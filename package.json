@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:slow": "NODE_ENV=development_slow webpack-dev-server",
-    "dev:fast": "NODE_ENV=development_fast webpack-dev-server",
-    "build": "NODE_ENV=production webpack"
+    "dev:slow": "NODE_ENV=development DEV_ENV=slow webpack-dev-server",
+    "dev:fast": "NODE_ENV=development DEV_ENV=fast webpack-dev-server",
+    "build": "NODE_ENV=production webpack",
+    "server": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -22,7 +23,7 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.21.0",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9"
+    "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.6",

@@ -23,7 +23,7 @@ export default theme => {
         overline
       }
     }
-  } = theme || defaultTheme;
+  } = theme ? { ...defaultTheme, ...theme } : defaultTheme;
 
   const commonFontFamily = fontFamily.join(',');
 

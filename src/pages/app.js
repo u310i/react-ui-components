@@ -4,24 +4,25 @@ import Helmet from 'react-helmet';
 import { css, injectGlobal, sheet } from 'react-emotion';
 import reboot from 'utilities/reboot';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { fontAwesomeIconList } from '../icons';
+import { fontAwesomeIconList } from 'src/icons';
 
-import createPageProps from 'utilities/createPageProps';
-import pageTheme from './_page_theme';
-import basePageProps from './_page_props';
+import createPagePropsTheme from 'utilities/createPagePropsTheme';
+import baseTheme from './_this_theme';
+import baseProps from './_this_props';
 
 import GlobalNav from 'organisms/GlobalNav';
 import HEAD from 'organisms/Header';
 
 library.add(...fontAwesomeIconList);
 
-const PageProps = createPageProps(pageTheme, basePageProps);
-injectGlobal(PageProps.globalStyles, reboot);
+const {pageProps, pageTheme} = createPagePropsTheme(baseTheme, baseProps);
+
+injectGlobal(pageProps.globalStyles, reboot);
 
 class App extends React.Component {
   render() {
     return (
-      <article className={css(PageProps.container.styles)}>
+      <article className={css(pageProps.container.styles)}>
         <Helmet>
           <title>My page title</title>
           <meta
@@ -30,12 +31,12 @@ class App extends React.Component {
           />
         </Helmet>
 
-        {/* <GlobalNav
-          theme={PageProps.theme}
-          containerProps={PageProps.globalNav}
-        /> */}
+        <GlobalNav
+          theme={pageTheme}
+          containerProps={pageProps.globalNav}
+        />
 
-        {/* <HEAD theme={PageProps.theme} containerProps={PageProps.head} /> */}
+        <HEAD theme={pageTheme} containerProps={pageProps.head} />
 
         {/* <section>
         <h2>VISION</h2>

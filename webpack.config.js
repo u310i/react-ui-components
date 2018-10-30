@@ -1,16 +1,16 @@
 const path = require('path');
 
 const _env = {};
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'production') {
+  _env.mode = 'development';
+  if (process.env.DEV_ENV === 'slow') {
+    _env.devtool = 'inline-source-map';
+  } else if (process.env.DEV_ENV === 'fast') {
+    _env.devtool = 'eval';
+  }
+} else {
   _env.mode = 'production';
   _env.devtool = '';
-} else {
-  _env.mode = 'development';
-  if (~process.env.NODE_ENV.indexOf('fast')) {
-    _env.devtool = 'eval';
-  } else {
-    _env.devtool = 'inline-source-map';
-  }
 }
 
 module.exports = {
@@ -71,6 +71,7 @@ module.exports = {
   resolve: {
     extensions: ['.wasm', '.mjs', '.js', '.json', '.jsx'],
     alias: {
+      src: path.resolve(__dirname, 'src/'),
       atoms: path.resolve(__dirname, 'src/components/atoms/'),
       molecules: path.resolve(__dirname, 'src/components/molecules/'),
       organisms: path.resolve(__dirname, 'src/components/organisms/'),

@@ -1,4 +1,10 @@
 export default {
+  breakpoints: {
+    values: {
+      sm: { value: '767px' },
+      lg: { value: '1280px' }
+    }
+  },
   palette: {
     primary: {
       light: '#757ce8',
