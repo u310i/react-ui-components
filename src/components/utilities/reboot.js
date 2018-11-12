@@ -199,10 +199,10 @@ button {
   border-radius: 0;
 }
 
-button:focus {
-  outline: 1px dotted;
-  outline: 5px auto -webkit-focus-ring-color;
-}
+// button:focus {
+//   outline: 1px dotted;
+//   outline: 5px auto -webkit-focus-ring-color;
+// }
 
 input, button, select, optgroup, textarea {
   margin: 0;
@@ -306,29 +306,80 @@ template {
 
 
 /* custom */
+
+
+*, *::before, *::after {
+  margin: 0px;
+  padding: 0px;
+}
+
 html {
   line-height: 0;
 }
 
 body {
-  line-height: 0;
+  background: #fff;
+  color: #333;
+  font-size: 1rem;
 }
 
-table {
-  margin-top: 0;
+a {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+a:link {
+  color: #333;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #333;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #900;
+  text-decoration: none;
+}
+
+a img {
+  border-width: 0px;
+  border-style: none;
+  border-color: #fff;
+  background: transparent;
 }
 
 i {
   line-height: 0;
 }
 
-button{
+button {
   background-color: transparent;
   border: none;
   cursor: pointer;
-  outline: none;
   padding: 0;
-  appearance: none;
+  line-height: 0;
+}
+
+a,
+a:active,
+a:focus,
+button,
+button:active,
+button:focus {
+  outline: none;
+}
+
+ul, ol, menu, dir {
+  list-style-type: none;
+}
+
+li {
+}
+
+nav {
+  font-size: 0;
 }
 
 `;

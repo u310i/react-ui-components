@@ -1,9 +1,21 @@
 export default {
   breakpoints: {
     values: {
-      sm: { value: '767px' },
-      lg: { value: '1280px' }
+      sm: { value: 767 },
+      lg: { value: 1280 }
     }
+  },
+  zIndex: {
+    mobileStepper: 1000,
+    appBar: 1100,
+    drawer: 1200,
+    modal: 1300,
+    snackbar: 1400,
+    tooltip: 1500
+  },
+  scrollbar: {
+    v: 17,
+    h: 17
   },
   palette: {
     primary: {
@@ -26,7 +38,7 @@ export default {
     }
   },
   typography: {
-    fontFamily: ['Roboto', "'Helvetica Neue'", 'Arial', 'sans-serif'],
+    fontFamily: ['Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
     font: {
       h1: {
         fontSize: '2.5rem',

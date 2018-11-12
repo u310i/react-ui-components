@@ -4,6 +4,8 @@ import { screenSizeStyleNameGen } from 'utilities/utils';
 export default theme => {
   const {
     breakpoints,
+    zIndex,
+    scrollbar,
     palette: { primary, secondary, tertiary },
     typography: {
       fontFamily,
@@ -27,10 +29,16 @@ export default theme => {
 
   const commonFontFamily = fontFamily.join(',');
 
-  breakpoints.keys = screenSizeStyleNameGen(breakpoints.values);
+  breakpoints.maxWidthPresets = screenSizeStyleNameGen(breakpoints.values);
 
   return {
     breakpoints: breakpoints,
+    zIndex: {
+      ...zIndex
+    },
+    scrollbar: {
+      ...scrollbar
+    },
     palette: {
       primary: {
         ...primary

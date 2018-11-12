@@ -1,43 +1,61 @@
-import React from 'react';
-import { css } from 'react-emotion';
-import { faAlignJustify } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from 'react';
+import { css, cx } from 'react-emotion';
+
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import ActionIcon from 'atoms/ActionIcon';
-import List from 'atoms/List';
+import Drawer from 'molecules/Drawer';
 
 export default ({
   theme,
-  containerProps: {
-    general,
-    container,
-    itemList: { common, list = [] },
-    actionIcon
-  }
+  containerProps: { general, container, drawer, actionIcon }
 }) => {
-  if (!actionIcon.icon.iconName) {
-    actionIcon.icon.iconName = faAlignJustify;
+  const [toggleState, setToggleState] = useState('close');
+  const toggle = () => {
+    setToggleState(toggleState === 'close' ? 'open' : 'close');
+  };
+
+  if (!actionIcon.container.icon.close) {
+    actionIcon.container.icon.name = faBars;
+  } else {
+    actionIcon.container.icon.name =
+      toggleState === 'close'
+        ? actionIcon.container.icon.close
+        : actionIcon.container.icon.open;
   }
+
+  const componentStyle = {
+    backgroundColor: '#333',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'stretch',
+    height: '3rem',
+    [theme.breakpoints.maxWidthPresets.sm]: {
+      // position: 'fixed',
+      // top: '0',
+      // left: '0',
+      // right: '0',
+      // height: '3rem',
+      // width: '100%',
+      // backgroundColor: '#4169e1'
+    }
+  };
   return (
-    <nav
-      className={css(container.styles)}
-      css={{
-        backgroundColor: '#333',
-        fontSize: '0',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        lineHeight: '3',
-        padding: '0',
-        margin: '0'
-      }}
-    >
-      <List theme={theme} containerProps={{ list, common, general }} />
-      {/* <ActionIcon
+    // <nav className={cx(css(componentStyle), css(container.styles))}>
+    <nav css={componentStyle} className={cx(css(container.styles))}>
+      <Drawer
+        theme={theme}
+        containerProps={{ ...drawer, general }}
+        toggleState={toggleState}
+      />
+      <ActionIcon
         theme={theme}
         containerProps={{
           ...actionIcon,
           general
-        }} */}
+        }}
+        toggle={toggle}
       />
     </nav>
   );

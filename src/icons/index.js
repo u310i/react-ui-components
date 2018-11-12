@@ -1,10 +1,19 @@
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import {
-  faAlignJustify,
+  faBars,
   faCheckSquare,
-  faCoffee
+  faCoffee,
+  faAngleDoubleLeft,
+  faAngleDoubleRight
 } from '@fortawesome/free-solid-svg-icons';
 
-const fontAwesomeIconList = [fab, faAlignJustify, faCheckSquare, faCoffee];
+const fontAwesomeIconList = [
+  fab,
+  faBars,
+  faCheckSquare,
+  faCoffee,
+  faAngleDoubleLeft,
+  faAngleDoubleRight
+];
 
 export { fontAwesomeIconList };

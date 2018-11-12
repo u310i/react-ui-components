@@ -15,9 +15,9 @@ import HEAD from 'organisms/Header';
 
 library.add(...fontAwesomeIconList);
 
-const {pageProps, pageTheme} = createPagePropsTheme(baseTheme, baseProps);
+const { pageProps, pageTheme } = createPagePropsTheme(baseTheme, baseProps);
 
-injectGlobal(pageProps.globalStyles, reboot);
+injectGlobal(pageProps.global.styles, reboot);
 
 class App extends React.Component {
   render() {
@@ -31,10 +31,7 @@ class App extends React.Component {
           />
         </Helmet>
 
-        <GlobalNav
-          theme={pageTheme}
-          containerProps={pageProps.globalNav}
-        />
+        <GlobalNav theme={pageTheme} containerProps={pageProps.globalNav} />
 
         <HEAD theme={pageTheme} containerProps={pageProps.head} />
 

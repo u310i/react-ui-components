@@ -26,7 +26,7 @@ export default {
     }
   },
   typography: {
-    fontFamily: ['Roboto', "'Helvetica Neue'", 'Arial', 'sans-serif'],
+    fontFamily: ['Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
     font: {
       h1: {
         fontSize: '2.5rem',

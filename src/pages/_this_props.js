@@ -1,17 +1,20 @@
 import * as images from '../images';
 import * as fonts from '../fonts';
 
-export default (breakpointKeys) => ({
-  globalStyles: {
-    '@font-face': {
-      fontFamily: '"Pacifico"',
-      src: `url("${fonts.pacificoRegularTTF}") format("truetype")`
+export default theme => ({
+  global: {
+    styles: {
+      '@font-face': {
+        fontFamily: '"Pacifico"',
+        src: `url("${fonts.pacificoRegularTTF}") format("truetype")`
+      }
     }
   },
   container: {
     styles: {
       // display: 'grid',
       // justifyContent: 'center'
+      overflow: 'hidden'
     }
   },
 
@@ -24,86 +27,56 @@ export default (breakpointKeys) => ({
     },
     container: {
       styles: {
-        // backgroundColor: '#333',
-        // fontSize: '0',
-        // display: 'flex',
-        // flexDirection: 'row',
-        // justifyContent: 'flex-end',
-        // '& > ul': {
-        //   display: 'flex',
-        //   flexDirection: 'row',
-        //   justifyContent: 'flex-end',
-        //   margin: '0',
-        //   '& > li': {
-        //     display: 'block',
-        //     '& > a': {
-        //       color: '#f2f2f2',
-        //       textAlign: 'center',
-        //       paddingLeft: '1rem',
-        //       paddingRight: '1rem',
-        //       fontSize: '1rem',
-        //       display: 'block',
-        //       '&:link': {},
-        //       '&:visited': {},
-        //       '&:hover': {
-        //         backgroundColor: '#ddd',
-        //         color: 'black'
-        //       },
-        //       [breakpointKeys.sm]: {
-        //         display: 'none'
-        //       }
-        //     }
-        //   }
-        // },
-        '& > .icon': {
-          display: 'none',
-          [breakpointKeys.sm]: {
-            display: 'block',
-            paddingLeft: '1rem',
-            paddingRight: '1rem',
-            fontSize: '1.8rem',
-            textAlign: 'center',
-            backgroundColor: '#ff7f50'
-          }
+        [theme.breakpoints.maxWidthPresets.sm]: {
+          backgroundColor: '#2f4f4f'
         }
       }
     },
-    itemList: {
-      common: {
-        styles: {}
+    drawer: {
+      container: {
+        styles: {},
+        attributes: {}
       },
-      list: [
-        {
-          textNode: 'TOP',
-          attributes: { href: '#' },
-          styles: {
-            backgroundColor: '#4CAF50',
-            color: 'white'
-          }
-        },
-        {
-          textNode: 'VISION',
-          attributes: { href: '#' }
-        },
-        {
-          textNode: 'MESSAGE',
-          attributes: { href: '#' }
-        },
-        {
-          textNode: 'STORY',
-          attributes: { href: '#' }
-        },
-        {
-          textNode: 'PROFILE',
-          attributes: { href: '#' }
+      list: {
+        container: {
+          styles: {},
+          listItems: [
+            {
+              textNode: 'TOP',
+              attributes: { href: '#' },
+              styles: {
+                backgroundColor: '#4CAF50',
+                color: 'white'
+              }
+            },
+            {
+              textNode: 'VISION',
+              attributes: { href: '#' }
+            },
+            {
+              textNode: 'MESSAGE',
+              attributes: { href: '#' }
+            },
+            {
+              textNode: 'STORY',
+              attributes: { href: '#' }
+            },
+            {
+              textNode: 'PROFILE',
+              attributes: { href: '#' }
+            }
+          ]
         }
-      ]
+      }
     },
+
     actionIcon: {
-      className: 'icon',
-      styles: {},
-      icon: {
-        iconName: 'align-justify'
+      container: {
+        styles: {},
+        icon: {
+          close: 'angle-double-left',
+          open: 'angle-double-right'
+        }
       }
     }
   },
