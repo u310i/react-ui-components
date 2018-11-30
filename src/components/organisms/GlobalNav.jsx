@@ -150,7 +150,7 @@ export default ({
         className={cx(css(componentStyle.main.style), css(container.style))}
         id="ui-globalnav-main"
       >
-        <Drawer
+        <Menu
           theme={theme}
           containerProps={{ ...drawer, general, actionIconComponent }}
           toggle={toggle}
