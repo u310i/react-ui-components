@@ -1,204 +1,211 @@
 import React, { useState, useEffect } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'emotion';
-import { createReactCSSTransitionStyle } from 'utilities/utils';
+import {
+  createReactCSSTransitionStyle,
+  createReactCSSTransitionCallBack
+} from 'utilities/utils';
+import ActionIcon from 'atoms/ActionIcon';
 
 import List from 'atoms/List';
 
 export default ({
   theme,
-  containerProps: { container, list, general },
+  containerProps: { container, list, general, actionIconComponent },
+  toggle,
   toggleState
 }) => {
   const name = 'drawer';
-  const direction = 'left';
+  const direction = 'right';
   const duration = 150;
-  const verticalScrollbarWidth = theme.scrollbar.v;
+  const timingFunction = 'ease-out';
 
   const componentStyle = {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'stretch',
-    margin: '0',
-    backgroundColor: '#fafad2',
-    '& > li': {
-      display: 'flex',
-      alignItems: 'center',
-      '& > a': {
-        display: 'block',
-        color: 'black',
-        paddingTop: '1.5rem',
-        paddingBottom: '1.5rem',
-        paddingLeft: '1rem',
-        paddingRight: '1rem',
-        fontSize: '1rem',
-        lineHeight: '0',
-        '&:link': {},
-        '&:visited': {},
-        '&:hover': {
-          backgroundColor: '#ddd',
-          color: 'black'
+    overlay: {
+      style: {
+        display: 'none',
+        [theme.breakpoints.presets.sm]: {
+          display: 'block',
+          pointerEvents: toggleState === 'close' ? 'none' : 'auto',
+          position: 'fixed',
+          zIndex: '999',
+          top: '0',
+          left: '0',
+          right: '0',
+          bottom: '0',
+          backgroundColor: 'black'
         }
       }
     },
-    [theme.breakpoints.maxWidthPresets.sm]: {
-      justifyContent: 'flex-start',
-      zIndex: theme.zIndex.drawer,
-      position: 'fixed',
-      top: '0',
-      [direction]: '0',
-      width: '200px',
-      height: '100vh',
-      flexDirection: 'column',
-      '& > li': {
-        '& > a': {
-          width: '100%'
+    main: {
+      style: {
+        [theme.breakpoints.presets.sm]: {
+          [direction]: '0',
+          display: 'block',
+          zIndex: theme.zIndex.drawer,
+          position: 'fixed',
+          padding: '0',
+          top: '0',
+          width: '400px',
+          height: '100%'
+        }
+      },
+      list: {
+        style: {
+          '& > li': {
+            backgroundColor: '#fafad2',
+            '& > a': {
+              display: 'block',
+              lineHeight: '1',
+              paddingTop: '1rem',
+              paddingBottom: '1rem',
+              paddingLeft: '1rem',
+              paddingRight: '1rem',
+              fontSize: '1rem',
+              '&:link': {},
+              '&:visited': {},
+              '&:hover': {
+                backgroundColor: '#ffe4b5',
+                color: 'black'
+              }
+            }
+          },
+          [theme.breakpoints.presets.sm_to_infinite]: {
+            display: 'flex',
+            flexDirection: 'row',
+            paddingLeft: '1rem',
+            paddingRight: '1rem',
+            backgroundColor: '#b0c4de'
+          },
+          [theme.breakpoints.presets.sm]: {
+            height: '100%',
+            height: 'calc(100% - 3rem)',
+            paddingTop: '1rem',
+            paddingBottom: '1rem',
+            paddingLeft: '0.5rem',
+            paddingRight: '0.5rem',
+            backgroundColor: '#e0ffff',
+            '& > li': {
+              width: '100%',
+              backgroundColor: '#fafad2',
+              '& > a': {
+                width: '100%',
+                color: 'black'
+              }
+            }
+          }
+        }
+      },
+      button: {
+        style: {
+          [theme.breakpoints.presets.sm_to_infinite]: {
+            display: 'none'
+          },
+          [theme.breakpoints.presets.sm]: {
+            height: '3rem',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            paddingRight: '17px',
+            backgroundColor: '#ffc0cb'
+          }
         }
       }
     }
   };
 
-  const createMainAnimation = ({
-    name,
-    duration,
-    styles: {
-      close: [close_x, close_y],
-      open: [open_x, open_y]
-    }
-  }) => {
+  const createDrawerTransitionStyle = () => {
+    const x = direction === 'left' ? '-100%' : '100%';
     return createReactCSSTransitionStyle(name, {
-      default: {
-        transform: `translate3d(0,0,0)`,
-        [theme.breakpoints.maxWidthPresets.sm]: {
-          transform: `translate3d(${close_x},${close_y},0)`
+      defaultStyle: {
+        [theme.breakpoints.presets.sm]: {
+          '& > #ui-drawer-main': {
+            transform: `translate3d(${x},0,0)`
+          },
+          '& > #ui-drawer-overlay': {
+            opacity: '0'
+          }
         }
       },
       enter: {
-        [theme.breakpoints.maxWidthPresets.sm]: {
-          transform: `translate3d(${close_x},${close_y},0)`
+        [theme.breakpoints.presets.sm]: {
+          '& > #ui-drawer-main': {
+            transform: `translate3d(${x},0,0)`
+          },
+          '& > #ui-drawer-overlay': {
+            opacity: '0'
+          }
         }
       },
       enterActive: {
-        [theme.breakpoints.maxWidthPresets.sm]: {
-          transform: `translate3d(${open_x},${open_y},0)`,
-          transition: `transform ${duration}ms ease-out`
+        [theme.breakpoints.presets.sm]: {
+          '& > #ui-drawer-main': {
+            transform: 'translate3d(0,0,0)',
+            transition: `transform ${duration}ms ${timingFunction}`
+          },
+          '& > #ui-drawer-overlay': {
+            opacity: '0.3',
+            transition: `opacity ${duration}ms ${timingFunction}`
+          }
         }
       },
       exit: {
-        [theme.breakpoints.maxWidthPresets.sm]: {
-          transform: `translate3d(${open_x},${open_y},0)`
+        [theme.breakpoints.presets.sm]: {
+          '& > #ui-drawer-main': {
+            transform: 'translate3d(0,0,0)'
+          },
+          '& > #ui-drawer-overlay': {
+            opacity: '0.3'
+          }
         }
       },
       exitActive: {
-        [theme.breakpoints.maxWidthPresets.sm]: {
-          transform: `translate3d(${close_x},${close_y},0)`,
-          transition: `transform ${duration}ms ease-out`
+        [theme.breakpoints.presets.sm]: {
+          '& > #ui-drawer-main': {
+            transform: `translate3d(${x},0,0)`,
+            transition: `transform ${duration}ms ${timingFunction}`
+          },
+          '& > #ui-drawer-overlay': {
+            opacity: '0',
+            transition: `opacity ${duration}ms ${timingFunction}`
+          }
         }
       }
     });
   };
 
-  const createMainAnimationPresets = (
-    name,
-    direction,
-    duration,
-    verticalScrollbarWidth = 17
-  ) => {
-    let styles;
-    if (direction === 'left') {
-      styles = {
-        close: [`-100%`, '0'],
-        open: [`${verticalScrollbarWidth * -1}px`, '0']
-      };
-    } else if (direction === 'right') {
-      styles = {
-        close: [`100%`, '0'],
-        open: [`${verticalScrollbarWidth * 2}px`, '0']
-      };
-    }
-    return {
-      name: name,
-      direction: direction,
-      duration: duration,
-      verticalScrollbarWidth: verticalScrollbarWidth,
-      styles: styles
-    };
-  };
+  const drawerTransitionStyle = createDrawerTransitionStyle();
 
-  const mainAnimationPresets = createMainAnimationPresets(
-    name,
-    direction,
-    duration,
-    verticalScrollbarWidth
-  );
-
-  const mainAnimation = createMainAnimation(mainAnimationPresets);
-
-  const createBackgroundAnimation = (
-    name,
-    direction,
-    duration,
-    verticalScrollbarWidth
-  ) => {
-    const overflowY = 'overflow-y: hidden;';
-    const rigthMargin = `margin-right: ${verticalScrollbarWidth}px;`;
-    const leftMargin = `margin-right: ${verticalScrollbarWidth}px;`;
-    const x =
-      direction === 'right'
-        ? verticalScrollbarWidth * -1
-        : verticalScrollbarWidth;
-
-    return `
-    ${theme.breakpoints.maxWidthPresets.sm} {
-      body.${name}-background-enter {
-        transform: translate3d(0px,0,0);
-        overflow-x: hidden;
-        ${direction === 'right' ? overflowY : ''}
-        ${direction === 'right' ? rigthMargin : ''}
-      }
-      body.${name}-background-enter-active {
-        transform: translate3d(${x}px,0,0);
-        transition: transform ${duration}ms ease-out;
-      }
-      body.${name}-background-enter-done {
-        transform: translate3d(${x}px,0,0);
-        overflow-x: hidden;
-        overflow-y: hidden;
-        ${direction === 'right' ? rigthMargin : leftMargin}
-      }
-      body.${name}-background-exit {
-        transform: translate3d(${x}px,0,0);
-        overflow-x: hidden;
-        ${direction === 'right' ? overflowY : ''}
-        ${direction === 'right' ? rigthMargin : ''}
-      }
-      body.${name}-background-exit-active {
-        transform: translate3d(0px,0,0);
-        transition: transform ${duration}ms ease-out;
+  useEffect(() => {
+    const head = document.head;
+    const backgroundTransitionStyle = `
+    ${theme.breakpoints.presets.sm} {
+      body.drawer-overflow-hidden {
+        overflow: hidden;
       }
     }
     `;
-  };
-
-  const backgroundAnimation = createBackgroundAnimation(
-    name,
-    direction,
-    duration,
-    verticalScrollbarWidth
-  );
-  let toggleNode = document.getElementsByTagName('body')[0];
-
-  useEffect(() => {
     const styleNode = document.createElement('style');
-    const ruleText = document.createTextNode(backgroundAnimation);
+    const ruleText = document.createTextNode(backgroundTransitionStyle);
     styleNode.setAttribute('id', 'body-drawer');
     styleNode.appendChild(ruleText);
-    document.getElementsByTagName('head')[0].appendChild(styleNode);
+    head.appendChild(styleNode);
     return () => {
       const removeNode = document.getElementById('body-drawer');
       if (removeNode) {
-        const parentNode = document.getElementsByTagName('head')[0];
-        parentNode.removeChild(removeNode);
+        head.removeChild(removeNode);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const body = document.body;
+    if (toggleState === 'open') {
+      body.classList.add('drawer-overflow-hidden');
+    }
+    return () => {
+      if (body.classList.contains('drawer-overflow-hidden')) {
+        body.classList.remove('drawer-overflow-hidden');
       }
     };
   });
@@ -208,40 +215,35 @@ export default ({
       in={toggleState === 'open'}
       timeout={duration}
       classNames={name}
-      onEnter={() => {
-        toggleNode.classList.remove('drawer-background-exit');
-        toggleNode.classList.remove('drawer-background-exit-active');
-        toggleNode.classList.add('drawer-background-enter');
-      }}
-      onEntering={() => {
-        toggleNode.classList.add('drawer-background-enter-active');
-      }}
-      onEntered={() => {
-        toggleNode.classList.remove('drawer-background-enter');
-        toggleNode.classList.remove('drawer-background-enter-active');
-        toggleNode.classList.add('drawer-background-enter-done');
-      }}
-      onExit={() => {
-        toggleNode.classList.remove('drawer-background-enter');
-        toggleNode.classList.remove('drawer-background-enter-active');
-        toggleNode.classList.remove('drawer-background-enter-done');
-        toggleNode.classList.add('drawer-background-exit');
-      }}
-      onExiting={() => {
-        toggleNode.classList.add('drawer-background-exit-active');
-      }}
-      onExited={() => {
-        toggleNode.classList.remove('drawer-background-exit');
-        toggleNode.classList.remove('drawer-background-exit-active');
-      }}
     >
-      {state => {
-        return (
-          <ul className={cx(css(componentStyle), css(mainAnimation.style))}>
-            <List theme={theme} containerProps={{ ...list, general }} />
+      <div
+        className={cx(css(componentStyle), css(drawerTransitionStyle))}
+        id="ui-drawer"
+      >
+        <div
+          onClick={toggle}
+          className={cx(css(componentStyle.overlay.style))}
+          id="ui-drawer-overlay"
+        />
+        <div className={cx(css(componentStyle.main.style))} id="ui-drawer-main">
+          <div
+            className={cx(css(componentStyle.main.button.style))}
+            id="ui-drawer-main-button"
+          >
+            {actionIconComponent}
+          </div>
+          <ul
+            className={cx(css(componentStyle.main.list.style))}
+            id="ui-drawer-main-list"
+          >
+            <List
+              theme={theme}
+              containerProps={{ ...list, general }}
+              tagName="li"
+            />
           </ul>
-        );
-      }}
+        </div>
+      </div>
     </CSSTransition>
   );
 };

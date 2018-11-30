@@ -3,7 +3,7 @@ import * as fonts from '../fonts';
 
 export default theme => ({
   global: {
-    styles: {
+    style: {
       '@font-face': {
         fontFamily: '"Pacifico"',
         src: `url("${fonts.pacificoRegularTTF}") format("truetype")`
@@ -11,59 +11,59 @@ export default theme => ({
     }
   },
   container: {
-    styles: {
+    style: {
       // display: 'grid',
       // justifyContent: 'center'
-      overflow: 'hidden'
+      // overflow: 'hidden'
     }
   },
 
   globalNav: {
     general: {
-      styles: {
+      style: {
         // paddingTop: '1.5rem',
         // paddingBottom: '1.5rem'
       }
     },
     container: {
-      styles: {
-        [theme.breakpoints.maxWidthPresets.sm]: {
+      style: {
+        [theme.breakpoints.presets.min]: {
           backgroundColor: '#2f4f4f'
         }
       }
     },
     drawer: {
       container: {
-        styles: {},
-        attributes: {}
+        style: {},
+        attribute: {}
       },
       list: {
         container: {
-          styles: {},
+          style: {},
           listItems: [
             {
               textNode: 'TOP',
-              attributes: { href: '#' },
-              styles: {
+              attribute: { href: '#' },
+              style: {
                 backgroundColor: '#4CAF50',
                 color: 'white'
               }
             },
             {
               textNode: 'VISION',
-              attributes: { href: '#' }
+              attribute: { href: '#' }
             },
             {
               textNode: 'MESSAGE',
-              attributes: { href: '#' }
+              attribute: { href: '#' }
             },
             {
               textNode: 'STORY',
-              attributes: { href: '#' }
+              attribute: { href: '#' }
             },
             {
               textNode: 'PROFILE',
-              attributes: { href: '#' }
+              attribute: { href: '#' }
             }
           ]
         }
@@ -72,7 +72,7 @@ export default theme => ({
 
     actionIcon: {
       container: {
-        styles: {},
+        style: {},
         icon: {
           close: 'angle-double-left',
           open: 'angle-double-right'
@@ -83,22 +83,22 @@ export default theme => ({
 
   head: {
     container: {
-      styles: {
+      style: {
         position: 'relative',
         maxWidth: '1280px'
       }
     },
     image: {
-      attributes: {
+      attribute: {
         src: images.mainImgJPG,
         alt: 'my image'
       },
-      styles: {
+      style: {
         height: '568px'
       }
     },
     titleOuter: {
-      styles: {
+      style: {
         textAlign: 'center',
         position: 'absolute',
         top: '50%',
@@ -108,7 +108,7 @@ export default theme => ({
     },
     title: {
       textNode: 'Vestibulum mauris',
-      styles: {
+      style: {
         fontSize: '2.5rem',
         fontFamily: '"Pacifico", cursive',
         color: '#fff'
@@ -116,7 +116,7 @@ export default theme => ({
     },
     subTitle: {
       textNode: '最新技術と自然との調和を目指す',
-      styles: {
+      style: {
         fontSize: '1.25rem',
         fontFamily: '"Josefin Sans", "Noto Sans JP",serif',
         color: '#fff'

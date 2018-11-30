@@ -1,5 +1,5 @@
 import defaultTheme from 'theme/defaultTheme';
-import { screenSizeStyleNameGen } from 'utilities/utils';
+import { screenSizeMediaQueriesGen } from 'utilities/utils';
 
 export default theme => {
   const {
@@ -29,7 +29,18 @@ export default theme => {
 
   const commonFontFamily = fontFamily.join(',');
 
-  breakpoints.maxWidthPresets = screenSizeStyleNameGen(breakpoints.values);
+  let breakpointsEntriesList = [];
+  let breakpointsList = [];
+  for (let [key, obj] of Object.entries(breakpoints.values).sort((a, b) => {
+    return a[1].value - b[1].value;
+  })) {
+    if (obj.value) {
+      breakpointsEntriesList.push([key, obj.value]);
+      breakpointsList.push(obj.value);
+    }
+  }
+  breakpoints.list = breakpointsList;
+  breakpoints.presets = screenSizeMediaQueriesGen(breakpointsEntriesList);
 
   return {
     breakpoints: breakpoints,

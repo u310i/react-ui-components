@@ -1,8 +1,11 @@
 export default {
   breakpoints: {
     values: {
+      xs: { value: null },
       sm: { value: 767 },
-      lg: { value: 1280 }
+      md: { value: null },
+      lg: { value: 1280 },
+      xl: { value: null }
     }
   },
   zIndex: {
@@ -12,10 +15,6 @@ export default {
     modal: 1300,
     snackbar: 1400,
     tooltip: 1500
-  },
-  scrollbar: {
-    v: 17,
-    h: 17
   },
   palette: {
     primary: {

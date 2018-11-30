@@ -3,7 +3,7 @@ import { css } from 'react-emotion';
 
 export default ({
   containerProps: {
-    styles = {},
-    attributes: { src = '', alt = '', ...attributes }
+    style = {},
+    attribute: { src = '', alt = '', ...attribute }
   }
-}) => <img className={css(styles)} src={src} alt={alt} {...attributes} />;
+}) => <img className={css(style)} src={src} alt={alt} {...attribute} />;

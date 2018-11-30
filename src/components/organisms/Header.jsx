@@ -15,9 +15,9 @@ export default ({
   }
 }) => (
   <header
-    className={css(container.styles, {
+    className={css(container.style, {
       '& > .text': {
-        ...titleOuter.styles
+        ...titleOuter.style
       }
     })}
   >

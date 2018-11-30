@@ -3,19 +3,19 @@ import Image from 'atoms/Image';
 
 export default ({
   containerProps: {
-    attributes = {},
-    styles: { height, ...styles }
+    attribute = {},
+    style: { height, ...style }
   }
 }) => (
   <Image
     containerProps={{
-      styles: {
+      style: {
         width: '100%',
         objectFit: 'cover',
         height: height || '568px',
-        ...styles
+        ...style
       },
-      attributes: attributes
+      attribute: attribute
     }}
   />
 );

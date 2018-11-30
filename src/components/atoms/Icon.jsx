@@ -2,9 +2,9 @@ import React from 'react';
 import { css, cx } from 'react-emotion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default ({ containerProps: { name, styles } }) => {
+export default ({ containerProps: { name, style } }) => {
   return (
-    <FontAwesomeIcon icon={name} className={css(styles)} />
+    <FontAwesomeIcon icon={name} className={css(style)} />
     // <i
     //   className={cx(
     //     className,
@@ -14,7 +14,7 @@ export default ({ containerProps: { name, styles } }) => {
     //         lineHeight: '0',
     //         color: 'white'
     //       },
-    //       styles
+    //       style
     //     )
     //   )}
     // />

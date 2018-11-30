@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Helmet from 'react-helmet';
 import { css, injectGlobal, sheet } from 'react-emotion';
 import reboot from 'utilities/reboot';
+import { requestAnimationFrameFallback } from 'utilities/utils';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fontAwesomeIconList } from 'src/icons';
 
@@ -17,25 +18,71 @@ library.add(...fontAwesomeIconList);
 
 const { pageProps, pageTheme } = createPagePropsTheme(baseTheme, baseProps);
 
-injectGlobal(pageProps.global.styles, reboot);
+injectGlobal(pageProps.global.style, reboot);
 
-class App extends React.Component {
-  render() {
-    return (
-      <article className={css(pageProps.container.styles)}>
-        <Helmet>
-          <title>My page title</title>
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
-        </Helmet>
+const App = () => {
+  useEffect(() => {
+    const targetElement = document.getElementById('ui-globalnav-main');
+    const targetHeight = targetElement.offsetHeight;
+    let lastPosition = window.pageYOffset;
+    let offset = lastPosition;
+    let hideMenuOnDownScrollToggle = 'visible';
+    const hideMenuOnDownScroll = () => {
+      lastPosition = window.pageYOffset;
+      if (lastPosition > targetHeight) {
+        if (lastPosition > offset) {
+          if (hideMenuOnDownScrollToggle === 'visible') {
+            hideMenuOnDownScrollToggle = 'hide';
+            targetElement.classList.add('hide-on-scroll-enter');
+            targetElement.classList.add('hide-on-scroll-active');
+          }
+        } else {
+          if (hideMenuOnDownScrollToggle === 'hide') {
+            hideMenuOnDownScrollToggle = 'visible';
+            targetElement.classList.remove('hide-on-scroll-active');
+          }
+        }
+      } else {
+        if (offset > targetHeight) {
+          hideMenuOnDownScrollToggle = 'visible';
+          targetElement.classList.remove('hide-on-scroll-enter');
+          targetElement.classList.remove('hide-on-scroll-active');
+        }
+      }
+      offset = lastPosition;
+    };
 
-        <GlobalNav theme={pageTheme} containerProps={pageProps.globalNav} />
+    let ticking = false;
+    const windowSizeOnScroll = () => {
+      if (!ticking) {
+        requestAnimationFrameFallback(() => {
+          // hideMenuOnDownScroll();
+          if (window.innerWidth < pageTheme.breakpoints.list[0]) {
+            console.log('');
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
-        <HEAD theme={pageTheme} containerProps={pageProps.head} />
+    window.addEventListener('resize', windowSizeOnScroll);
 
-        {/* <section>
+    // return window.removeEventListener('resize', windowSizeOnScroll);
+  });
+
+  return (
+    <article className={css(pageProps.container.style)}>
+      <Helmet>
+        <title>My page title</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Helmet>
+
+      <GlobalNav theme={pageTheme} containerProps={pageProps.globalNav} />
+
+      <HEAD theme={pageTheme} containerProps={pageProps.head} />
+
+      {/* <section>
         <h2>VISION</h2>
         <p>
           ちかごろ世間で日本歴史の科学的研究ということがしきりに叫ばれている。科学的研究というのが近代史学の学問的方法による研究という意義であるならば、これは史学の学徒の間においては一般に行われていることであるから、今さらこと新しくいうには及ばないはずである。上にいったようなことがらについては、曖昧あいまいな態度をとり、または真実でない知識を強いて注入していたことも、明かな事実である。
@@ -126,9 +173,8 @@ class App extends React.Component {
           </a>
         </p>
       </footer> */}
-      </article>
-    );
-  }
-}
+    </article>
+  );
+};
 
 export default App;

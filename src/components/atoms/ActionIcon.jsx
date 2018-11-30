@@ -4,31 +4,37 @@ import { css, cx } from 'react-emotion';
 import Icon from 'atoms/Icon';
 
 export default ({ theme, containerProps: { container, general }, toggle }) => {
-  const { styles, icon } = container;
+  const { style, icon } = container;
   const componentStyle = {
     display: 'none',
-    [theme.breakpoints.maxWidthPresets.sm]: {
-      zIndex: theme.zIndex.drawer + 99,
+    [theme.breakpoints.presets.sm]: {
       display: 'block',
-      alignSelf: 'stretch',
-      padding: '0rem',
-      paddingLeft: '1rem',
-      paddingRight: '1rem',
-      fontSize: '1.5rem',
-      backgroundColor: '#ff7f50'
+      paddingTop: '0rem',
+      paddingBottom: '0rem',
+      paddingLeft: '0rem',
+      paddingRight: '0.5rem',
+      '& > button': {
+        fontSize: '1.5rem',
+        backgroundColor: '#ff7f50',
+        paddingTop: '0.5rem',
+        paddingBottom: '0.5rem',
+        paddingLeft: '0.5rem',
+        paddingRight: '0.5rem'
+      }
     }
   };
 
   return (
-    <button
+    <div
       css={{
-        ...general.styles,
-        ...styles,
+        ...general.style,
+        ...style,
         ...componentStyle
       }}
-      onClick={toggle}
     >
-      <Icon theme={theme} containerProps={icon} />
-    </button>
+      <button onClick={toggle}>
+        <Icon theme={theme} containerProps={icon} />
+      </button>
+    </div>
   );
 };
