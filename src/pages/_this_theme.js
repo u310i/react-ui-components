@@ -3,7 +3,7 @@ export default {
     values: {
       xs: null,
       sm: 767,
-      md: 900,
+      md: null,
       lg: 1280,
       xl: null
     }

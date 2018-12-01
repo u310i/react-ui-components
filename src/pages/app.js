@@ -21,25 +21,47 @@ const { pageProps, pageTheme } = createPagePropsTheme(baseTheme, baseProps);
 injectGlobal(pageProps.global.style, reboot);
 
 const App = () => {
+  const breakpoint = pageTheme.breakpoint;
+
+  let currentWidth = window.innerWidth;
+  let currentBreakpoint =
+    (currentWidth < breakpoint.values.sm && 'sm') ||
+    (currentWidth < breakpoint.values.lg && 'lg') ||
+    'max';
+
+  const [breakpointState, setBreakpointState] = useState(currentBreakpoint);
+
+  console.log('breakpoint:' + breakpointState);
+
   useEffect(() => {
-    let currentWidth = window.innerWidth;
-    let offset = currentWidth;
-    let hideMenuOnDownScrollToggle = 'visible';
-    let currentPoint = '';
+    const setBreakpointOnResize = () => {
+      currentWidth = window.innerWidth;
+      if (currentWidth < breakpoint.values.sm) {
+        if (currentBreakpoint !== 'sm') {
+          currentBreakpoint = 'sm';
+          setBreakpointState(currentBreakpoint);
+        }
+      } else if (
+        currentWidth < breakpoint.values.lg &&
+        currentWidth >= breakpoint.values.sm
+      ) {
+        if (currentBreakpoint !== 'lg') {
+          currentBreakpoint = 'lg';
+          setBreakpointState(currentBreakpoint);
+        }
+      } else {
+        if (currentBreakpoint !== 'max') {
+          currentBreakpoint = 'max';
+          setBreakpointState(currentBreakpoint);
+        }
+      }
+    };
 
     let ticking = false;
     const windowSizeOnScroll = () => {
       if (!ticking) {
         requestAnimationFrameFallback(() => {
-          // currentWidth = window.innerWidth;
-          // for ([key, value] of breakpoint.entriesList) {
-          //   if (currentWidth < value) {
-          //     currentPoint = key;
-          //   }
-          // }
-          // if (window.innerWidth < breakpoint.values.sm) {
-          //   console.log('');
-          // }
+          setBreakpointOnResize();
           ticking = false;
         });
         ticking = true;
@@ -47,16 +69,18 @@ const App = () => {
     };
 
     window.addEventListener('resize', windowSizeOnScroll);
-
-    // return window.removeEventListener('resize', windowSizeOnScroll);
-  });
+    return () => {
+      console.log('remove eventListener');
+      window.removeEventListener('resize', windowSizeOnScroll);
+    };
+  }, []);
 
   return (
     <article className={css(pageProps.container.style)}>
-      <Helmet>
+      {/* <Helmet>
         <title>My page title</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Helmet>
+      </Helmet> */}
 
       <GlobalNav theme={pageTheme} containerProps={pageProps.globalNav} />
 
