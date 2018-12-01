@@ -7,7 +7,7 @@ export default ({ theme, containerProps: { container, general }, toggle }) => {
   const { style, icon } = container;
   const componentStyle = {
     display: 'none',
-    [theme.breakpoints.presets.sm]: {
+    [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
       display: 'block',
       paddingTop: '0rem',
       paddingBottom: '0rem',

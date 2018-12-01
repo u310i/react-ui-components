@@ -24,7 +24,7 @@ export default ({
     overlay: {
       style: {
         display: 'none',
-        [theme.breakpoints.presets.sm]: {
+        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
           display: 'block',
           pointerEvents: toggleState === 'close' ? 'none' : 'auto',
           position: 'fixed',
@@ -39,7 +39,7 @@ export default ({
     },
     main: {
       style: {
-        [theme.breakpoints.presets.sm]: {
+        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
           [direction]: '0',
           display: 'block',
           zIndex: theme.zIndex.drawer,
@@ -70,14 +70,14 @@ export default ({
               }
             }
           },
-          [theme.breakpoints.presets.sm_to_infinite]: {
+          [theme.breakpoint.createMediaQuerie('minWidth', 'sm')]: {
             display: 'flex',
             flexDirection: 'row',
             paddingLeft: '1rem',
             paddingRight: '1rem',
             backgroundColor: '#b0c4de'
           },
-          [theme.breakpoints.presets.sm]: {
+          [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
             height: '100%',
             height: 'calc(100% - 3rem)',
             paddingTop: '1rem',
@@ -98,10 +98,10 @@ export default ({
       },
       button: {
         style: {
-          [theme.breakpoints.presets.sm_to_infinite]: {
+          [theme.breakpoint.createMediaQuerie('minWidth', 'sm')]: {
             display: 'none'
           },
-          [theme.breakpoints.presets.sm]: {
+          [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
             height: '3rem',
             display: 'flex',
             justifyContent: 'flex-end',
@@ -118,7 +118,7 @@ export default ({
     const x = direction === 'left' ? '-100%' : '100%';
     return createReactCSSTransitionStyle(name, {
       defaultStyle: {
-        [theme.breakpoints.presets.sm]: {
+        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
           '& > #ui-drawer-main': {
             transform: `translate3d(${x},0,0)`
           },
@@ -128,7 +128,7 @@ export default ({
         }
       },
       enter: {
-        [theme.breakpoints.presets.sm]: {
+        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
           '& > #ui-drawer-main': {
             transform: `translate3d(${x},0,0)`
           },
@@ -138,7 +138,7 @@ export default ({
         }
       },
       enterActive: {
-        [theme.breakpoints.presets.sm]: {
+        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
           '& > #ui-drawer-main': {
             transform: 'translate3d(0,0,0)',
             transition: `transform ${duration}ms ${timingFunction}`
@@ -150,7 +150,7 @@ export default ({
         }
       },
       exit: {
-        [theme.breakpoints.presets.sm]: {
+        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
           '& > #ui-drawer-main': {
             transform: 'translate3d(0,0,0)'
           },
@@ -160,7 +160,7 @@ export default ({
         }
       },
       exitActive: {
-        [theme.breakpoints.presets.sm]: {
+        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
           '& > #ui-drawer-main': {
             transform: `translate3d(${x},0,0)`,
             transition: `transform ${duration}ms ${timingFunction}`
@@ -179,7 +179,7 @@ export default ({
   useEffect(() => {
     const head = document.head;
     const backgroundTransitionStyle = `
-    ${theme.breakpoints.presets.sm} {
+    ${theme.breakpoint.presets.sm} {
       body.drawer-overflow-hidden {
         overflow: hidden;
       }

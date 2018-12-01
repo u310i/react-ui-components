@@ -44,32 +44,32 @@ export default ({
   useEffect(() => {
     const targetElement = document.getElementById('ui-globalnav-main');
     const targetHeight = targetElement.offsetHeight;
-    let lastPosition = window.pageYOffset;
-    let offset = lastPosition;
+    let currentPosition = window.pageYOffset;
+    let offset = currentPosition;
     let hideMenuOnDownScrollToggle = 'visible';
     const hideMenuOnDownScroll = () => {
-      lastPosition = window.pageYOffset;
-      if (lastPosition > targetHeight) {
-        if (lastPosition > offset) {
+      currentPosition = window.pageYOffset;
+      if (currentPosition > targetHeight) {
+        if (currentPosition > offset) {
           if (hideMenuOnDownScrollToggle === 'visible') {
-            hideMenuOnDownScrollToggle = 'hide';
             targetElement.classList.add('hide-on-scroll-enter');
             targetElement.classList.add('hide-on-scroll-active');
+            hideMenuOnDownScrollToggle = 'hide';
           }
         } else {
           if (hideMenuOnDownScrollToggle === 'hide') {
-            hideMenuOnDownScrollToggle = 'visible';
             targetElement.classList.remove('hide-on-scroll-active');
+            hideMenuOnDownScrollToggle = 'visible';
           }
         }
       } else {
         if (offset > targetHeight) {
-          hideMenuOnDownScrollToggle = 'visible';
           targetElement.classList.remove('hide-on-scroll-enter');
           targetElement.classList.remove('hide-on-scroll-active');
+          hideMenuOnDownScrollToggle = 'visible';
         }
       }
-      offset = lastPosition;
+      offset = currentPosition;
     };
 
     let ticking = false;
@@ -109,14 +109,14 @@ export default ({
         justifyContent: 'flex-end',
         alignItems: 'center',
         height: '3rem',
-        [theme.breakpoints.presets.sm_to_infinite]: {
+        [theme.breakpoint.createMediaQuerie('minWidth', 'sm')]: {
           position: 'fixed',
           top: '0',
           left: '0',
           width: '100%',
           zIndex: '100'
         },
-        [theme.breakpoints.presets.sm]: {
+        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
           position: 'fixed',
           top: '0',
           left: '0',

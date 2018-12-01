@@ -1,11 +1,11 @@
 export default {
-  breakpoints: {
+  breakpoint: {
     values: {
-      xs: { value: null },
-      sm: { value: 767 },
-      md: { value: null },
-      lg: { value: 1280 },
-      xl: { value: null }
+      xs: null,
+      sm: 767,
+      md: 900,
+      lg: 1280,
+      xl: null
     }
   },
   zIndex: {

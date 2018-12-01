@@ -1,9 +1,9 @@
 import defaultTheme from 'theme/defaultTheme';
-import { screenSizeMediaQueriesGen } from 'utilities/utils';
+import { createScreenSizeMediaQueries } from 'utilities/utils';
 
 export default theme => {
   const {
-    breakpoints,
+    breakpoint,
     zIndex,
     scrollbar,
     palette: { primary, secondary, tertiary },
@@ -29,21 +29,29 @@ export default theme => {
 
   const commonFontFamily = fontFamily.join(',');
 
-  let breakpointsEntriesList = [];
-  let breakpointsList = [];
-  for (let [key, obj] of Object.entries(breakpoints.values).sort((a, b) => {
-    return a[1].value - b[1].value;
-  })) {
-    if (obj.value) {
-      breakpointsEntriesList.push([key, obj.value]);
-      breakpointsList.push(obj.value);
+  breakpoint.createMediaQuerie = (type, pointName) => {
+    switch (type) {
+      case 'maxWidth':
+        return `@media (max-width: ${(
+          breakpoint.values[pointName] - 1
+        ).toString()}px)`;
+      case 'minWidth':
+        return `@media (min-width: ${breakpoint.values[
+          pointName
+        ].toString()}px)`;
+      case 'minToMaxWidth':
+        return `@media (min-width: ${breakpoint.values[
+          min
+        ].toString()}px) and (max-width: ${(
+          breakpoint.values[max] - 1
+        ).toString()}px)`;
+      default:
+        return 'error';
     }
-  }
-  breakpoints.list = breakpointsList;
-  breakpoints.presets = screenSizeMediaQueriesGen(breakpointsEntriesList);
+  };
 
   return {
-    breakpoints: breakpoints,
+    breakpoint: breakpoint,
     zIndex: {
       ...zIndex
     },

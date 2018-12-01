@@ -22,44 +22,24 @@ injectGlobal(pageProps.global.style, reboot);
 
 const App = () => {
   useEffect(() => {
-    const targetElement = document.getElementById('ui-globalnav-main');
-    const targetHeight = targetElement.offsetHeight;
-    let lastPosition = window.pageYOffset;
-    let offset = lastPosition;
+    let currentWidth = window.innerWidth;
+    let offset = currentWidth;
     let hideMenuOnDownScrollToggle = 'visible';
-    const hideMenuOnDownScroll = () => {
-      lastPosition = window.pageYOffset;
-      if (lastPosition > targetHeight) {
-        if (lastPosition > offset) {
-          if (hideMenuOnDownScrollToggle === 'visible') {
-            hideMenuOnDownScrollToggle = 'hide';
-            targetElement.classList.add('hide-on-scroll-enter');
-            targetElement.classList.add('hide-on-scroll-active');
-          }
-        } else {
-          if (hideMenuOnDownScrollToggle === 'hide') {
-            hideMenuOnDownScrollToggle = 'visible';
-            targetElement.classList.remove('hide-on-scroll-active');
-          }
-        }
-      } else {
-        if (offset > targetHeight) {
-          hideMenuOnDownScrollToggle = 'visible';
-          targetElement.classList.remove('hide-on-scroll-enter');
-          targetElement.classList.remove('hide-on-scroll-active');
-        }
-      }
-      offset = lastPosition;
-    };
+    let currentPoint = '';
 
     let ticking = false;
     const windowSizeOnScroll = () => {
       if (!ticking) {
         requestAnimationFrameFallback(() => {
-          // hideMenuOnDownScroll();
-          if (window.innerWidth < pageTheme.breakpoints.list[0]) {
-            console.log('');
-          }
+          // currentWidth = window.innerWidth;
+          // for ([key, value] of breakpoint.entriesList) {
+          //   if (currentWidth < value) {
+          //     currentPoint = key;
+          //   }
+          // }
+          // if (window.innerWidth < breakpoint.values.sm) {
+          //   console.log('');
+          // }
           ticking = false;
         });
         ticking = true;
