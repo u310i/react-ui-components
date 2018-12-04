@@ -1,14 +1,12 @@
 import React from 'react';
-import { css, cx } from 'react-emotion';
+import { css } from 'react-emotion';
 
 export default ({
-  containerProps: {
-    textNode = '',
-    attribute: { href = '#', ...attribute },
-    style = {}
-  }
+  text,
+  attribute: { href = '#', ...attribute },
+  style = {}
 }) => (
-  <a href={href} className={cx(css(style), 'ui-link')} {...attribute}>
-    {textNode}
+  <a href={href} className={css(style)} {...attribute}>
+    {text}
   </a>
 );

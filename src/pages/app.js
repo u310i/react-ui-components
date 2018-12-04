@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Helmet from 'react-helmet';
 import { css, injectGlobal, sheet } from 'react-emotion';
 import reboot from 'utilities/reboot';
-import { requestAnimationFrameFallback } from 'utilities/utils';
+import { createOptimizedEvent } from 'utilities/utils';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fontAwesomeIconList } from 'src/icons';
 
@@ -11,8 +11,8 @@ import createPagePropsTheme from 'utilities/createPagePropsTheme';
 import baseTheme from './_this_theme';
 import baseProps from './_this_props';
 
-import GlobalNav from 'organisms/GlobalNav';
-import HEAD from 'organisms/Header';
+import Header from 'organisms/Header';
+import HeaderImage from 'organisms/HeaderImage';
 
 library.add(...fontAwesomeIconList);
 
@@ -20,7 +20,11 @@ const { pageProps, pageTheme } = createPagePropsTheme(baseTheme, baseProps);
 
 injectGlobal(pageProps.global.style, reboot);
 
+console.log('app-outer');
+console.log(document.body.clientWidth);
 const App = () => {
+  console.log('app');
+  console.log(document.body.clientWidth);
   const breakpoint = pageTheme.breakpoint;
 
   let currentWidth = window.innerWidth;
@@ -30,8 +34,6 @@ const App = () => {
     'max';
 
   const [breakpointState, setBreakpointState] = useState(currentBreakpoint);
-
-  console.log('breakpoint:' + breakpointState);
 
   useEffect(() => {
     const setBreakpointOnResize = () => {
@@ -57,16 +59,7 @@ const App = () => {
       }
     };
 
-    let ticking = false;
-    const windowSizeOnScroll = () => {
-      if (!ticking) {
-        requestAnimationFrameFallback(() => {
-          setBreakpointOnResize();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
+    const windowSizeOnScroll = createOptimizedEvent(setBreakpointOnResize);
 
     window.addEventListener('resize', windowSizeOnScroll);
     return () => {
@@ -82,9 +75,13 @@ const App = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Helmet> */}
 
-      <GlobalNav theme={pageTheme} containerProps={pageProps.globalNav} />
+      <Header
+        theme={pageTheme}
+        breakpointState={breakpointState}
+        componentProps={pageProps.header}
+      />
 
-      <HEAD theme={pageTheme} containerProps={pageProps.head} />
+      <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
 
       {/* <section>
         <h2>VISION</h2>

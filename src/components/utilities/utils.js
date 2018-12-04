@@ -13,7 +13,7 @@ export const createReactCSSTransitionStyle = (
   }
 ) => {
   return {
-    ...(defaultStyle || enter),
+    ...(defaultStyle || {}),
     [`&.${name}-appear`]: appear || enter,
     [`&.${name}-appear-active`]: appearActive || enterActive,
     [`&.${name}-enter`]: enter,
@@ -66,3 +66,40 @@ export const requestAnimationFrameFallback = (function() {
     }
   );
 })();
+
+export const createOptimizedEvent = callback => {
+  let ticking = false;
+  return () => {
+    if (!ticking) {
+      requestAnimationFrameFallback(() => {
+        callback();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  };
+};
+
+export const createGetScrollUpDownState = () => {
+  let currentPosition,
+    prePosition = window.pageYOffset,
+    state = 'equal';
+  return () => {
+    currentPosition = window.pageYOffset;
+    if (currentPosition > prePosition) {
+      if (state !== 'down') {
+        state = 'down';
+      }
+    } else if (currentPosition < prePosition) {
+      if (state !== 'up') {
+        state = 'up';
+      }
+    } else {
+      if (state !== 'equal') {
+        state = 'equal';
+      }
+    }
+    prePosition = currentPosition;
+    return state;
+  };
+};

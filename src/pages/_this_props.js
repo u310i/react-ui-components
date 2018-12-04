@@ -19,70 +19,50 @@ export default theme => {
       }
     },
 
-    globalNav: {
-      general: {
-        style: {
-          // paddingTop: '1.5rem',
-          // paddingBottom: '1.5rem'
+    header: {
+      style: {
+        '& > div': {
+          backgroundColor: '#008b8b'
         }
       },
-      container: {
-        style: {
-          [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
-            backgroundColor: '#2f4f4f'
+      menu: {
+        itemList: [
+          {
+            text: 'TOP',
+            attribute: { href: '#' },
+            style: {
+              backgroundColor: '#4CAF50',
+              color: 'white'
+            }
+          },
+          {
+            text: 'VISION',
+            attribute: { href: '#' }
+          },
+          {
+            text: 'MESSAGE',
+            attribute: { href: '#' }
+          },
+          {
+            text: 'STORY',
+            attribute: { href: '#' }
+          },
+          {
+            text: 'PROFILE',
+            attribute: { href: '#' }
           }
-        }
+        ]
       },
-      drawer: {
-        container: {
-          style: {},
-          attribute: {}
+      drawerButton: {
+        icon: {
+          close: 'angle-double-left',
+          open: 'angle-double-right'
         },
-        list: {
-          container: {
-            style: {},
-            listItems: [
-              {
-                textNode: 'TOP',
-                attribute: { href: '#' },
-                style: {
-                  backgroundColor: '#4CAF50',
-                  color: 'white'
-                }
-              },
-              {
-                textNode: 'VISION',
-                attribute: { href: '#' }
-              },
-              {
-                textNode: 'MESSAGE',
-                attribute: { href: '#' }
-              },
-              {
-                textNode: 'STORY',
-                attribute: { href: '#' }
-              },
-              {
-                textNode: 'PROFILE',
-                attribute: { href: '#' }
-              }
-            ]
-          }
-        }
-      },
-
-      actionIcon: {
-        container: {
-          style: {},
-          icon: {
-            close: 'angle-double-left',
-            open: 'angle-double-right'
-          }
-        }
+        style: {}
       }
     },
 
-    head: {
+    headerImage: {
       container: {
         style: {
           position: 'relative',

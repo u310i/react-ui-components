@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { css, cx } from 'emotion';
 import List from 'atoms/List';
+import Link from 'atoms/Link';
 
-export default ({ theme, containerProps: { container, list, general } }) => {
+const Menu = ({ theme, itemList }) => {
   const componentStyle = {
+    style: {},
     main: {
       style: {},
       list: {
@@ -37,19 +39,20 @@ export default ({ theme, containerProps: { container, list, general } }) => {
   };
 
   return (
-    <div className={cx(css(componentStyle))} id="ui-menu">
-      <div className={cx(css(componentStyle.main.style))} id="ui-menu-main">
-        <ul
-          className={cx(css(componentStyle.main.list.style))}
-          id="ui-menu-main-list"
-        >
-          <List
-            theme={theme}
-            containerProps={{ ...list, general }}
-            tagName="li"
-          />
-        </ul>
-      </div>
+    <div className={cx(css(componentStyle.style))} id="uc-menu">
+      <ul className={cx(css(componentStyle.main.list.style))} id="uc-menu-list">
+        <List theme={theme} itemList={itemList}>
+          {({ text, attribute, style }) => {
+            return (
+              <li>
+                <Link text={text} attribute={attribute} style={style} />
+              </li>
+            );
+          }}
+        </List>
+      </ul>
     </div>
   );
 };
+
+export default Menu;

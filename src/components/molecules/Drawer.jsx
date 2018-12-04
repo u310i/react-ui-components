@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'emotion';
-import {
-  createReactCSSTransitionStyle,
-  createReactCSSTransitionCallBack
-} from 'utilities/utils';
-import ActionIcon from 'atoms/ActionIcon';
+import { createReactCSSTransitionStyle } from 'utilities/utils';
+import Link from 'atoms/Link';
 
 import List from 'atoms/List';
+console.log('drawer-outer');
+console.log(document.body.clientWidth);
 
-export default ({
-  theme,
-  containerProps: { container, list, general, actionIconComponent },
-  toggle,
-  toggleState
-}) => {
+const Drawer = ({ theme, itemList, toggle, toggleState, toggleButton }) => {
+  console.log('drawer');
+  console.log(document.body.clientWidth);
   const name = 'drawer';
   const direction = 'right';
   const duration = 150;
@@ -24,34 +20,45 @@ export default ({
     overlay: {
       style: {
         display: 'none',
-        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
-          display: 'block',
-          pointerEvents: toggleState === 'close' ? 'none' : 'auto',
-          position: 'fixed',
-          zIndex: '999',
-          top: '0',
-          left: '0',
-          right: '0',
-          bottom: '0',
-          backgroundColor: 'black'
-        }
+        display: 'block',
+        pointerEvents: toggleState === 'close' ? 'none' : 'auto',
+        position: 'fixed',
+        zIndex: '999',
+        top: '0',
+        left: '0',
+        right: '0',
+        bottom: '0',
+        backgroundColor: 'black'
       }
     },
     main: {
       style: {
-        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
-          [direction]: '0',
-          display: 'block',
-          zIndex: theme.zIndex.drawer,
-          position: 'fixed',
-          padding: '0',
-          top: '0',
-          width: '400px',
-          height: '100%'
-        }
+        [direction]: '0',
+        display: 'block',
+        zIndex: theme.zIndex.drawer,
+        position: 'fixed',
+        padding: '0',
+        top: '0',
+        width: '400px',
+        height: '100%'
       },
       list: {
         style: {
+          height: '100%',
+          height: 'calc(100% - 3rem)',
+          paddingTop: '1rem',
+          paddingBottom: '1rem',
+          paddingLeft: '0.5rem',
+          paddingRight: '0.5rem',
+          backgroundColor: '#e0ffff',
+          '& > li': {
+            width: '100%',
+            backgroundColor: '#fafad2',
+            '& > a': {
+              width: '100%',
+              color: 'black'
+            }
+          },
           '& > li': {
             backgroundColor: '#fafad2',
             '& > a': {
@@ -69,122 +76,80 @@ export default ({
                 color: 'black'
               }
             }
-          },
-          [theme.breakpoint.createMediaQuerie('minWidth', 'sm')]: {
-            display: 'flex',
-            flexDirection: 'row',
-            paddingLeft: '1rem',
-            paddingRight: '1rem',
-            backgroundColor: '#b0c4de'
-          },
-          [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
-            height: '100%',
-            height: 'calc(100% - 3rem)',
-            paddingTop: '1rem',
-            paddingBottom: '1rem',
-            paddingLeft: '0.5rem',
-            paddingRight: '0.5rem',
-            backgroundColor: '#e0ffff',
-            '& > li': {
-              width: '100%',
-              backgroundColor: '#fafad2',
-              '& > a': {
-                width: '100%',
-                color: 'black'
-              }
-            }
           }
         }
       },
-      button: {
+      header: {
         style: {
-          [theme.breakpoint.createMediaQuerie('minWidth', 'sm')]: {
-            display: 'none'
-          },
-          [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
-            height: '3rem',
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            paddingRight: '17px',
-            backgroundColor: '#ffc0cb'
-          }
+          height: '3rem',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          backgroundColor: '#ffc0cb',
+          paddingLeft: '0.5rem',
+          paddingRight: '0.5rem'
         }
       }
     }
   };
 
-  const createDrawerTransitionStyle = () => {
-    const x = direction === 'left' ? '-100%' : '100%';
-    return createReactCSSTransitionStyle(name, {
-      defaultStyle: {
-        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
-          '& > #ui-drawer-main': {
-            transform: `translate3d(${x},0,0)`
-          },
-          '& > #ui-drawer-overlay': {
-            opacity: '0'
-          }
-        }
+  const x = direction === 'left' ? '-100%' : '100%';
+  const drawerTransitionStyle = createReactCSSTransitionStyle(name, {
+    defaultStyle: {
+      '& > #uc-drawer-main': {
+        transform: `translate3d(${x},0,0)`
       },
-      enter: {
-        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
-          '& > #ui-drawer-main': {
-            transform: `translate3d(${x},0,0)`
-          },
-          '& > #ui-drawer-overlay': {
-            opacity: '0'
-          }
-        }
-      },
-      enterActive: {
-        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
-          '& > #ui-drawer-main': {
-            transform: 'translate3d(0,0,0)',
-            transition: `transform ${duration}ms ${timingFunction}`
-          },
-          '& > #ui-drawer-overlay': {
-            opacity: '0.3',
-            transition: `opacity ${duration}ms ${timingFunction}`
-          }
-        }
-      },
-      exit: {
-        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
-          '& > #ui-drawer-main': {
-            transform: 'translate3d(0,0,0)'
-          },
-          '& > #ui-drawer-overlay': {
-            opacity: '0.3'
-          }
-        }
-      },
-      exitActive: {
-        [theme.breakpoint.createMediaQuerie('maxWidth', 'sm')]: {
-          '& > #ui-drawer-main': {
-            transform: `translate3d(${x},0,0)`,
-            transition: `transform ${duration}ms ${timingFunction}`
-          },
-          '& > #ui-drawer-overlay': {
-            opacity: '0',
-            transition: `opacity ${duration}ms ${timingFunction}`
-          }
-        }
+      '& > #uc-drawer-overlay': {
+        opacity: '0'
       }
-    });
-  };
-
-  const drawerTransitionStyle = createDrawerTransitionStyle();
+    },
+    enter: {
+      '& > #uc-drawer-main': {
+        transform: `translate3d(${x},0,0)`
+      },
+      '& > #uc-drawer-overlay': {
+        opacity: '0'
+      }
+    },
+    enterActive: {
+      '& > #uc-drawer-main': {
+        transform: 'translate3d(0,0,0)',
+        transition: `transform ${duration}ms ${timingFunction}`
+      },
+      '& > #uc-drawer-overlay': {
+        opacity: '0.3',
+        transition: `opacity ${duration}ms ${timingFunction}`
+      }
+    },
+    exit: {
+      '& > #uc-drawer-main': {
+        transform: 'translate3d(0,0,0)'
+      },
+      '& > #uc-drawer-overlay': {
+        opacity: '0.3'
+      }
+    },
+    exitActive: {
+      '& > #uc-drawer-main': {
+        transform: `translate3d(${x},0,0)`,
+        transition: `transform ${duration}ms ${timingFunction}`
+      },
+      '& > #uc-drawer-overlay': {
+        opacity: '0',
+        transition: `opacity ${duration}ms ${timingFunction}`
+      }
+    }
+  });
 
   useEffect(() => {
     const head = document.head;
     const backgroundTransitionStyle = `
-    ${theme.breakpoint.presets.sm} {
       body.drawer-overflow-hidden {
         overflow: hidden;
       }
     }
     `;
+    // margin-${direction === 'right' ? 'right' : 'left'}: 17px;
     const styleNode = document.createElement('style');
     const ruleText = document.createTextNode(backgroundTransitionStyle);
     styleNode.setAttribute('id', 'body-drawer');
@@ -202,6 +167,8 @@ export default ({
     const body = document.body;
     if (toggleState === 'open') {
       body.classList.add('drawer-overflow-hidden');
+    } else {
+      body.classList.remove('drawer-overflow-hidden');
     }
     return () => {
       if (body.classList.contains('drawer-overflow-hidden')) {
@@ -209,6 +176,13 @@ export default ({
       }
     };
   });
+  const item = ({ key, text, attribute, style }) => {
+    return (
+      <li key={key}>
+        <Link text={text} attribute={attribute} style={style} />
+      </li>
+    );
+  };
 
   return (
     <CSSTransition
@@ -218,28 +192,34 @@ export default ({
     >
       <div
         className={cx(css(componentStyle), css(drawerTransitionStyle))}
-        id="ui-drawer"
+        id="uc-drawer"
       >
         <div
           onClick={toggle}
           className={cx(css(componentStyle.overlay.style))}
-          id="ui-drawer-overlay"
+          id="uc-drawer-overlay"
         />
-        <div className={cx(css(componentStyle.main.style))} id="ui-drawer-main">
+        <div className={cx(css(componentStyle.main.style))} id="uc-drawer-main">
           <div
-            className={cx(css(componentStyle.main.button.style))}
-            id="ui-drawer-main-button"
+            className={cx(css(componentStyle.main.header.style))}
+            id="uc-drawer-main-header"
           >
-            {actionIconComponent}
+            {toggleButton}
           </div>
           <ul
             className={cx(css(componentStyle.main.list.style))}
-            id="ui-drawer-main-list"
+            id="uc-drawer-main-list"
           >
             <List
               theme={theme}
-              containerProps={{ ...list, general }}
-              tagName="li"
+              itemList={itemList}
+              render={({ text, attribute, style }) => {
+                return (
+                  <li>
+                    <Link text={text} attribute={attribute} style={style} />
+                  </li>
+                );
+              }}
             />
           </ul>
         </div>
@@ -247,3 +227,5 @@ export default ({
     </CSSTransition>
   );
 };
+
+export default Drawer;

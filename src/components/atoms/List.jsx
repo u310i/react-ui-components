@@ -2,24 +2,21 @@ import React from 'react';
 import { css, cx } from 'emotion';
 import Link from 'atoms/Link';
 
-export default ({ theme, containerProps: { container, general }, tagName }) => {
-  let textNode, attribute, style;
-  const items = container.listItems.map((item, index) => {
-    ({ textNode, attribute, style } = item);
-    const link = (
-      <Link
-        containerProps={{
-          textNode: textNode,
-          attribute: { ...attribute },
-          style: {
-            ...general.style,
-            ...container.style,
-            ...style
-          }
-        }}
-      />
-    );
-    return React.createElement(tagName, { key: index, id: 'ui-list' }, link);
-  });
-  return <>{items}</>;
+console.log('list-outer');
+
+const Item = ({ child }) => {
+  return <React.Fragment>{child}</React.Fragment>;
 };
+
+const ItemWithMemo = React.memo(Item);
+
+const List = ({ render, theme, itemList }) => {
+  console.log('list');
+  console.log('-------------');
+  const elementList = itemList.map((item, index) => {
+    return <Item key={index} child={render(item)} item={item} />;
+  });
+  return <>{elementList}</>;
+};
+
+export default List;
