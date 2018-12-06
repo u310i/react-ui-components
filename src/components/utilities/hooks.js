@@ -23,7 +23,7 @@ export const useGetStateOnScroll = elementId => {
   useEffect(() => {
     const elementHeight = elementId
       ? document.getElementById(elementId).offsetHeight
-      : 0;
+      : false;
     const getStateOnScrol = createGetStateOnScroll(setState, elementHeight);
     const hideHeaderOnScroll = createOptimizedEvent(getStateOnScrol);
     window.addEventListener('scroll', hideHeaderOnScroll);

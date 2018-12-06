@@ -118,7 +118,7 @@ export const createGetStateOnScroll = (setState, elementHeight) => {
     scrollState,
     preState,
     state,
-    height = elementHeight ? elementHeight : 0;
+    height = elementHeight ? elementHeight : -1;
   return () => {
     currentPosition = window.pageYOffset;
     scrollState = getScrollState(initPosition, currentPosition);
