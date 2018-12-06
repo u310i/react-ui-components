@@ -20,11 +20,7 @@ const { pageProps, pageTheme } = createPagePropsTheme(baseTheme, baseProps);
 
 injectGlobal(pageProps.global.style, reboot);
 
-console.log('app-outer');
-console.log(document.body.clientWidth);
 const App = () => {
-  console.log('app');
-  console.log(document.body.clientWidth);
   const breakpoint = pageTheme.breakpoint;
 
   let currentWidth = window.innerWidth;
@@ -63,7 +59,6 @@ const App = () => {
 
     window.addEventListener('resize', windowSizeOnScroll);
     return () => {
-      console.log('remove eventListener');
       window.removeEventListener('resize', windowSizeOnScroll);
     };
   }, []);

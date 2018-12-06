@@ -5,12 +5,8 @@ import { createReactCSSTransitionStyle } from 'utilities/utils';
 import Link from 'atoms/Link';
 
 import List from 'atoms/List';
-console.log('drawer-outer');
-console.log(document.body.clientWidth);
 
 const Drawer = ({ theme, itemList, toggle, toggleState, toggleButton }) => {
-  console.log('drawer');
-  console.log(document.body.clientWidth);
   const name = 'drawer';
   const direction = 'right';
   const duration = 150;
@@ -143,13 +139,14 @@ const Drawer = ({ theme, itemList, toggle, toggleState, toggleButton }) => {
 
   useEffect(() => {
     const head = document.head;
+    const scrollBarWidth = window.innerWidth - document.body.clientWidth;
     const backgroundTransitionStyle = `
       body.drawer-overflow-hidden {
         overflow: hidden;
+        margin-${direction === 'right' ? 'right' : 'left'}: ${scrollBarWidth}px;
       }
     }
     `;
-    // margin-${direction === 'right' ? 'right' : 'left'}: 17px;
     const styleNode = document.createElement('style');
     const ruleText = document.createTextNode(backgroundTransitionStyle);
     styleNode.setAttribute('id', 'body-drawer');
@@ -176,13 +173,12 @@ const Drawer = ({ theme, itemList, toggle, toggleState, toggleButton }) => {
       }
     };
   });
-  const item = ({ key, text, attribute, style }) => {
-    return (
-      <li key={key}>
-        <Link text={text} attribute={attribute} style={style} />
-      </li>
-    );
-  };
+
+  const listItem = ({ text, attribute, style }) => (
+    <li>
+      <Link text={text} attribute={attribute} style={style} />
+    </li>
+  );
 
   return (
     <CSSTransition
@@ -210,17 +206,9 @@ const Drawer = ({ theme, itemList, toggle, toggleState, toggleButton }) => {
             className={cx(css(componentStyle.main.list.style))}
             id="uc-drawer-main-list"
           >
-            <List
-              theme={theme}
-              itemList={itemList}
-              render={({ text, attribute, style }) => {
-                return (
-                  <li>
-                    <Link text={text} attribute={attribute} style={style} />
-                  </li>
-                );
-              }}
-            />
+            <List theme={theme} itemList={itemList}>
+              {listItem}
+            </List>
           </ul>
         </div>
       </div>

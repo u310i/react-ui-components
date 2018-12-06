@@ -7,23 +7,19 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import {
   createOptimizedEvent,
   createReactCSSTransitionStyle,
-  createGetScrollUpDownState
+  createSetHeaderStateOnScrollUpDown
 } from 'utilities/utils';
+import { useGetStateOnScroll } from 'utilities/hooks';
 import IconButton from 'atoms/iconButton';
 import Drawer from 'molecules/Drawer';
 import Menu from 'molecules/Menu';
-console.log('header-outer');
-console.log(document.body.clientWidth);
 
 const Header = ({
   theme,
   breakpointState,
   componentProps: { style, menu, drawerButton }
 }) => {
-  console.log('header');
-  console.log(document.body.clientWidth);
   const [drawerState, setDrawerState] = useState('close');
-  const [headerState, setHeaderState] = useState('show');
   const drawerToggle = () => {
     setDrawerState(drawerState === 'close' ? 'open' : 'close');
   };
@@ -32,42 +28,28 @@ const Header = ({
     hideBarTimingFunction = 'ease-out',
     hideBarDuration = 200;
 
-  useEffect(() => {
-    if (drawerState === 'open' && breakpointState !== 'sm') {
-      setDrawerState('close');
-    }
-  });
+  if (drawerState === 'open' && breakpointState !== 'sm') {
+    setDrawerState('close');
+  }
 
-  useEffect(() => {
-    const targetElement = document.getElementById('uc-header-bar'),
-      targetHeight = targetElement.offsetHeight;
-    let currentPosition,
-      scrollState,
-      preState,
-      state = currentPosition > targetHeight ? 'show' : 'quickly-show';
-    const getScrollUpDownState = createGetScrollUpDownState();
-    const setHeaderStateOnScroll = () => {
-      currentPosition = window.pageYOffset;
-      scrollState = getScrollUpDownState();
-      preState = state;
-      if (currentPosition > targetHeight) {
-        state = scrollState !== 'down' ? 'show' : 'hide';
-      } else {
-        state = 'quickly-show';
-      }
-      if (state !== preState) {
-        setHeaderState(state);
-      }
-    };
+  const headerState = useGetStateOnScroll('uc-header-bar');
 
-    const hideHeaderOnScroll = createOptimizedEvent(setHeaderStateOnScroll);
-
-    window.addEventListener('scroll', hideHeaderOnScroll);
-
-    return () => {
-      window.removeEventListener('scroll', hideHeaderOnScroll);
-    };
-  }, []);
+  // const [headerState, setHeaderState] = useState('show');
+  // useEffect(() => {
+  //   const targetHeight = document.getElementById('uc-header-bar').offsetHeight;
+  //   const setHeaderStateOnScrollUpDown = createSetHeaderStateOnScrollUpDown(
+  //     setHeaderState,
+  //     targetHeight
+  //   );
+  //   // const setHeaderStateOnScrollOffset = () => {};
+  //   const hideHeaderOnScroll = createOptimizedEvent(
+  //     setHeaderStateOnScrollUpDown
+  //   );
+  //   window.addEventListener('scroll', hideHeaderOnScroll);
+  //   return () => {
+  //     window.removeEventListener('scroll', hideHeaderOnScroll);
+  //   };
+  // }, []);
 
   const hideBarStyle = createReactCSSTransitionStyle(hideBarName, {
     enter: {

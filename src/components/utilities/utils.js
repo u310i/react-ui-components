@@ -80,12 +80,19 @@ export const createOptimizedEvent = callback => {
   };
 };
 
-export const createGetScrollUpDownState = () => {
+const createGetScrollState = () => {
   let currentPosition,
-    prePosition = window.pageYOffset,
-    state = 'equal';
-  return () => {
-    currentPosition = window.pageYOffset;
+    prePosition,
+    state = 'equal',
+    isFirstRender = true;
+  return (initPosition, position) => {
+    if (!isFirstRender) {
+      prePosition = currentPosition;
+    } else {
+      prePosition = initPosition;
+      isFirstRender = false;
+    }
+    currentPosition = position;
     if (currentPosition > prePosition) {
       if (state !== 'down') {
         state = 'down';
@@ -99,7 +106,30 @@ export const createGetScrollUpDownState = () => {
         state = 'equal';
       }
     }
-    prePosition = currentPosition;
+
     return state;
+  };
+};
+export const getScrollState = createGetScrollState();
+
+export const createGetStateOnScroll = (setState, elementHeight) => {
+  let currentPosition,
+    initPosition = window.pageYOffset,
+    scrollState,
+    preState,
+    state,
+    height = elementHeight ? elementHeight : 0;
+  return () => {
+    currentPosition = window.pageYOffset;
+    scrollState = getScrollState(initPosition, currentPosition);
+    preState = state;
+    if (currentPosition > height) {
+      state = scrollState !== 'down' ? 'show' : 'hide';
+    } else {
+      state = 'quickly-show';
+    }
+    if (state !== preState) {
+      setState(state);
+    }
   };
 };
