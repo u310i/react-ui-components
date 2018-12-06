@@ -1,6 +1,5 @@
-export const createReactCSSTransitionStyle = (
-  name,
-  {
+export const createReactCSSTransitionStyle = (name, callback) => {
+  const {
     defaultStyle,
     appear,
     appearActive,
@@ -10,8 +9,7 @@ export const createReactCSSTransitionStyle = (
     exit,
     exitActive,
     exitDone
-  }
-) => {
+  } = callback();
   return {
     ...(defaultStyle || {}),
     [`&.${name}-appear`]: appear || enter,
@@ -117,7 +115,7 @@ export const createGetStateOnScroll = (setState, elementHeight) => {
     initPosition = window.pageYOffset,
     scrollState,
     preState,
-    state,
+    state = 'init',
     height = elementHeight ? elementHeight : -1;
   return () => {
     currentPosition = window.pageYOffset;

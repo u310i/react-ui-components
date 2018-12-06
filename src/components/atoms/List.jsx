@@ -8,8 +8,8 @@ const Item = ({ children }) => {
 
 const ItemWithMemo = React.memo(Item);
 
-const List = ({ children, theme, itemList }) => {
-  const elementList = itemList.map((item, index) => {
+const List = ({ children, theme, list }) => {
+  const elementList = list.map((item, index) => {
     return <Item key={index}>{children(item)}</Item>;
   });
   return <>{elementList}</>;

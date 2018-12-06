@@ -3,7 +3,7 @@ import { css, cx } from 'react-emotion';
 
 import Icon from 'atoms/Icon';
 
-export default ({ theme, icon, style, toggle }) => {
+export default ({ theme, icon, style, onClick }) => {
   const componentStyle = {
     fontSize: '1.5rem',
     backgroundColor: '#ff7f50',
@@ -15,7 +15,7 @@ export default ({ theme, icon, style, toggle }) => {
 
   return (
     <button
-      onClick={toggle}
+      onClick={onClick}
       className={css({
         ...componentStyle,
         ...style

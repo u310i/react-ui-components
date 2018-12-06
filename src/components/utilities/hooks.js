@@ -33,3 +33,39 @@ export const useGetStateOnScroll = elementId => {
   }, []);
   return state;
 };
+
+export const useAddCssInBody = (name, state, styleCallback) => {
+  useEffect(() => {
+    const head = document.head;
+    const style = `
+      body.body-${name} {
+        ${styleCallback()}
+      }
+    `;
+    const styleNode = document.createElement('style');
+    const cssText = document.createTextNode(style);
+    styleNode.setAttribute('id', `body-${name}`);
+    styleNode.appendChild(cssText);
+    head.appendChild(styleNode);
+    return () => {
+      const removeNode = document.getElementById(`body-${name}`);
+      if (removeNode) {
+        head.removeChild(removeNode);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const body = document.body;
+    if (state) {
+      body.classList.add(`body-${name}`);
+    } else {
+      body.classList.remove(`body-${name}`);
+    }
+    return () => {
+      if (body.classList.contains(`body-${name}`)) {
+        body.classList.remove(`body-${name}`);
+      }
+    };
+  });
+};

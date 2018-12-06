@@ -53,6 +53,25 @@ export default theme => {
           }
         ]
       },
+      drawer: {
+        style: {},
+        direction: 'left',
+        duration: 150,
+        timingFunction: 'ease-out',
+        closable: true,
+        buttonIcon: 'times',
+        buttonStyle: {},
+        mask: true,
+        maskClosable: true,
+        maskOpacity: 0.3,
+        maskStyle: {
+          backgroundColor: 'white'
+        },
+        shiftScrollBarWidth: true,
+        width: '400px',
+        height: '100%',
+        zIndex: theme.zIndex.drawer
+      },
       drawerButton: {
         icon: {
           close: 'angle-double-left',

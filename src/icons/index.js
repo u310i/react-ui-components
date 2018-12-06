@@ -4,7 +4,8 @@ import {
   faCheckSquare,
   faCoffee,
   faAngleDoubleLeft,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 
 const fontAwesomeIconList = [
@@ -13,7 +14,8 @@ const fontAwesomeIconList = [
   faCheckSquare,
   faCoffee,
   faAngleDoubleLeft,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faTimes
 ];
 
 export { fontAwesomeIconList };

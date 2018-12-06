@@ -4,11 +4,7 @@ import { css, cx } from 'react-emotion';
 
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import {
-  createOptimizedEvent,
-  createReactCSSTransitionStyle,
-  createSetHeaderStateOnScrollUpDown
-} from 'utilities/utils';
+import { createReactCSSTransitionStyle } from 'utilities/utils';
 import { useGetStateOnScroll } from 'utilities/hooks';
 import IconButton from 'atoms/iconButton';
 import Drawer from 'molecules/Drawer';
@@ -17,11 +13,14 @@ import Menu from 'molecules/Menu';
 const Header = ({
   theme,
   breakpointState,
-  componentProps: { style, menu, drawerButton }
+  componentProps: { style, menu, drawer, drawerButton }
 }) => {
   const [drawerState, setDrawerState] = useState('close');
-  const drawerToggle = () => {
+  const onClick = () => {
     setDrawerState(drawerState === 'close' ? 'open' : 'close');
+  };
+  const onClose = () => {
+    setDrawerState('close');
   };
 
   const hideBarName = 'hideBar',
@@ -34,40 +33,25 @@ const Header = ({
 
   const headerState = useGetStateOnScroll('uc-header-bar');
 
-  // const [headerState, setHeaderState] = useState('show');
-  // useEffect(() => {
-  //   const targetHeight = document.getElementById('uc-header-bar').offsetHeight;
-  //   const setHeaderStateOnScrollUpDown = createSetHeaderStateOnScrollUpDown(
-  //     setHeaderState,
-  //     targetHeight
-  //   );
-  //   // const setHeaderStateOnScrollOffset = () => {};
-  //   const hideHeaderOnScroll = createOptimizedEvent(
-  //     setHeaderStateOnScrollUpDown
-  //   );
-  //   window.addEventListener('scroll', hideHeaderOnScroll);
-  //   return () => {
-  //     window.removeEventListener('scroll', hideHeaderOnScroll);
-  //   };
-  // }, []);
-
-  const hideBarStyle = createReactCSSTransitionStyle(hideBarName, {
-    enter: {
-      transform: `translate3d(0,0,0)`
-    },
-    enterActive: {
-      transform: `translate3d(0,-100%,0)`,
-      transition: `transform ${hideBarDuration}ms ${hideBarTimingFunction}`
-    },
-    exit: {
-      transform: `translate3d(0,-100%,0)`
-    },
-    exitActive: {
-      transform: `translate3d(0,0,0)`,
-      transition: `transform ${
-        headerState === 'quickly-show' ? 0 : hideBarDuration
-      }ms ${hideBarTimingFunction}`
-    }
+  const hideBarStyle = createReactCSSTransitionStyle(hideBarName, () => {
+    return {
+      enter: {
+        transform: `translate3d(0,0,0)`
+      },
+      enterActive: {
+        transform: `translate3d(0,-100%,0)`,
+        transition: `transform ${hideBarDuration}ms ${hideBarTimingFunction}`
+      },
+      exit: {
+        transform: `translate3d(0,-100%,0)`
+      },
+      exitActive: {
+        transform: `translate3d(0,0,0)`,
+        transition: `transform ${
+          headerState === 'quickly-show' ? 0 : hideBarDuration
+        }ms ${hideBarTimingFunction}`
+      }
+    };
   });
 
   const componentStyle = {
@@ -107,9 +91,9 @@ const Header = ({
     }
   };
 
-  let drawerButtonIcon;
+  let icon;
   if (drawerButton.icon.close && drawerButton.icon.open) {
-    drawerButtonIcon =
+    icon =
       drawerState === 'close'
         ? drawerButton.icon.close
         : drawerButton.icon.open;
@@ -117,13 +101,8 @@ const Header = ({
     icon = faBars;
   }
 
-  const drawerToggleButton = (
-    <IconButton
-      theme={theme}
-      icon={drawerButtonIcon}
-      style={drawerButton.style}
-      toggle={drawerToggle}
-    />
+  const button = (
+    <IconButton icon={icon} style={drawerButton.style} onClick={onClick} />
   );
 
   return (
@@ -140,18 +119,17 @@ const Header = ({
           {breakpointState !== 'sm' ? (
             <Menu theme={theme} itemList={menu.itemList} />
           ) : (
-            drawerToggleButton
+            button
           )}
         </div>
       </CSSTransition>
       {breakpointState === 'sm' && (
         <Drawer
           theme={theme}
-          itemList={menu.itemList}
-          toggle={drawerToggle}
-          toggleState={drawerState}
-          toggleButton={drawerToggleButton}
-          breakpointState={breakpointState}
+          options={drawer}
+          list={menu.itemList}
+          onClose={onClose}
+          state={drawerState}
         />
       )}
       <div
