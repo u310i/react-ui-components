@@ -8,7 +8,8 @@
     "dev:fast": "NODE_ENV=development DEV_ENV=fast webpack-dev-server",
     "build": "NODE_ENV=production webpack",
     "server": "node server.js",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +19,7 @@
     "@babel/core": "^7.1.5",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "@storybook/react": "^4.0.12",
     "babel-loader": "^8.0.4",
     "babel-plugin-emotion": "^9.2.11",
     "css-loader": "^1.0.0",

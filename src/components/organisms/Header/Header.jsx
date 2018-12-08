@@ -6,7 +6,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import { genReactCSSTransitionStyle } from 'utilities/utils';
 import { useGetStateOnScroll } from 'utilities/hooks';
-import IconButton from 'atoms/iconButton';
+import IconButton from 'atoms/IconButton';
 import Drawer from 'molecules/Drawer';
 import Menu from 'molecules/Menu';
 

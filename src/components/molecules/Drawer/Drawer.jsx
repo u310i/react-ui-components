@@ -10,7 +10,7 @@ import { css, cx } from 'emotion';
 import { genUniqueId, genReactCSSTransitionStyle } from 'utilities/utils';
 import { useAddCssInBody } from 'utilities/hooks';
 import Link from 'atoms/Link';
-import IconButton from 'atoms/iconButton';
+import IconButton from 'atoms/IconButton';
 
 import List from 'atoms/List';
 
