@@ -1,7 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo
+} from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'emotion';
-import { createReactCSSTransitionStyle } from 'utilities/utils';
+import { genUniqueId, genReactCSSTransitionStyle } from 'utilities/utils';
 import { useAddCssInBody } from 'utilities/hooks';
 import Link from 'atoms/Link';
 import IconButton from 'atoms/iconButton';
@@ -9,6 +15,7 @@ import IconButton from 'atoms/iconButton';
 import List from 'atoms/List';
 
 const Drawer = ({ theme, options, list, onClose, state }) => {
+  const name = 'drawer';
   const {
     style: propStyle = {},
     direction = 'right',
@@ -26,7 +33,6 @@ const Drawer = ({ theme, options, list, onClose, state }) => {
     height = '100%',
     zIndex = theme.zIndex.drawer
   } = options;
-  const name = 'drawer';
 
   const componentStyle = {
     mask: {
@@ -65,15 +71,7 @@ const Drawer = ({ theme, options, list, onClose, state }) => {
           paddingLeft: '0.5rem',
           paddingRight: '0.5rem',
           backgroundColor: '#e0ffff',
-          '& > li': {
-            width: '100%',
-            backgroundColor: '#fafad2',
-            '& > a': {
-              width: '100%',
-              color: 'black'
-            }
-          },
-          '& > li': {
+          '& > .uc-drawer-main-list-item': {
             backgroundColor: '#fafad2',
             '& > a': {
               display: 'block',
@@ -107,58 +105,60 @@ const Drawer = ({ theme, options, list, onClose, state }) => {
     }
   };
 
-  const transitionStyle = createReactCSSTransitionStyle(name, () => {
-    const x = direction === 'left' ? '-100%' : '100%';
-    const opacity = (mask && maskOpacity) || 0;
-    return {
-      defaultStyle: {
-        '& > #uc-drawer-main': {
-          transform: `translate3d(${x},0,0)`
+  const transitionStyle = useMemo(() => {
+    return genReactCSSTransitionStyle(name, () => {
+      const x = direction === 'left' ? '-100%' : '100%';
+      const opacity = (mask && maskOpacity) || 0;
+      return {
+        defaultStyle: {
+          '& > .uc-drawer-main': {
+            transform: `translate3d(${x},0,0)`
+          },
+          '& > .uc-drawer-mask': {
+            opacity: '0'
+          }
         },
-        '& > #uc-drawer-mask': {
-          opacity: '0'
-        }
-      },
-      enter: {
-        '& > #uc-drawer-main': {
-          transform: `translate3d(${x},0,0)`
+        enter: {
+          '& > .uc-drawer-main': {
+            transform: `translate3d(${x},0,0)`
+          },
+          '& > .uc-drawer-mask': {
+            opacity: '0'
+          }
         },
-        '& > #uc-drawer-mask': {
-          opacity: '0'
-        }
-      },
-      enterActive: {
-        '& > #uc-drawer-main': {
-          transform: 'translate3d(0,0,0)',
-          transition: `transform ${duration}ms ${timingFunction}`
+        enterActive: {
+          '& > .uc-drawer-main': {
+            transform: 'translate3d(0,0,0)',
+            transition: `transform ${duration}ms ${timingFunction}`
+          },
+          '& > .uc-drawer-mask': {
+            opacity: opacity,
+            transition: `opacity ${duration}ms ${timingFunction}`
+          }
         },
-        '& > #uc-drawer-mask': {
-          opacity: opacity,
-          transition: `opacity ${duration}ms ${timingFunction}`
-        }
-      },
-      exit: {
-        '& > #uc-drawer-main': {
-          transform: 'translate3d(0,0,0)'
+        exit: {
+          '& > .uc-drawer-main': {
+            transform: 'translate3d(0,0,0)'
+          },
+          '& > .uc-drawer-mask': {
+            opacity: opacity
+          }
         },
-        '& > #uc-drawer-mask': {
-          opacity: opacity
+        exitActive: {
+          '& > .uc-drawer-main': {
+            transform: `translate3d(${x},0,0)`,
+            transition: `transform ${duration}ms ${timingFunction}`
+          },
+          '& > .uc-drawer-mask': {
+            opacity: '0',
+            transition: `opacity ${duration}ms ${timingFunction}`
+          }
         }
-      },
-      exitActive: {
-        '& > #uc-drawer-main': {
-          transform: `translate3d(${x},0,0)`,
-          transition: `transform ${duration}ms ${timingFunction}`
-        },
-        '& > #uc-drawer-mask': {
-          opacity: '0',
-          transition: `opacity ${duration}ms ${timingFunction}`
-        }
-      }
-    };
-  });
+      };
+    });
+  }, []);
 
-  useAddCssInBody('drawer', state === 'open', () => {
+  useAddCssInBody(name, state === 'open', () => {
     const scrollBarWidth = window.innerWidth - document.body.clientWidth;
     return `
       overflow: hidden;
@@ -172,11 +172,13 @@ const Drawer = ({ theme, options, list, onClose, state }) => {
     `;
   });
 
-  const listItem = ({ text, attribute, style }) => (
-    <li>
-      <Link text={text} attribute={attribute} style={style} />
-    </li>
-  );
+  const listItem = useMemo(() => {
+    return ({ text, attribute, style }) => (
+      <li className={cx('uc-drawer-main-list-item')}>
+        <Link text={text} attribute={attribute} style={style} />
+      </li>
+    );
+  }, []);
 
   return (
     <CSSTransition in={state === 'open'} timeout={duration} classNames={name}>
@@ -184,19 +186,20 @@ const Drawer = ({ theme, options, list, onClose, state }) => {
         className={cx(
           css(componentStyle),
           css(propStyle),
-          css(transitionStyle)
+          css(transitionStyle),
+          'uc-drawer'
         )}
-        id="uc-drawer"
       >
         <div
           onClick={maskClosable && onClose}
-          className={cx(css(componentStyle.mask.style))}
-          id="uc-drawer-mask"
+          className={cx(css(componentStyle.mask.style), 'uc-drawer-mask')}
         />
-        <div className={cx(css(componentStyle.main.style))} id="uc-drawer-main">
+        <div className={cx(css(componentStyle.main.style), 'uc-drawer-main')}>
           <div
-            className={cx(css(componentStyle.main.header.style))}
-            id="uc-drawer-main-header"
+            className={cx(
+              css(componentStyle.main.header.style),
+              'uc-drawer-main-header'
+            )}
           >
             {closable && (
               <IconButton
@@ -207,8 +210,10 @@ const Drawer = ({ theme, options, list, onClose, state }) => {
             )}
           </div>
           <ul
-            className={cx(css(componentStyle.main.list.style))}
-            id="uc-drawer-main-list"
+            className={cx(
+              css(componentStyle.main.list.style),
+              'uc-drawer-main-list'
+            )}
           >
             <List theme={theme} list={list}>
               {listItem}

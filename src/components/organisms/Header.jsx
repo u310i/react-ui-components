@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'react-emotion';
 
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import { createReactCSSTransitionStyle } from 'utilities/utils';
+import { genReactCSSTransitionStyle } from 'utilities/utils';
 import { useGetStateOnScroll } from 'utilities/hooks';
 import IconButton from 'atoms/iconButton';
 import Drawer from 'molecules/Drawer';
@@ -16,12 +16,16 @@ const Header = ({
   componentProps: { style, menu, drawer, drawerButton }
 }) => {
   const [drawerState, setDrawerState] = useState('close');
-  const onClick = () => {
-    setDrawerState(drawerState === 'close' ? 'open' : 'close');
-  };
-  const onClose = () => {
+
+  const onClick = useCallback(() => {
+    setDrawerState(prev => {
+      return prev === 'close' ? 'open' : 'close';
+    });
+  }, []);
+
+  const onClose = useCallback(() => {
     setDrawerState('close');
-  };
+  }, []);
 
   const hideBarName = 'hideBar',
     hideBarTimingFunction = 'ease-out',
@@ -31,9 +35,10 @@ const Header = ({
     setDrawerState('close');
   }
 
-  const headerState = useGetStateOnScroll('uc-header-bar');
+  const headerEl = useRef(null);
+  const headerState = useGetStateOnScroll(headerEl);
 
-  const hideBarStyle = createReactCSSTransitionStyle(hideBarName, () => {
+  const hideBarStyle = genReactCSSTransitionStyle(hideBarName, () => {
     return {
       enter: {
         transform: `translate3d(0,0,0)`
@@ -106,18 +111,22 @@ const Header = ({
   );
 
   return (
-    <nav className={cx(css(componentStyle.style), css(style))} id="uc-header">
+    <nav className={cx(css(componentStyle.style), css(style), 'uc-header')}>
       <CSSTransition
         in={headerState === 'hide'}
         timeout={hideBarDuration}
         classNames={hideBarName}
       >
         <div
-          className={cx(css(componentStyle.bar.style), css(hideBarStyle))}
-          id="uc-header-bar"
+          ref={headerEl}
+          className={cx(
+            css(componentStyle.bar.style),
+            css(hideBarStyle),
+            'uc-header-bar'
+          )}
         >
           {breakpointState !== 'sm' ? (
-            <Menu theme={theme} itemList={menu.itemList} />
+            <Menu theme={theme} list={menu.itemList} />
           ) : (
             button
           )}
@@ -132,10 +141,7 @@ const Header = ({
           state={drawerState}
         />
       )}
-      <div
-        className={cx(css(componentStyle.dummy.style))}
-        id="uc-header-dummy"
-      />
+      <div className={cx(css(componentStyle.dummy.style), 'uc-header-dummy')} />
     </nav>
   );
 };

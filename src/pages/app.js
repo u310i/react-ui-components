@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import Helmet from 'react-helmet';
 import { css, injectGlobal, sheet } from 'react-emotion';
 import reboot from 'utilities/reboot';
 import { createOptimizedEvent } from 'utilities/utils';
+import { useSetTwoBreakpoints } from 'utilities/hooks';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fontAwesomeIconList } from 'src/icons';
 
@@ -21,47 +22,10 @@ const { pageProps, pageTheme } = createPagePropsTheme(baseTheme, baseProps);
 injectGlobal(pageProps.global.style, reboot);
 
 const App = () => {
-  const breakpoint = pageTheme.breakpoint;
-
-  let currentWidth = window.innerWidth;
-  let currentBreakpoint =
-    (currentWidth < breakpoint.values.sm && 'sm') ||
-    (currentWidth < breakpoint.values.lg && 'lg') ||
-    'max';
-
-  const [breakpointState, setBreakpointState] = useState(currentBreakpoint);
-
-  useEffect(() => {
-    const setBreakpointOnResize = () => {
-      currentWidth = window.innerWidth;
-      if (currentWidth < breakpoint.values.sm) {
-        if (currentBreakpoint !== 'sm') {
-          currentBreakpoint = 'sm';
-          setBreakpointState(currentBreakpoint);
-        }
-      } else if (
-        currentWidth < breakpoint.values.lg &&
-        currentWidth >= breakpoint.values.sm
-      ) {
-        if (currentBreakpoint !== 'lg') {
-          currentBreakpoint = 'lg';
-          setBreakpointState(currentBreakpoint);
-        }
-      } else {
-        if (currentBreakpoint !== 'max') {
-          currentBreakpoint = 'max';
-          setBreakpointState(currentBreakpoint);
-        }
-      }
-    };
-
-    const windowSizeOnScroll = createOptimizedEvent(setBreakpointOnResize);
-
-    window.addEventListener('resize', windowSizeOnScroll);
-    return () => {
-      window.removeEventListener('resize', windowSizeOnScroll);
-    };
-  }, []);
+  const breakpoints = pageTheme.breakpoint.values;
+  const refBreakpoint = useRef(null);
+  useSetTwoBreakpoints(breakpoints, refBreakpoint);
+  const breakpointState = refBreakpoint.current;
 
   return (
     <article className={css(pageProps.container.style)}>

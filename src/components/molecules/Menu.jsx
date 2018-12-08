@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { css, cx } from 'emotion';
 import List from 'atoms/List';
 import Link from 'atoms/Link';
 
-const Menu = ({ theme, itemList }) => {
+const Menu = ({ theme, list }) => {
   const componentStyle = {
     style: {},
     main: {
@@ -15,7 +15,7 @@ const Menu = ({ theme, itemList }) => {
           paddingLeft: '1rem',
           paddingRight: '1rem',
           backgroundColor: '#b0c4de',
-          '& > li': {
+          '& > .uc-menu-list-item': {
             backgroundColor: '#fafad2',
             '& > a': {
               display: 'block',
@@ -38,17 +38,19 @@ const Menu = ({ theme, itemList }) => {
     }
   };
 
+  const listItem = useMemo(() => {
+    return ({ text, attribute, style }) => (
+      <li className={cx('uc-menu-list-item')}>
+        <Link text={text} attribute={attribute} style={style} />
+      </li>
+    );
+  }, []);
+
   return (
-    <div className={cx(css(componentStyle.style))} id="uc-menu">
-      <ul className={cx(css(componentStyle.main.list.style))} id="uc-menu-list">
-        <List theme={theme} itemList={itemList}>
-          {({ text, attribute, style }) => {
-            return (
-              <li>
-                <Link text={text} attribute={attribute} style={style} />
-              </li>
-            );
-          }}
+    <div className={cx(css(componentStyle.style), 'uc-menu')}>
+      <ul className={cx(css(componentStyle.main.list.style), 'uc-menu-list')}>
+        <List theme={theme} list={list}>
+          {listItem}
         </List>
       </ul>
     </div>

@@ -1,4 +1,10 @@
-export const createReactCSSTransitionStyle = (name, callback) => {
+export const genUniqueId = () => {
+  return Math.random()
+    .toString(36)
+    .substr(2, 9);
+};
+
+export const genReactCSSTransitionStyle = (name, callback) => {
   const {
     defaultStyle,
     appear,
@@ -10,6 +16,7 @@ export const createReactCSSTransitionStyle = (name, callback) => {
     exitActive,
     exitDone
   } = callback();
+
   return {
     ...(defaultStyle || {}),
     [`&.${name}-appear`]: appear || enter,
@@ -23,36 +30,36 @@ export const createReactCSSTransitionStyle = (name, callback) => {
   };
 };
 
-export const createReactCSSTransitionCallBack = (name, node) => {
-  return {
-    onEnter: () => {
-      node.classList.remove(`${name}-exit`);
-      node.classList.remove(`${name}-exit-active`);
-      node.classList.add(`${name}-enter`);
-    },
-    onEntering: () => {
-      node.classList.add(`${name}-enter-active`);
-    },
-    onEntered: () => {
-      node.classList.remove(`${name}-enter`);
-      node.classList.remove(`${name}-enter-active`);
-      node.classList.add(`${name}-enter-done`);
-    },
-    onExit: () => {
-      node.classList.remove(`${name}-enter`);
-      node.classList.remove(`${name}-enter-active`);
-      node.classList.remove(`${name}-enter-done`);
-      node.classList.add(`${name}-exit`);
-    },
-    onExiting: () => {
-      node.classList.add(`${name}-exit-active`);
-    },
-    onExited: () => {
-      node.classList.remove(`${name}-exit`);
-      node.classList.remove(`${name}-exit-active`);
-    }
-  };
-};
+// export const createReactCSSTransitionCallBack = (name, node) => {
+//   return {
+//     onEnter: () => {
+//       node.classList.remove(`${name}-exit`);
+//       node.classList.remove(`${name}-exit-active`);
+//       node.classList.add(`${name}-enter`);
+//     },
+//     onEntering: () => {
+//       node.classList.add(`${name}-enter-active`);
+//     },
+//     onEntered: () => {
+//       node.classList.remove(`${name}-enter`);
+//       node.classList.remove(`${name}-enter-active`);
+//       node.classList.add(`${name}-enter-done`);
+//     },
+//     onExit: () => {
+//       node.classList.remove(`${name}-enter`);
+//       node.classList.remove(`${name}-enter-active`);
+//       node.classList.remove(`${name}-enter-done`);
+//       node.classList.add(`${name}-exit`);
+//     },
+//     onExiting: () => {
+//       node.classList.add(`${name}-exit-active`);
+//     },
+//     onExited: () => {
+//       node.classList.remove(`${name}-exit`);
+//       node.classList.remove(`${name}-exit-active`);
+//     }
+//   };
+// };
 
 export const requestAnimationFrameFallback = (function() {
   return (
@@ -79,55 +86,55 @@ export const createOptimizedEvent = callback => {
 };
 
 const createGetScrollState = () => {
-  let currentPosition,
-    prePosition,
-    state = 'equal',
+  let currentRow,
+    prevRow,
+    rowState = 'equal',
     isFirstRender = true;
-  return (initPosition, position) => {
+  return (initRow, row) => {
     if (!isFirstRender) {
-      prePosition = currentPosition;
+      prevRow = currentRow;
     } else {
-      prePosition = initPosition;
+      prevRow = initRow;
       isFirstRender = false;
     }
-    currentPosition = position;
-    if (currentPosition > prePosition) {
-      if (state !== 'down') {
-        state = 'down';
+    currentRow = row;
+    if (currentRow > prevRow) {
+      if (rowState !== 'down') {
+        rowState = 'down';
       }
-    } else if (currentPosition < prePosition) {
-      if (state !== 'up') {
-        state = 'up';
+    } else if (currentRow < prevRow) {
+      if (rowState !== 'up') {
+        rowState = 'up';
       }
     } else {
-      if (state !== 'equal') {
-        state = 'equal';
+      if (rowState !== 'equal') {
+        rowState = 'equal';
       }
     }
 
-    return state;
+    return rowState;
   };
 };
 export const getScrollState = createGetScrollState();
 
 export const createGetStateOnScroll = (setState, elementHeight) => {
-  let currentPosition,
-    initPosition = window.pageYOffset,
+  let currentRow,
+    initRow = window.pageYOffset,
     scrollState,
-    preState,
-    state = 'init',
+    prevState,
+    rowState = 'init',
     height = elementHeight ? elementHeight : -1;
   return () => {
-    currentPosition = window.pageYOffset;
-    scrollState = getScrollState(initPosition, currentPosition);
-    preState = state;
-    if (currentPosition > height) {
-      state = scrollState !== 'down' ? 'show' : 'hide';
+    currentRow = window.pageYOffset;
+    scrollState = getScrollState(initRow, currentRow);
+    prevState = rowState;
+    if (currentRow > height) {
+      rowState = scrollState !== 'down' ? 'show' : 'hide';
     } else {
-      state = 'quickly-show';
+      rowState = 'quickly-show';
     }
-    if (state !== preState) {
-      setState(state);
+    if (rowState !== prevState) {
+      setState(rowState);
     }
   };
 };
