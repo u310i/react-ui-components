@@ -4,7 +4,7 @@ export const genUniqueId = () => {
     .substr(2, 9);
 };
 
-export const genReactCSSTransitionStyle = (name, callback) => {
+export const genReactCSSTransitionStyle = (name, fn) => {
   const {
     defaultStyle,
     appear,
@@ -15,7 +15,7 @@ export const genReactCSSTransitionStyle = (name, callback) => {
     exit,
     exitActive,
     exitDone
-  } = callback();
+  } = fn();
 
   return {
     ...(defaultStyle || {}),
@@ -66,18 +66,18 @@ export const requestAnimationFrameFallback = (function() {
     window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
     window.mozRequestAnimationFrame ||
-    function(callback) {
-      window.setTimeout(callback, 1000 / 60);
+    function(fn) {
+      window.setTimeout(fn, 1000 / 60);
     }
   );
 })();
 
-export const createOptimizedEvent = callback => {
+export const createOptimizedEvent = fn => {
   let ticking = false;
   return () => {
     if (!ticking) {
       requestAnimationFrameFallback(() => {
-        callback();
+        fn();
         ticking = false;
       });
       ticking = true;

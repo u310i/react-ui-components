@@ -5,21 +5,21 @@ import {
   createGetStateOnScroll
 } from 'utilities/utils';
 
-export const useDidUpdate = (callback, watchValues) => {
+export const useDidUpdate = (fn, dependencies) => {
   const isMount = useRef(true).current;
   let cleanup;
   useEffect(() => {
     if (isMount) {
       isMount = false;
     } else {
-      cleanup = callback();
+      cleanup = fn();
     }
     return () => {
       if (cleanup) {
         cleanup();
       }
     };
-  }, watchValues);
+  }, dependencies);
 };
 
 export const useGetStateOnScroll = ref => {

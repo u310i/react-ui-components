@@ -25,34 +25,7 @@ export default theme => {
           backgroundColor: '#008b8b'
         }
       },
-      menu: {
-        itemList: [
-          {
-            text: 'TOP',
-            attribute: { href: '#' },
-            style: {
-              backgroundColor: '#4CAF50',
-              color: 'white'
-            }
-          },
-          {
-            text: 'VISION',
-            attribute: { href: '#' }
-          },
-          {
-            text: 'MESSAGE',
-            attribute: { href: '#' }
-          },
-          {
-            text: 'STORY',
-            attribute: { href: '#' }
-          },
-          {
-            text: 'PROFILE',
-            attribute: { href: '#' }
-          }
-        ]
-      },
+      menu: {},
       drawer: {
         style: {},
         direction: 'left',
@@ -78,7 +51,33 @@ export default theme => {
           open: 'angle-double-right'
         },
         style: {}
-      }
+      },
+      list: [
+        {
+          text: 'TOP',
+          attribute: { href: '#' },
+          style: {
+            backgroundColor: '#4CAF50',
+            color: 'white'
+          }
+        },
+        {
+          text: 'VISION',
+          attribute: { href: '#' }
+        },
+        {
+          text: 'MESSAGE',
+          attribute: { href: '#' }
+        },
+        {
+          text: 'STORY',
+          attribute: { href: '#' }
+        },
+        {
+          text: 'PROFILE',
+          attribute: { href: '#' }
+        }
+      ]
     },
 
     headerImage: {

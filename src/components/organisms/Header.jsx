@@ -13,7 +13,7 @@ import Menu from 'molecules/Menu';
 const Header = ({
   theme,
   breakpointState,
-  componentProps: { style, menu, drawer, drawerButton }
+  componentProps: { style, menu, drawer, drawerButton, list }
 }) => {
   const [drawerState, setDrawerState] = useState('close');
 
@@ -126,7 +126,7 @@ const Header = ({
           )}
         >
           {breakpointState !== 'sm' ? (
-            <Menu theme={theme} list={menu.itemList} />
+            <Menu theme={theme} list={list} />
           ) : (
             button
           )}
@@ -136,7 +136,7 @@ const Header = ({
         <Drawer
           theme={theme}
           options={drawer}
-          list={menu.itemList}
+          list={list}
           onClose={onClose}
           state={drawerState}
         />
