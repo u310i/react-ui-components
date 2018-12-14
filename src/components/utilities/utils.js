@@ -117,7 +117,7 @@ const createGetScrollState = () => {
 };
 export const getScrollState = createGetScrollState();
 
-export const createGetStateOnScroll = (setState, elementHeight) => {
+export const createSetDisplayStatusOnScroll = (setState, elementHeight) => {
   let currentRow,
     initRow = window.pageYOffset,
     scrollState,

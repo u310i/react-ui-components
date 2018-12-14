@@ -1,21 +1,21 @@
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import {
-  faBars,
-  faCheckSquare,
-  faCoffee,
-  faAngleDoubleLeft,
-  faAngleDoubleRight,
-  faTimes
+  faBars as FasFaBars,
+  faCheckSquare as FasFaCheckSquare,
+  faCoffee as FasFaCoffee,
+  faAngleDoubleLeft as fasFaAngleDoubleLeft,
+  faAngleDoubleRight as fasFaAngleDoubleRight,
+  faTimes as fasFaTimes
 } from '@fortawesome/free-solid-svg-icons';
 
 const fontAwesomeIconList = [
   fab,
-  faBars,
-  faCheckSquare,
-  faCoffee,
-  faAngleDoubleLeft,
-  faAngleDoubleRight,
-  faTimes
+  FasFaBars,
+  FasFaCheckSquare,
+  FasFaCoffee,
+  fasFaAngleDoubleLeft,
+  fasFaAngleDoubleRight,
+  fasFaTimes
 ];
 
 export { fontAwesomeIconList };

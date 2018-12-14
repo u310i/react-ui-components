@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   genUniqueId,
   createOptimizedEvent,
-  createGetStateOnScroll
+  createSetDisplayStatusOnScroll
 } from 'utilities/utils';
 
 export const useDidUpdate = (fn, dependencies) => {
@@ -22,18 +22,34 @@ export const useDidUpdate = (fn, dependencies) => {
   }, dependencies);
 };
 
-export const useGetStateOnScroll = ref => {
-  const [rowState, setRowState] = useState('show');
-  useEffect(() => {
-    const elementHeight = ref ? ref.current.offsetHeight : false;
-    const getStateOnScrol = createGetStateOnScroll(setRowState, elementHeight);
-    const hideHeaderOnScroll = createOptimizedEvent(getStateOnScrol);
-    window.addEventListener('scroll', hideHeaderOnScroll);
-    return () => {
-      window.removeEventListener('scroll', hideHeaderOnScroll);
-    };
-  }, []);
-  return rowState;
+export const useSetDisplayStatusOnScroll = (
+  setState,
+  targetRef,
+  disable = false
+) => {
+  const refEvent = useRef(null);
+  useEffect(
+    () => {
+      if (!disable) {
+        const elementHeight = targetRef.current
+          ? targetRef.current.offsetHeight
+          : -1;
+        const setDisplayStatusOnScroll = createSetDisplayStatusOnScroll(
+          setState,
+          elementHeight
+        );
+        refEvent.current = createOptimizedEvent(setDisplayStatusOnScroll);
+        window.addEventListener('scroll', refEvent.current);
+      }
+      return () => {
+        if (refEvent.current) {
+          window.removeEventListener('scroll', refEvent.current);
+          refEvent.current = null;
+        }
+      };
+    },
+    [disable]
+  );
 };
 
 export const useAddCssInBody = (name, state, styleCallback) => {

@@ -14,8 +14,18 @@ import IconButton from 'atoms/IconButton';
 
 import List from 'atoms/List';
 
-const Drawer = ({ theme, options, list, onClose, state }) => {
-  const name = 'drawer';
+const name = 'drawer';
+
+const Drawer = ({
+  propRef = null,
+  parent = {},
+  theme,
+  options = {},
+  list,
+  onClose,
+  state
+}) => {
+  const { style: parentStyle = {} } = parent;
   const {
     style: propStyle = {},
     direction = 'right',
@@ -42,7 +52,7 @@ const Drawer = ({ theme, options, list, onClose, state }) => {
         pointerEvents: state === 'close' ? 'none' : 'auto',
         cursor: state === 'close' ? 'auto' : maskClosable ? 'pointer' : 'auto',
         position: 'fixed',
-        zIndex: '999',
+        zIndex: theme.zIndex.appBar + 1,
         top: '0',
         left: '0',
         right: '0',
@@ -112,10 +122,10 @@ const Drawer = ({ theme, options, list, onClose, state }) => {
       return {
         defaultStyle: {
           '& > .uc-drawer-main': {
-            transform: `translate3d(${x},0,0)`
+            transform: `translate3d(${state === 'close' ? x : 0},0,0)`
           },
           '& > .uc-drawer-mask': {
-            opacity: '0'
+            opacity: state === 'close' ? 0 : opacity
           }
         },
         enter: {
@@ -183,10 +193,14 @@ const Drawer = ({ theme, options, list, onClose, state }) => {
   return (
     <CSSTransition in={state === 'open'} timeout={duration} classNames={name}>
       <div
+        ref={propRef}
         className={cx(
-          css(componentStyle),
-          css(propStyle),
-          css(transitionStyle),
+          css({
+            ...componentStyle,
+            ...parentStyle,
+            ...propStyle,
+            ...transitionStyle
+          }),
           'uc-drawer'
         )}
       >
@@ -204,7 +218,7 @@ const Drawer = ({ theme, options, list, onClose, state }) => {
             {closable && (
               <IconButton
                 icon={buttonIcon}
-                style={buttonStyle}
+                options={{ buttonStyle }}
                 onClick={onClose}
               />
             )}

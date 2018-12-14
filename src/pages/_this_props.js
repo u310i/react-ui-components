@@ -20,37 +20,77 @@ export default theme => {
     },
 
     header: {
-      style: {
-        '& > div': {
-          backgroundColor: '#008b8b'
+      options: {
+        style: {},
+        barStyle: {
+          backgroundColor: '#2f4f4f'
+        },
+        height: '3rem',
+        sm: {
+          position: 'fixed',
+          top: '0',
+          menu: false,
+          drawer: true,
+          drawerOptions: {
+            defaultDisplay: false
+          },
+          hideOnScroll: true,
+          hideOnScrollOptions: {
+            keepHeight: true,
+            timingFunction: 'ease-out',
+            duration: 200
+          }
+        },
+        lg: {
+          position: 'static',
+          top: '0',
+          menu: true,
+          drawer: false,
+          drawerOptions: {
+            defaultDisplay: false
+          },
+          hideOnScroll: false,
+          hideOnScrollOptions: {
+            keepHeight: true,
+            timingFunction: 'ease-out',
+            duration: 200
+          }
         }
       },
-      menu: {},
+      menu: {
+        options: {
+          style: {}
+        }
+      },
       drawer: {
-        style: {},
-        direction: 'left',
-        duration: 150,
-        timingFunction: 'ease-out',
-        closable: true,
-        buttonIcon: 'times',
-        buttonStyle: {},
-        mask: true,
-        maskClosable: true,
-        maskOpacity: 0.3,
-        maskStyle: {
-          backgroundColor: 'white'
-        },
-        shiftScrollBarWidth: true,
-        width: '400px',
-        height: '100%',
-        zIndex: theme.zIndex.drawer
+        options: {
+          style: {},
+          direction: 'left',
+          duration: 150,
+          timingFunction: 'ease-out',
+          closable: true,
+          buttonIcon: ['fas', 'times'],
+          buttonStyle: {},
+          mask: true,
+          maskClosable: true,
+          maskOpacity: 0.3,
+          maskStyle: {
+            backgroundColor: 'white'
+          },
+          shiftScrollBarWidth: true,
+          width: '400px',
+          height: '100%',
+          zIndex: theme.zIndex.drawer
+        }
       },
       drawerButton: {
         icon: {
-          close: 'angle-double-left',
-          open: 'angle-double-right'
+          close: ['fas', 'angle-double-left'],
+          open: ['fas', 'angle-double-right']
         },
-        style: {}
+        options: {
+          style: {}
+        }
       },
       list: [
         {

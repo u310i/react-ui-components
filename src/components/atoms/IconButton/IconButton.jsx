@@ -3,7 +3,10 @@ import { css, cx } from 'react-emotion';
 
 import Icon from 'atoms/Icon';
 
-export default ({ theme, icon, style, onClick }) => {
+export default ({ theme, parent = {}, icon, options = {}, onClick }) => {
+  const { style: parentStyle = {} } = parent;
+  const { style: propStyle = {} } = options;
+
   const componentStyle = {
     fontSize: '1.5rem',
     backgroundColor: '#ff7f50',
@@ -16,10 +19,10 @@ export default ({ theme, icon, style, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className={css({
-        ...componentStyle,
-        ...style
-      })}
+      className={cx(
+        css({ ...componentStyle, ...parentStyle, ...propStyle }),
+        'uc-iconbutton'
+      )}
     >
       <Icon theme={theme} icon={icon} />
     </button>
