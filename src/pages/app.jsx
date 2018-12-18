@@ -34,12 +34,12 @@ const App = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Helmet> */}
 
+      <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
       <Header
         theme={pageTheme}
         breakpointState={breakpointState}
         componentProps={pageProps.header}
       />
-
       <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
 
       {/* <section>

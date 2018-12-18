@@ -60,9 +60,7 @@ const Menu = ({
       )}
     >
       <ul className={cx(css(componentStyle.list.style), 'uc-menu-list')}>
-        <List theme={theme} list={list}>
-          {listItem}
-        </List>
+        <List theme={theme} propList={list} render={listItem} mode="render" />
       </ul>
     </div>
   );

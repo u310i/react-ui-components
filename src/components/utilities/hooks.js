@@ -1,9 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import {
-  genUniqueId,
-  createOptimizedEvent,
-  createSetDisplayStatusOnScroll
-} from 'utilities/utils';
+import { genUniqueId, createOptimizedEvent } from 'utilities/utils';
 
 export const useDidUpdate = (fn, dependencies) => {
   const isMount = useRef(true).current;
@@ -22,33 +18,29 @@ export const useDidUpdate = (fn, dependencies) => {
   }, dependencies);
 };
 
-export const useSetDisplayStatusOnScroll = (
-  setState,
-  targetRef,
-  disable = false
+export const useAddWindowEvent = (
+  type,
+  callback,
+  enable = true,
+  optimized = true
 ) => {
-  const refEvent = useRef(null);
+  const refOptimized = useRef(null);
   useEffect(
     () => {
-      if (!disable) {
-        const elementHeight = targetRef.current
-          ? targetRef.current.offsetHeight
-          : -1;
-        const setDisplayStatusOnScroll = createSetDisplayStatusOnScroll(
-          setState,
-          elementHeight
-        );
-        refEvent.current = createOptimizedEvent(setDisplayStatusOnScroll);
-        window.addEventListener('scroll', refEvent.current);
+      if (enable) {
+        const event = callback();
+        refOptimized.current =
+          (optimized && createOptimizedEvent(event)) || event;
+        window.addEventListener(type, refOptimized.current);
       }
       return () => {
-        if (refEvent.current) {
-          window.removeEventListener('scroll', refEvent.current);
-          refEvent.current = null;
+        if (refOptimized.current) {
+          window.removeEventListener(type, refOptimized.current);
+          refOptimized.current = null;
         }
       };
     },
-    [disable]
+    [enable]
   );
 };
 
@@ -130,4 +122,23 @@ export const useSetTwoBreakpoints = (breakpoints, refBreakpoint) => {
       window.removeEventListener('resize', windowSizeOnScroll);
     };
   }, []);
+};
+
+export const useHasFirstElement = hasElement => {
+  const prevHasElementRef = useRef();
+  if (!hasElement) {
+    prevHasElementRef.current = null;
+  }
+  let hasFirstElement;
+
+  if (hasElement && prevHasElementRef.current === null) {
+    prevHasElementRef.current = true;
+    hasFirstElement = true;
+  } else if (!hasElement && prevHasElementRef.current === true) {
+    prevHasElementRef.current = null;
+    hasFirstElement = null;
+  } else {
+    hasFirstElement = null;
+  }
+  return hasFirstElement;
 };

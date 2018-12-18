@@ -229,9 +229,12 @@ const Drawer = ({
               'uc-drawer-main-list'
             )}
           >
-            <List theme={theme} list={list}>
-              {listItem}
-            </List>
+            <List
+              theme={theme}
+              propList={list}
+              render={listItem}
+              mode="render"
+            />
           </ul>
         </div>
       </div>

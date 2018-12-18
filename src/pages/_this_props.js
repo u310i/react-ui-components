@@ -22,38 +22,56 @@ export default theme => {
     header: {
       options: {
         style: {},
-        barStyle: {
-          backgroundColor: '#2f4f4f'
-        },
-        height: '3rem',
         sm: {
-          position: 'fixed',
-          top: '0',
           menu: false,
           drawer: true,
           drawerOptions: {
             defaultDisplay: false
-          },
-          hideOnScroll: true,
-          hideOnScrollOptions: {
-            keepHeight: true,
-            timingFunction: 'ease-out',
-            duration: 200
           }
         },
         lg: {
-          position: 'static',
-          top: '0',
           menu: true,
           drawer: false,
           drawerOptions: {
             defaultDisplay: false
+          }
+        }
+      },
+      bar: {
+        options: {
+          style: {
+            backgroundColor: '#2f4f4f'
           },
-          hideOnScroll: false,
-          hideOnScrollOptions: {
-            keepHeight: true,
+          height: '6rem',
+          sm: {
+            style: {},
             timingFunction: 'ease-out',
-            duration: 200
+            duration: 200,
+            mode: 'staticToFixed',
+            hideOnScroll: false,
+            keepHeight: false,
+            hidable: false,
+            hidePoint: -100,
+            changeable: true,
+            changeableStyle: {
+              before: {
+                // opacity: 1
+              },
+              after: {
+                // height: '3rem',
+                backgroundColor: 'green'
+                // opacity: 0.5
+              }
+            }
+          },
+          lg: {
+            style: {},
+            hideOnScroll: false,
+            hideOnScrollOptions: {
+              keepHeight: true,
+              timingFunction: 'ease-out',
+              duration: 200
+            }
           }
         }
       },

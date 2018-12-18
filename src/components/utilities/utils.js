@@ -85,56 +85,132 @@ export const createOptimizedEvent = fn => {
   };
 };
 
-const createGetScrollState = () => {
+const createGetScrollUpDownState = initRow => {
   let currentRow,
     prevRow,
-    rowState = 'equal',
+    state = 'equal',
     isFirstRender = true;
-  return (initRow, row) => {
-    if (!isFirstRender) {
-      prevRow = currentRow;
-    } else {
+  return row => {
+    if (isFirstRender) {
       prevRow = initRow;
       isFirstRender = false;
+    } else {
+      prevRow = currentRow;
     }
     currentRow = row;
     if (currentRow > prevRow) {
-      if (rowState !== 'down') {
-        rowState = 'down';
+      if (state !== 'down') {
+        state = 'down';
       }
     } else if (currentRow < prevRow) {
-      if (rowState !== 'up') {
-        rowState = 'up';
+      if (state !== 'up') {
+        state = 'up';
       }
     } else {
-      if (rowState !== 'equal') {
-        rowState = 'equal';
+      if (state !== 'equal') {
+        state = 'equal';
       }
     }
 
-    return rowState;
+    return state;
   };
 };
-export const getScrollState = createGetScrollState();
 
-export const createSetDisplayStatusOnScroll = (setState, elementHeight) => {
+export const createSetDisplayStateOnScroll = (setState, elRef, keepHeight) => {
+  const elRefExists = !!elRef.current;
+
+  let target, height, top;
+  if (keepHeight) {
+    height = elRefExists ? elRef.current.offsetHeight : -1;
+    top = elRefExists ? elRef.current.offsetTop : 0;
+    target = height + top;
+  } else {
+    target = elRefExists ? elRef.current.offsetTop : 0;
+  }
+
   let currentRow,
     initRow = window.pageYOffset,
-    scrollState,
-    prevState,
-    rowState = 'init',
-    height = elementHeight ? elementHeight : -1;
+    baseState,
+    state = 'init',
+    prevState;
+
+  const getScrollState = createGetScrollUpDownState(initRow);
   return () => {
     currentRow = window.pageYOffset;
-    scrollState = getScrollState(initRow, currentRow);
-    prevState = rowState;
-    if (currentRow > height) {
-      rowState = scrollState !== 'down' ? 'show' : 'hide';
+    baseState = getScrollState(currentRow);
+    prevState = state;
+    if (currentRow > target) {
+      state = baseState !== 'down' ? 'show' : 'hide';
     } else {
-      rowState = 'quickly-show';
+      state = 'quickly-show';
     }
-    if (rowState !== prevState) {
-      setState(rowState);
+    if (state !== prevState) {
+      setState(state);
     }
   };
+};
+
+export const createSetArrivedStateOnScroll = (setState, elRef) => {
+  const elRefExists = !!elRef.current;
+  const top = elRefExists ? elRef.current.offsetTop : 0;
+  let currentRow,
+    flag = false,
+    prevFlag = false;
+  if (window.pageYOffset > top) {
+    flag = true;
+    prevFlag = flag;
+    setState(flag);
+  }
+
+  return () => {
+    currentRow = window.pageYOffset;
+    prevFlag = flag;
+    if (currentRow > top) {
+      flag = true;
+    } else {
+      flag = false;
+    }
+    if (flag !== prevFlag) {
+      setState(flag);
+    }
+  };
+};
+
+export const extractCurrentScreenSizeProps = (state, options) => {
+  const { xs = {}, sm = {}, md = {}, lg = {}, xl = {}, ...common } = options;
+  const currentOptions = (state === 'xs' && { ...common, ...xs }) ||
+    (state === 'sm' && { ...common, ...sm }) ||
+    (state === 'md' && { ...common, ...md }) ||
+    (state === 'lg' && { ...common, ...lg }) ||
+    (state === 'xl' && { ...common, ...xl }) || { ...common };
+  return currentOptions;
+};
+
+export const extractOverlapObjectProperty = (
+  first,
+  second,
+  extractFromFirst
+) => {
+  const result = {};
+  const extractObj = extractFromFirst ? first : second;
+  Object.keys(first).forEach(value => {
+    if (second[value]) {
+      result[value] = extractObj[value];
+    }
+  });
+  return result;
+};
+
+export const camelCaceToAny = (camel, insert = '_') => {
+  return camel.replace(/([A-Z])/g, s => {
+    return insert + s.charAt(0).toLowerCase();
+  });
+};
+
+export const makeTransitionProperty = style => {
+  return Object.keys(style)
+    .map(value => {
+      return camelCaceToAny(value, '-');
+    })
+    .join();
 };
