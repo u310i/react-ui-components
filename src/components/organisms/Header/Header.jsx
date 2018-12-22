@@ -19,31 +19,39 @@ import AppBar from 'atoms/AppBar';
 const Header = ({
   propRef = null,
   parent = {},
-  breakpointState,
+  breakpoint,
   componentProps: { options, bar, menu, drawer, drawerButton, list },
   theme
 }) => {
+  const { style: parentStyle = {} } = parent;
+
+  const header_options = useMemo(
+    () => {
+      return extractCurrentScreenSizeProps(breakpoint, options);
+    },
+    [breakpoint]
+  );
+  const {
+    style: propStyle,
+    menu: shouldMountMenu = !header_options.drawer,
+    drawer: shouldMountDrawer = !header_options.menu,
+    drawerOptions: { defaultDisplay: drawerDefaultDisplay = false }
+  } = header_options;
+
   const [drawerState, setDrawerState] = useState(
     drawerDefaultDisplay ? 'open' : 'close'
   );
 
-  const { style: parentStyle = {} } = parent;
-
-  const header_options = extractCurrentScreenSizeProps(
-    breakpointState,
-    options
+  useCallback(
+    () => {
+      if (defaultDisplay === true) {
+        setDrawerState('open');
+      }
+    },
+    [drawerDefaultDisplay]
   );
-  const {
-    style: propStyle,
-    menu: displayMenu = header_options.drawer ? false : true,
-    drawer: displayDrawer = header_options.menu ? false : true,
-    drawerOptions: { defaultDisplay: drawerDefaultDisplay = false }
-  } = header_options;
 
-  const bar_options = extractCurrentScreenSizeProps(
-    breakpointState,
-    bar.options
-  );
+  const bar_options = extractCurrentScreenSizeProps(breakpoint, bar.options);
 
   const onClick = useCallback(() => {
     setDrawerState(prev => {
@@ -55,7 +63,7 @@ const Header = ({
     setDrawerState('close');
   }, []);
 
-  if (drawerState === 'open' && breakpointState !== 'sm') {
+  if (drawerState === 'open' && breakpoint !== 'sm') {
     setDrawerState('close');
   }
 
@@ -85,10 +93,10 @@ const Header = ({
   /*
   component
   */
-  const SwitchDrawer = useMemo(
+  const MountableDrawer = useMemo(
     () => {
       return (
-        displayDrawer && (
+        shouldMountDrawer && (
           <Drawer
             theme={theme}
             options={drawer.options}
@@ -99,7 +107,7 @@ const Header = ({
         )
       );
     },
-    [breakpointState, drawerState]
+    [breakpoint, drawerState]
   );
 
   const DrawerButton = useMemo(
@@ -122,9 +130,9 @@ const Header = ({
     [drawerState]
   );
 
-  const SwitchBarItem = useMemo(
+  const MenuOrDrawerButton = useMemo(
     () => {
-      return displayMenu ? (
+      return shouldMountMenu ? (
         <Menu
           parent={{ style: componentStyle.bar.menu.style }}
           theme={theme}
@@ -135,10 +143,10 @@ const Header = ({
         DrawerButton
       );
     },
-    [breakpointState, drawerState]
+    [breakpoint, drawerState]
   );
 
-  const BarItem = [SwitchBarItem];
+  const BarItem = [MenuOrDrawerButton];
 
   /*
   return
@@ -152,7 +160,7 @@ const Header = ({
       )}
     >
       <AppBar theme={theme} options={bar_options} list={BarItem} />
-      {SwitchDrawer}
+      {MountableDrawer}
     </nav>
   );
 };

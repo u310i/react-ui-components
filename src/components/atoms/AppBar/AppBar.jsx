@@ -11,17 +11,23 @@ import { css, cx } from 'react-emotion';
 
 import {
   genReactCSSTransitionStyle,
-  createSetDisplayStateOnScroll,
-  createSetArrivedStateOnScroll,
   extractOverlapObjectProperty,
-  makeTransitionProperty
+  makeTransitionalProperty
 } from 'utilities/utils';
-import { useAddWindowEvent, useHasFirstElement } from 'utilities/hooks';
+import {
+  setDisplayStateOnScrollEvent,
+  setIsArrivedToElOnScrollEvent,
+  setSetRefsPropertyEvent,
+  callbackOnChangeBodyPropertyEvent
+} from 'utilities/windowEvents';
+import { useAddWindowEvent } from 'utilities/effects';
+import { useSetDomProperty } from 'utilities/layoutEffects';
+import { useHasFirstElement } from 'utilities/hooks';
 
 import List from 'atoms/List';
 
-const hideName = 'hide';
-const changeStyleName = 'change';
+const name_hide = 'hide';
+const name_transitionOnArrived = 'arrived';
 
 const AppBar = ({
   propRef = {},
@@ -30,36 +36,149 @@ const AppBar = ({
   theme,
   options = {}
 }) => {
-  const elRef = useRef(null);
-  const [rowState, setRowState] = useState('show');
-  const [arrivedState, setArrivedState] = useState(false);
-  const [elTopState, setElTopState] = useState(null);
+  /*
 
+
+
+
+
+  options
+  */
   const { style: parentStyle = {} } = parent;
-  propRef = elRef;
-
+  console.log('app bar');
   const {
     style: propStyle = {},
     height = '3rem',
     timingFunction = 'ease-out',
     duration = 200,
     mode = 'static',
-    hideOnScroll = false,
-    keepHeight = false,
-    hidable = false,
-    hidePoint = -100,
-    changeable = false,
-    changeableStyle = {}
+    hideOnScroll: {
+      enable: hideOnScrollEnable = false,
+      keepHeight: hideOnScrollKeepHeight = false,
+      timingFunction: hideOnScrollTimingFunction = false,
+      duration: hideOnScrollDuration = false
+    },
+    hideOnTarget: {
+      enable: hideOnTargetEnable = true,
+      target: hideOnTargetTarget = 'uc-footer',
+      timingFunction: hideOnTargetTimingFunction = false,
+      duration: hideOnTargetDuration = false
+    },
+    transitionOnArrived: {
+      enable: transitionOnArrivedEnable = false,
+      timingFunction: transitionOnArrivedTimingFunction = null,
+      duration: transitionOnArrivedDuration = null,
+      beforeStyle: transitionOnArrivedBeforeStyle = {},
+      afterStyle: transitionOnArrivedAfterStyle = {}
+    }
   } = options;
+  /*
+
+
+  hooks
+  */
+  const elRef = useRef(null);
+  propRef = elRef;
+
+  const [offsetTopState, setOffsetTopState] = useState(null);
+  const [isArrivedState, setIsArrivedState] = useState(false);
+  const [rowState, setRowState] = useState('show');
+
+  /*
+
+
+
+
+
+  Judgment
+  */
+
+  const hasElement = elRef.current !== null;
+  const hasOffsetTop = offsetTopState !== null;
+
   const isFixed = mode === 'fixed',
     isAbsolute = mode === 'absolute',
     isStaticToFixed = mode === 'staticToFixed',
-    isAbsoluteToFixed = mode === 'absoluteToFixed',
-    hasElement = elRef.current !== null,
-    isAbsoluteHasEl = isAbsolute && hasElement,
-    isAbsoluteToFixedHasEl = isAbsoluteToFixed && hasElement,
-    isArrivedStaticToFixed = isStaticToFixed && arrivedState,
-    isArrivedAbsoluteToFixed = isAbsoluteToFixedHasEl && arrivedState;
+    isAbsoluteToFixed = mode === 'absoluteToFixed';
+
+  const absoluteHasOffsetTop = isAbsolute && hasOffsetTop;
+  const absoluteToFixedHasOffsetTop = isAbsoluteToFixed && hasOffsetTop;
+
+  const canToFixed = isStaticToFixed || isAbsoluteToFixed;
+
+  const shouldBeFixed =
+    isFixed ||
+    (isStaticToFixed && isArrivedState) ||
+    (absoluteToFixedHasOffsetTop && isArrivedState);
+  // console.log('isArrivedState:    ' + isArrivedState);
+  const shouldBeAbsolute = absoluteHasOffsetTop || absoluteToFixedHasOffsetTop;
+
+  // console.log('canToFixed:   ' + canToFixed);
+
+  const canScrollHide =
+    hideOnScrollEnable && (isFixed || isStaticToFixed || isAbsoluteToFixed);
+  const shouldGetOffsetTop = isAbsolute || isAbsoluteToFixed || isStaticToFixed;
+  // const targetElement = targetElement === 'footer';
+  // const canHide = hideOnTargetIsNum || hideOnTargetIsEl;
+
+  /*
+
+
+
+
+
+  useEffect
+  */
+  console.warn(
+    '-------------------------------------' + shouldGetOffsetTop &&
+      !hasOffsetTop
+  );
+  useSetDomProperty(
+    setOffsetTopState,
+    elRef,
+    'offsetTop',
+
+    shouldGetOffsetTop && !hasOffsetTop,
+    false,
+    [options, hasOffsetTop]
+  );
+  // useGetRefsPropertyToRefs(elTopRef, elRef, 'offsetTop', canToFixed, [options]);
+
+  useAddWindowEvent(
+    'resize',
+    () =>
+      callbackOnChangeBodyPropertyEvent(
+        () => setOffsetTopState(null),
+        'offsetHeight'
+      ),
+    shouldGetOffsetTop,
+    [options, hasOffsetTop]
+  );
+  // useAddWindowEvent(
+  //   'resize',
+  //   () => setSetRefsPropertyEvent(setOffsetTopState, elRef, 'offsetTop'),
+  //   shouldGetOffsetTop,
+  //   [options]
+  // );
+
+  useAddWindowEvent(
+    'scroll',
+    () => setIsArrivedToElOnScrollEvent(setIsArrivedState, offsetTopState),
+    canToFixed && hasOffsetTop,
+    [offsetTopState]
+  );
+
+  useAddWindowEvent(
+    'scroll',
+    () =>
+      setDisplayStateOnScrollEvent(
+        setRowState,
+        elRef,
+        (isFixed && hideOnScrollKeepHeight) || isStaticToFixed
+      ),
+    canScrollHide,
+    [options]
+  );
 
   /*
 
@@ -70,20 +189,12 @@ const AppBar = ({
   style
   */
   const position =
-    ((isFixed || isArrivedStaticToFixed || isArrivedAbsoluteToFixed) &&
-      'fixed') ||
-    ((isAbsoluteHasEl || isAbsoluteToFixedHasEl) && 'absolute') ||
-    'static';
+    (shouldBeFixed && 'fixed') || (shouldBeAbsolute && 'absolute') || 'static';
 
   const top =
-    ((isFixed || isArrivedStaticToFixed || isArrivedAbsoluteToFixed) && '0') ||
-    ((isAbsoluteHasEl || isAbsoluteToFixedHasEl) && elTopState) ||
-    'auto';
+    (shouldBeFixed && '0') || (shouldBeAbsolute && offsetTopState) || 'auto';
 
-  const left =
-    ((isFixed || isArrivedStaticToFixed || isArrivedAbsoluteToFixed) && '0') ||
-    ((isAbsoluteHasEl || isAbsoluteToFixedHasEl) && '0') ||
-    'auto';
+  const left = (shouldBeFixed && '0') || (shouldBeAbsolute && '0') || 'auto';
 
   const componentStyle = {
     style: {},
@@ -113,72 +224,87 @@ const AppBar = ({
     }
   };
 
-  const hideBarTransitionStyle = useMemo(() => {
-    return genReactCSSTransitionStyle(hideName, () => {
-      return {
-        enter: {
-          transform: `translate3d(0,0,0)`
-        },
-        enterActive: {
-          transform: `translate3d(0,-100%,0)`,
-          transition: `transform ${duration}ms ${timingFunction}`
-        },
-        exit: {
-          transform: `translate3d(0,-100%,0)`
-        },
-        exitActive: {
-          transform: `translate3d(0,0,0)`,
-          transition: `transform ${duration}ms ${timingFunction}`
-        }
-      };
-    });
-  }, []);
-
-  const cancelHideBarTransition = useMemo(
+  const hideOnScroll_d = hideOnScrollDuration || duration;
+  const hideOnScroll_t = hideOnScrollTimingFunction || timingFunction;
+  const transitionStyleOfHideOnScroll = useMemo(
     () => {
-      return rowState === 'quickly-show' && hideOnScroll
+      return genReactCSSTransitionStyle(name_hide, () => {
+        return {
+          enter: {
+            transform: `translate3d(0,0,0)`
+          },
+          enterActive: {
+            transform: `translate3d(0,-100%,0)`,
+            transition: `transform ${hideOnScroll_d}ms ${hideOnScroll_t}`
+          },
+          exit: {
+            transform: `translate3d(0,-100%,0)`
+          },
+          exitActive: {
+            transform: `translate3d(0,0,0)`,
+            transition: `transform ${hideOnScroll_d}ms ${hideOnScroll_t}`
+          }
+        };
+      });
+    },
+    [hideOnScrollEnable]
+  );
+
+  const cancelHideOnScrollTransition = useMemo(
+    () => {
+      return rowState === 'quickly-show' && hideOnScrollEnable
         ? {
             transition: `transform 0ms linear`
           }
         : {};
     },
-    [rowState, hideOnScroll]
+    [rowState, hideOnScrollEnable]
   );
 
   const hasFirstElement =
-    isAbsoluteToFixed && changeable ? useHasFirstElement(hasElement) : null;
-  const changeTransitionStyle = useMemo(
+    canToFixed && transitionOnArrivedEnable
+      ? useHasFirstElement(hasElement)
+      : null;
+
+  const transitionOnArrived_d = transitionOnArrivedDuration || duration;
+  const transitionOnArrived_t =
+    transitionOnArrivedTimingFunction || timingFunction;
+  const transitionStyleOfArrived = useMemo(
     () => {
-      if (changeable) {
+      if (transitionOnArrivedEnable) {
         const beforeOverlapStyle = extractOverlapObjectProperty(
-          changeableStyle.after,
+          transitionOnArrivedAfterStyle,
           componentStyle.main.style
         );
         const beforeStyle = {
           ...beforeOverlapStyle,
-          ...changeableStyle.before
+          ...transitionOnArrivedBeforeStyle
         };
-        const changeProperty = makeTransitionProperty(beforeStyle);
+        const switchProperty = makeTransitionalProperty(beforeStyle);
 
-        return genReactCSSTransitionStyle(changeStyleName, () => {
+        return genReactCSSTransitionStyle(name_transitionOnArrived, () => {
           return {
             enter: {
               ...beforeStyle
             },
             enterActive: {
-              ...changeableStyle.after,
-              transitionProperty: changeProperty || 'all',
-              transitionDuration: hasFirstElement ? '0ms' : `${duration}ms`,
-              transitionTimingFunction: timingFunction
+              ...transitionOnArrivedAfterStyle,
+              transitionProperty: switchProperty || 'all',
+              transitionDuration: hasFirstElement
+                ? '0ms'
+                : `${transitionOnArrived_d}ms`,
+              transitionTimingFunction: transitionOnArrived_t
             },
             exit: {
-              ...changeableStyle.after
+              ...transitionOnArrivedAfterStyle
             },
             exitActive: {
               ...beforeStyle,
-              transitionProperty: changeProperty || 'all',
-              transitionDuration: hasFirstElement ? '0ms' : `${duration}ms`,
-              transitionTimingFunction: timingFunction
+              transitionProperty: switchProperty || 'all',
+              transitionDuration: hasFirstElement
+                ? '0ms'
+                : `${transitionOnArrived_d}ms`,
+              transitionTimingFunction: transitionOnArrived_t
             }
           };
         });
@@ -187,45 +313,10 @@ const AppBar = ({
     [isAbsoluteToFixed, isStaticToFixed, hasFirstElement]
   );
 
-  /*
-
-
-
-
-
-  useEffect
-  */
-  useAddWindowEvent(
-    'scroll',
-    () => createSetArrivedStateOnScroll(setArrivedState, elRef),
-    isStaticToFixed || isAbsoluteToFixed
-  );
-
-  useAddWindowEvent(
-    'scroll',
-    () =>
-      createSetDisplayStateOnScroll(
-        setRowState,
-        elRef,
-        (isFixed && keepHeight) || isStaticToFixed
-      ),
-    hideOnScroll && (isFixed || isStaticToFixed || isAbsoluteToFixed)
-  );
-
-  useEffect(
-    () => {
-      if (isAbsolute || isAbsoluteToFixed) {
-        const top = elRef.current.offsetTop;
-        setElTopState(top);
-      }
-      return () => {
-        if (ElTopExists) {
-          setElTopState(null);
-        }
-      };
-    },
-    [mode]
-  );
+  // console.log(elRef.current);
+  // useEffect(() => {
+  //   shouldHide;
+  // });
 
   /*
 
@@ -236,8 +327,8 @@ const AppBar = ({
   component
   */
   const shouldDummyElMount =
-    (isFixed && hideOnScroll && keepHeight) ||
-    (isStaticToFixed && arrivedState);
+    (isFixed && hideOnScrollEnable && hideOnScrollKeepHeight) ||
+    (isStaticToFixed && isArrivedState);
   const DummyEl = useMemo(
     () => {
       return (
@@ -248,32 +339,29 @@ const AppBar = ({
         )
       );
     },
-    [hideOnScroll, arrivedState]
+    [options, isArrivedState]
   );
-
+  // || (hidable && shouldHide)
   return (
-    <div className={cx(css(propStyle), 'uc-appbar')}>
+    <div className={cx(css(propStyle), 'uc-appbar')} ref={elRef}>
       <CSSTransition
-        in={
-          (isAbsoluteToFixed || isStaticToFixed) && changeable && arrivedState
-        }
-        timeout={duration}
-        classNames={changeStyleName}
+        in={canToFixed && transitionOnArrivedEnable && isArrivedState}
+        timeout={transitionOnArrived_d}
+        classNames={name_transitionOnArrived}
       >
         <CSSTransition
-          in={(hideOnScroll && rowState === 'hide') || (hidable && shouldHide)}
-          timeout={duration}
-          classNames={hideName}
+          in={hideOnScrollEnable && rowState === 'hide'}
+          timeout={hideOnScroll_d}
+          classNames={name_hide}
         >
           <div
-            ref={elRef}
             className={cx(
               css({
                 ...componentStyle.main.style,
                 ...parentStyle,
-                ...hideBarTransitionStyle,
-                ...cancelHideBarTransition,
-                ...changeTransitionStyle
+                ...transitionStyleOfHideOnScroll,
+                ...cancelHideOnScrollTransition,
+                ...transitionStyleOfArrived
               }),
               'uc-appbar-main'
             )}

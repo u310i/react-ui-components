@@ -85,7 +85,7 @@ export const createOptimizedEvent = fn => {
   };
 };
 
-const createGetScrollUpDownState = initRow => {
+export const createGetScrollUpDownState = initRow => {
   let currentRow,
     prevRow,
     state = 'equal',
@@ -116,73 +116,15 @@ const createGetScrollUpDownState = initRow => {
   };
 };
 
-export const createSetDisplayStateOnScroll = (setState, elRef, keepHeight) => {
-  const elRefExists = !!elRef.current;
-
-  let target, height, top;
-  if (keepHeight) {
-    height = elRefExists ? elRef.current.offsetHeight : -1;
-    top = elRefExists ? elRef.current.offsetTop : 0;
-    target = height + top;
-  } else {
-    target = elRefExists ? elRef.current.offsetTop : 0;
-  }
-
-  let currentRow,
-    initRow = window.pageYOffset,
-    baseState,
-    state = 'init',
-    prevState;
-
-  const getScrollState = createGetScrollUpDownState(initRow);
-  return () => {
-    currentRow = window.pageYOffset;
-    baseState = getScrollState(currentRow);
-    prevState = state;
-    if (currentRow > target) {
-      state = baseState !== 'down' ? 'show' : 'hide';
-    } else {
-      state = 'quickly-show';
-    }
-    if (state !== prevState) {
-      setState(state);
-    }
-  };
-};
-
-export const createSetArrivedStateOnScroll = (setState, elRef) => {
-  const elRefExists = !!elRef.current;
-  const top = elRefExists ? elRef.current.offsetTop : 0;
-  let currentRow,
-    flag = false,
-    prevFlag = false;
-  if (window.pageYOffset > top) {
-    flag = true;
-    prevFlag = flag;
-    setState(flag);
-  }
-
-  return () => {
-    currentRow = window.pageYOffset;
-    prevFlag = flag;
-    if (currentRow > top) {
-      flag = true;
-    } else {
-      flag = false;
-    }
-    if (flag !== prevFlag) {
-      setState(flag);
-    }
-  };
-};
-
 export const extractCurrentScreenSizeProps = (state, options) => {
-  const { xs = {}, sm = {}, md = {}, lg = {}, xl = {}, ...common } = options;
+  const { xs, sm, md, lg, xl, ...common } = options;
+  const max = xl || lg || md || sm || xs;
   const currentOptions = (state === 'xs' && { ...common, ...xs }) ||
     (state === 'sm' && { ...common, ...sm }) ||
     (state === 'md' && { ...common, ...md }) ||
     (state === 'lg' && { ...common, ...lg }) ||
-    (state === 'xl' && { ...common, ...xl }) || { ...common };
+    (state === 'xl' && { ...common, ...xl }) ||
+    (state === 'max' && { ...common, ...max }) || { ...common };
   return currentOptions;
 };
 
@@ -207,7 +149,7 @@ export const camelCaceToAny = (camel, insert = '_') => {
   });
 };
 
-export const makeTransitionProperty = style => {
+export const makeTransitionalProperty = style => {
   return Object.keys(style)
     .map(value => {
       return camelCaceToAny(value, '-');

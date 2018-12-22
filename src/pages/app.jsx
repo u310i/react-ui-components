@@ -2,9 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import Helmet from 'react-helmet';
 import { css, injectGlobal, sheet } from 'react-emotion';
+
 import reboot from 'utilities/reboot';
-import { createOptimizedEvent } from 'utilities/utils';
-import { useSetTwoBreakpoints } from 'utilities/hooks';
+import { setTwoBreakpoint } from 'utilities/hooks';
+import {} from 'utilities/utils';
+import {} from 'utilities/windowEvents';
+
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fontAwesomeIconList } from 'src/icons';
 
@@ -23,9 +26,16 @@ injectGlobal(pageProps.global.style, reboot);
 
 const App = () => {
   const breakpoints = pageTheme.breakpoint.values;
-  const refBreakpoint = useRef(null);
-  useSetTwoBreakpoints(breakpoints, refBreakpoint);
-  const breakpointState = refBreakpoint.current;
+  // const initBreakpoint = useGetInitTwoBreakpoint(
+  //   breakpoints,
+  //   setBreakpointState
+  // );
+  // const [breakpointState, setBreakpointState] = useState(initBreakpoint);
+  // useAddWindowEvent('resize', () =>
+  //   setTwoBreakpointOnResize(breakpoints, initBreakpoint, setBreakpointState)
+  // );
+
+  const breakpoint = setTwoBreakpoint(breakpoints);
 
   return (
     <article className={css(pageProps.container.style)}>
@@ -33,11 +43,13 @@ const App = () => {
         <title>My page title</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Helmet> */}
-
+      <div className={css({ wordWrap: 'break-word' })}>
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      </div>
       <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
       <Header
         theme={pageTheme}
-        breakpointState={breakpointState}
+        breakpoint={breakpoint}
         componentProps={pageProps.header}
       />
       <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />

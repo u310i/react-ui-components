@@ -43,21 +43,32 @@ export default theme => {
             backgroundColor: '#2f4f4f'
           },
           height: '6rem',
+          timingFunction: 'ease-out',
+          duration: 200,
           sm: {
             style: {},
-            timingFunction: 'ease-out',
-            duration: 200,
+            height: '6rem',
             mode: 'staticToFixed',
-            hideOnScroll: false,
-            keepHeight: false,
-            hidable: false,
-            hidePoint: -100,
-            changeable: true,
-            changeableStyle: {
-              before: {
+            hideOnScroll: {
+              enable: false,
+              keepHeight: false,
+              timingFunction: 'ease-out',
+              duration: 200
+            },
+            hideOnTarget: {
+              enable: true,
+              target: 'uc-footer',
+              timingFunction: 'ease-out',
+              duration: 200
+            },
+            transitionOnArrived: {
+              enable: true,
+              timingFunction: 'ease-out',
+              duration: 200,
+              beforeStyle: {
                 // opacity: 1
               },
-              after: {
+              afterStyle: {
                 // height: '3rem',
                 backgroundColor: 'green'
                 // opacity: 0.5
@@ -66,11 +77,20 @@ export default theme => {
           },
           lg: {
             style: {},
-            hideOnScroll: false,
-            hideOnScrollOptions: {
-              keepHeight: true,
-              timingFunction: 'ease-out',
-              duration: 200
+            height: '3rem',
+            mode: 'static',
+            hideOnScroll: {
+              enable: false,
+              keepHeight: false
+            },
+            hideOnTarget: {
+              enable: false,
+              target: ''
+            },
+            transitionOnArrived: {
+              enable: false,
+              beforeStyle: {},
+              afterStyle: {}
             }
           }
         }
