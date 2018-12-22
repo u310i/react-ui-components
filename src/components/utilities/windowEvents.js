@@ -46,6 +46,7 @@ export const setDisplayStateOnScrollEvent = (setState, elRef, keepHeight) => {
 
   const getScrollState = createGetScrollUpDownState(initRow);
   return () => {
+    console.log('scroll');
     currentRow = window.pageYOffset;
     baseState = getScrollState(currentRow);
     prevState = state;
@@ -88,18 +89,29 @@ export const setIsArrivedToElOnScrollEvent = (setState, elTop) => {
   };
 };
 
-export const setSetRefsPropertyEvent = (setState, ref, property) => {
+export const setSetRefsPropertyEvent = (
+  setState,
+  ref,
+  property,
+  callback = false
+) => {
   if (ref.current) {
-    let current = ref.current[property];
+    let current;
     let prev;
     // console.log('+++resize init set offsetTop:   ' + current);
 
     return () => {
+      if (!current) {
+        current = ref.current[property];
+      }
       prev = current;
       current = ref.current[property];
-      if (current !== prev) {
-        // console.log('+++resize set offsetTop:   ' + current);
-        setState(current);
+      if (callback) {
+        setState(callback(current, prev));
+      } else {
+        if (current !== prev) {
+          setState(current);
+        }
       }
     };
   } else {
@@ -107,16 +119,16 @@ export const setSetRefsPropertyEvent = (setState, ref, property) => {
   }
 };
 
-export const callbackOnChangeBodyPropertyEvent = (callback, property) => {
-  let current = document.body[property];
-  let prev;
-  return () => {
-    prev = current;
-    current = document.body[property];
-    console.log(current);
-    if (current !== prev) {
-      // console.log('!!!change body');
-      callback();
-    }
-  };
-};
+// export const callbackOnChangeBodyPropertyEvent = (callback, property) => {
+//   let current = document.body[property];
+//   let prev;
+//   return () => {
+//     prev = current;
+//     current = document.body[property];
+//     console.log(current);
+//     if (current !== prev) {
+//       // console.log('!!!change body');
+//       callback();
+//     }
+//   };
+// };

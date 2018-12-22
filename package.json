@@ -31,6 +31,7 @@
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-react-hooks": "^0.0.0",
     "file-loader": "^2.0.0",
+    "intersection-observer": "^0.5.1",
     "prop-types": "^15.6.2",
     "url-loader": "^1.1.2",
     "webpack": "^4.21.0",

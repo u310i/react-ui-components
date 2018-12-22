@@ -12,44 +12,40 @@ export const useSetDomProperty = (
   ref,
   property,
   enable = true,
-  clear = true,
-  dependencies = []
+  clear = false,
+  dependencies = [],
+  callback = false
 ) => {
   useLayoutEffect(() => {
     if (enable && ref.current) {
       const value = ref.current[property];
-      // console.log('@@@updated set offsetTop');
-      // console.warn(
-      //   '-----------------------' + enable + '-----------------------'
-      // );
-      setState(value);
+      callback ? setState(callback(value)) : setState(value);
     }
     return () => {
-      if (clear) {
-        // console.log('@@@will update set offsetTop');
-
+      if (clear && getRef.current) {
         setState(null);
       }
     };
   }, dependencies);
 };
 
-export const useGetRefsPropertyToRefs = (
-  getRef,
-  ref,
-  property,
-  enable = true,
-  dependencies = []
-) => {
-  useEffect(() => {
-    if (enable) {
-      const value = ref.current[property];
-      getRef.current = value;
-    }
-    return () => {
-      if (enable) {
-        getRef.current = null;
-      }
-    };
-  }, dependencies);
-};
+// export const useGetRefsPropertyToRefs = (
+//   resultRef,
+//   ref,
+//   property,
+//   enable = true,
+//   clear = true,
+//   dependencies = []
+// ) => {
+//   useEffect(() => {
+//     if (enenable && ref.currentable) {
+//       const value = ref.current[property];
+//       resultRef.current = value;
+//     }
+//     return () => {
+//       if (clear && resultRef.current) {
+//         getRef.current = null;
+//       }
+//     };
+//   }, dependencies);
+// };

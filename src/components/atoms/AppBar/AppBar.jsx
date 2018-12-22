@@ -16,9 +16,7 @@ import {
 } from 'utilities/utils';
 import {
   setDisplayStateOnScrollEvent,
-  setIsArrivedToElOnScrollEvent,
-  setSetRefsPropertyEvent,
-  callbackOnChangeBodyPropertyEvent
+  setIsArrivedToElOnScrollEvent
 } from 'utilities/windowEvents';
 import { useAddWindowEvent } from 'utilities/effects';
 import { useSetDomProperty } from 'utilities/layoutEffects';
@@ -137,29 +135,24 @@ const AppBar = ({
     setOffsetTopState,
     elRef,
     'offsetTop',
-
     shouldGetOffsetTop && !hasOffsetTop,
     false,
     [options, hasOffsetTop]
   );
-  // useGetRefsPropertyToRefs(elTopRef, elRef, 'offsetTop', canToFixed, [options]);
 
-  useAddWindowEvent(
-    'resize',
-    () =>
-      callbackOnChangeBodyPropertyEvent(
-        () => setOffsetTopState(null),
-        'offsetHeight'
-      ),
-    shouldGetOffsetTop,
-    [options, hasOffsetTop]
+  //init isArrivedState
+  useSetDomProperty(
+    setIsArrivedState,
+    elRef,
+    'offsetTop',
+    shouldGetOffsetTop && !hasOffsetTop,
+    false,
+    [options, hasOffsetTop],
+    value => {
+      const top = value ? value : 0;
+      return window.pageYOffset > top ? true : false;
+    }
   );
-  // useAddWindowEvent(
-  //   'resize',
-  //   () => setSetRefsPropertyEvent(setOffsetTopState, elRef, 'offsetTop'),
-  //   shouldGetOffsetTop,
-  //   [options]
-  // );
 
   useAddWindowEvent(
     'scroll',
@@ -179,6 +172,24 @@ const AppBar = ({
     canScrollHide,
     [options]
   );
+  // useGetRefsPropertyToRefs(elTopRef, elRef, 'offsetTop', canToFixed, [options]);
+
+  // useAddWindowEvent(
+  //   'resize',
+  //   () =>
+  //     callbackOnChangeBodyPropertyEvent(
+  //       () => setOffsetTopState(null),
+  //       'offsetHeight'
+  //     ),
+  //   shouldGetOffsetTop,
+  //   [options, hasOffsetTop]
+  // );
+  // useAddWindowEvent(
+  //   'resize',
+  //   () => setSetRefsPropertyEvent(setOffsetTopState, elRef, 'offsetTop'),
+  //   shouldGetOffsetTop,
+  //   [options]
+  // );
 
   /*
 
