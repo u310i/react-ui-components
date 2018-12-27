@@ -44,7 +44,7 @@ const AdvancedAppBar = ({
   const {
     style: propStyle = {},
     height = '3rem',
-    advanced: {
+    advance: {
       timingFunction = 'ease-out',
       duration = 200,
       mode = 'static',

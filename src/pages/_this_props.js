@@ -43,14 +43,14 @@ export default theme => {
             backgroundColor: '#2f4f4f'
           },
           height: '5rem',
-          advanced: {
+          advance: {
             timingFunction: 'ease-out',
             duration: 200
           },
           sm: {
             style: {},
             height: '6rem',
-            advanced: {
+            advance: {
               mode: 'staticToFixed',
               fixedToBottom: false,
               hideOnScroll: {
@@ -77,7 +77,7 @@ export default theme => {
           lg: {
             style: {},
             height: '3rem',
-            advanced: {
+            advance: {
               mode: 'absoluteToFixed',
               fixedToBottom: false,
               hideOnScroll: {
