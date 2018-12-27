@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { css, injectGlobal, sheet } from 'react-emotion';
 
 import reboot from 'utilities/reboot';
-import { setTwoBreakpoint } from 'utilities/hooks';
+import { useSetTwoBreakpoint } from 'utilities/hooks';
 import {} from 'utilities/utils';
 import {} from 'utilities/windowEvents';
 
@@ -25,16 +25,7 @@ injectGlobal(pageProps.global.style, reboot);
 
 const App = () => {
   const breakpoints = pageTheme.breakpoint.values;
-  // const initBreakpoint = useGetInitTwoBreakpoint(
-  //   breakpoints,
-  //   setBreakpointState
-  // );
-  // const [breakpointState, setBreakpointState] = useState(initBreakpoint);
-  // useAddWindowEvent('resize', () =>
-  //   setTwoBreakpointOnResize(breakpoints, initBreakpoint, setBreakpointState)
-  // );
-
-  const breakpoint = setTwoBreakpoint(breakpoints);
+  const breakpoint = useSetTwoBreakpoint(breakpoints);
 
   return (
     <article className={css(pageProps.container.style)}>
@@ -51,12 +42,12 @@ const App = () => {
       >
         aaaaaaaaaaaaaaaaaaa
       </div> */}
-      <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
       <Header
         theme={pageTheme}
         breakpoint={breakpoint}
         componentProps={pageProps.header}
       />
+      <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
       <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
 
       {/* <section>

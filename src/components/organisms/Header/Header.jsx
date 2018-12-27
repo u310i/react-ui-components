@@ -6,6 +6,7 @@ import { extractCurrentScreenSizeProps } from 'utilities/utils';
 
 import IconButton from 'atoms/IconButton';
 import Drawer from 'molecules/Drawer';
+import { Container as DrawerContainer } from 'molecules/Drawer';
 import Menu from 'molecules/Menu';
 import { AdvancedAppBar } from 'atoms/AppBar';
 
@@ -34,38 +35,10 @@ const Header = ({
   const {
     style: propStyle,
     menu: shouldMountMenu = !header_options.drawer,
-    drawer: shouldMountDrawer = !header_options.menu,
-    drawerOptions: { defaultDisplay: drawerDefaultDisplay = false }
+    drawer: shouldMountDrawer = !header_options.menu
   } = header_options;
 
-  const [drawerState, setDrawerState] = useState(
-    drawerDefaultDisplay ? 'open' : 'close'
-  );
-
-  useCallback(
-    () => {
-      if (defaultDisplay === true) {
-        setDrawerState('open');
-      }
-    },
-    [drawerDefaultDisplay]
-  );
-
   const bar_options = extractCurrentScreenSizeProps(breakpoint, bar.options);
-
-  const onClick = useCallback(() => {
-    setDrawerState(prev => {
-      return prev === 'close' ? 'open' : 'close';
-    });
-  }, []);
-
-  const onClose = useCallback(() => {
-    setDrawerState('close');
-  }, []);
-
-  if (drawerState === 'open' && breakpoint !== 'sm') {
-    setDrawerState('close');
-  }
 
   /*
   style
@@ -93,60 +66,55 @@ const Header = ({
   /*
   component
   */
-  const MountableDrawer = useMemo(
+
+  const drawerContainer = DrawerContainer({
+    theme: theme,
+    parentProps: {},
+    options: drawer.options,
+    list: list,
+    breakpoint: breakpoint,
+    showBreakpoint: ['sm']
+  });
+
+  const icon = useMemo(
     () => {
-      return (
-        shouldMountDrawer && (
-          <Drawer
-            theme={theme}
-            options={drawer.options}
-            list={list}
-            onClose={onClose}
-            state={drawerState}
-          />
-        )
-      );
+      return drawerButton.icon.close && drawerButton.icon.open
+        ? drawerContainer.state === 'close'
+          ? drawerButton.icon.close
+          : drawerButton.icon.open
+        : faBars;
     },
-    [breakpoint, drawerState]
+    [drawerContainer.state]
   );
 
   const DrawerButton = useMemo(
     () => {
-      const icon =
-        drawerButton.icon.close && drawerButton.icon.open
-          ? drawerState === 'close'
-            ? drawerButton.icon.close
-            : drawerButton.icon.open
-          : faBars;
       return (
-        <IconButton
-          parentProps={{ style: componentStyle.bar.drawerButton.style }}
-          icon={icon}
-          options={drawerButton.options}
-          onClick={onClick}
-        />
+        !shouldMountMenu && (
+          <IconButton
+            parentProps={{ style: componentStyle.bar.drawerButton.style }}
+            icon={icon}
+            options={drawerButton.options}
+            onClick={drawerContainer.onClick}
+          />
+        )
       );
     },
-    [drawerState]
+    [breakpoint, drawerContainer.state]
   );
 
-  const MenuOrDrawerButton = useMemo(
-    () => {
-      return shouldMountMenu ? (
-        <Menu
-          parentProps={{ style: componentStyle.bar.menu.style }}
-          theme={theme}
-          list={list}
-          options={menu.options}
-        />
-      ) : (
-        DrawerButton
-      );
-    },
-    [breakpoint, drawerState]
-  );
+  const MenuItem = useMemo(() => {
+    return (
+      <Menu
+        parentProps={{ style: componentStyle.bar.menu.style }}
+        theme={theme}
+        list={list}
+        options={menu.options}
+      />
+    );
+  });
 
-  const BarItem = [MenuOrDrawerButton];
+  const BarItem = [(shouldMountMenu && MenuItem) || DrawerButton];
 
   /*
   return
@@ -160,7 +128,7 @@ const Header = ({
       )}
     >
       <AdvancedAppBar theme={theme} options={bar_options} list={BarItem} />
-      {MountableDrawer}
+      {shouldMountDrawer && drawerContainer.component}
     </nav>
   );
 };

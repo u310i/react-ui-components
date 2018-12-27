@@ -1,29 +1,54 @@
 import { createGetScrollUpDownState } from 'utilities/utils';
 
-export const setTwoBreakpointOnResizeEvent = (
+export const setBreakpointOnResizeEvent = (
   breakpoints,
   initBreakpoint,
   setState
 ) => {
-  const { sm, lg } = breakpoints;
+  const { xs, sm, md, lg, xl } = breakpoints;
   let currentWidth,
     prevBreakpoint,
     currentBreakpoint = initBreakpoint;
-  return () => {
-    prevBreakpoint = currentBreakpoint;
-    currentWidth = window.innerWidth;
-    if (currentWidth < sm) {
-      currentBreakpoint = 'sm';
-    } else if (currentWidth < lg && currentWidth >= sm) {
-      currentBreakpoint = 'lg';
-    } else {
-      currentBreakpoint = 'max';
-    }
 
-    if (currentBreakpoint !== prevBreakpoint) {
-      setState(currentBreakpoint);
-    }
-  };
+  if (sm && lg) {
+    return () => {
+      prevBreakpoint = currentBreakpoint;
+      currentWidth = window.innerWidth;
+      currentBreakpoint =
+        (currentWidth < sm && 'sm') || (currentWidth < lg && 'lg') || 'max';
+      if (currentBreakpoint !== prevBreakpoint) {
+        setState(currentBreakpoint);
+      }
+    };
+  } else if (sm && md && lg) {
+    return () => {
+      prevBreakpoint = currentBreakpoint;
+      currentWidth = window.innerWidth;
+      currentBreakpoint =
+        (currentWidth < sm && 'sm') ||
+        (currentWidth < md && 'md') ||
+        (currentWidth < lg && 'lg') ||
+        'max';
+      if (currentBreakpoint !== prevBreakpoint) {
+        setState(currentBreakpoint);
+      }
+    };
+  } else {
+    return () => {
+      prevBreakpoint = currentBreakpoint;
+      currentWidth = window.innerWidth;
+      currentBreakpoint =
+        (currentWidth < xs && 'xs') ||
+        (currentWidth < sm && 'sm') ||
+        (currentWidth < md && 'md') ||
+        (currentWidth < lg && 'lg') ||
+        (currentWidth < xl && 'xl') ||
+        'max';
+      if (currentBreakpoint !== prevBreakpoint) {
+        setState(currentBreakpoint);
+      }
+    };
+  }
 };
 
 export const getDisplayStateOnScrollEvent = (elRef, keepHeight, callback) => {

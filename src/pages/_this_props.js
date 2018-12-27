@@ -24,17 +24,11 @@ export default theme => {
         style: {},
         sm: {
           menu: false,
-          drawer: true,
-          drawerOptions: {
-            defaultDisplay: false
-          }
+          drawer: true
         },
         lg: {
           menu: true,
-          drawer: false,
-          drawerOptions: {
-            defaultDisplay: false
-          }
+          drawer: false
         }
       },
       bar: {
@@ -114,6 +108,7 @@ export default theme => {
           direction: 'left',
           duration: 150,
           timingFunction: 'ease-out',
+          defaultDisplay: false,
           closable: true,
           buttonIcon: ['fas', 'times'],
           buttonStyle: {},
