@@ -113,9 +113,7 @@ export const createGetScrollUpDownState = initRow => {
 };
 
 const deepMergeOverrideArray = (target, source) => {
-  const overwriteMerge = (destinationArray, sourceArray, options) =>
-    sourceArray;
-  return deepmerge(target, source, overwriteMerge);
+  return deepmerge(target, source, { arrayMerge: (x, y, options) => y });
 };
 
 export const extractCurrentScreenSizeProps = (state, options) => {
