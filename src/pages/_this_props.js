@@ -47,7 +47,9 @@ export default theme => {
             timingFunction: 'ease-out',
             duration: 200
           },
+          test: ['aaa', 'bbb', 'ccc'],
           sm: {
+            test: ['ddd', 'eee', 'fff'],
             style: {},
             height: '6rem',
             advanced: {

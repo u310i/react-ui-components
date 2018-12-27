@@ -64,6 +64,7 @@ const AdvancedAppBar = ({
       }
     }
   } = options;
+  console.dir(options);
   /*
 
 

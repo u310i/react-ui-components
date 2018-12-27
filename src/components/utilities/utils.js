@@ -1,6 +1,15 @@
 import raf from 'raf';
 import * as deepmerge from 'deepmerge';
 
+const deepMerge = (target, source, options) => {
+  return deepmerge(target, source, options);
+};
+deepMerge.overrideArray = (target, source) => {
+  return deepMerge(target, source, { arrayMerge: (x, y, options) => y });
+};
+
+export { deepMerge };
+
 export const genUniqueId = () => {
   return Math.random()
     .toString(36)
@@ -112,19 +121,15 @@ export const createGetScrollUpDownState = initRow => {
   };
 };
 
-const deepMergeOverrideArray = (target, source) => {
-  return deepmerge(target, source, { arrayMerge: (x, y, options) => y });
-};
-
 export const extractCurrentScreenSizeProps = (state, options) => {
   const { xs, sm, md, lg, xl, ...common } = options;
   const max = xl || lg || md || sm || xs;
   const currentOptions = (state === 'xs' && { ...common, ...xs }) ||
-    (state === 'sm' && deepMergeOverrideArray(common, sm)) ||
-    (state === 'md' && deepMergeOverrideArray(common, md)) ||
-    (state === 'lg' && deepMergeOverrideArray(common, lg)) ||
-    (state === 'xl' && deepMergeOverrideArray(common, xl)) ||
-    (state === 'max' && deepMergeOverrideArray(common, max)) || { ...common };
+    (state === 'sm' && deepMerge.overrideArray(common, sm)) ||
+    (state === 'md' && deepMerge.overrideArray(common, md)) ||
+    (state === 'lg' && deepMerge.overrideArray(common, lg)) ||
+    (state === 'xl' && deepMerge.overrideArray(common, xl)) ||
+    (state === 'max' && deepMerge.overrideArray(common, max)) || { ...common };
   return currentOptions;
 };
 
