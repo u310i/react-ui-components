@@ -1,7 +1,14 @@
+import raf from 'raf';
+import * as deepmerge from 'deepmerge';
+
 export const genUniqueId = () => {
   return Math.random()
     .toString(36)
     .substr(2, 9);
+};
+
+export const isObject = o => {
+  return o instanceof Object && !(o instanceof Array);
 };
 
 export const genReactCSSTransitionStyle = (name, fn) => {
@@ -61,22 +68,11 @@ export const genReactCSSTransitionStyle = (name, fn) => {
 //   };
 // };
 
-export const requestAnimationFrameFallback = (function() {
-  return (
-    window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    function(fn) {
-      window.setTimeout(fn, 1000 / 60);
-    }
-  );
-})();
-
 export const createOptimizedEvent = fn => {
   let ticking = false;
   return () => {
     if (!ticking) {
-      requestAnimationFrameFallback(() => {
+      raf(() => {
         fn();
         ticking = false;
       });
@@ -116,15 +112,21 @@ export const createGetScrollUpDownState = initRow => {
   };
 };
 
+const deepMergeOverrideArray = (target, source) => {
+  const overwriteMerge = (destinationArray, sourceArray, options) =>
+    sourceArray;
+  return deepmerge(target, source, overwriteMerge);
+};
+
 export const extractCurrentScreenSizeProps = (state, options) => {
   const { xs, sm, md, lg, xl, ...common } = options;
   const max = xl || lg || md || sm || xs;
   const currentOptions = (state === 'xs' && { ...common, ...xs }) ||
-    (state === 'sm' && { ...common, ...sm }) ||
-    (state === 'md' && { ...common, ...md }) ||
-    (state === 'lg' && { ...common, ...lg }) ||
-    (state === 'xl' && { ...common, ...xl }) ||
-    (state === 'max' && { ...common, ...max }) || { ...common };
+    (state === 'sm' && deepMergeOverrideArray(common, sm)) ||
+    (state === 'md' && deepMergeOverrideArray(common, md)) ||
+    (state === 'lg' && deepMergeOverrideArray(common, lg)) ||
+    (state === 'xl' && deepMergeOverrideArray(common, xl)) ||
+    (state === 'max' && deepMergeOverrideArray(common, max)) || { ...common };
   return currentOptions;
 };
 

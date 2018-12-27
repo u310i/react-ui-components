@@ -22,7 +22,7 @@ export const setTwoBreakpoint = breakpoints => {
   return breakpointState;
 };
 
-export const useHasFirstElement = hasElement => {
+export const useIsSecondRendering = hasElement => {
   const prevHasElementRef = useRef();
   if (!hasElement) {
     prevHasElementRef.current = null;

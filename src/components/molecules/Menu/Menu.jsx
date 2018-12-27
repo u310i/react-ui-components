@@ -4,14 +4,14 @@ import List from 'atoms/List';
 import Link from 'atoms/Link';
 
 const Menu = ({
-  propRef = null,
-  parent = {},
+  parentRef = null,
+  parentProps = {},
   theme = {},
   list = [],
   options = {}
 }) => {
   const { style: propStyle = {} } = options;
-  const { style: parentStyle = {} } = parent;
+  const { style: parentStyle = {} } = parentProps;
   const componentStyle = {
     style: {},
     list: {
@@ -53,7 +53,7 @@ const Menu = ({
 
   return (
     <div
-      ref={propRef}
+      ref={parentRef}
       className={cx(
         css({ ...componentStyle.style, ...parentStyle, ...propStyle }),
         'uc-menu'

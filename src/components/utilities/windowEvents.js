@@ -26,7 +26,7 @@ export const setTwoBreakpointOnResizeEvent = (
   };
 };
 
-export const setDisplayStateOnScrollEvent = (setState, elRef, keepHeight) => {
+export const getDisplayStateOnScrollEvent = (elRef, keepHeight, callback) => {
   const elRefExists = !!elRef.current;
 
   let target, height, top;
@@ -46,7 +46,6 @@ export const setDisplayStateOnScrollEvent = (setState, elRef, keepHeight) => {
 
   const getScrollState = createGetScrollUpDownState(initRow);
   return () => {
-    console.log('scroll');
     currentRow = window.pageYOffset;
     baseState = getScrollState(currentRow);
     prevState = state;
@@ -56,37 +55,25 @@ export const setDisplayStateOnScrollEvent = (setState, elRef, keepHeight) => {
       state = 'quickly-show';
     }
     if (state !== prevState) {
-      setState(state);
+      callback(state);
     }
   };
 };
 
-export const setIsArrivedToElOnScrollEvent = (setState, elTop) => {
-  console.log('~~~scroll init arrived:    ' + elTop);
-  const top = elTop || elTop === 0 ? elTop : 0;
-  let currentRow,
-    flag = false,
-    prevFlag = false;
-  if (window.pageYOffset > top) {
-    flag = true;
-    prevFlag = flag;
-    setState(flag);
-  }
-
-  return () => {
-    console.log('~~~scroll arrived');
-
-    currentRow = window.pageYOffset;
-    prevFlag = flag;
-    if (currentRow > top) {
-      flag = true;
-    } else {
+export const getIsArrivedToElOnScrollEvent = (ref, callback) => {
+  if (ref.current || ref.current.offsetTop === 0) {
+    let offsetTop,
+      currentRow,
       flag = false;
-    }
-    if (flag !== prevFlag) {
-      setState(flag);
-    }
-  };
+    return () => {
+      offsetTop = ref.current.offsetTop;
+      currentRow = window.pageYOffset;
+      flag = currentRow > offsetTop ? true : false;
+      callback(flag);
+    };
+  } else {
+    return () => {};
+  }
 };
 
 export const setSetRefsPropertyEvent = (
@@ -98,8 +85,6 @@ export const setSetRefsPropertyEvent = (
   if (ref.current) {
     let current;
     let prev;
-    // console.log('+++resize init set offsetTop:   ' + current);
-
     return () => {
       if (!current) {
         current = ref.current[property];

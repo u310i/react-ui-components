@@ -17,15 +17,15 @@ import List from 'atoms/List';
 const name = 'drawer';
 
 const Drawer = ({
-  propRef = null,
-  parent = {},
+  parentRef = null,
+  parentProps = {},
   theme,
   options = {},
   list,
   onClose,
   state
 }) => {
-  const { style: parentStyle = {} } = parent;
+  const { style: parentStyle = {} } = parentProps;
   const {
     style: propStyle = {},
     direction = 'right',
@@ -193,7 +193,7 @@ const Drawer = ({
   return (
     <CSSTransition in={state === 'open'} timeout={duration} classNames={name}>
       <div
-        ref={propRef}
+        ref={parentRef}
         className={cx(
           css({
             ...componentStyle,

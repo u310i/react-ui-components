@@ -25,6 +25,32 @@ export const useDidUpdate = (fn, dependencies) => {
   }, dependencies);
 };
 
+export const useIntersectionObserver = (
+  elRef,
+  callback,
+  option,
+  enable,
+  dependencies
+) => {
+  useEffect(() => {
+    if (enable && elRef.current) {
+      let observer = new IntersectionObserver(changes => {
+        for (let change of changes) {
+          callback(change);
+        }
+      }, option);
+
+      if (Array.isArray(elRef)) {
+        elRef.forEach(el => observer.observe(el.current));
+      } else {
+        observer.observe(elRef.current);
+      }
+    }
+
+    return;
+  }, dependencies);
+};
+
 export const useAddWindowEvent = (
   type,
   callback,
@@ -39,11 +65,9 @@ export const useAddWindowEvent = (
       refOptimized.current =
         (optimized && createOptimizedEvent(event)) || event;
       window.addEventListener(type, refOptimized.current);
-      console.log('---updated add event:   ' + callback);
     }
     return () => {
       if (enable) {
-        console.log('---will update add event:   ' + callback);
         window.removeEventListener(type, refOptimized.current);
         refOptimized.current = null;
       }
@@ -52,23 +76,23 @@ export const useAddWindowEvent = (
 };
 
 export const useAddCssInBody = (name, state, styleCallback) => {
-  const uniqueId = useRef(`${name}_${genUniqueId()}`).current;
+  const uniqueId = useRef(`${name}_${genUniqueId()}`);
   useEffect(() => {
     const head = document.head;
     const style = `
-      body.body-${uniqueId} {
+      body.body-${uniqueId.current} {
         ${styleCallback()}
       }
     `;
     const styleNode = document.createElement('style');
     const cssText = document.createTextNode(style);
-    styleNode.setAttribute('id', `body-${uniqueId}`);
+    styleNode.setAttribute('id', `body-${uniqueId.current}`);
     styleNode.appendChild(cssText);
-    head.appendChild(styleNode);
+    head.prepend(styleNode);
     return () => {
-      const removeNode = document.getElementById(`body-${uniqueId}`);
+      const removeNode = document.getElementById(`body-${uniqueId.current}`);
       if (removeNode) {
-        head.removeChild(removeNode);
+        removeNode.remove();
       }
     };
   }, []);
@@ -77,14 +101,12 @@ export const useAddCssInBody = (name, state, styleCallback) => {
     () => {
       const body = document.body;
       if (state) {
-        body.classList.add(`body-${uniqueId}`);
+        body.classList.add(`body-${uniqueId.current}`);
       } else {
-        body.classList.remove(`body-${uniqueId}`);
+        body.classList.remove(`body-${uniqueId.current}`);
       }
       return () => {
-        if (body.classList.contains(`body-${uniqueId}`)) {
-          body.classList.remove(`body-${uniqueId}`);
-        }
+        body.classList.remove(`body-${uniqueId.current}`);
       };
     },
     [state]

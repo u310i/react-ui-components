@@ -7,7 +7,7 @@ import { extractCurrentScreenSizeProps } from 'utilities/utils';
 import IconButton from 'atoms/IconButton';
 import Drawer from 'molecules/Drawer';
 import Menu from 'molecules/Menu';
-import AppBar from 'atoms/AppBar';
+import { AdvancedAppBar } from 'atoms/AppBar';
 
 /*
 
@@ -17,13 +17,13 @@ import AppBar from 'atoms/AppBar';
   Header */
 
 const Header = ({
-  propRef = null,
-  parent = {},
+  parentRef = null,
+  parentProps = {},
   breakpoint,
   componentProps: { options, bar, menu, drawer, drawerButton, list },
   theme
 }) => {
-  const { style: parentStyle = {} } = parent;
+  const { style: parentStyle = {} } = parentProps;
 
   const header_options = useMemo(
     () => {
@@ -120,7 +120,7 @@ const Header = ({
           : faBars;
       return (
         <IconButton
-          parent={{ style: componentStyle.bar.drawerButton.style }}
+          parentProps={{ style: componentStyle.bar.drawerButton.style }}
           icon={icon}
           options={drawerButton.options}
           onClick={onClick}
@@ -134,7 +134,7 @@ const Header = ({
     () => {
       return shouldMountMenu ? (
         <Menu
-          parent={{ style: componentStyle.bar.menu.style }}
+          parentProps={{ style: componentStyle.bar.menu.style }}
           theme={theme}
           list={list}
           options={menu.options}
@@ -153,13 +153,13 @@ const Header = ({
   */
   return (
     <nav
-      ref={propRef}
+      ref={parentRef}
       className={cx(
         css({ ...componentStyle.style, ...parentStyle, ...propStyle }),
         'uc-header'
       )}
     >
-      <AppBar theme={theme} options={bar_options} list={BarItem} />
+      <AdvancedAppBar theme={theme} options={bar_options} list={BarItem} />
       {MountableDrawer}
     </nav>
   );

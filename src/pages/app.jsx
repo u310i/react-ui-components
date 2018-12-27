@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import Helmet from 'react-helmet';
 import { css, injectGlobal, sheet } from 'react-emotion';
 
 import reboot from 'utilities/reboot';
@@ -43,9 +42,15 @@ const App = () => {
         <title>My page title</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Helmet> */}
-      <div className={css({ wordWrap: 'break-word' })}>
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-      </div>
+      {/* <div
+        className={css({
+          wordWrap: 'break-word',
+          fontSize: '20rem',
+          lineHeight: '0.5'
+        })}
+      >
+        aaaaaaaaaaaaaaaaaaa
+      </div> */}
       <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
       <Header
         theme={pageTheme}

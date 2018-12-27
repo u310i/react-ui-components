@@ -7,23 +7,22 @@ import {
   useMemo
 } from 'react';
 
-export const useSetDomProperty = (
-  setState,
+export const useGetDomProperty = (
   ref,
   property,
+  callback,
   enable = true,
-  clear = false,
-  dependencies = [],
-  callback = false
+  dependencies = []
 ) => {
   useLayoutEffect(() => {
+    let clear;
     if (enable && ref.current) {
       const value = ref.current[property];
-      callback ? setState(callback(value)) : setState(value);
+      clear = callback(value);
     }
     return () => {
-      if (clear && getRef.current) {
-        setState(null);
+      if (clear) {
+        clear();
       }
     };
   }, dependencies);

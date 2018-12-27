@@ -1,2 +1,4 @@
 import AppBar from './AppBar';
-export default AppBar;
+import AdvancedAppBar from './AdvancedAppBar';
+export { AppBar };
+export { AdvancedAppBar };

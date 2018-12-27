@@ -3,8 +3,8 @@ import { css, cx } from 'react-emotion';
 
 import Icon from 'atoms/Icon';
 
-export default ({ theme, parent = {}, icon, options = {}, onClick }) => {
-  const { style: parentStyle = {} } = parent;
+export default ({ theme, parentProps = {}, icon, options = {}, onClick }) => {
+  const { style: parentStyle = {} } = parentProps;
   const { style: propStyle = {} } = options;
 
   const componentStyle = {

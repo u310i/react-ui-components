@@ -42,55 +42,63 @@ export default theme => {
           style: {
             backgroundColor: '#2f4f4f'
           },
-          height: '6rem',
-          timingFunction: 'ease-out',
-          duration: 200,
+          height: '5rem',
+          advanced: {
+            timingFunction: 'ease-out',
+            duration: 200
+          },
           sm: {
             style: {},
             height: '6rem',
-            mode: 'staticToFixed',
-            hideOnScroll: {
-              enable: false,
-              keepHeight: false,
-              timingFunction: 'ease-out',
-              duration: 200
-            },
-            hideOnTarget: {
-              enable: true,
-              target: 'uc-footer',
-              timingFunction: 'ease-out',
-              duration: 200
-            },
-            transitionOnArrived: {
-              enable: true,
-              timingFunction: 'ease-out',
-              duration: 200,
-              beforeStyle: {
-                // opacity: 1
+            advanced: {
+              mode: 'staticToFixed',
+              fixedToBottom: false,
+              hideOnScroll: {
+                enable: true,
+                keepHeight: false,
+                timingFunction: 'ease-out',
+                duration: 200
               },
-              afterStyle: {
-                // height: '3rem',
-                backgroundColor: 'green'
-                // opacity: 0.5
+              transitionOnArrived: {
+                enable: false,
+                timingFunction: 'ease-out',
+                duration: 200,
+                beforeStyle: {
+                  opacity: 1
+                },
+                afterStyle: {
+                  height: '3rem',
+                  opacity: 0.5,
+                  backgroundColor: 'green'
+                }
               }
             }
           },
           lg: {
             style: {},
             height: '3rem',
-            mode: 'static',
-            hideOnScroll: {
-              enable: false,
-              keepHeight: false
-            },
-            hideOnTarget: {
-              enable: false,
-              target: ''
-            },
-            transitionOnArrived: {
-              enable: false,
-              beforeStyle: {},
-              afterStyle: {}
+            advanced: {
+              mode: 'absoluteToFixed',
+              fixedToBottom: false,
+              hideOnScroll: {
+                enable: false,
+                keepHeight: false,
+                timingFunction: 'ease-out',
+                duration: 200
+              },
+              transitionOnArrived: {
+                enable: true,
+                timingFunction: 'ease-out',
+                duration: 200,
+                beforeStyle: {
+                  // opacity: 1
+                },
+                afterStyle: {
+                  height: '5rem',
+                  // opacity: 0.5,
+                  backgroundColor: 'red'
+                }
+              }
             }
           }
         }
