@@ -17,7 +17,7 @@ import List from 'atoms/List';
 const name = 'drawer';
 
 const Drawer = ({
-  parentRef = null,
+  forwardRef = null,
   parentProps = {},
   theme,
   options = {},
@@ -193,7 +193,7 @@ const Drawer = ({
   return (
     <CSSTransition in={state === 'open'} timeout={duration} classNames={name}>
       <div
-        ref={parentRef}
+        ref={forwardRef}
         className={cx(
           css({
             ...componentStyle,

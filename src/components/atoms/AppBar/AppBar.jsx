@@ -4,7 +4,7 @@ import { css, cx } from 'react-emotion';
 import List from 'atoms/List';
 
 const AppBar = ({
-  parentRef = null,
+  forwardRef = null,
   parentProps = {},
   list = [],
   theme,
@@ -35,7 +35,7 @@ const AppBar = ({
   };
 
   return (
-    <div ref={parentRef} className={cx(css(componentStyleRoot), 'uc-appbar')}>
+    <div ref={forwardRef} className={cx(css(componentStyleRoot), 'uc-appbar')}>
       <List componentList={list} mode="component" />
     </div>
   );

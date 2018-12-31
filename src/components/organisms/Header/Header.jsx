@@ -18,7 +18,7 @@ import { AdvancedAppBar } from 'atoms/AppBar';
   Header */
 
 const Header = ({
-  parentRef = null,
+  forwardRef = null,
   parentProps = {},
   breakpoint,
   componentProps: { options, bar, menu, drawer, drawerButton, list },
@@ -121,7 +121,7 @@ const Header = ({
   */
   return (
     <nav
-      ref={parentRef}
+      ref={forwardRef}
       className={cx(
         css({ ...componentStyle.style, ...parentStyle, ...propStyle }),
         'uc-header'

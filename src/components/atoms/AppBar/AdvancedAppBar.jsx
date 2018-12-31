@@ -29,7 +29,7 @@ const name_hide = 'hide';
 const name_transitionOnArrived = 'arrived';
 
 const AdvancedAppBar = ({
-  parentRef = null,
+  forwardRef = null,
   parentProps = {},
   list = [],
   theme,
@@ -72,7 +72,7 @@ const AdvancedAppBar = ({
   hooks
   */
   const elRef = useRef(null);
-  parentRef = elRef;
+  forwardRef = elRef;
 
   const isArrivedOnFirst = useRef(false);
   const [isArrivedState, setIsArrivedState] = useState(false);
