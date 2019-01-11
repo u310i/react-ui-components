@@ -110,8 +110,15 @@ export default theme => {
           timingFunction: 'ease-out',
           defaultDisplay: false,
           closable: true,
-          buttonIcon: ['fas', 'times'],
-          buttonStyle: {},
+          button: {
+            icon: {
+              type: 'fa',
+              icon: ['fas', 'times'],
+            },
+            options: {
+              style: {}
+            }
+          },
           mask: true,
           maskClosable: true,
           maskOpacity: 0.3,
@@ -126,8 +133,14 @@ export default theme => {
       },
       drawerButton: {
         icon: {
-          close: ['fas', 'angle-double-left'],
-          open: ['fas', 'angle-double-right']
+          close: {
+            type: 'fa',
+            icon: ['fas', 'angle-double-left']
+          },
+          open: {
+            type: 'fa',
+            icon: ['fas', 'angle-double-right']
+          }
         },
         options: {
           style: {}

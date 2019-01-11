@@ -24,7 +24,7 @@ export default ({ theme, parentProps = {}, icon, options = {}, onClick }) => {
         'uc-iconbutton'
       )}
     >
-      <Icon theme={theme} icon={icon} />
+      <Icon {...icon} />
     </button>
   );
 };

@@ -7,7 +7,8 @@ const DrawerContainer = ({
   options: { defaultDisplay, ...options },
   list,
   breakpoint,
-  showBreakpoint
+  showBreakpoint,
+  rootElement
 }) => {
   const [state, setState] = useState(defaultDisplay ? 'open' : 'close');
 
@@ -47,6 +48,7 @@ const DrawerContainer = ({
       list={list}
       onClose={onClose}
       state={state}
+      rootElement={rootElement}
     />
   );
 

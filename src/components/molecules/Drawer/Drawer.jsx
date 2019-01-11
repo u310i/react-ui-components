@@ -5,6 +5,8 @@ import React, {
   useCallback,
   useMemo
 } from 'react';
+import ReactDOM from 'react-dom';
+
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'emotion';
 import { genUniqueId, genReactCSSTransitionStyle } from 'utilities/utils';
@@ -23,7 +25,8 @@ const Drawer = ({
   options = {},
   list,
   onClose,
-  state
+  state,
+  rootElement
 }) => {
   const { style: parentStyle = {} } = parentProps;
   const {
@@ -32,8 +35,7 @@ const Drawer = ({
     duration = 150,
     timingFunction = 'ease-out',
     closable = true,
-    buttonIcon = 'times',
-    buttonStyle = {},
+    button,
     mask = true,
     maskClosable = true,
     maskOpacity = 0.3,
@@ -190,7 +192,7 @@ const Drawer = ({
     );
   }, []);
 
-  return (
+  const Component = (
     <CSSTransition in={state === 'open'} timeout={duration} classNames={name}>
       <div
         ref={forwardRef}
@@ -217,8 +219,8 @@ const Drawer = ({
           >
             {closable && (
               <IconButton
-                icon={buttonIcon}
-                options={{ buttonStyle }}
+                icon={button.icon}
+                options={button.options}
                 onClick={onClose}
               />
             )}
@@ -240,6 +242,10 @@ const Drawer = ({
       </div>
     </CSSTransition>
   );
+
+  return rootElement
+    ? ReactDOM.createPortal(Component, rootElement)
+    : Component;
 };
 
 export default Drawer;

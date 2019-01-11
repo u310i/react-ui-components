@@ -1,15 +1,14 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
+
 import { css, cx } from 'react-emotion';
 
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { extractCurrentScreenSizeProps } from 'utilities/utils';
 
 import IconButton from 'atoms/IconButton';
-import Drawer from 'molecules/Drawer';
 import { Container as DrawerContainer } from 'molecules/Drawer';
 import Menu from 'molecules/Menu';
 import { AdvancedAppBar } from 'atoms/AppBar';
-
 /*
 
 
@@ -67,22 +66,40 @@ const Header = ({
   component
   */
 
+  const rootElement = useMemo(() => document.getElementById('app'), []);
+
   const drawerContainer = DrawerContainer({
     theme: theme,
     parentProps: {},
     options: drawer.options,
     list: list,
     breakpoint: breakpoint,
-    showBreakpoint: ['sm']
+    showBreakpoint: ['sm'],
+    rootElement
   });
+
 
   const icon = useMemo(
     () => {
-      return drawerButton.icon.close && drawerButton.icon.open
-        ? drawerContainer.state === 'close'
-          ? drawerButton.icon.close
-          : drawerButton.icon.open
-        : faBars;
+      const i = drawerButton.icon
+      if(i.open.icon) {
+        if(i.close.icon && drawerContainer.state === 'close') {
+          return {
+            type: i.close.type,
+            icon: i.close.icon
+          }
+        } else {
+          return {
+            type: i.open.type,
+            icon: i.open.icon
+          }
+        }
+      } else {
+        return {
+          type: 'fa',
+          icon: faBars
+        }
+      }
     },
     [drawerContainer.state]
   );

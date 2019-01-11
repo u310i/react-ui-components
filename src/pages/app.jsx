@@ -8,7 +8,8 @@ import {} from 'utilities/utils';
 import {} from 'utilities/windowEvents';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { fontAwesomeIconList } from 'src/icons';
+import { fontAwesomeIconList } from 'src/icons/fontAwesome';
+import Icon from 'atoms/Icon';
 
 import createPagePropsTheme from 'utilities/createPagePropsTheme';
 import baseTheme from './_this_theme';
@@ -29,6 +30,32 @@ const App = () => {
 
   return (
     <article className={css(pageProps.container.style)}>
+      <div
+        className={css({
+          width: '300px',
+          height: '100px',
+          backgroundColor: '#ffffe0'
+        })}
+      >
+        <Icon icon="envelope" style={{ fontSize: '2em' }} />
+        test test
+        <Icon icon="message" />
+        <Icon type="fa" icon={['fab', 'apple']} />
+        <Icon type="fa" icon={['fab', 'apple']} />
+        <Icon type="fa" icon={['fas', 'coffee']} style={{ fontSize: '1em' }} />
+        <Icon type="fa" icon="coffee" symbol />
+        <Icon
+          type="fa"
+          icon="coffee"
+          use
+          style={{ color: 'red', fontSize: '2em' }}
+        />
+        <Icon icon="bird" symbol />
+        <Icon icon="bird" use />
+      </div>
+
+      {/* {Icon({ name: 'envelpe' })} */}
+
       {/* <Helmet>
         <title>My page title</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
