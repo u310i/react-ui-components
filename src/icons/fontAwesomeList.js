@@ -18,4 +18,4 @@ const fontAwesomeIconList = [
   fasFaTimes
 ];
 
-export { fontAwesomeIconList };
+export default fontAwesomeIconList;

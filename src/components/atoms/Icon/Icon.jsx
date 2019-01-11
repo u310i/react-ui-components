@@ -1,8 +1,10 @@
 import React from 'react';
 import { css, cx } from 'react-emotion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isObject } from 'utilities/utils';
 
-import { getIcon } from 'src/icons/ownIcons';
+import SVG from 'atoms/SVG';
+import { userDefinedIconList } from 'src/icons';
 
 const Icon = ({
   type = 'own',
@@ -20,18 +22,25 @@ const Icon = ({
   };
 
   const iconIsArray = Array.isArray(icon);
-  const name = iconIsArray ? icon.join('-') : icon;
+  const iconIsObject = isObject(icon);
+  const name =
+    (iconIsArray && icon.join('-')) ||
+    (iconIsObject && `${icon.prefix}-${icon.iconName}`) ||
+    icon;
 
   if (type === 'own' && !iconIsArray && !use) {
-    const Component = getIcon(name);
+    const iconData = userDefinedIconList.get(name);
     return (
-      <Component
+      <SVG
+        viewBox={iconData.viewBox}
+        inner={iconData.inner}
+        symbol={symbol}
+        use={use}
         className={cx(
           `uc-svg-i-${type}`,
           css({ ...componentStyle, ...propStyle })
         )}
         id={symbol ? `uc-svg-i-${type}-symbol-${name}` : ''}
-        symbol={symbol}
         {...props}
       />
     );
@@ -39,24 +48,22 @@ const Icon = ({
     return (
       <FontAwesomeIcon
         icon={icon}
-        className={cx(`uc-svg-i-${type}`, css(propStyle))}
+        className={cx(`uc-svg-i-${type}-${name}`, css(propStyle))}
         symbol={symbol ? `uc-svg-i-${type}-symbol-${name}` : false}
         {...props}
       />
     );
   } else if (use) {
     return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
+      <SVG
+        use={use}
         className={cx(
-          `uc-svg-i-${type}-use`,
+          `uc-svg-i-${type}-use-${name}`,
           css({ ...componentStyle, width: '1.25em', ...propStyle })
         )}
+        xlinkHref={`#uc-svg-i-${type}-symbol-${name}`}
         {...props}
-      >
-        <use xlinkHref={`#uc-svg-i-${type}-symbol-${name}`} />
-      </svg>
+      />
     );
   }
 };

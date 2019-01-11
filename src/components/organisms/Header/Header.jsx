@@ -78,27 +78,26 @@ const Header = ({
     rootElement
   });
 
-
   const icon = useMemo(
     () => {
-      const i = drawerButton.icon
-      if(i.open.icon) {
-        if(i.close.icon && drawerContainer.state === 'close') {
+      const i = drawerButton.icon;
+      if (i.open.icon) {
+        if (i.close.icon && drawerContainer.state === 'close') {
           return {
             type: i.close.type,
             icon: i.close.icon
-          }
+          };
         } else {
           return {
             type: i.open.type,
             icon: i.open.icon
-          }
+          };
         }
       } else {
         return {
           type: 'fa',
           icon: faBars
-        }
+        };
       }
     },
     [drawerContainer.state]

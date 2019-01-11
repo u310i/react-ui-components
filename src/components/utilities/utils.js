@@ -20,6 +20,10 @@ export const isObject = o => {
   return o instanceof Object && !(o instanceof Array);
 };
 
+// export const isObject = (item) => {
+//   return typeof item === 'object' && item !== null && !Array.isArray(item)
+// };
+
 export const genReactCSSTransitionStyle = (name, fn) => {
   const {
     defaultStyle,

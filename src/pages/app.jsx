@@ -8,7 +8,7 @@ import {} from 'utilities/utils';
 import {} from 'utilities/windowEvents';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { fontAwesomeIconList } from 'src/icons/fontAwesome';
+import { fontAwesomeIconList } from 'src/icons';
 import Icon from 'atoms/Icon';
 
 import createPagePropsTheme from 'utilities/createPagePropsTheme';
@@ -51,7 +51,7 @@ const App = () => {
           style={{ color: 'red', fontSize: '2em' }}
         />
         <Icon icon="bird" symbol />
-        <Icon icon="bird" use />
+        <Icon icon="bird" use style={{ fontSize: '2em' }} />
       </div>
 
       {/* {Icon({ name: 'envelpe' })} */}
