@@ -32,14 +32,15 @@ const App = () => {
     <article className={css(pageProps.container.style)}>
       <div
         className={css({
-          width: '300px',
+          width: '400px',
           height: '100px',
           backgroundColor: '#ffffe0'
         })}
       >
-        <Icon icon="envelope" style={{ fontSize: '2em' }} />
-        test test
-        <Icon icon="message" />
+        <Icon icon="envelope" style={{ fontSize: '2em' }} currentColor />
+        test test test
+        <Icon icon="message" symbol currentColor />
+        <Icon icon="message" use />
         <Icon type="fa" icon={['fab', 'apple']} />
         <Icon type="fa" icon={['fab', 'apple']} />
         <Icon type="fa" icon={['fas', 'coffee']} style={{ fontSize: '1em' }} />
@@ -52,6 +53,7 @@ const App = () => {
         />
         <Icon icon="bird" symbol />
         <Icon icon="bird" use style={{ fontSize: '2em' }} />
+        <Icon icon="bird" style={{ fontSize: '2.5em' }} />
       </div>
 
       {/* {Icon({ name: 'envelpe' })} */}

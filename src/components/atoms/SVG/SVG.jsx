@@ -3,7 +3,19 @@ import React from 'react';
 const xmlns = 'http://www.w3.org/2000/svg';
 const xmlnsXlink = 'http://www.w3.org/1999/xlink';
 
-const SVG = ({ viewBox, inner, symbol, use, xlinkHref, ...props }) => {
+const SVG = ({
+  viewBox,
+  inner,
+  symbol,
+  use,
+  xlinkHref,
+  currentColor = false,
+  ...props
+}) => {
+  if (currentColor) {
+    props['fill'] = 'currentColor';
+  }
+
   if (symbol || use) {
     if (symbol) {
       return (
