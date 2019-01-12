@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { userDefinedIconList, fontAwesomeIconMap } from 'src/icons';
-import { isObject, toCamelCase } from 'utilities/utils';
+import { isObject, toCamelCase, addProperties } from 'utilities/utils';
 import { getFontSize } from './utils';
 
 import SVG from 'atoms/SVG';
@@ -56,16 +56,22 @@ const Icon = ({
         typeof fixedWidth === 'string' ? fixedWidth : '1.25em');
     size && (propStyle['fontSize'] = getFontSize(size));
     if (!use) {
-      props['viewBox'] = ownIcon.viewBox;
-      props['inner'] = ownIcon.inner;
+      addProperties(props, [
+        ['viewBox', ownIcon.viewBox],
+        ['inner', ownIcon.inner]
+      ]);
       if (!symbol) {
-        props['className'] = `${baseName}-${name}`;
-        props['style'] = { ...componentStyle, ...propStyle };
+        addProperties(props, [
+          ['className', `${baseName}-${name}`],
+          ['style', { ...componentStyle, ...propStyle }]
+        ]);
       } else {
-        props['symbol'] = symbol;
-        props['className'] = `${baseName}-'symbol-'${name}`;
-        props['id'] = `${baseName}-symbol-${name}`;
-        props['style'] = propStyle;
+        addProperties(props, [
+          ['symbol', symbol],
+          ['className', `${baseName}-'symbol-'${name}`],
+          ['id', `${baseName}-symbol-${name}`],
+          ['style', propStyle]
+        ]);
       }
     } else {
       let w, h;
@@ -80,14 +86,19 @@ const Icon = ({
       }
       const width = Math.round((w / h) * 100) / 100;
 
-      props['use'] = use;
-      props['className'] = `${baseName}-use-${name}`;
-      props['style'] = {
-        ...componentStyle,
-        width: width ? `${width}em` : '1.25em',
-        ...propStyle
-      };
-      props['xlinkHref'] = `#${baseName}-symbol-${name}`;
+      addProperties(props, [
+        ['use', use],
+        ['className', `${baseName}-use-${name}`],
+        [
+          'style',
+          {
+            ...componentStyle,
+            width: width ? `${width}em` : '1.25em',
+            ...propStyle
+          }
+        ],
+        ['xlinkHref', `#${baseName}-symbol-${name}`]
+      ]);
     }
   } else if (isFa) {
     props['icon'] = icon;
@@ -99,8 +110,10 @@ const Icon = ({
     if (!symbol) {
       props['className'] = `${baseName}-${name}`;
     } else {
-      props['className'] = `${baseName}-symbol-${name}`;
-      props['symbol'] = `${baseName}-symbol-${name}`;
+      addProperties(props, [
+        ['className', `${baseName}-symbol-${name}`],
+        ['symbol', `${baseName}-symbol-${name}`]
+      ]);
     }
   }
 

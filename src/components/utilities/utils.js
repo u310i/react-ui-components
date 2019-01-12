@@ -173,3 +173,13 @@ export const makeTransitionalProperty = style => {
     })
     .join();
 };
+
+export const addProperties = (obj, entries) => {
+  if (entries.length === 1) {
+    obj[entries[0][0]] = [entries[0][1]];
+    return;
+  }
+  for (let [key, value] of entries) {
+    obj[key] = value;
+  }
+};
