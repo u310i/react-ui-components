@@ -1,4 +1,6 @@
-import fontAwesomeIconList from 'src/icons/fontAwesomeList'
-import userDefinedIconList from 'src/icons/userDefinedIconList'
+import fontAwesomeIconList, {
+  fontAwesomeIconMap
+} from 'src/icons/fontAwesomeList';
+import userDefinedIconList from 'src/icons/userDefinedIconList';
 
-export {fontAwesomeIconList, userDefinedIconList}
+export { fontAwesomeIconList, fontAwesomeIconMap, userDefinedIconList };

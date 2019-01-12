@@ -1,7 +1,10 @@
 import React from 'react';
+import { css, cx } from 'react-emotion';
 
-const xmlns = 'http://www.w3.org/2000/svg';
-const xmlnsXlink = 'http://www.w3.org/1999/xlink';
+const xml = {
+  xmlns: 'http://www.w3.org/2000/svg',
+  xmlnsXlink: 'http://www.w3.org/1999/xlink'
+};
 
 const SVG = ({
   viewBox,
@@ -9,19 +12,19 @@ const SVG = ({
   symbol,
   use,
   xlinkHref,
-  currentColor = false,
+  className,
+  style: propStyle,
   ...props
 }) => {
-  if (currentColor) {
-    props['fill'] = 'currentColor';
-  }
+  const compositStyle = cx(className, css(propStyle));
 
   if (symbol || use) {
     if (symbol) {
       return (
-        <svg display="none" xmlns={xmlns} xmlnsXlink={xmlnsXlink}>
+        <svg display="none" {...xml}>
           <symbol
             viewBox={viewBox}
+            className={compositStyle}
             {...props}
             dangerouslySetInnerHTML={{ __html: inner }}
           />
@@ -29,7 +32,7 @@ const SVG = ({
       );
     } else {
       return (
-        <svg {...props} xmlns={xmlns} xmlnsXlink={xmlnsXlink}>
+        <svg className={compositStyle} {...props} {...xml}>
           <use xlinkHref={xlinkHref} />
         </svg>
       );
@@ -38,9 +41,9 @@ const SVG = ({
     return (
       <svg
         viewBox={viewBox}
+        className={compositStyle}
         {...props}
-        xmlns={xmlns}
-        xmlnsXlink={xmlnsXlink}
+        {...xml}
         dangerouslySetInnerHTML={{ __html: inner }}
       />
     );

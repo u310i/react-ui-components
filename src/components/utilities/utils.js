@@ -152,8 +152,16 @@ export const extractOverlapObjectProperty = (
   return result;
 };
 
-export const camelCaceToAny = (camel, insert = '_') => {
-  return camel.replace(/([A-Z])/g, s => {
+export const toCamelCase = (str, replace = '-') => {
+  str = str.charAt(0).toLowerCase() + str.slice(1);
+  const reg = new RegExp(`[${replace}](.)`, 'g');
+  return str.replace(reg, (match, toUpperStr) => {
+    return toUpperStr.toUpperCase();
+  });
+};
+
+export const fromCamelCase = (camel, insert = '-') => {
+  return camel.replace(/[A-Z]/g, s => {
     return insert + s.charAt(0).toLowerCase();
   });
 };
@@ -161,7 +169,7 @@ export const camelCaceToAny = (camel, insert = '_') => {
 export const makeTransitionalProperty = style => {
   return Object.keys(style)
     .map(value => {
-      return camelCaceToAny(value, '-');
+      return fromCamelCase(value, '-');
     })
     .join();
 };

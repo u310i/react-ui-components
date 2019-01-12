@@ -32,28 +32,32 @@ const App = () => {
     <article className={css(pageProps.container.style)}>
       <div
         className={css({
-          width: '400px',
+          width: '500px',
           height: '100px',
           backgroundColor: '#ffffe0'
         })}
       >
-        <Icon icon="envelope" style={{ fontSize: '2em' }} currentColor />
+        <Icon icon="envelope" currentColor />
         test test test
         <Icon icon="message" symbol currentColor />
         <Icon icon="message" use />
+        <Icon type="fa" icon={['fas', 'angle-double-left']} />
+        <Icon type="fa" icon={['fas', 'angle-double-left']} symbol />
+        <Icon type="fa" icon={['fas', 'angle-double-left']} use />
         <Icon type="fa" icon={['fab', 'apple']} />
-        <Icon type="fa" icon={['fab', 'apple']} />
-        <Icon type="fa" icon={['fas', 'coffee']} style={{ fontSize: '1em' }} />
-        <Icon type="fa" icon="coffee" symbol />
+        coffee
+        <Icon type="fa" icon={['fas', 'coffee']} fixedWidth="3em" />
+        {/* <Icon type="fa" icon={['fas', 'coffee']} symbol /> */}
         <Icon
           type="fa"
-          icon="coffee"
-          use
-          style={{ color: 'red', fontSize: '2em' }}
+          icon={['fas', 'coffee']}
+          style={{ color: 'red' }}
+          size="2x"
         />
+        coffee
         <Icon icon="bird" symbol />
-        <Icon icon="bird" use style={{ fontSize: '2em' }} />
-        <Icon icon="bird" style={{ fontSize: '2.5em' }} />
+        <Icon icon="bird" use />
+        <Icon icon="bird" fixedWidth size="3x" />
       </div>
 
       {/* {Icon({ name: 'envelpe' })} */}
