@@ -9,18 +9,18 @@ import React, {
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'react-emotion';
 
+import { extractOverlapObjectProperty } from 'utilities/utils';
 import {
   genReactCSSTransitionStyle,
-  extractOverlapObjectProperty,
-  makeTransitionalProperty
-} from 'utilities/utils';
+  createTransitionalProperty
+} from 'utilities/styleUtils';
 import {
   getDisplayStateOnScrollEvent,
   getIsArrivedToElOnScrollEvent
 } from 'utilities/windowEvents';
-import { useAddWindowEvent, useIntersectionObserver } from 'utilities/effects';
-import { useGetDomProperty } from 'utilities/layoutEffects';
-import { useIsSecondRendering } from 'utilities/hooks';
+import { useAddWindowEvent } from 'utilities/hooks/useEffects';
+import { useGetDomProperty } from 'utilities/hooks/useLayoutEffects';
+import { useIsSecondRendering } from 'utilities/hooks/useHooks';
 
 import List from 'atoms/List';
 import { AppBar } from 'atoms/AppBar';
@@ -289,7 +289,7 @@ const AdvancedAppBar = ({
           ...beforeOverlapStyle,
           ...transitionOnArrived_beforeStyle
         };
-        const transitionProperty = makeTransitionalProperty(beforeStyle);
+        const transitionProperty = createTransitionalProperty(beforeStyle);
 
         return genReactCSSTransitionStyle(name_transitionOnArrived, () => {
           return {

@@ -1,5 +1,4 @@
 import defaultTheme from 'theme/defaultTheme';
-import { createScreenSizeMediaQueries } from 'utilities/utils';
 
 export default theme => {
   const {

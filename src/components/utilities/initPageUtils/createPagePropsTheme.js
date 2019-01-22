@@ -1,4 +1,4 @@
-import createTheme from 'utilities/createTheme';
+import createTheme from './createTheme';
 
 export default (baseTheme, baseProps) => {
   const pageTheme = createTheme(baseTheme);

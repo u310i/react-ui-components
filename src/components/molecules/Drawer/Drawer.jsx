@@ -9,8 +9,8 @@ import ReactDOM from 'react-dom';
 
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'emotion';
-import { genUniqueId, genReactCSSTransitionStyle } from 'utilities/utils';
-import { useAddCssInBody } from 'utilities/effects';
+import { genReactCSSTransitionStyle } from 'utilities/styleUtils';
+import { useAddCssInBody } from 'utilities/hooks/useEffects';
 import Link from 'atoms/Link';
 import IconButton from 'atoms/IconButton';
 

@@ -3,7 +3,7 @@ import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { css, cx } from 'react-emotion';
 
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { extractCurrentScreenSizeProps } from 'utilities/utils';
+import { extractCurrentScreenSizeProps } from 'utilities/breakpointUtils';
 
 import IconButton from 'atoms/IconButton';
 import { Container as DrawerContainer } from 'molecules/Drawer';

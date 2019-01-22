@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { userDefinedIconList, fontAwesomeIconMap } from 'src/icons';
-import { isObject, toCamelCase, addProperties } from 'utilities/utils';
-import { getFontSize } from './utils';
+import { isObject, addProperties, roundNumber } from 'utilities/utils';
+import { testCssNumberRegExp } from 'utilities/regExp';
+import { getFontSize, getIcon } from './utils';
 
 import SVG from 'atoms/SVG';
 
@@ -11,29 +10,49 @@ const Icon = ({
   type = 'own',
   icon,
   style: propStyle = {},
+  className: propClassName = '',
+  id: propId = '',
   symbol = false,
   use = false,
   currentColor,
   size = false,
   fixedWidth = false,
+  pull = false,
+  border = false,
+  rotation = false,
+  flip = false,
+  spin,
+  pulse,
   ...props
 }) => {
+  const className = [];
+  const id = [];
+  propClassName && className.push(propClassName);
+  propId && id.push(propId);
+
+  const iconIsString = typeof icon === 'string';
   const iconIsArray = Array.isArray(icon);
   const iconIsObject = isObject(icon);
-  const isOwn = type === 'own';
-  const isFa = type === 'fa';
 
   const name =
-    (!icon && '') ||
+    (iconIsString && icon) ||
     (iconIsArray && icon.join('-')) ||
-    (iconIsObject && icon.prefix && icon.iconName
-      ? `${icon.prefix}-${icon.iconName}`
-      : '') ||
-    (typeof icon === 'string' && icon) ||
-    icon.toString();
-  const baseName = `uc-svg-i-${type}`;
+    (iconIsObject
+      ? typeof icon.name === 'string' && icon.name
+      : Array.isArray(icon.name) && icon.name.join('-'));
 
-  const ownIcon = isOwn && userDefinedIconList.get(name);
+  const iconData = iconIsObject
+    ? {
+        type: 'direct',
+        viewBox: icon.viewBox,
+        path: icon.path,
+        tag: icon.tag
+      }
+    : getIcon(name);
+
+  const pathExists = !!iconData.path;
+
+  const baseName = `uc-svg-i-${iconData.type}`;
 
   const componentStyle = useMemo(() => {
     return {
@@ -45,79 +64,108 @@ const Icon = ({
     };
   });
 
+  size && (componentStyle['fontSize'] = getFontSize(size));
+
   if (typeof currentColor === 'undefined') {
-    (isOwn && (currentColor = false)) || (isFa && (currentColor = true));
+    currentColor = pathExists && true;
+  }
+  currentColor && (props['fill'] = 'currentColor');
+
+  const height = border ? 1.5 : 1;
+
+  if (fixedWidth && !border) {
+    componentStyle['width'] =
+      typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
+        ? fixedWidth
+        : `${roundNumber(height * 1.25, 3)}em`;
+  } else {
+    componentStyle['width'] = `${roundNumber(height * iconData.ratio, 3)}em`;
   }
 
-  if (isOwn || use) {
-    currentColor && (props['fill'] = 'currentColor');
-    fixedWidth &&
-      (propStyle['width'] =
-        typeof fixedWidth === 'string' ? fixedWidth : '1.25em');
-    size && (propStyle['fontSize'] = getFontSize(size));
-    if (!use) {
-      addProperties(props, [
-        ['viewBox', ownIcon.viewBox],
-        ['inner', ownIcon.inner]
-      ]);
-      if (!symbol) {
-        addProperties(props, [
-          ['className', `${baseName}-${name}`],
-          ['style', { ...componentStyle, ...propStyle }]
-        ]);
-      } else {
-        addProperties(props, [
-          ['symbol', symbol],
-          ['className', `${baseName}-'symbol-'${name}`],
-          ['id', `${baseName}-symbol-${name}`],
-          ['style', propStyle]
-        ]);
-      }
+  if (border) {
+    const borderIsObject = isObject(border);
+    addProperties(componentStyle, [
+      ['height', `${height}em`],
+      ['border', (borderIsObject && border.border) || 'solid 0.08em #eee'],
+      ['borderRadius', (borderIsObject && border.borderRadius) || '0.1em'],
+      ['padding', (borderIsObject && border.padding) || '0.2em 0.25em 0.15em']
+    ]);
+    if (fixedWidth) {
+      componentStyle['width'] =
+        typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
+          ? fixedWidth
+          : `${roundNumber(height * 1.25, 3)}em`;
     } else {
-      let w, h;
-      if (isFa) {
-        const faIcon = fontAwesomeIconMap.get(toCamelCase(name, '-'));
-        w = faIcon.icon[0];
-        h = faIcon.icon[1];
-      } else {
-        const viewBoxArray = ownIcon.viewBox.split(' ');
-        w = viewBoxArray[2];
-        h = viewBoxArray[3];
-      }
-      const width = Math.round((w / h) * 100) / 100;
-
-      addProperties(props, [
-        ['use', use],
-        ['className', `${baseName}-use-${name}`],
-        [
-          'style',
-          {
-            ...componentStyle,
-            width: width ? `${width}em` : '1.25em',
-            ...propStyle
-          }
-        ],
-        ['xlinkHref', `#${baseName}-symbol-${name}`]
-      ]);
-    }
-  } else if (isFa) {
-    props['icon'] = icon;
-    typeof fixedWidth === 'string'
-      ? (propStyle['width'] = fixedWidth)
-      : (props['fixedWidth'] = fixedWidth);
-    size && (props['size'] = size);
-    props['style'] = propStyle;
-    if (!symbol) {
-      props['className'] = `${baseName}-${name}`;
-    } else {
-      addProperties(props, [
-        ['className', `${baseName}-symbol-${name}`],
-        ['symbol', `${baseName}-symbol-${name}`]
-      ]);
+      componentStyle['width'] = `${roundNumber(height * iconData.ratio, 3)}em`;
     }
   }
 
-  return isOwn || use ? <SVG {...props} /> : <FontAwesomeIcon {...props} />;
+  if (pull === 'left') {
+    addProperties(componentStyle, [
+      ['marginRight', '0.3em'],
+      ['float', 'left']
+    ]);
+  } else if (pull === 'right') {
+    addProperties(componentStyle, [
+      ['marginLeft', '0.3em'],
+      ['float', 'right']
+    ]);
+  }
+
+  if (rotation || flip) {
+    const transformList = [];
+
+    if (rotation) {
+      const rotate = `rotate(${rotation}deg)`;
+      transformList.push(rotate);
+    }
+    if (flip) {
+      let scale;
+      flip === 'horizontal' && (scale = `scale(-1, 1)`);
+      flip === 'vertical' && (scale = `scale(1, -1)`);
+      flip === 'both' && (scale = `scale(-1, -1)`);
+      transformList.push(scale);
+    }
+
+    componentStyle['transform'] = transformList.join(' ');
+  }
+
+  if (spin || pulse) {
+    spin
+      ? (componentStyle['animation'] = 'uc-spin 2s infinite linear')
+      : (componentStyle['animation'] = 'uc-spin 1s infinite steps(8)');
+  }
+
+  if (use) {
+    className.push(`${baseName}-use-${name}`);
+    addProperties(props, [
+      ['use', true],
+      ['className', className.join(' ')],
+      ['xlinkHref', `#${baseName}-symbol-${name}`]
+    ]);
+  } else {
+    addProperties(props, [
+      ['viewBox', iconData.viewBox],
+      ['path', iconData.path],
+      ['tag', iconData.tag]
+    ]);
+    if (symbol) {
+      className.push(`${baseName}-symbol-${name}`);
+      id.push(`${baseName}-symbol-${name}`);
+      addProperties(props, [
+        ['symbol', true],
+        ['className', className.join(' ')],
+        ['id', id.join(' ')]
+      ]);
+    } else {
+      className.push(`${baseName}-${name}`);
+      props['className'] = className.join(' ');
+    }
+  }
+
+  props['style'] = { ...componentStyle, ...propStyle };
+
+  return <SVG {...props} />;
 };
 
 export default Icon;

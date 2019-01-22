@@ -1,9 +1,12 @@
 import { useState, useRef, useCallback, useMemo } from 'react';
-import { useAddWindowEvent } from 'utilities/effects';
+import { useAddWindowEvent } from 'utilities/hooks/useEffects';
+import { useGetInitBreakpoint } from 'utilities/breakpointUtils';
 import { setBreakpointOnResizeEvent } from 'utilities/windowEvents';
 
-export const useSetTwoBreakpoint = breakpoints => {
-  const initBreakpoint = useGetInitBreakpoint(breakpoints, setBreakpointState);
+export const useSetBreakpoint = breakpoints => {
+  const initBreakpoint = useMemo(() => {
+    return useGetInitBreakpoint(breakpoints);
+  });
   const [breakpointState, setBreakpointState] = useState(initBreakpoint);
   useAddWindowEvent(
     'resize',
@@ -17,23 +20,6 @@ export const useSetTwoBreakpoint = breakpoints => {
     []
   );
   return breakpointState;
-};
-
-export const useGetInitBreakpoint = breakpoints => {
-  const result = useMemo(() => {
-    const { xs, sm, md, lg, xl } = breakpoints;
-    const width = window.innerWidth;
-    const breakpoint =
-      (xs && width < xs && 'xs') ||
-      (sm && width < sm && 'sm') ||
-      (md && width < md && 'md') ||
-      (lg && width < lg && 'lg') ||
-      (xl && width < xl && 'xl') ||
-      'max';
-    return breakpoint;
-  }, []);
-
-  return result;
 };
 
 export const useIsSecondRendering = hasElement => {

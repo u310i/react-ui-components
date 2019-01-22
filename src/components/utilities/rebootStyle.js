@@ -386,4 +386,17 @@ nav {
   font-size: 0;
 }
 
+
+
+/* animation */
+
+@keyframes uc-spin {
+  from {
+    transform:rotate(0deg);
+  }
+  to {
+    transform:rotate(360deg);
+  }
+}
+
 `;

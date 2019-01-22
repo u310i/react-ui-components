@@ -1,6 +1,18 @@
-import fontAwesomeIconList, {
-  fontAwesomeIconMap
-} from 'src/icons/fontAwesomeList';
-import userDefinedIconList from 'src/icons/userDefinedIconList';
+import userIcons from './userIcons';
+import fontAwesomeIcons from './fontAwesomeIcons';
 
-export { fontAwesomeIconList, fontAwesomeIconMap, userDefinedIconList };
+const iconList = new Map();
+
+const iconsList = [userIcons, fontAwesomeIcons];
+for (let icons of iconsList) {
+  for (let icon of icons.list) {
+    iconList.set(`${icon.name}`, {
+      type: icons.type,
+      viewBox: icon.viewBox,
+      path: icon.path || null,
+      tag: icon.tag || null
+    });
+  }
+}
+
+export default iconList;

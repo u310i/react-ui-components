@@ -24,63 +24,6 @@ export const isObject = o => {
 //   return typeof item === 'object' && item !== null && !Array.isArray(item)
 // };
 
-export const genReactCSSTransitionStyle = (name, fn) => {
-  const {
-    defaultStyle,
-    appear,
-    appearActive,
-    enter,
-    enterActive,
-    enterDone,
-    exit,
-    exitActive,
-    exitDone
-  } = fn();
-
-  return {
-    ...(defaultStyle || {}),
-    [`&.${name}-appear`]: appear || enter,
-    [`&.${name}-appear-active`]: appearActive || enterActive,
-    [`&.${name}-enter`]: enter,
-    [`&.${name}-enter-active`]: enterActive,
-    [`&.${name}-enter-done`]: enterDone || exit,
-    [`&.${name}-exit`]: exit,
-    [`&.${name}-exit-active`]: exitActive,
-    [`&.${name}-exit-done`]: exitDone || enter
-  };
-};
-
-// export const createReactCSSTransitionCallBack = (name, node) => {
-//   return {
-//     onEnter: () => {
-//       node.classList.remove(`${name}-exit`);
-//       node.classList.remove(`${name}-exit-active`);
-//       node.classList.add(`${name}-enter`);
-//     },
-//     onEntering: () => {
-//       node.classList.add(`${name}-enter-active`);
-//     },
-//     onEntered: () => {
-//       node.classList.remove(`${name}-enter`);
-//       node.classList.remove(`${name}-enter-active`);
-//       node.classList.add(`${name}-enter-done`);
-//     },
-//     onExit: () => {
-//       node.classList.remove(`${name}-enter`);
-//       node.classList.remove(`${name}-enter-active`);
-//       node.classList.remove(`${name}-enter-done`);
-//       node.classList.add(`${name}-exit`);
-//     },
-//     onExiting: () => {
-//       node.classList.add(`${name}-exit-active`);
-//     },
-//     onExited: () => {
-//       node.classList.remove(`${name}-exit`);
-//       node.classList.remove(`${name}-exit-active`);
-//     }
-//   };
-// };
-
 export const createOptimizedEvent = fn => {
   let ticking = false;
   return () => {
@@ -94,56 +37,9 @@ export const createOptimizedEvent = fn => {
   };
 };
 
-export const createGetScrollUpDownState = initRow => {
-  let currentRow,
-    prevRow,
-    state = 'equal',
-    isFirstRender = true;
-  return row => {
-    if (isFirstRender) {
-      prevRow = initRow;
-      isFirstRender = false;
-    } else {
-      prevRow = currentRow;
-    }
-    currentRow = row;
-    if (currentRow > prevRow) {
-      if (state !== 'down') {
-        state = 'down';
-      }
-    } else if (currentRow < prevRow) {
-      if (state !== 'up') {
-        state = 'up';
-      }
-    } else {
-      if (state !== 'equal') {
-        state = 'equal';
-      }
-    }
-
-    return state;
-  };
-};
-
-export const extractCurrentScreenSizeProps = (state, options) => {
-  const { xs, sm, md, lg, xl, ...common } = options;
-  const max = xl || lg || md || sm || xs;
-  const currentOptions = (state === 'xs' && { ...common, ...xs }) ||
-    (state === 'sm' && deepMerge.overrideArray(common, sm)) ||
-    (state === 'md' && deepMerge.overrideArray(common, md)) ||
-    (state === 'lg' && deepMerge.overrideArray(common, lg)) ||
-    (state === 'xl' && deepMerge.overrideArray(common, xl)) ||
-    (state === 'max' && deepMerge.overrideArray(common, max)) || { ...common };
-  return currentOptions;
-};
-
-export const extractOverlapObjectProperty = (
-  first,
-  second,
-  extractFromFirst
-) => {
+export const extractOverlapObjectProperty = (first, second, extractIsFirst) => {
   const result = {};
-  const extractObj = extractFromFirst ? first : second;
+  const extractObj = extractIsFirst ? first : second;
   Object.keys(first).forEach(value => {
     if (second[value]) {
       result[value] = extractObj[value];
@@ -166,20 +62,23 @@ export const fromCamelCase = (camel, insert = '-') => {
   });
 };
 
-export const makeTransitionalProperty = style => {
-  return Object.keys(style)
-    .map(value => {
-      return fromCamelCase(value, '-');
-    })
-    .join();
-};
-
 export const addProperties = (obj, entries) => {
-  if (entries.length === 1) {
-    obj[entries[0][0]] = [entries[0][1]];
-    return;
-  }
   for (let [key, value] of entries) {
     obj[key] = value;
   }
+};
+
+export const roundNumber = (number, precision) => {
+  var shift = function(number, precision, reverseShift) {
+    if (reverseShift) {
+      precision = -precision;
+    }
+    var numArray = ('' + number).split('e');
+    return +(
+      numArray[0] +
+      'e' +
+      (numArray[1] ? +numArray[1] + precision : precision)
+    );
+  };
+  return shift(Math.round(shift(number, precision, false)), precision, true);
 };

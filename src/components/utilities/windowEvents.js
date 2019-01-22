@@ -1,5 +1,3 @@
-import { createGetScrollUpDownState } from 'utilities/utils';
-
 export const setBreakpointOnResizeEvent = (
   breakpoints,
   initBreakpoint,
@@ -10,7 +8,16 @@ export const setBreakpointOnResizeEvent = (
     prevBreakpoint,
     currentBreakpoint = initBreakpoint;
 
-  if (sm && lg) {
+  if (md && !(xs && sm && lg && xl)) {
+    return () => {
+      prevBreakpoint = currentBreakpoint;
+      currentWidth = window.innerWidth;
+      currentBreakpoint = (currentWidth < md && 'md') || 'max';
+      if (currentBreakpoint !== prevBreakpoint) {
+        setState(currentBreakpoint);
+      }
+    };
+  } else if (sm && lg && !(xs && md && xl)) {
     return () => {
       prevBreakpoint = currentBreakpoint;
       currentWidth = window.innerWidth;
@@ -20,7 +27,7 @@ export const setBreakpointOnResizeEvent = (
         setState(currentBreakpoint);
       }
     };
-  } else if (sm && md && lg) {
+  } else if (sm && md && lg && !(xs && xl)) {
     return () => {
       prevBreakpoint = currentBreakpoint;
       currentWidth = window.innerWidth;
@@ -33,7 +40,21 @@ export const setBreakpointOnResizeEvent = (
         setState(currentBreakpoint);
       }
     };
-  } else {
+  } else if (sm && md && lg && xl && !xs) {
+    return () => {
+      prevBreakpoint = currentBreakpoint;
+      currentWidth = window.innerWidth;
+      currentBreakpoint =
+        (currentWidth < sm && 'sm') ||
+        (currentWidth < md && 'md') ||
+        (currentWidth < lg && 'lg') ||
+        (currentWidth < xl && 'xl') ||
+        'max';
+      if (currentBreakpoint !== prevBreakpoint) {
+        setState(currentBreakpoint);
+      }
+    };
+  } else if (xs && sm && md && lg && xl) {
     return () => {
       prevBreakpoint = currentBreakpoint;
       currentWidth = window.innerWidth;
@@ -49,6 +70,37 @@ export const setBreakpointOnResizeEvent = (
       }
     };
   }
+};
+
+const createGetScrollUpDownState = initRow => {
+  let currentRow,
+    prevRow,
+    state = 'equal',
+    isFirstRender = true;
+  return row => {
+    if (isFirstRender) {
+      prevRow = initRow;
+      isFirstRender = false;
+    } else {
+      prevRow = currentRow;
+    }
+    currentRow = row;
+    if (currentRow > prevRow) {
+      if (state !== 'down') {
+        state = 'down';
+      }
+    } else if (currentRow < prevRow) {
+      if (state !== 'up') {
+        state = 'up';
+      }
+    } else {
+      if (state !== 'equal') {
+        state = 'equal';
+      }
+    }
+
+    return state;
+  };
 };
 
 export const getDisplayStateOnScrollEvent = (elRef, keepHeight, callback) => {

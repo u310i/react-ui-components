@@ -2,62 +2,120 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import { css, injectGlobal, sheet } from 'react-emotion';
 
-import reboot from 'utilities/reboot';
-import { useSetTwoBreakpoint } from 'utilities/hooks';
-import {} from 'utilities/utils';
-import {} from 'utilities/windowEvents';
+import rebootStyle from 'utilities/rebootStyle';
+import { useSetBreakpoint } from 'utilities/hooks/useHooks';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fontAwesomeIconList } from 'src/icons';
 import Icon from 'atoms/Icon';
-
-import createPagePropsTheme from 'utilities/createPagePropsTheme';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faAngleDoubleLeft,
+  faAmbulance
+} from '@fortawesome/free-solid-svg-icons';
+import { faApple, faCcPaypal } from '@fortawesome/free-brands-svg-icons';
+import createPagePropsTheme from 'utilities/initPageUtils/createPagePropsTheme';
 import baseTheme from './_this_theme';
 import baseProps from './_this_props';
 
 import Header from 'organisms/Header';
 import HeaderImage from 'organisms/HeaderImage';
 
-library.add(...fontAwesomeIconList);
-
 const { pageProps, pageTheme } = createPagePropsTheme(baseTheme, baseProps);
 
-injectGlobal(pageProps.global.style, reboot);
+injectGlobal(pageProps.global.style, rebootStyle);
 
 const App = () => {
   const breakpoints = pageTheme.breakpoint.values;
-  const breakpoint = useSetTwoBreakpoint(breakpoints);
+  const breakpoint = useSetBreakpoint(breakpoints);
 
   return (
     <article className={css(pageProps.container.style)}>
       <div
         className={css({
           width: '500px',
-          height: '100px',
+          height: '300px',
           backgroundColor: '#ffffe0'
         })}
       >
+        <div>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</div>
+        <Icon
+          type="fa"
+          icon={['fab', 'apple']}
+          size="2x"
+          // flip="both"
+          // border
+          // rotation={90}
+          // flip="horizontal"
+          transform="translate(100 -200)  rotate(150 0 0)  scale(1 1.5)"
+          className="aaaaaaaaaaaaaaaaaaaaaaaaaa"
+        />
+        <Icon
+          type="fa"
+          icon={['fab', 'apple']}
+          size="2x"
+          // flip="both"
+          // pull="right"
+        />
+        aaaaaaaaaaa
+        <Icon
+          type="fa"
+          icon={['fas', 'angle-double-left']}
+          size="2x"
+          // flip="both"
+          // border
+          // pull="right"
+        />
+        <Icon
+          type="fa"
+          icon={['fab', 'apple']}
+          size="2x"
+          // flip="both"
+          border
+        />
+        <Icon
+          type="fa"
+          icon={['fab', 'apple']}
+          size="2x"
+          // flip="both"
+          border={{ border: 'solid 0.12em #c71585' }}
+          fixedWidth
+        />
+        <div>------</div>
+        <FontAwesomeIcon icon={faApple} size="2x" />
+        <FontAwesomeIcon
+          icon={faApple}
+          size="2x"
+          // pull="right"
+          transform={{ rotate: 42 }}
+          // flip="horizontal"
+          // spin
+          style={{
+            marginLeft: '1rem'
+          }}
+        />
+        <FontAwesomeIcon
+          icon={faApple}
+          size="2x"
+          // pull="right"
+          // rotation={180}
+          // rotation={90}
+          // flip="horizontal"
+          // transform={{ rotate: 42 }}
+          style={{
+            marginLeft: '1rem'
+          }}
+          transform="shrink-6 left-4"
+          // spin
+        />
+        <div>------</div>
+        <div>##########################################</div>
+        <Icon icon="bird" symbol />
+        <Icon icon="bird" use size="3x" />
+        <Icon icon="bird" size="3x" border />
         <Icon icon="envelope" currentColor />
+        <Icon icon="message" currentColor />
         test test test
         <Icon icon="message" symbol currentColor />
         <Icon icon="message" use />
-        <Icon type="fa" icon={['fas', 'angle-double-left']} />
-        <Icon type="fa" icon={['fas', 'angle-double-left']} symbol />
-        <Icon type="fa" icon={['fas', 'angle-double-left']} use />
-        <Icon type="fa" icon={['fab', 'apple']} />
-        coffee
-        <Icon type="fa" icon={['fas', 'coffee']} fixedWidth="3em" />
-        {/* <Icon type="fa" icon={['fas', 'coffee']} symbol /> */}
-        <Icon
-          type="fa"
-          icon={['fas', 'coffee']}
-          style={{ color: 'red' }}
-          size="2x"
-        />
-        coffee
-        <Icon icon="bird" symbol />
-        <Icon icon="bird" use />
-        <Icon icon="bird" fixedWidth size="3x" />
       </div>
 
       {/* {Icon({ name: 'envelpe' })} */}
