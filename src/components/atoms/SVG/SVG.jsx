@@ -23,7 +23,7 @@ const SVG = ({
 }) => {
   const compositStyle = cx(className, css(propStyle));
 
-  let TransformHoc;
+  let createGroupedComponent;
   if (transform) {
     const x = roundNumber(viewBox[2] / 2, 6);
     const y = roundNumber(viewBox[3] / 2, 6);
@@ -33,7 +33,7 @@ const SVG = ({
 
     innerProps = { transform: forInnerGroup, ...innerProps };
 
-    TransformHoc = inner => (
+    createGroupedComponent = inner => (
       <g transform={forOuterGroup}>
         <g transform={transform}>{inner}</g>
       </g>
@@ -45,7 +45,9 @@ const SVG = ({
     <g {...innerProps} dangerouslySetInnerHTML={{ __html: tag }} />
   );
 
-  const InnerComponent = transform ? TransformHoc(Path || Tag) : Path || Tag;
+  const InnerComponent = transform
+    ? createGroupedComponent(Path || Tag)
+    : Path || Tag;
 
   if (symbol) {
     return (
