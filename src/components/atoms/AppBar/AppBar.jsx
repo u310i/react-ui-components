@@ -1,42 +1,212 @@
-import React from 'react';
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useRef,
+  useMemo
+} from 'react';
+
 import { css, cx } from 'react-emotion';
+import { getIsArrivedToElOnScrollEvent } from 'utilities/windowEvents';
+import { useAddWindowEvent } from 'utilities/hooks/useEffects';
+import { useGetDomProperties } from 'utilities/hooks/useLayoutEffects';
+// import { useSetVerticalState } from '.utils';
 
+import Dummy from 'atoms/Dummy';
 import List from 'atoms/List';
+import ScrollDown from './transitions/ScrollDown';
+import Scrolling from './transitions/Scrolling';
 
-const AppBar = ({
-  forwardRef = null,
-  parentProps = {},
-  list = [],
-  theme,
-  options = {}
-}) => {
-  const { style: parentStyle = {} } = parentProps;
-  const { style: propStyle = {}, height = '3rem' } = options;
-
-  const componentStyle = {
-    style: {
-      backgroundColor: '#333',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      height: height,
-      paddingLeft: '0.5rem',
-      paddingRight: '0.5rem',
-      width: '100%',
-      zIndex: theme.zIndex.appBar
+const AppBar = ({ list = [], theme, options = {}, style: propStyle = {} }) => {
+  const {
+    height = '3rem',
+    advance: {
+      duration = 200,
+      timingFunction = 'ease-out',
+      mode = 'static',
+      actionMode,
+      action: { scrollDown, scrolling }
     }
-  };
+  } = options;
 
-  const componentStyleRoot = {
-    ...componentStyle.style,
-    ...parentStyle,
+  const elRef = useRef(null);
+  const [isArrivedState, setIsArrivedState] = useState(false);
+
+  const {
+    isFixed,
+    isAbsolute,
+    isStaticToFixed,
+    isAbsoluteToFixed,
+    isBottom,
+    isScrollDown,
+    isScrolling
+  } = useMemo(() => {
+    return {
+      isFixed: mode === 'fixed',
+      isAbsolute: mode === 'absolute',
+      isStaticToFixed: mode === 'staticToFixed',
+      isAbsoluteToFixed: mode === 'absoluteToFixed',
+      isBottom: mode === 'bottom',
+      isScrollDown: actionMode === 'scrollDown',
+      isScrolling: actionMode === 'scrolling'
+    };
+  });
+
+  const { needArrivedState, needVerticalValue, needDummy } = useMemo(() => {
+    return {
+      needArrivedState: isStaticToFixed || isAbsoluteToFixed,
+      needVerticalValue: (isStaticToFixed && isScrollDown) || isBottom,
+      needDummy: isStaticToFixed || (isBottom && !isScrollDown)
+    };
+  }, []);
+
+  const hasEl = !!elRef.current;
+
+  const { shouldBeAbsolute, shouldBeFixed } = useMemo(
+    () => {
+      return {
+        shouldBeAbsolute: isAbsolute || (isAbsoluteToFixed && !isArrivedState),
+        shouldBeFixed:
+          isFixed ||
+          (isBottom && hasEl) ||
+          (isStaticToFixed && isArrivedState) ||
+          (isAbsoluteToFixed && isArrivedState)
+      };
+    },
+    [hasEl, isArrivedState]
+  );
+
+  const actionOptions = useMemo(() => {
+    return (isScrollDown && scrollDown) || (isScrolling && scrolling);
+  }, []);
+
+  const verticalState = useGetDomProperties(
+    elRef,
+    ['offsetTop', 'offsetHeight'],
+    (prev, value) => value,
+    needVerticalValue,
+    []
+  );
+
+  useAddWindowEvent(
+    'scroll',
+    () =>
+      getIsArrivedToElOnScrollEvent(elRef, isArrived => {
+        setIsArrivedState(isArrived);
+      }),
+    needArrivedState,
+    []
+  );
+
+  const componentStyle = useMemo(() => {
+    return {
+      style: {},
+      main: {
+        style: {
+          backgroundColor: '#333',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          height: height,
+          paddingLeft: '0.5rem',
+          paddingRight: '0.5rem',
+          width: '100%',
+          zIndex: theme.zIndex.appBar
+        }
+      }
+    };
+  }, []);
+
+  useMemo(
+    () => {
+      componentStyle.style['position'] =
+        (shouldBeAbsolute && 'relative') || 'static';
+      componentStyle.main.style['position'] =
+        (shouldBeFixed && 'fixed') ||
+        (shouldBeAbsolute && 'absolute') ||
+        'static';
+
+      componentStyle.main.style['top'] =
+        (shouldBeFixed && !isBottom ? '0' : 'auto') ||
+        (shouldBeAbsolute && '0') ||
+        'auto';
+      componentStyle.main.style['bottom'] =
+        shouldBeFixed && isBottom ? '0' : 'auto';
+      componentStyle.main.style['left'] =
+        ((shouldBeFixed || shouldBeAbsolute) && '0') || 'auto';
+    },
+    [hasEl, isArrivedState]
+  );
+
+  const style = {
+    ...componentStyle.main.style,
     ...propStyle
   };
 
+  const createAppBar = useMemo(() => {
+    return style => (
+      <div className={cx(css(style), 'uc-appbar-main')}>
+        <List componentList={list} mode="component" />
+      </div>
+    );
+  }, []);
+
+  let Component;
+  if (isScrollDown) {
+    Component = (
+      <ScrollDown
+        enable={shouldBeFixed}
+        innerHoc={createAppBar}
+        style={style}
+        keepHeight={
+          needVerticalValue &&
+          verticalState &&
+          verticalState.offsetTop + verticalState.offsetHeight
+        }
+        isBottom={isBottom}
+        duration={duration}
+        timingFunction={timingFunction}
+        options={actionOptions}
+      />
+    );
+  } else if (isScrolling) {
+    Component = (
+      <Scrolling
+        enable={shouldBeFixed}
+        innerHoc={createAppBar}
+        style={style}
+        duration={duration}
+        timingFunction={timingFunction}
+        options={actionOptions}
+      />
+    );
+  } else {
+    Component = createAppBar(style);
+  }
+
+  const DummyComponent = useMemo(
+    () => {
+      if (needDummy && verticalState.offsetHeight) {
+        const style = { height: `${verticalState.offsetHeight}px` };
+        const container = isBottom && document.getElementById('bottom');
+        return (
+          <Dummy
+            container={container}
+            style={style}
+            className="uc-appbar-dummy"
+          />
+        );
+      }
+    },
+    [hasEl]
+  );
+
   return (
-    <div ref={forwardRef} className={cx(css(componentStyleRoot), 'uc-appbar')}>
-      <List componentList={list} mode="component" />
+    <div className={cx(css(componentStyle.style), 'uc-appbar')} ref={elRef}>
+      {Component}
+      {(isArrivedState || isBottom) && DummyComponent}
     </div>
   );
 };

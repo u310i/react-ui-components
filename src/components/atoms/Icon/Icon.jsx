@@ -21,8 +21,8 @@ const Icon = ({
   border = false,
   rotation = false,
   flip = false,
-  spin,
-  pulse,
+  spin = false,
+  pulse = false,
   ...props
 }) => {
   const className = [];
@@ -50,7 +50,7 @@ const Icon = ({
       }
     : getIcon(name);
 
-  const pathExists = !!iconData.path;
+  const isPath = !!iconData.path;
 
   const baseName = `uc-svg-i-${iconData.type}`;
 
@@ -67,49 +67,61 @@ const Icon = ({
   size && (componentStyle['fontSize'] = getFontSize(size));
 
   if (typeof currentColor === 'undefined') {
-    currentColor = pathExists && true;
+    currentColor = isPath && true;
   }
   currentColor && (props['fill'] = 'currentColor');
 
   const height = border ? 1.5 : 1;
+  const widthRatioAtFixed = 1.25;
+  const precision = 3;
 
   if (fixedWidth && !border) {
     componentStyle['width'] =
       typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
         ? fixedWidth
-        : `${roundNumber(height * 1.25, 3)}em`;
+        : `${roundNumber(height * widthRatioAtFixed, precision)}em`;
   } else {
-    componentStyle['width'] = `${roundNumber(height * iconData.ratio, 3)}em`;
+    componentStyle['width'] = `${roundNumber(
+      height * iconData.ratio,
+      precision
+    )}em`;
   }
 
   if (border) {
     const borderIsObject = isObject(border);
-    addProperties(componentStyle, [
-      ['height', `${height}em`],
-      ['border', (borderIsObject && border.border) || 'solid 0.08em #eee'],
-      ['borderRadius', (borderIsObject && border.borderRadius) || '0.1em'],
-      ['padding', (borderIsObject && border.padding) || '0.2em 0.25em 0.15em']
-    ]);
+    if (borderIsObject) {
+      addProperties(componentStyle, border);
+    } else {
+      addProperties(componentStyle, {
+        height: `${height}em`,
+        border: 'solid 0.08em #eee',
+        borderRadius: '0.1em',
+        padding: '0.2em 0.25em 0.15em'
+      });
+    }
     if (fixedWidth) {
       componentStyle['width'] =
         typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
           ? fixedWidth
-          : `${roundNumber(height * 1.25, 3)}em`;
+          : `${roundNumber(height * widthRatioAtFixed, precision)}em`;
     } else {
-      componentStyle['width'] = `${roundNumber(height * iconData.ratio, 3)}em`;
+      componentStyle['width'] = `${roundNumber(
+        height * iconData.ratio,
+        precision
+      )}em`;
     }
   }
 
   if (pull === 'left') {
-    addProperties(componentStyle, [
-      ['marginRight', '0.3em'],
-      ['float', 'left']
-    ]);
+    addProperties(componentStyle, {
+      marginRight: '0.3em',
+      float: 'left'
+    });
   } else if (pull === 'right') {
-    addProperties(componentStyle, [
-      ['marginLeft', '0.3em'],
-      ['float', 'right']
-    ]);
+    addProperties(componentStyle, {
+      marginLeft: '0.3em',
+      float: 'right'
+    });
   }
 
   if (rotation || flip) {
@@ -138,25 +150,25 @@ const Icon = ({
 
   if (use) {
     className.push(`${baseName}-use-${name}`);
-    addProperties(props, [
-      ['use', true],
-      ['className', className.join(' ')],
-      ['xlinkHref', `#${baseName}-symbol-${name}`]
-    ]);
+    addProperties(props, {
+      use: true,
+      className: className.join(' '),
+      xlinkHref: `#${baseName}-symbol-${name}`
+    });
   } else {
-    addProperties(props, [
-      ['viewBox', iconData.viewBox],
-      ['path', iconData.path],
-      ['tag', iconData.tag]
-    ]);
+    addProperties(props, {
+      viewBox: iconData.viewBox,
+      path: iconData.path,
+      tag: iconData.tag
+    });
     if (symbol) {
       className.push(`${baseName}-symbol-${name}`);
       id.push(`${baseName}-symbol-${name}`);
-      addProperties(props, [
-        ['symbol', true],
-        ['className', className.join(' ')],
-        ['id', id.join(' ')]
-      ]);
+      addProperties(props, {
+        symbol: true,
+        className: className.join(' '),
+        id: id.join(' ')
+      });
     } else {
       className.push(`${baseName}-${name}`);
       props['className'] = className.join(' ');

@@ -22,21 +22,30 @@ export const useSetBreakpoint = breakpoints => {
   return breakpointState;
 };
 
-export const useIsSecondRendering = hasElement => {
-  const prevHasElementRef = useRef();
-  if (!hasElement) {
-    prevHasElementRef.current = null;
-  }
-  let hasFirstElement;
+export const didMount = () => {
+  const ref = useRef();
+  const state = ref.current;
 
-  if (hasElement && prevHasElementRef.current === null) {
-    prevHasElementRef.current = true;
-    hasFirstElement = true;
-  } else if (!hasElement && prevHasElementRef.current === true) {
-    prevHasElementRef.current = null;
-    hasFirstElement = null;
-  } else {
-    hasFirstElement = null;
+  if (typeof state === undefined) {
+    ref.current = 1;
+  } else if (state === 1) {
+    ref.current = false;
   }
-  return hasFirstElement;
+
+  return !!ref.current;
+};
+
+export const didFirstUpdate = () => {
+  const ref = useRef();
+  const state = ref.current;
+
+  if (typeof state === undefined) {
+    ref.current = 0;
+  } else if (state === 0) {
+    ref.current = 1;
+  } else if (state === 1) {
+    ref.current = false;
+  }
+
+  return !!ref.current;
 };

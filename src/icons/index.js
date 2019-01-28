@@ -1,7 +1,7 @@
 import userIcons from './userIcons';
 import fontAwesomeIcons from './fontAwesomeIcons';
 
-const iconList = new Map();
+const iconList = new Map(null);
 
 const iconsList = [userIcons, fontAwesomeIcons];
 for (let icons of iconsList) {

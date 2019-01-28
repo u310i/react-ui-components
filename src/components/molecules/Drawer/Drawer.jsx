@@ -18,17 +18,7 @@ import List from 'atoms/List';
 
 const name = 'drawer';
 
-const Drawer = ({
-  forwardRef = null,
-  parentProps = {},
-  theme,
-  options = {},
-  list,
-  onClose,
-  state,
-  rootElement
-}) => {
-  const { style: parentStyle = {} } = parentProps;
+const Drawer = ({ theme, options = {}, list, onClose, state, container }) => {
   const {
     style: propStyle = {},
     direction = 'right',
@@ -195,11 +185,9 @@ const Drawer = ({
   const Component = (
     <CSSTransition in={state === 'open'} timeout={duration} classNames={name}>
       <div
-        ref={forwardRef}
         className={cx(
           css({
             ...componentStyle,
-            ...parentStyle,
             ...propStyle,
             ...transitionStyle
           }),
@@ -243,9 +231,7 @@ const Drawer = ({
     </CSSTransition>
   );
 
-  return rootElement
-    ? ReactDOM.createPortal(Component, rootElement)
-    : Component;
+  return container ? ReactDOM.createPortal(Component, container) : Component;
 };
 
 export default Drawer;

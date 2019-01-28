@@ -72,6 +72,18 @@ export const setBreakpointOnResizeEvent = (
   }
 };
 
+export const getDomPropertyEvent = (elRef, propertyName, callback, init) => {
+  let value = (init || init === 0) && init,
+    preTop;
+  return () => {
+    preTop = value;
+    value = elRef.current[propertyName];
+    if (value !== preTop) {
+      callback(value);
+    }
+  };
+};
+
 const createGetScrollUpDownState = initRow => {
   let currentRow,
     prevRow,
@@ -103,54 +115,65 @@ const createGetScrollUpDownState = initRow => {
   };
 };
 
-export const getDisplayStateOnScrollEvent = (elRef, keepHeight, callback) => {
-  const elRefExists = !!elRef.current;
-
-  let target, height, top;
-  if (keepHeight) {
-    height = elRefExists ? elRef.current.offsetHeight : -1;
-    top = elRefExists ? elRef.current.offsetTop : 0;
-    target = height + top;
-  } else {
-    target = elRefExists ? elRef.current.offsetTop : 0;
-  }
-
+export const getDisplayStateOnScrollEvent = (height, callback) => {
   let currentRow,
     initRow = window.pageYOffset,
-    baseState,
+    rowState,
     state = 'init',
-    prevState;
+    prevState = state,
+    ticking = false;
 
+  const judge = (state, prev) => {
+    switch (state) {
+      case 'up':
+        return 'show';
+      case 'down':
+        return 'hide';
+      default:
+        return prev;
+    }
+  };
   const getScrollState = createGetScrollUpDownState(initRow);
   return () => {
-    currentRow = window.pageYOffset;
-    baseState = getScrollState(currentRow);
-    prevState = state;
-    if (currentRow > target) {
-      state = baseState !== 'down' ? 'show' : 'hide';
-    } else {
-      state = 'quickly-show';
-    }
-    if (state !== prevState) {
-      callback(state);
+    if (!ticking) {
+      currentRow = window.pageYOffset;
+      rowState = getScrollState(currentRow);
+      prevState = state;
+      if (height || height === 0) {
+        if (currentRow > height) {
+          state = judge(rowState, prevState);
+        } else {
+          state = 'ignore';
+        }
+      } else {
+        state = judge(rowState, prevState);
+      }
+
+      if (state !== prevState) {
+        window.setTimeout(() => {
+          ticking = false;
+        }, 10);
+        ticking = true;
+        callback(state);
+      }
     }
   };
 };
 
 export const getIsArrivedToElOnScrollEvent = (ref, callback) => {
-  if (ref.current || ref.current.offsetTop === 0) {
-    let offsetTop,
-      currentRow,
-      flag = false;
-    return () => {
-      offsetTop = ref.current.offsetTop;
-      currentRow = window.pageYOffset;
-      flag = currentRow > offsetTop ? true : false;
+  let limit,
+    currentRow,
+    flag = false,
+    prev;
+  return () => {
+    limit = ref.current.offsetTop;
+    currentRow = window.pageYOffset;
+    prev = flag;
+    flag = currentRow > limit;
+    if (flag !== prev) {
       callback(flag);
-    };
-  } else {
-    return () => {};
-  }
+    }
+  };
 };
 
 export const setSetRefsPropertyEvent = (

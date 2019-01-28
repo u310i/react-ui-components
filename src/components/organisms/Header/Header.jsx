@@ -8,7 +8,7 @@ import { extractCurrentScreenSizeProps } from 'utilities/breakpointUtils';
 import IconButton from 'atoms/IconButton';
 import { Container as DrawerContainer } from 'molecules/Drawer';
 import Menu from 'molecules/Menu';
-import { AdvancedAppBar } from 'atoms/AppBar';
+import AppBar from 'atoms/AppBar';
 /*
 
 
@@ -17,27 +17,30 @@ import { AdvancedAppBar } from 'atoms/AppBar';
   Header */
 
 const Header = ({
-  forwardRef = null,
-  parentProps = {},
   breakpoint,
-  componentProps: { options, bar, menu, drawer, drawerButton, list },
+  componentProps: {
+    options: propOptions,
+    appbar,
+    menu,
+    drawer,
+    drawerButton,
+    list
+  },
   theme
 }) => {
-  const { style: parentStyle = {} } = parentProps;
-
-  const header_options = useMemo(
-    () => {
-      return extractCurrentScreenSizeProps(breakpoint, options);
-    },
+  const options = {};
+  options['header'] = useMemo(
+    () => extractCurrentScreenSizeProps(breakpoint, propOptions),
     [breakpoint]
   );
+
   const {
     style: propStyle,
     menu: shouldMountMenu = !header_options.drawer,
     drawer: shouldMountDrawer = !header_options.menu
-  } = header_options;
+  } = options.header;
 
-  const bar_options = extractCurrentScreenSizeProps(breakpoint, bar.options);
+  options['appbar'] = extractCurrentScreenSizeProps(breakpoint, appbar.options);
 
   /*
   style
@@ -45,7 +48,7 @@ const Header = ({
   const componentStyle = useMemo(
     () => ({
       style: {},
-      bar: {
+      appbar: {
         style: {},
         menu: {
           style: {
@@ -66,7 +69,7 @@ const Header = ({
   component
   */
 
-  const rootElement = useMemo(() => document.getElementById('app'), []);
+  const container = useMemo(() => document.getElementById('app'), []);
 
   const drawerContainer = DrawerContainer({
     theme: theme,
@@ -75,7 +78,7 @@ const Header = ({
     list: list,
     breakpoint: breakpoint,
     showBreakpoint: ['sm'],
-    rootElement
+    container
   });
 
   const icon = useMemo(
@@ -105,12 +108,16 @@ const Header = ({
 
   const DrawerButton = useMemo(
     () => {
+      const style = {
+        ...componentStyle.appbar.drawerButton.style,
+        ...drawerButton.options.style
+      };
       return (
         !shouldMountMenu && (
           <IconButton
-            parentProps={{ style: componentStyle.bar.drawerButton.style }}
             icon={icon}
             options={drawerButton.options}
+            style={style}
             onClick={drawerContainer.onClick}
           />
         )
@@ -122,7 +129,7 @@ const Header = ({
   const MenuItem = useMemo(() => {
     return (
       <Menu
-        parentProps={{ style: componentStyle.bar.menu.style }}
+        parentProps={{ style: componentStyle.appbar.menu.style }}
         theme={theme}
         list={list}
         options={menu.options}
@@ -132,18 +139,24 @@ const Header = ({
 
   const BarItem = [(shouldMountMenu && MenuItem) || DrawerButton];
 
+  const appbarStyle = options.appbar.style;
+
   /*
   return
   */
   return (
     <nav
-      ref={forwardRef}
       className={cx(
-        css({ ...componentStyle.style, ...parentStyle, ...propStyle }),
+        css({ ...componentStyle.style, ...propStyle }),
         'uc-header'
       )}
     >
-      <AdvancedAppBar theme={theme} options={bar_options} list={BarItem} />
+      <AppBar
+        theme={theme}
+        options={options.appbar}
+        style={appbarStyle}
+        list={BarItem}
+      />
       {shouldMountDrawer && drawerContainer.component}
     </nav>
   );

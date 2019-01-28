@@ -58,18 +58,19 @@ export const useAddWindowEvent = (
   dependencies = [],
   optimized = true
 ) => {
-  const refOptimized = useRef(null);
+  let handle;
+  const rafHandleRef = useRef(false);
   useEffect(() => {
     if (enable) {
       const event = callback();
-      refOptimized.current =
-        (optimized && createOptimizedEvent(event)) || event;
-      window.addEventListener(type, refOptimized.current);
+      handle =
+        (optimized && createOptimizedEvent(event, rafHandleRef)) || event;
+      window.addEventListener(type, handle);
     }
     return () => {
       if (enable) {
-        window.removeEventListener(type, refOptimized.current);
-        refOptimized.current = null;
+        window.removeEventListener(type, handle);
+        rafHandleRef.current && rafHandleRef.current();
       }
     };
   }, dependencies);

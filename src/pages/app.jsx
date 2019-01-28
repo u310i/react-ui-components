@@ -29,11 +29,25 @@ const App = () => {
 
   return (
     <article className={css(pageProps.container.style)}>
+      <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
+
       <div
         className={css({
           width: '500px',
           height: '300px',
           backgroundColor: '#ffffe0'
+          // '@keyframes height-loop': {
+          //   '0%': {
+          //     height: '300px'
+          //   },
+          //   '50%': {
+          //     height: '600px'
+          //   },
+          //   '100%': {
+          //     height: '300px'
+          //   }
+          // },
+          // animation: 'height-loop 3s ease-in-out infinite'
         })}
       >
         <div>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</div>

@@ -3,12 +3,14 @@ import { deepMerge } from 'utilities/utils';
 export const extractCurrentScreenSizeProps = (state, options) => {
   const { xs, sm, md, lg, xl, ...common } = options;
   const max = xl || lg || md || sm || xs;
-  const currentOptions = (state === 'xs' && { ...common, ...xs }) ||
+  const currentOptions =
+    (state === 'xs' && deepMerge.overrideArray(common, xs)) ||
     (state === 'sm' && deepMerge.overrideArray(common, sm)) ||
     (state === 'md' && deepMerge.overrideArray(common, md)) ||
     (state === 'lg' && deepMerge.overrideArray(common, lg)) ||
     (state === 'xl' && deepMerge.overrideArray(common, xl)) ||
-    (state === 'max' && deepMerge.overrideArray(common, max)) || { ...common };
+    (state === 'max' && deepMerge.overrideArray(common, max)) ||
+    common;
   return currentOptions;
 };
 

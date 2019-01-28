@@ -3,12 +3,11 @@ import Drawer from './Drawer';
 
 const DrawerContainer = ({
   theme,
-  parentProps = {},
   options: { defaultDisplay, ...options },
   list,
   breakpoint,
   showBreakpoint,
-  rootElement
+  container
 }) => {
   const [state, setState] = useState(defaultDisplay ? 'open' : 'close');
 
@@ -44,11 +43,10 @@ const DrawerContainer = ({
     <Drawer
       theme={theme}
       options={options}
-      parentProps={parentProps}
       list={list}
       onClose={onClose}
       state={state}
-      rootElement={rootElement}
+      container={container}
     />
   );
 

@@ -31,7 +31,7 @@ export default theme => {
           drawer: false
         }
       },
-      bar: {
+      appbar: {
         options: {
           style: {
             backgroundColor: '#2f4f4f'
@@ -45,25 +45,29 @@ export default theme => {
             style: {},
             height: '6rem',
             advance: {
-              mode: 'staticToFixed',
-              fixedToBottom: false,
-              hideOnScroll: {
-                enable: true,
-                keepHeight: false,
-                timingFunction: 'ease-out',
-                duration: 200
-              },
-              transitionOnArrived: {
-                enable: false,
-                timingFunction: 'ease-out',
-                duration: 200,
-                beforeStyle: {
-                  opacity: 1
+              mode: 'absoluteToFixed',
+              actionMode: 'scrollDown',
+              timingFunction: 'ease-out',
+              duration: 200,
+              action: {
+                scrollDown: {
+                  preset: 'hide',
+                  style: {
+                    beforeStyle: {},
+                    afterStyle: {}
+                  }
                 },
-                afterStyle: {
-                  height: '3rem',
-                  opacity: 0.5,
-                  backgroundColor: 'green'
+                scrolling: {
+                  style: {
+                    beforeStyle: {
+                      opacity: 1
+                    },
+                    afterStyle: {
+                      // height: '3rem',
+                      opacity: 0.3,
+                      backgroundColor: '#ff0000'
+                    }
+                  }
                 }
               }
             }
@@ -72,25 +76,31 @@ export default theme => {
             style: {},
             height: '3rem',
             advance: {
-              mode: 'absoluteToFixed',
-              fixedToBottom: false,
-              hideOnScroll: {
-                enable: false,
-                keepHeight: false,
-                timingFunction: 'ease-out',
-                duration: 200
-              },
-              transitionOnArrived: {
-                enable: true,
-                timingFunction: 'ease-out',
-                duration: 200,
-                beforeStyle: {
-                  // opacity: 1
+              mode: 'fixed',
+              actionMode: 'scrolling',
+              action: {
+                scrollDwon: {
+                  preset: 'hide',
+                  keepHeight: true,
+                  timingFunction: 'ease-out',
+                  duration: 200,
+                  style: {
+                    beforeStyle: {},
+                    afterStyle: {}
+                  }
                 },
-                afterStyle: {
-                  height: '5rem',
-                  // opacity: 0.5,
-                  backgroundColor: 'red'
+                scrolling: {
+                  preset: '',
+                  timingFunction: 'ease-out',
+                  duration: 200,
+                  beforeStyle: {
+                    opacity: 1
+                  },
+                  afterStyle: {
+                    height: '5rem',
+                    opacity: 0.5,
+                    backgroundColor: 'red'
+                  }
                 }
               }
             }
@@ -113,7 +123,7 @@ export default theme => {
           button: {
             icon: {
               type: 'fa',
-              icon: ['fas', 'times'],
+              icon: ['fas', 'times']
             },
             options: {
               style: {}

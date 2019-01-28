@@ -24,14 +24,17 @@ export const isObject = o => {
 //   return typeof item === 'object' && item !== null && !Array.isArray(item)
 // };
 
-export const createOptimizedEvent = fn => {
+export const createOptimizedEvent = (fn, handleRef) => {
   let ticking = false;
+  let handle;
   return () => {
     if (!ticking) {
-      raf(() => {
+      handle = raf(() => {
         fn();
+        handleRef.current = false;
         ticking = false;
       });
+      handleRef.current = () => raf.cancel(handle);
       ticking = true;
     }
   };
@@ -62,9 +65,9 @@ export const fromCamelCase = (camel, insert = '-') => {
   });
 };
 
-export const addProperties = (obj, entries) => {
-  for (let [key, value] of entries) {
-    obj[key] = value;
+export const addProperties = (sourceObj, targetObj) => {
+  for (let key of Object.keys(targetObj)) {
+    sourceObj[key] = targetObj[key];
   }
 };
 
