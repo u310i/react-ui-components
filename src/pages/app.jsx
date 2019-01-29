@@ -5,7 +5,7 @@ import { css, injectGlobal, sheet } from 'react-emotion';
 import rebootStyle from 'utilities/rebootStyle';
 import { useSetBreakpoint } from 'utilities/hooks/useHooks';
 
-import Icon from 'atoms/Icon';
+import Icon from 'components/Icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAngleDoubleLeft,
@@ -13,13 +13,18 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faApple, faCcPaypal } from '@fortawesome/free-brands-svg-icons';
 import createPagePropsTheme from 'utilities/initPageUtils/createPagePropsTheme';
+import defaultTheme from 'utilities/initPageUtils/defaultTheme';
 import baseTheme from './_this_theme';
 import baseProps from './_this_props';
+import { deepMerge } from 'utilities/utils';
 
-import Header from 'organisms/Header';
-import HeaderImage from 'organisms/HeaderImage';
+import Header from 'components/Header';
+import HeaderImage from 'components/HeaderImage';
 
+// console.log(baseTheme);
 const { pageProps, pageTheme } = createPagePropsTheme(baseTheme, baseProps);
+// console.log(pageTheme);
+// console.log(deepMerge.overrideArray(baseTheme, defaultTheme));
 
 injectGlobal(pageProps.global.style, rebootStyle);
 

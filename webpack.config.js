@@ -72,12 +72,8 @@ module.exports = {
     extensions: ['.wasm', '.mjs', '.js', '.json', '.jsx'],
     alias: {
       src: path.resolve(__dirname, 'src/'),
-      atoms: path.resolve(__dirname, 'src/components/atoms/'),
-      molecules: path.resolve(__dirname, 'src/components/molecules/'),
-      organisms: path.resolve(__dirname, 'src/components/organisms/'),
-      templates: path.resolve(__dirname, 'src/components/templates/'),
-      utilities: path.resolve(__dirname, 'src/components/utilities/'),
-      theme: path.resolve(__dirname, 'src/components/theme/'),
+      components: path.resolve(__dirname, 'src/components/'),
+      utilities: path.resolve(__dirname, 'src/components/_utilities/'),
       'react-emotion': path.resolve(__dirname, './no-prefix-emotion.js')
     }
   }
