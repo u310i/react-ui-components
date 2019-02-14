@@ -42,24 +42,3 @@ export const useGetDomProperties = (
   }, dependencies);
   return state;
 };
-
-// export const useGetRefsPropertyToRefs = (
-//   resultRef,
-//   ref,
-//   property,
-//   enable = true,
-//   clear = true,
-//   dependencies = []
-// ) => {
-//   useEffect(() => {
-//     if (enenable && ref.currentable) {
-//       const value = ref.current[property];
-//       resultRef.current = value;
-//     }
-//     return () => {
-//       if (clear && resultRef.current) {
-//         getRef.current = null;
-//       }
-//     };
-//   }, dependencies);
-// };

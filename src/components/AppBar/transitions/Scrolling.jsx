@@ -11,9 +11,8 @@ const Scrolling = ({
   style: propStyle,
   duration = 200,
   timingFunction = 'ease-out',
-  options: {
-    style: { beforeStyle = {}, afterStyle = {} }
-  }
+  beforeStyle = {},
+  afterStyle = {}
 }) => {
   const tsStyle = useMemo(() => {
     return genSimpleTransitionStyle(
@@ -33,13 +32,11 @@ const Scrolling = ({
     ...tsStyle
   };
 
-  const transitionProps = {
-    in: enable,
-    timeout: duration,
-    classNames: name
-  };
-
-  return <CSSTransition {...transitionProps}>{innerHoc(style)}</CSSTransition>;
+  return (
+    <CSSTransition in={enable} timeout={duration} classNames={name}>
+      {innerHoc(style)}
+    </CSSTransition>
+  );
 };
 
 export default Scrolling;

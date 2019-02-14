@@ -30,7 +30,6 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 }
 
 body {
-  margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 1rem;
   font-weight: 400;
@@ -199,13 +198,7 @@ button {
   border-radius: 0;
 }
 
-// button:focus {
-//   outline: 1px dotted;
-//   outline: 5px auto -webkit-focus-ring-color;
-// }
-
 input, button, select, optgroup, textarea {
-  margin: 0;
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -224,13 +217,11 @@ button, html [type="button"], [type="reset"], [type="submit"] {
 }
 
 button::-moz-focus-inner, [type="button"]::-moz-focus-inner, [type="reset"]::-moz-focus-inner, [type="submit"]::-moz-focus-inner {
-  padding: 0;
   border-style: none;
 }
 
 input[type="radio"], input[type="checkbox"] {
   box-sizing: border-box;
-  padding: 0;
 }
 
 input[type="date"], input[type="time"], input[type="datetime-local"], input[type="month"] {
@@ -244,8 +235,6 @@ textarea {
 
 fieldset {
   min-width: 0;
-  padding: 0;
-  margin: 0;
   border: 0;
 }
 
@@ -253,7 +242,6 @@ legend {
   display: block;
   width: 100%;
   max-width: 100%;
-  padding: 0;
   margin-bottom: .5rem;
   font-size: 1.5rem;
   line-height: inherit;
@@ -307,10 +295,9 @@ template {
 
 /* custom */
 
-
 *, *::before, *::after {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 }
 
 html {
@@ -358,7 +345,6 @@ button {
   background-color: transparent;
   border: none;
   cursor: pointer;
-  padding: 0;
   line-height: 0;
 }
 

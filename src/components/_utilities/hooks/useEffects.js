@@ -98,18 +98,15 @@ export const useAddCssInBody = (name, state, styleCallback) => {
     };
   }, []);
 
-  useEffect(
-    () => {
-      const body = document.body;
-      if (state) {
-        body.classList.add(`body-${uniqueId.current}`);
-      } else {
-        body.classList.remove(`body-${uniqueId.current}`);
-      }
-      return () => {
-        body.classList.remove(`body-${uniqueId.current}`);
-      };
-    },
-    [state]
-  );
+  useEffect(() => {
+    const body = document.body;
+    if (state) {
+      body.classList.add(`body-${uniqueId.current}`);
+    } else {
+      body.classList.remove(`body-${uniqueId.current}`);
+    }
+    return () => {
+      body.classList.remove(`body-${uniqueId.current}`);
+    };
+  }, [state]);
 };

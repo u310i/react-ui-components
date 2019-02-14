@@ -5,7 +5,6 @@ import ListItem from 'components/ListItem';
 
 const List = ({
   render,
-  theme,
   propList = [],
   componentList = [],
   mode = 'render',

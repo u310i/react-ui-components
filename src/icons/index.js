@@ -1,10 +1,11 @@
 import userIcons from './userIcons';
 import fontAwesomeIcons from './fontAwesomeIcons';
+import defaultIcons from './defaultIcons';
 
 const iconList = new Map(null);
 
-const iconsList = [userIcons, fontAwesomeIcons];
-for (let icons of iconsList) {
+const iconPackageList = [defaultIcons, userIcons, fontAwesomeIcons];
+for (let icons of iconPackageList) {
   for (let icon of icons.list) {
     iconList.set(`${icon.name}`, {
       type: icons.type,
@@ -14,5 +15,4 @@ for (let icons of iconsList) {
     });
   }
 }
-
 export default iconList;

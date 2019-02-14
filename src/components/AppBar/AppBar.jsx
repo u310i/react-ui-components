@@ -18,18 +18,14 @@ import List from 'components/List';
 import ScrollDown from './transitions/ScrollDown';
 import Scrolling from './transitions/Scrolling';
 
-const AppBar = ({ list = [], theme, options = {}, style: propStyle = {} }) => {
-  const {
-    height = '3rem',
-    advance: {
-      duration = 200,
-      timingFunction = 'ease-out',
-      mode = 'static',
-      actionMode,
-      action: { scrollDown, scrolling }
-    }
-  } = options;
-
+const AppBar = ({
+  list = [],
+  style: propStyle = {},
+  height = '3rem',
+  mode = 'static',
+  actionMode,
+  action: { duration = 200, timingFunction = 'ease-out', scrollDown, scrolling }
+}) => {
   const elRef = useRef(null);
   const [isArrivedState, setIsArrivedState] = useState(false);
 
@@ -77,7 +73,7 @@ const AppBar = ({ list = [], theme, options = {}, style: propStyle = {} }) => {
     [hasEl, isArrivedState]
   );
 
-  const actionOptions = useMemo(() => {
+  const actionProps = useMemo(() => {
     return (isScrollDown && scrollDown) || (isScrolling && scrolling);
   }, []);
 
@@ -168,7 +164,7 @@ const AppBar = ({ list = [], theme, options = {}, style: propStyle = {} }) => {
         isBottom={isBottom}
         duration={duration}
         timingFunction={timingFunction}
-        options={actionOptions}
+        {...actionProps}
       />
     );
   } else if (isScrolling) {
@@ -179,7 +175,7 @@ const AppBar = ({ list = [], theme, options = {}, style: propStyle = {} }) => {
         style={style}
         duration={duration}
         timingFunction={timingFunction}
-        options={actionOptions}
+        {...actionProps}
       />
     );
   } else {

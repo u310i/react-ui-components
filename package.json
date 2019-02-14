@@ -43,13 +43,14 @@
     "@fortawesome/free-brands-svg-icons": "^5.4.1",
     "@fortawesome/free-solid-svg-icons": "^5.4.1",
     "@fortawesome/react-fontawesome": "^0.1.4",
+    "check-types": "^8.0.1",
     "classlist-polyfill": "^1.2.0",
-    "deepmerge": "^3.0.0",
+    "deepmerge": "^3.1.0",
     "emotion": "^9.2.12",
     "intersection-observer": "^0.5.1",
     "raf": "^3.4.1",
-    "react": "16.7.0-alpha.0",
-    "react-dom": "16.7.0-alpha.0",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
     "react-emotion": "^9.2.12",
     "react-transition-group": "^2.5.0"
   }

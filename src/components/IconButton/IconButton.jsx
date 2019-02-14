@@ -3,7 +3,7 @@ import { css, cx } from 'react-emotion';
 
 import Icon from 'components/Icon';
 
-export default ({ icon, options = {}, style: propStyle = {}, onClick }) => {
+export default ({ style: propStyle = {}, onClick, icon }) => {
   const componentStyle = {
     fontSize: '1.5rem',
     backgroundColor: '#ff7f50',

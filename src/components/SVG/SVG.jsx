@@ -1,7 +1,14 @@
 import React from 'react';
-import { css, cx } from 'react-emotion';
 
 import { roundNumber } from 'utilities/utils';
+import {
+  SvgElement,
+  GElement,
+  SymbolElement,
+  UseElement,
+  TitleElement,
+  DescElement
+} from 'components/_Elements';
 
 const xml = {
   xmlns: 'http://www.w3.org/2000/svg',
@@ -16,12 +23,16 @@ const SVG = ({
   symbol,
   use,
   xlinkHref,
-  className,
-  style: propStyle,
   transform = false,
+  title,
+  desc,
+  role = 'img',
   ...props
 }) => {
-  const compositStyle = cx(className, css(propStyle));
+  const titleTag = title && <TitleElement>{title}</TitleElement>;
+  const descTag = desc && <DescElement>{desc}</DescElement>;
+
+  props.role = role;
 
   let createGroupedComponent;
   if (transform) {
@@ -34,15 +45,15 @@ const SVG = ({
     innerProps = { transform: forInnerGroup, ...innerProps };
 
     createGroupedComponent = inner => (
-      <g transform={forOuterGroup}>
-        <g transform={transform}>{inner}</g>
-      </g>
+      <GElement transform={forOuterGroup}>
+        <GElement transform={transform}>{inner}</GElement>
+      </GElement>
     );
   }
 
   const Path = path && <path {...innerProps} d={path} />;
   const Tag = !path && tag && (
-    <g {...innerProps} dangerouslySetInnerHTML={{ __html: tag }} />
+    <GElement {...innerProps} dangerouslySetInnerHTML={{ __html: tag }} />
   );
 
   const InnerComponent = transform
@@ -51,33 +62,28 @@ const SVG = ({
 
   if (symbol) {
     return (
-      <svg display="none" {...xml}>
-        <symbol
-          viewBox={viewBox.join(' ')}
-          className={compositStyle}
-          {...props}
-        >
+      <SvgElement display="none" {...xml}>
+        <SymbolElement viewBox={viewBox.join(' ')} {...props}>
           {InnerComponent}
-        </symbol>
-      </svg>
+        </SymbolElement>
+      </SvgElement>
     );
   }
   if (use) {
     return (
-      <svg className={compositStyle} {...props} {...xml}>
-        <use xlinkHref={xlinkHref} />
-      </svg>
+      <SvgElement {...props} {...xml}>
+        {titleTag}
+        {descTag}
+        <UseElement xlinkHref={xlinkHref} />
+      </SvgElement>
     );
   } else {
     return (
-      <svg
-        viewBox={viewBox.join(' ')}
-        className={compositStyle}
-        {...props}
-        {...xml}
-      >
+      <SvgElement viewBox={viewBox.join(' ')} {...props} {...xml}>
+        {titleTag}
+        {descTag}
         {InnerComponent}
-      </svg>
+      </SvgElement>
     );
   }
 };

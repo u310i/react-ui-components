@@ -5,24 +5,25 @@ import { css, injectGlobal, sheet } from 'react-emotion';
 import rebootStyle from 'utilities/rebootStyle';
 import { useSetBreakpoint } from 'utilities/hooks/useHooks';
 
-import Icon from 'components/Icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAngleDoubleLeft,
   faAmbulance
 } from '@fortawesome/free-solid-svg-icons';
 import { faApple, faCcPaypal } from '@fortawesome/free-brands-svg-icons';
-import createPagePropsTheme from 'utilities/initPageUtils/createPagePropsTheme';
-import defaultTheme from 'utilities/initPageUtils/defaultTheme';
-import baseTheme from './_this_theme';
-import baseProps from './_this_props';
-import { deepMerge } from 'utilities/utils';
+// import createPagePropsTheme from 'utilities/initPageUtils/createPagePropsTheme';
+// import {defaultTheme} from 'utilities/initPageUtils/defaultTheme';
+// import baseTheme from './_this_theme';
+// import baseProps from './_this_props';
+import { params, theme } from './props';
+// import { deepMerge } from 'utilities/utils';
 
+import Icon from 'components/Icon';
 import Header from 'components/Header';
 import HeaderImage from 'components/HeaderImage';
 
 // console.log(baseTheme);
-const { pageProps, pageTheme } = createPagePropsTheme(baseTheme, baseProps);
+// const { pageProps, pageTheme } = createPagePropsTheme(baseTheme, baseProps);
 // console.log(pageTheme);
 // console.log(deepMerge.overrideArray(baseTheme, defaultTheme));
 
@@ -32,10 +33,17 @@ const App = () => {
   const breakpoints = pageTheme.breakpoint.values;
   const breakpoint = useSetBreakpoint(breakpoints);
 
-  return (
-    <article className={css(pageProps.container.style)}>
-      <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
+  const currentParams = params[breakpoint];
 
+  return (
+    <article className={css(currentParams.container.props.style)}>
+      <HeaderImage theme={theme} containerProps={currentParams.headerImage} />
+      <Header
+        theme={theme}
+        breakpoint={breakpoint}
+        componentProps={currentParams.header}
+      />
+      <HeaderImage theme={theme} containerProps={currentParams.headerImage} />
       <div
         className={css({
           width: '500px',
@@ -136,29 +144,7 @@ const App = () => {
         <Icon icon="message" symbol currentColor />
         <Icon icon="message" use />
       </div>
-
-      {/* {Icon({ name: 'envelpe' })} */}
-
-      {/* <Helmet>
-        <title>My page title</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Helmet> */}
-      {/* <div
-        className={css({
-          wordWrap: 'break-word',
-          fontSize: '20rem',
-          lineHeight: '0.5'
-        })}
-      >
-        aaaaaaaaaaaaaaaaaaa
-      </div> */}
-      <Header
-        theme={pageTheme}
-        breakpoint={breakpoint}
-        componentProps={pageProps.header}
-      />
-      <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
-      <HeaderImage theme={pageTheme} containerProps={pageProps.headerImage} />
+      <HeaderImage theme={theme} containerProps={currentParams.headerImage} />
 
       {/* <section>
         <h2>VISION</h2>

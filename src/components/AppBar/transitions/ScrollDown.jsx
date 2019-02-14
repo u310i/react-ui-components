@@ -17,10 +17,9 @@ const ScrollDown = ({
   isBottom,
   duration = 200,
   timingFunction = 'ease-out',
-  options: {
-    preset = 'hide',
-    style: { beforeStyle = {}, afterStyle = {} }
-  }
+  preset = 'hide',
+  beforeStyle = {},
+  afterStyle = {}
 }) => {
   const [displayState, setDisplayState] = useState('show');
   useAddWindowEvent(
@@ -67,13 +66,15 @@ const ScrollDown = ({
     ...tsDurationStyle
   };
 
-  const transitionProps = {
-    in: enable && displayState === 'hide',
-    timeout: duration,
-    classNames: name
-  };
-
-  return <CSSTransition {...transitionProps}>{innerHoc(style)}</CSSTransition>;
+  return (
+    <CSSTransition
+      in={enable && displayState === 'hide'}
+      timeout={duration}
+      classNames={name}
+    >
+      {innerHoc(style)}
+    </CSSTransition>
+  );
 };
 
 export default ScrollDown;

@@ -6,7 +6,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { extractCurrentScreenSizeProps } from 'utilities/breakpointUtils';
 
 import IconButton from 'components/IconButton';
-import { Container as DrawerContainer } from 'components/Drawer';
+import { Generator as GenerateDrawer } from 'components/Drawer';
 import Menu from 'components/Menu';
 import AppBar from 'components/AppBar';
 /*
@@ -71,7 +71,7 @@ const Header = ({
 
   const container = useMemo(() => document.getElementById('app'), []);
 
-  const drawerContainer = DrawerContainer({
+  const drawerContainer = GenerateDrawer({
     theme: theme,
     parentProps: {},
     options: drawer.options,
@@ -80,51 +80,6 @@ const Header = ({
     showBreakpoint: ['sm'],
     container
   });
-
-  const icon = useMemo(
-    () => {
-      const i = drawerButton.icon;
-      if (i.open.icon) {
-        if (i.close.icon && drawerContainer.state === 'close') {
-          return {
-            type: i.close.type,
-            icon: i.close.icon
-          };
-        } else {
-          return {
-            type: i.open.type,
-            icon: i.open.icon
-          };
-        }
-      } else {
-        return {
-          type: 'fa',
-          icon: faBars
-        };
-      }
-    },
-    [drawerContainer.state]
-  );
-
-  const DrawerButton = useMemo(
-    () => {
-      const style = {
-        ...componentStyle.appbar.drawerButton.style,
-        ...drawerButton.options.style
-      };
-      return (
-        !shouldMountMenu && (
-          <IconButton
-            icon={icon}
-            options={drawerButton.options}
-            style={style}
-            onClick={drawerContainer.onClick}
-          />
-        )
-      );
-    },
-    [breakpoint, drawerContainer.state]
-  );
 
   const MenuItem = useMemo(() => {
     return (
@@ -137,7 +92,9 @@ const Header = ({
     );
   });
 
-  const BarItem = [(shouldMountMenu && MenuItem) || DrawerButton];
+  const BarItem = [
+    (shouldMountMenu && MenuItem) || drawerContainer.toggleButton
+  ];
 
   const appbarStyle = options.appbar.style;
 

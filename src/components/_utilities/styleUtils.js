@@ -1,5 +1,28 @@
 import { fromCamelCase } from './utils';
 import { extractOverlapObjectProperty } from 'utilities/utils';
+import { isArray, isString, isNumber } from 'utilities/checkTypes';
+import { keyframes as emotionKeyframes } from 'react-emotion';
+
+export const keyframes = emotionKeyframes;
+
+export const getFontSize = data => {
+  if (isNumber(data)) return `${Math.round(data * 100) / 100}px`;
+  if (!isString(data)) return;
+  switch (data) {
+    case 'xs':
+      return '.75em';
+    case 'sm':
+      return '.875em';
+    case 'lg':
+      return '1.33333em';
+    default:
+      const match = data.match(/^([2-9]|10)x$/);
+      if (match) {
+        return `${match[1]}em`;
+      }
+      return data;
+  }
+};
 
 export const genTransitionProperty = style => {
   return Object.keys(style)

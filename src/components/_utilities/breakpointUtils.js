@@ -26,3 +26,9 @@ export const useGetInitBreakpoint = breakpoints => {
     'max';
   return currentBreakpoint;
 };
+
+export const getComponentByBreakpoint = (entries, breakpoint) => {
+  for (let [key, component] of entries) {
+    return key === breakpoint && component;
+  }
+};

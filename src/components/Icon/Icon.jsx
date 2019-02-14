@@ -1,60 +1,79 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 
-import { isObject, addProperties, roundNumber } from 'utilities/utils';
-import { testCssNumberRegExp } from 'utilities/regExp';
-import { getFontSize, getIcon } from './utils';
+import {
+  roundNumber,
+  testCssNumberRegExp,
+  getType,
+  isString,
+  isArray,
+  isObject,
+  getFontSize,
+  keyframes
+} from 'utilities';
+import { getIcon } from './utils';
 
 import SVG from 'components/SVG';
 
 const Icon = ({
-  type = 'own',
   icon,
   style: propStyle = {},
-  className: propClassName = '',
-  id: propId = '',
-  symbol = false,
-  use = false,
+  classNames = [],
+  ids = [],
+  role = 'icon',
+  symbol,
+  use,
   currentColor,
-  size = false,
-  fixedWidth = false,
-  pull = false,
-  border = false,
-  rotation = false,
-  flip = false,
-  spin = false,
-  pulse = false,
+  size,
+  fixedWidth,
+  pull,
+  border,
+  rotation,
+  flip,
+  spin,
+  pulse,
+  marginLeft,
+  marginRight,
   ...props
 }) => {
-  const className = [];
-  const id = [];
-  propClassName && className.push(propClassName);
-  propId && id.push(propId);
+  const iconType = getType(icon);
 
-  const iconIsString = typeof icon === 'string';
-  const iconIsArray = Array.isArray(icon);
-  const iconIsObject = isObject(icon);
+  let name = '';
+  let ariaLabel = '';
+  if (iconType === 'string') {
+    name = icon;
+    ariaLabel = 'icon: ' + icon;
+  } else if (iconType === 'array') {
+    name = icon.join('-');
+    ariaLabel = 'icon: ' + icon[1];
+  } else if (iconType === 'object') {
+    if (isString(icon.name)) {
+      name = icon.name;
+      ariaLabel = 'icon: ' + icon.name;
+    } else if (isArray(icon.name)) {
+      icon.name.join('-');
+      ariaLabel = 'icon: ' + icon.name[1];
+    }
+  }
 
-  const name =
-    (iconIsString && icon) ||
-    (iconIsArray && icon.join('-')) ||
-    (iconIsObject
-      ? typeof icon.name === 'string' && icon.name
-      : Array.isArray(icon.name) && icon.name.join('-'));
+  props['aria-label'] = ariaLabel;
 
-  const iconData = iconIsObject
-    ? {
-        type: 'direct',
-        viewBox: icon.viewBox,
-        path: icon.path,
-        tag: icon.tag
-      }
-    : getIcon(name);
+  const iconData =
+    iconType === 'object'
+      ? {
+          type: 'inline',
+          viewBox: icon.viewBox,
+          path: icon.path,
+          tag: icon.tag,
+          title: icon.title || ''
+        }
+      : getIcon(name);
+  if (!iconData) return null;
 
   const isPath = !!iconData.path;
 
   const baseName = `uc-svg-i-${iconData.type}`;
 
-  const componentStyle = useMemo(() => {
+  const immutableStyle = useMemo(() => {
     return {
       display: 'inline-block',
       overflow: 'visible',
@@ -62,50 +81,55 @@ const Icon = ({
       fontSize: 'inherit',
       verticalAlign: '-.125em'
     };
-  });
+  }, []);
 
-  size && (componentStyle['fontSize'] = getFontSize(size));
+  let mutableStyle = {};
+
+  if (marginLeft)
+    mutableStyle.marginLeft = isString(marginLeft) ? marginLeft : '0.5em';
+  if (marginRight)
+    mutableStyle.marginRight = isString(marginRight) ? marginRight : '0.5em';
+
+  if (size) mutableStyle.fontSize = getFontSize(size);
 
   if (typeof currentColor === 'undefined') {
     currentColor = isPath && true;
   }
-  currentColor && (props['fill'] = 'currentColor');
+  if (currentColor) props.fill = 'currentColor';
 
   const height = border ? 1.5 : 1;
   const widthRatioAtFixed = 1.25;
   const precision = 3;
 
   if (fixedWidth && !border) {
-    componentStyle['width'] =
+    mutableStyle.width =
       typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
         ? fixedWidth
         : `${roundNumber(height * widthRatioAtFixed, precision)}em`;
   } else {
-    componentStyle['width'] = `${roundNumber(
-      height * iconData.ratio,
-      precision
-    )}em`;
+    mutableStyle.width = `${roundNumber(height * iconData.ratio, precision)}em`;
   }
 
   if (border) {
     const borderIsObject = isObject(border);
     if (borderIsObject) {
-      addProperties(componentStyle, border);
+      mutableStyle = { ...mutableStyle, ...border };
     } else {
-      addProperties(componentStyle, {
+      mutableStyle = {
+        ...mutableStyle,
         height: `${height}em`,
         border: 'solid 0.08em #eee',
         borderRadius: '0.1em',
         padding: '0.2em 0.25em 0.15em'
-      });
+      };
     }
     if (fixedWidth) {
-      componentStyle['width'] =
+      mutableStyle.width =
         typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
           ? fixedWidth
           : `${roundNumber(height * widthRatioAtFixed, precision)}em`;
     } else {
-      componentStyle['width'] = `${roundNumber(
+      mutableStyle.width = `${roundNumber(
         height * iconData.ratio,
         precision
       )}em`;
@@ -113,15 +137,17 @@ const Icon = ({
   }
 
   if (pull === 'left') {
-    addProperties(componentStyle, {
+    mutableStyle = {
+      ...mutableStyle,
       marginRight: '0.3em',
       float: 'left'
-    });
+    };
   } else if (pull === 'right') {
-    addProperties(componentStyle, {
+    mutableStyle = {
+      ...mutableStyle,
       marginLeft: '0.3em',
       float: 'right'
-    });
+    };
   }
 
   if (rotation || flip) {
@@ -139,43 +165,59 @@ const Icon = ({
       transformList.push(scale);
     }
 
-    componentStyle['transform'] = transformList.join(' ');
+    mutableStyle['transform'] = transformList.join(' ');
   }
 
   if (spin || pulse) {
+    const rotateAnimation = keyframes({
+      from: {
+        transform: 'rotate(0deg)'
+      },
+      to: {
+        transform: 'rotate(360deg)'
+      }
+    });
     spin
-      ? (componentStyle['animation'] = 'uc-spin 2s infinite linear')
-      : (componentStyle['animation'] = 'uc-spin 1s infinite steps(8)');
+      ? (mutableStyle.animation = `${rotateAnimation} ${
+          isString(spin) ? spin : '1s infinite linear'
+        }`)
+      : (mutableStyle.animation = `${rotateAnimation} ${
+          isString(pulse) ? pulse : '1s infinite steps(8)'
+        }`);
   }
 
   if (use) {
-    className.push(`${baseName}-use-${name}`);
-    addProperties(props, {
+    classNames.push(`${baseName}-use-${name}`);
+    props = {
+      ...props,
       use: true,
-      className: className.join(' '),
       xlinkHref: `#${baseName}-symbol-${name}`
-    });
+    };
   } else {
-    addProperties(props, {
+    props = {
+      ...props,
       viewBox: iconData.viewBox,
       path: iconData.path,
       tag: iconData.tag
-    });
+    };
     if (symbol) {
-      className.push(`${baseName}-symbol-${name}`);
-      id.push(`${baseName}-symbol-${name}`);
-      addProperties(props, {
-        symbol: true,
-        className: className.join(' '),
-        id: id.join(' ')
-      });
+      classNames.push(`${baseName}-symbol-${name}`);
+      ids.push(`${baseName}-symbol-${name}`);
+      props = {
+        ...props,
+        symbol: true
+      };
     } else {
-      className.push(`${baseName}-${name}`);
-      props['className'] = className.join(' ');
+      classNames.push(`${baseName}-${name}`);
     }
   }
 
-  props['style'] = { ...componentStyle, ...propStyle };
+  props.classNames = classNames;
+  if (ids.length !== 0) props.ids = ids;
+
+  props.role = role;
+
+  props.style = { ...immutableStyle, ...mutableStyle, ...propStyle };
 
   return <SVG {...props} />;
 };

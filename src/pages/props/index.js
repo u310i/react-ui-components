@@ -1,12 +1,14 @@
-import material from './material';
+import params from './params';
 import common from './common';
 import baseTheme from './theme';
 
 import genTheme from 'utilities/initPageUtils/genTheme';
 
+const theme = genTheme(baseTheme);
+
 const props = {
-  material: material(theme, common),
-  theme: genTheme(baseTheme)
+  params: params(theme, common),
+  theme: theme
 };
 
 export default props;

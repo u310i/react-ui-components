@@ -3,13 +3,17 @@ import React, {
   useEffect,
   useRef,
   useCallback,
-  useMemo
+  useMemo,
+  useContext
 } from 'react';
 import ReactDOM from 'react-dom';
 
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'emotion';
-import { genReactCSSTransitionStyle } from 'utilities/styleUtils';
+import {
+  genReactCSSTransitionStyle,
+  genSimpleTransitionStyle
+} from 'utilities/styleUtils';
 import { useAddCssInBody } from 'utilities/hooks/useEffects';
 import Link from 'components/Link';
 import IconButton from 'components/IconButton';
@@ -18,33 +22,37 @@ import List from 'components/List';
 
 const name = 'drawer';
 
-const Drawer = ({ theme, options = {}, list, onClose, state, container }) => {
-  const {
-    style: propStyle = {},
-    direction = 'right',
-    duration = 150,
-    timingFunction = 'ease-out',
-    closable = true,
-    button,
-    mask = true,
-    maskClosable = true,
-    maskOpacity = 0.3,
-    maskStyle = {},
-    shiftScrollBarWidth = true,
-    width = '256px',
-    height = '100%',
-    zIndex = theme.zIndex.drawer
-  } = options;
-
+const Drawer = ({
+  portal,
+  list,
+  onClose,
+  state,
+  style: propStyle = {},
+  direction = 'right',
+  duration = 150,
+  timingFunction = 'ease-out',
+  closable = true,
+  closeButton,
+  mask = true,
+  closableOnMask = true,
+  maskOpacity = 0.3,
+  maskStyle = {},
+  shiftScrollBarWidth = true,
+  width = '256px',
+  height = '100%',
+  zIndex: propZIndex = 1200
+}) => {
+  const { zIndex } = useContext(ThemeContext);
   const componentStyle = {
     mask: {
       style: {
         display: 'none',
         display: 'block',
         pointerEvents: state === 'close' ? 'none' : 'auto',
-        cursor: state === 'close' ? 'auto' : maskClosable ? 'pointer' : 'auto',
+        cursor:
+          state === 'close' ? 'auto' : closableOnMask ? 'pointer' : 'auto',
         position: 'fixed',
-        zIndex: theme.zIndex.appBar + 1,
+        zIndex: (zIndex.drawer || propZIndex) - 1,
         top: '0',
         left: '0',
         right: '0',
@@ -57,7 +65,7 @@ const Drawer = ({ theme, options = {}, list, onClose, state, container }) => {
       style: {
         [direction]: '0',
         display: 'block',
-        zIndex: zIndex,
+        zIndex: zIndex.drawer || propZIndex,
         position: 'fixed',
         padding: '0',
         top: '0',
@@ -107,10 +115,29 @@ const Drawer = ({ theme, options = {}, list, onClose, state, container }) => {
     }
   };
 
+  // const transitionStyle = useMemo(() => {
+  //   genSimpleTransitionStyle(
+  //     name,
+  //     {
+  //       beforeStyle: { ...presetBeforeStyle, ...beforeStyle },
+  //       afterStyle: { ...presetAfterStyle, ...afterStyle },
+  //       baseStyle: {
+  //         '& > .uc-drawer-main': {
+  //           transform: `translate3d(${state === 'close' ? x : 0},0,0)`
+  //         },
+  //         '& > .uc-drawer-mask': {
+  //           opacity: state === 'close' ? 0 : opacity
+  //         }
+  //       }
+  //     },
+  //     duration,
+  //     timingFunction
+  //   )
+  // })
   const transitionStyle = useMemo(() => {
     return genReactCSSTransitionStyle(name, () => {
       const x = direction === 'left' ? '-100%' : '100%';
-      const opacity = (mask && maskOpacity) || 0;
+      const opacity = maskOpacity || 0;
       return {
         defaultStyle: {
           '& > .uc-drawer-main': {
@@ -161,7 +188,8 @@ const Drawer = ({ theme, options = {}, list, onClose, state, container }) => {
   }, []);
 
   useAddCssInBody(name, state === 'open', () => {
-    const scrollBarWidth = window.innerWidth - document.body.clientWidth;
+    const scrollBarWidth =
+      shiftScrollBarWidth && window.innerWidth - document.body.clientWidth;
     return `
       overflow: hidden;
       ${
@@ -194,10 +222,12 @@ const Drawer = ({ theme, options = {}, list, onClose, state, container }) => {
           'uc-drawer'
         )}
       >
-        <div
-          onClick={maskClosable && onClose}
-          className={cx(css(componentStyle.mask.style), 'uc-drawer-mask')}
-        />
+        {mask && (
+          <div
+            onClick={closableOnMask && onClose}
+            className={cx(css(componentStyle.mask.style), 'uc-drawer-mask')}
+          />
+        )}
         <div className={cx(css(componentStyle.main.style), 'uc-drawer-main')}>
           <div
             className={cx(
@@ -207,8 +237,8 @@ const Drawer = ({ theme, options = {}, list, onClose, state, container }) => {
           >
             {closable && (
               <IconButton
-                icon={button.icon}
-                options={button.options}
+                icon={closeButton.icon}
+                options={closeButton.options}
                 onClick={onClose}
               />
             )}
@@ -219,19 +249,14 @@ const Drawer = ({ theme, options = {}, list, onClose, state, container }) => {
               'uc-drawer-main-list'
             )}
           >
-            <List
-              theme={theme}
-              propList={list}
-              render={listItem}
-              mode="render"
-            />
+            <List propList={list} render={listItem} mode="render" />
           </ul>
         </div>
       </div>
     </CSSTransition>
   );
 
-  return container ? ReactDOM.createPortal(Component, container) : Component;
+  return portal ? ReactDOM.createPortal(Component, portal) : Component;
 };
 
 export default Drawer;
