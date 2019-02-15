@@ -17,7 +17,7 @@ import {
   ButtonElement,
   InputSubmitElement
 } from 'components/_Elements';
-import Button from 'components/Button';
+import { Button } from 'components';
 
 const List = ({ children, style }) => {
   return (
@@ -44,15 +44,18 @@ export const Order = ({ children, list: propList }) => {
 };
 
 const propList = [
-  { className: css({ backgroundColor: '#ff7f50' }), key: 'aaa' },
-  { className: css({ backgroundColor: '#dc143c' }), key: 'bbb' },
-  { className: css({ backgroundColor: '#ff1493' }), key: 'ccc' }
+  { className: css({ backgroundColor: '#ff7f50' }) },
+  { className: css({ backgroundColor: '#dc143c' }) },
+  { className: css({ backgroundColor: '#ff1493' }) }
 ];
 check.array(propList);
 
 export default ({}) => {
+  const color = '#1890ff';
+  const color2 = '#ff4500';
+  const [state, setState] = useState(color);
   const onClick = () => {
-    console.log('click');
+    setState(color2);
   };
   return (
     <List style={{ padding: '1em' }}>
@@ -62,61 +65,78 @@ export default ({}) => {
       <Order list={propList}>
         {props => <DivElement {...props}>order</DivElement>}
       </Order>
-
-      <Button
-        style={{ marginBottom: '1em', marginTop: '1em' }}
-        size="3x"
-        ghost
-        onClick={onClick}
-        color="#008b8b"
-      >
-        <Icon icon="sys-envelope" />
-        Download
-      </Button>
-      <Button
-        style={{ marginBottom: '1em', marginTop: '1em' }}
-        size="3x"
-        color="#008b8b"
-      >
-        <Icon icon="sys-envelope" />
-        Download
-      </Button>
-      <DivElement style={{ height: '4em', backgroundColor: 'green' }}>
-        <Button
-          style={{ marginBottom: '1em' }}
-          shape="corner"
-          fullHeight
-          color="#008b8b"
-        >
-          <Icon icon="sys-envelope" />
-          Download
-        </Button>
+      <DivElement style={{ backgroundColor: 'white', margin: '1em' }}>
+        <Button.Group>
+          <Button.Coordinator
+            contents={[{ icon: 'sys-envelope' }, 'Download']}
+            color={state}
+            size="lg"
+            type="outline"
+            onClick={onClick}
+          />
+          <Button.Coordinator
+            contents={[{ icon: 'sys-envelope' }, 'Download']}
+            color={state}
+            size="lg"
+            type="outline"
+            onClick={onClick}
+          />
+          <Button.Coordinator
+            contents={[{ icon: 'sys-envelope' }, 'Download']}
+            color={state}
+            size="lg"
+            type="outline"
+            onClick={onClick}
+          />
+        </Button.Group>
       </DivElement>
 
-      <Button
-        shape="round"
-        size="2x"
-        borderStyle="dashed"
-        borderWidth="1.8px"
-        disable
-        color="#008b8b"
-      >
-        <Icon icon="sys-envelope" />
-        Download
-      </Button>
-      <Button shape="round" size="2x" loading color="#008b8b">
-        Download
-      </Button>
-      <Button shape="round" size="2x" loading disable color="#008b8b">
-        <span>ロード中</span>
-        <span>ロード中</span>
-      </Button>
-      <Button shape="circle" size="3x" loading color="#008b8b">
-        <Icon icon="sys-envelope" />
-      </Button>
-      <Button shape="circle" size="3x">
-        <Icon icon="sys-envelope" />
-      </Button>
+      {/* <DivElement style={{ backgroundColor: 'white' }}>
+        <Button.Coordinator
+          contents={[{ icon: 'sys-envelope' }, 'Download']}
+          style={{ margin: '0.5em' }}
+          color={state}
+          size="lg"
+          type="dark"
+          onClick={onClick}
+        />
+        <Button.Coordinator
+          contents={[{ icon: 'sys-envelope' }, 'Download']}
+          style={{ margin: '0.5em' }}
+          color={state}
+          size="lg"
+          type="dark-outline"
+        />
+        <Button.Coordinator
+          contents={[{ icon: 'sys-envelope' }, 'Download']}
+          style={{ margin: '0.5em' }}
+          color={state}
+          size="lg"
+          type="normal"
+        />
+        <Button.Coordinator
+          contents={[{ icon: 'sys-envelope' }, 'Download']}
+          style={{ margin: '0.5em' }}
+          color={state}
+          size="lg"
+          type="normal-outline"
+        />
+        <Button.Coordinator
+          contents={[{ icon: 'sys-envelope' }, 'Download']}
+          style={{ margin: '0.5em' }}
+          color={state}
+          size="lg"
+          type="outline"
+        />
+        <Button.Coordinator
+          contents={[{ icon: 'sys-envelope' }, 'Download']}
+          style={{ margin: '0.5em' }}
+          color={state}
+          size="lg"
+          type="fill"
+        />
+      </DivElement> */}
+
       <Order list={propList}>
         {props => <DivElement {...props}>order</DivElement>}
       </Order>
@@ -177,3 +197,66 @@ export default ({}) => {
 //     childStyle['& > :last-child'].marginLeft = marginLeft;
 //   }
 // }
+
+{
+  /* <Button.Coordinator
+contents={[{ icon: 'sys-envelope' }, 'Download']}
+style={{ marginBottom: '1em', marginTop: '1em' }}
+size="3x"
+ghost
+onClick={onClick}
+color={state}
+/>
+<Button.Coordinator
+contents={[{ icon: 'sys-envelope' }, 'Download']}
+style={{ marginBottom: '1em', marginTop: '1em' }}
+size="3x"
+color={state}
+/>
+<DivElement style={{ height: '4em', backgroundColor: 'green' }}>
+<Button.Coordinator
+  contents={[{ icon: 'sys-envelope' }, 'Download']}
+  style={{ marginBottom: '1em' }}
+  shape="corner"
+  fullHeight
+  color={state}
+/>
+</DivElement>
+
+<Button.Coordinator
+contents={[{ icon: 'sys-envelope' }, 'Download']}
+shape="round"
+size="2x"
+borderStyle="dashed"
+borderWidth="1.8px"
+disable
+color={state}
+/>
+<Button.Coordinator
+contents={['Download']}
+shape="round"
+size="2x"
+loading
+color={state}
+/>
+<Button.Coordinator
+contents={['ロード中', 'ロード中']}
+shape="round"
+size="2x"
+loading
+disable
+color={state}
+/>
+<Button.Coordinator
+contents={[{ icon: 'sys-envelope' }]}
+shape="circle"
+size="3x"
+loading
+color={state}
+/>
+<Button.Coordinator
+contents={[{ icon: 'sys-envelope' }]}
+shape="circle"
+size="3x"
+/> */
+}

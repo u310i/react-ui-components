@@ -1,3 +1,2 @@
-import Flex, { Row, Col, Item } from './Flex';
-export { Row, Col, Item };
+import Flex from './Flex';
 export default Flex;

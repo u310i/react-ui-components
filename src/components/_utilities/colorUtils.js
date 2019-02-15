@@ -1,3 +1,5 @@
+import { isString } from 'utilities';
+
 export const toFullHexa = (() => {
   const hexChar = 'a-f\\d';
   // 3char or 4char: [1]=hex, [2]=alpha | 6char or 8char: [3]=hex, [4]=alpha
@@ -6,6 +8,7 @@ export const toFullHexa = (() => {
     'i'
   );
   return str => {
+    if (!isString(str)) return null;
     let r, g, b, a;
     const matchStr = str.match(regExp);
     if (!matchStr) return;
