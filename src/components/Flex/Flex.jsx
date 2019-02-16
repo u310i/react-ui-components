@@ -11,9 +11,12 @@ const Flex = ({
   alignItems,
   alignContent,
   style: propStyle,
+  nthChildStyleList = [],
   firstChildStyle,
   lastChildStyle,
-  nthChildStyle,
+  notNthChildStyleList = [],
+  notFirstChildStyle,
+  notLastChildStyle,
   initClassName = 'uc-flex',
   ...props
 }) => {
@@ -26,8 +29,8 @@ const Flex = ({
   if (alignContent) style.alignContent = alignContent;
 
   const nestedStyle = {};
-  if (nthChildStyle) {
-    for (let [n, style] of nthChildStyle) {
+  if (nthChildStyleList) {
+    for (let [n, style] of nthChildStyleList) {
       nestedStyle[`& > :nth-child(${n})`] = style;
     }
   }
@@ -36,6 +39,17 @@ const Flex = ({
   }
   if (lastChildStyle) {
     nestedStyle['& > :last-child'] = lastChildStyle;
+  }
+  if (notNthChildStyleList) {
+    for (let [n, style] of notNthChildStyleList) {
+      nestedStyle[`& > :not(:nth-child(${n}))`] = style;
+    }
+  }
+  if (notFirstChildStyle) {
+    nestedStyle['& > :not(:first-child)'] = notFirstChildStyle;
+  }
+  if (notLastChildStyle) {
+    nestedStyle['& > :not(:last-child)'] = notLastChildStyle;
   }
 
   return (

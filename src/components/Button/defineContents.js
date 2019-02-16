@@ -1,93 +1,76 @@
 import React from 'react';
-import { isArray, isReactComponent } from 'utilities';
+import { isString, isArray, isReactComponent } from 'utilities';
 
 import { IElement, SpanElement } from 'components/_Elements';
 import Icon from 'components/Icon';
 
-const LoadingIcon = ({ between = true }) => {
+const LoadingIcon = ({ style: propStyle }) => {
   return (
-    <IElement key="loading" className="uc-button-loading">
-      <Icon
-        style={{ marginRight: between ? '0.5em' : '0em' }}
-        icon="sys-loading"
-        spin
-      />
+    <IElement key="loading" style={propStyle} className="uc-button-loading">
+      <Icon icon="sys-loading" spin />
     </IElement>
   );
 };
 
 const defineContents = (children, between, loading) => {
-  const iconStyle = {};
   const spanStyle = {
     lineHeight: '1.499',
     marginTop: '-.125em'
   };
   let contents;
 
+  let betweenValue;
+  if (between) {
+    isString(between) ? (betweenValue = between) : (betweenValue = '0.5em');
+  } else {
+    betweenValue = '0em';
+  }
+
   if (isArray(children) && React.Children.count(children) > 1) {
     contents = React.Children.map(children, (child, index) => {
-      let newItem;
+      let item;
+      const marginLeft = index !== 0 ? betweenValue : '0px';
       if (isReactComponent(child) && child.type.name === 'Icon') {
-        if (between) {
-          const spaceValue = '0.5em';
-          if (index === 0) {
-            iconStyle.marginRight = spaceValue;
-          } else if (index === children.length - 1) {
-            iconStyle.marginLeft = spaceValue;
-          } else {
-            iconStyle.marginRight = spaceValue;
-            iconStyle.marginLeft = spaceValue;
-          }
-        }
-
-        newItem =
-          loading && index === 0 ? (
-            <LoadingIcon />
-          ) : (
-            <IElement
-              key="icon"
-              style={iconStyle}
-              className="uc-button-icon"
-              children={child}
-            />
-          );
+        if (index === 0 && loading) return <LoadingIcon />;
+        item = (
+          <IElement
+            key={index}
+            style={{ marginLeft: marginLeft }}
+            className="uc-button-icon"
+            children={child}
+          />
+        );
       } else {
-        newItem = (
+        item = (
           <SpanElement
-            key="inner"
-            style={spanStyle}
+            key={index}
+            style={{ marginLeft: marginLeft, ...spanStyle }}
             className="uc-button-inner"
             children={child}
           />
         );
         if (loading && index === 0) {
-          newItem = (
-            <>
-              <LoadingIcon />
-              {newItem}
-            </>
+          item = (
+            <React.Fragment key={index}>
+              <LoadingIcon style={{ marginRight: betweenValue }} />
+              {item}
+            </React.Fragment>
           );
         }
       }
-      return newItem;
+      return item;
     });
   } else {
     const child = isArray(children) ? children[0] : children;
     if (isReactComponent(child) && child.type.name === 'Icon') {
       contents = loading ? (
-        <LoadingIcon between={false} />
+        <LoadingIcon />
       ) : (
-        <IElement
-          key="icon"
-          style={iconStyle}
-          className="uc-button-icon"
-          children={child}
-        />
+        <IElement className="uc-button-icon" children={child} />
       );
     } else {
       contents = (
         <SpanElement
-          key="inner"
           style={spanStyle}
           className="uc-button-inner"
           children={child}
@@ -96,7 +79,7 @@ const defineContents = (children, between, loading) => {
       if (loading) {
         contents = (
           <>
-            <LoadingIcon />
+            <LoadingIcon style={{ marginRight: betweenValue }} />
             {contents}
           </>
         );

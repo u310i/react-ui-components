@@ -66,67 +66,76 @@ export default ({}) => {
         {props => <DivElement {...props}>order</DivElement>}
       </Order>
       <DivElement style={{ backgroundColor: 'white', margin: '1em' }}>
-        <Button.Group>
-          <Button.Coordinator
-            contents={[{ icon: 'sys-envelope' }, 'Download']}
-            color={state}
-            size="lg"
-            type="outline"
-            onClick={onClick}
-          />
-          <Button.Coordinator
-            contents={[{ icon: 'sys-envelope' }, 'Download']}
-            color={state}
-            size="lg"
-            type="outline"
-            onClick={onClick}
-          />
-          <Button.Coordinator
-            contents={[{ icon: 'sys-envelope' }, 'Download']}
-            color={state}
-            size="lg"
-            type="outline"
-            onClick={onClick}
-          />
-        </Button.Group>
-      </DivElement>
-
-      {/* <DivElement style={{ backgroundColor: 'white' }}>
         <Button.Coordinator
-          contents={[{ icon: 'sys-envelope' }, 'Download']}
-          style={{ margin: '0.5em' }}
+          contents={[
+            [{ icon: 'sys-envelope' }, 'Aaaa'],
+            [{ icon: 'sys-envelope' }, 'Bbbb'],
+            [{ icon: 'sys-envelope' }, 'Cccc']
+          ]}
+          group={{
+            between: '0.2em',
+            childPropList: [, { disable: true }, { loading: true }]
+          }}
           color={state}
-          size="lg"
-          type="dark"
+          size=""
+          type="normal"
           onClick={onClick}
         />
+      </DivElement>
+
+      <DivElement style={{ backgroundColor: 'white' }}>
         <Button.Coordinator
-          contents={[{ icon: 'sys-envelope' }, 'Download']}
-          style={{ margin: '0.5em' }}
-          color={state}
-          size="lg"
-          type="dark-outline"
-        />
-        <Button.Coordinator
-          contents={[{ icon: 'sys-envelope' }, 'Download']}
+          contents={[{ icon: 'sys-envelope' }]}
           style={{ margin: '0.5em' }}
           color={state}
           size="lg"
           type="normal"
+          onClick={onClick}
+          toFill
+          shape="circle"
+          loading
         />
         <Button.Coordinator
-          contents={[{ icon: 'sys-envelope' }, 'Download']}
+          contents={['Download', { icon: 'sys-envelope' }]}
           style={{ margin: '0.5em' }}
           color={state}
           size="lg"
-          type="normal-outline"
+          type="normal"
+          toFill
+          loading
         />
         <Button.Coordinator
-          contents={[{ icon: 'sys-envelope' }, 'Download']}
+          contents={['Download']}
+          style={{ margin: '0.5em' }}
+          color={state}
+          size="lg"
+          type="dark"
+          toFill
+          loading
+        />
+        <Button.Coordinator
+          contents={[
+            { icon: 'sys-envelope' },
+            { icon: 'sys-envelope' },
+            'Download'
+          ]}
+          style={{ margin: '0.5em' }}
+          color={state}
+          size="lg"
+          type="dark-outline"
+          toFill
+          shape="round"
+          loading
+        />
+        <Button.Coordinator
+          contents={['Download', { icon: 'sys-envelope' }, 'Download']}
           style={{ margin: '0.5em' }}
           color={state}
           size="lg"
           type="outline"
+          toFill
+          shape="round"
+          borderStyle="dotted"
         />
         <Button.Coordinator
           contents={[{ icon: 'sys-envelope' }, 'Download']}
@@ -134,8 +143,10 @@ export default ({}) => {
           color={state}
           size="lg"
           type="fill"
+          toFill
+          shape="round"
         />
-      </DivElement> */}
+      </DivElement>
 
       <Order list={propList}>
         {props => <DivElement {...props}>order</DivElement>}

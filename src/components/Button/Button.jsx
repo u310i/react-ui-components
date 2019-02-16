@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import {
   getFontSize,
-  LightenDarkenHex,
   deepMergeOverrideArray,
   keyframes,
   useTimerWithToggle
@@ -11,19 +10,13 @@ import { ButtonElement, DivElement } from 'components/_Elements';
 import Coordinator from './Coordinator';
 import Group from './Group';
 import defineContents from './defineContents';
-
-const _hoverSelector = '&:hover';
-const _focusSelector = '&:focus';
-const _activeSelector = '&:active';
-
-const _white = '#fff';
-const _transparent = 'transparent';
+import createColorVariation from './createColorVariation';
 
 const Button = ({
   children,
   style: propStyle,
   nestedStyle: propNestedStyle = {},
-  color: propColor = '#1890ff',
+  color: mainColor = '#1890ff',
   type = 'normal',
   toFill,
   loading,
@@ -34,15 +27,15 @@ const Button = ({
   size,
   fullWidth,
   fullHeight,
-  borderStyle,
-  borderWidth,
+  borderStyle = 'solid',
+  borderWidth = '1px',
   clickEffect = true,
   onClick: propOnClick,
   ...props
 }) => {
   const [toggleState, setToggleState] = useTimerWithToggle(2000);
 
-  const hasClickEffect = !disable && !loading;
+  const hasClickEffect = clickEffect && !disable && !loading;
 
   const onClick = useCallback(() => {
     propOnClick && propOnClick();
@@ -58,9 +51,7 @@ const Button = ({
       verticalAlign: 'middle',
       height: '2em',
       padding: '0 1em',
-      borderWidth: '1px',
-      borderStyle: 'solid',
-      borderRadius: '4px',
+      borderRadius: '0.25em',
       touchAction: 'manipulation',
       whiteSpace: 'nowrap',
       userSelect: 'none',
@@ -68,20 +59,14 @@ const Button = ({
     };
   }, []);
 
-  const mainColor = propColor;
-
-  const [ligntenColor, darkenColor] = useMemo(() => {
-    return [LightenDarkenHex(mainColor, 25), LightenDarkenHex(mainColor, -35)];
-  }, [propColor]);
-
-  const [waveAnimation, fadeAnimation] = useMemo(() => {
+  const [clickAnimationStyle, loadingMaskStyle] = useMemo(() => {
     const waveAnimation = keyframes({
       to: {
-        top: '-6px',
-        left: '-6px',
-        bottom: '-6px',
-        right: '-6px',
-        borderWidth: '6px'
+        top: ['-6px', `calc(-${borderWidth} - 5px)`],
+        left: ['-6px', `calc(-${borderWidth} - 5px)`],
+        bottom: ['-6px', `calc(-${borderWidth} - 5px)`],
+        right: ['-6px', `calc(-${borderWidth} - 5px)`],
+        borderWidth: ['6px', `calc(${borderWidth} + 5px)`]
       }
     });
     const fadeAnimation = keyframes({
@@ -89,233 +74,111 @@ const Button = ({
         opacity: 0
       }
     });
-    return [waveAnimation, fadeAnimation];
-  }, []);
-
-  const clickAnimationStyle = useMemo(() => {
-    return {
+    const clickAnimationStyle = {
       position: 'absolute',
-      top: '-1px',
-      left: '-1px',
-      bottom: '-1px',
-      right: '-1px',
+      top: `-${borderWidth}`,
+      bottom: `-${borderWidth}`,
+      left: `-${borderWidth}`,
+      right: `-${borderWidth}`,
       borderRadius: 'inherit',
-      border: `0 solid ${effectColor || mainColor}`,
+      borderWidth: '0px',
+      borderStyle: 'solid',
+      borderColor: effectColor || mainColor,
       opacity: '.25',
       animation: `${fadeAnimation} 2s cubic-bezier(.08, .82, .17, 1), ${waveAnimation} .4s cubic-bezier(.08, .82, .17, 1)`,
       animationFillMode: 'forwards',
       display: 'block',
-      pointerEvents: 'none'
+      pointerEvents: 'none',
+      zIndex: '100'
     };
-  }, [propColor]);
+    const loadingMaskStyle = loading
+      ? {
+          position: 'absolute',
+          top: `-${borderWidth}`,
+          bottom: `-${borderWidth}`,
+          left: `-${borderWidth}`,
+          right: `-${borderWidth}`,
+          pointerEvents: 'none',
+          backgroundColor: '#fff',
+          borderRadius: 'inherit',
+          opacity: '.35',
+          transition: 'opacity .2s',
+          zIndex: '100'
+        }
+      : {};
+    return [clickAnimationStyle, loadingMaskStyle];
+  }, [borderWidth, mainColor, effectColor, loading]);
 
-  const [mutableStyle, nestedStyle] = useMemo(() => {
-    let mutableStyle = {};
-    let nestedStyle = {};
-
+  // changeShapeStyle
+  const shapeStyle = useMemo(() => {
+    const style = {};
     if (shape) {
       if (shape === 'round') {
-        mutableStyle = {
-          padding: '0 1.25em',
-          borderRadius: '1em'
-        };
+        style.padding = '0 1.25em';
+        style.borderRadius = '1em';
       }
       if (shape === 'circle') {
-        mutableStyle = {
-          width: '2em',
-          padding: '0',
-          borderRadius: '50%'
-        };
+        style.width = '2em';
+        style.padding = '0';
+        style.borderRadius = '50%';
       }
       if (shape === 'corner') {
-        mutableStyle = {
-          padding: '0 1.25em',
-          borderRadius: '0'
-        };
+        style.padding = '0 1.25em';
+        style.borderRadius = '0';
       }
     }
-    if (size) mutableStyle.fontSize = getFontSize(size);
+    if (size) style.fontSize = getFontSize(size);
+    style.borderStyle = borderStyle;
+    style.borderWidth = borderWidth;
+    if (fullWidth) style.width = '100%';
+    if (fullHeight) style.height = '100%';
+    if (loading) style.pointerEvents = 'none';
+    return style;
+  }, [shape, size, borderStyle, borderWidth, fullWidth, fullHeight, loading]);
 
-    if (borderStyle) {
-      if (borderStyle === 'dashed') mutableStyle.borderStyle = 'dashed';
-      if (borderStyle === 'dotted') mutableStyle.borderStyle = 'dotted';
-    }
+  // changeColorStyle
+  const [colorStyle, nestedColorStyle] = useMemo(() => {
+    return createColorVariation(mainColor, type, toFill, disable);
+  }, [mainColor, type, toFill, disable]);
 
-    if (borderWidth) {
-      mutableStyle.borderWidth = borderWidth;
-    }
-
-    if (fullWidth) mutableStyle.width = '100%';
-    if (fullHeight) mutableStyle.height = '100%';
-
-    if (!disable) {
-      const hoverFocusStyle = {};
-      const activeStyle = {};
-
-      if (loading) mutableStyle.pointerEvents = 'none';
-      switch (type) {
-        case 'normal':
-        case 'normal-outline':
-          mutableStyle.color = 'rgba(0,0,0,0.65)';
-          mutableStyle.backgroundColor = _white;
-          mutableStyle.borderColor = '#d9d9d9';
-          hoverFocusStyle.color = mainColor;
-          hoverFocusStyle.borderColor = mainColor;
-          activeStyle.color = darkenColor;
-          activeStyle.borderColor = darkenColor;
-          if (type === 'normal-outline') {
-            mutableStyle.color = _white;
-            mutableStyle.backgroundColor = _transparent;
-            mutableStyle.borderColor = _white;
-            hoverFocusStyle.color = mainColor;
-            hoverFocusStyle.backgroundColor = _transparent;
-            hoverFocusStyle.borderColor = mainColor;
-            activeStyle.color = darkenColor;
-            activeStyle.backgroundColor = _transparent;
-            activeStyle.borderColor = darkenColor;
-          }
-          break;
-        case 'normal-outline':
-          mutableStyle.color = _white;
-          mutableStyle.backgroundColor = _transparent;
-          mutableStyle.borderColor = _white;
-          hoverFocusStyle.color = mainColor;
-          hoverFocusStyle.backgroundColor = _transparent;
-          hoverFocusStyle.borderColor = mainColor;
-          activeStyle.color = darkenColor;
-          activeStyle.borderColor = darkenColor;
-          break;
-        case 'dark':
-        case 'dark-outline':
-          const darken = '#4e4e4e';
-          mutableStyle.color = _white;
-          mutableStyle.backgroundColor = darken;
-          mutableStyle.borderColor = darken;
-          hoverFocusStyle.backgroundColor = mainColor;
-          hoverFocusStyle.borderColor = mainColor;
-          activeStyle.backgroundColor = darkenColor;
-          activeStyle.borderColor = darkenColor;
-          if (type === 'dark-outline') {
-            mutableStyle.color = darken;
-            mutableStyle.backgroundColor = _transparent;
-            hoverFocusStyle.color = mainColor;
-            hoverFocusStyle.backgroundColor = _transparent;
-            activeStyle.color = darkenColor;
-            activeStyle.backgroundColor = _transparent;
-          }
-          break;
-        case 'outline':
-          mutableStyle.color = mainColor;
-          mutableStyle.backgroundColor = _transparent;
-          mutableStyle.borderColor = mainColor;
-          hoverFocusStyle.color = ligntenColor;
-          hoverFocusStyle.backgroundColor = _transparent;
-          hoverFocusStyle.borderColor = ligntenColor;
-          activeStyle.color = darkenColor;
-          activeStyle.backgroundColor = _transparent;
-          activeStyle.borderColor = darkenColor;
-          break;
-        case 'fill':
-          mutableStyle.color = _white;
-          mutableStyle.backgroundColor = mainColor;
-          mutableStyle.borderColor = mainColor;
-          hoverFocusStyle.backgroundColor = ligntenColor;
-          hoverFocusStyle.borderColor = ligntenColor;
-          activeStyle.backgroundColor = darkenColor;
-          activeStyle.borderColor = darkenColor;
-        default:
-      }
-      if (toFill) {
-        hoverFocusStyle.color = _white;
-        hoverFocusStyle.backgroundColor = ligntenColor;
-        hoverFocusStyle.borderColor = ligntenColor;
-        activeStyle.color = _white;
-        activeStyle.backgroundColor = darkenColor;
-        activeStyle.borderColor = darkenColor;
-      }
-
-      nestedStyle = {
-        [_hoverSelector]: hoverFocusStyle,
-        [_focusSelector]: hoverFocusStyle,
-        [_activeSelector]: activeStyle
-      };
-    }
-
-    if (disable) {
-      mutableStyle = {
-        ...mutableStyle,
-        color: 'rgba(0, 0, 0, 0.25)',
-        backgroundColor: '#f5f5f5',
-        borderColor: '#d9d9d9',
-        boxShadow: 'none',
-        cursor: 'not-allowed'
-      };
-      const hoverFocusStyle = {
-        color: 'rgba(0, 0, 0, 0.25)',
-        backgroundColor: '#f5f5f5',
-        borderColor: '#d9d9d9'
-      };
-      nestedStyle = {
-        [_hoverSelector]: hoverFocusStyle,
-        [_focusSelector]: hoverFocusStyle
-      };
-      if (
-        type === 'outline' ||
-        type === 'normal-outline' ||
-        type === 'dark-outline'
-      ) {
-        mutableStyle = {
-          ...mutableStyle,
-          backgroundColor: 'transparent',
-          borderColor: 'rgba(0, 0, 0, 0.25)'
-        };
-        const hoverFocusStyle = {
-          backgroundColor: 'transparent'
-        };
-        nestedStyle = {
-          [_hoverSelector]: hoverFocusStyle,
-          [_focusSelector]: hoverFocusStyle
-        };
-      }
-    }
-    return [mutableStyle, nestedStyle];
+  const style = useMemo(() => {
+    return {
+      ...immutableStyle,
+      ...shapeStyle,
+      ...colorStyle,
+      ...deepMergeOverrideArray(nestedColorStyle, propNestedStyle),
+      ...propStyle
+    };
   }, [
-    propColor,
-    shape,
-    size,
-    borderStyle,
-    borderWidth,
-    fullWidth,
-    fullHeight,
-    type,
-    toFill,
-    loading,
-    disable,
-    effectColor,
-    between,
-    disable
+    immutableStyle,
+    shapeStyle,
+    colorStyle,
+    nestedColorStyle,
+    propNestedStyle,
+    propStyle
   ]);
-
-  const style = {
-    ...immutableStyle,
-    ...mutableStyle,
-    ...deepMergeOverrideArray(nestedStyle, propNestedStyle),
-    ...propStyle
-  };
 
   let contents = useMemo(() => {
     return defineContents(children, between, loading);
   }, [children, between, loading]);
 
-  const clickEffectComponent = clickEffect &&
-    toggleState !== undefined &&
-    hasClickEffect && (
-      <DivElement key={toggleState} noRole style={clickAnimationStyle} />
+  const clickEffectComponent = useMemo(() => {
+    return (
+      toggleState !== undefined &&
+      hasClickEffect && (
+        <DivElement key={toggleState} noRole style={clickAnimationStyle} />
+      )
     );
+  }, [toggleState, hasClickEffect]);
+
+  const loadingMaskComponent = useMemo(() => {
+    return loading && <DivElement noRole style={loadingMaskStyle} />;
+  }, [loading]);
 
   return (
     <ButtonElement style={style} onClick={onClick} {...props}>
       {contents}
+      {loadingMaskComponent}
       {clickEffectComponent}
     </ButtonElement>
   );

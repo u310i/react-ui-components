@@ -5,8 +5,8 @@
 // custom
 export const allElementsCommonStyle = {
   boxSizing: 'border-box',
-  margin: 0,
-  padding: 0,
+  margin: '0px',
+  padding: '0px',
   fontSize: 'inherit'
   // verticalAlign: 'middle'
 };
@@ -123,14 +123,14 @@ export const button_input_optgroup_select_textarea_style = {
   fontFamily: 'inherit',
   fontSize: '1em',
   lineHeight: '1',
-  margin: '0'
+  margin: '0px'
 };
 
 export const button_inputButton_inputReset_inputSubmit_style = {
   '-webkit-appearance': 'button',
   '&::-moz-focus-inner': {
     borderStyle: 'none',
-    padding: '0'
+    padding: '0px'
   },
   '&:-moz-focusring': {
     outline: '1px dotted ButtonText'
@@ -151,14 +151,14 @@ export const button_select_style = {
 };
 
 export const fieldset_style = {
-  minWidth: '0'
+  minWidth: '0px'
 };
 
 export const legend_style = {
   color: 'inherit',
   display: 'table',
   maxWidth: '100%',
-  padding: '0',
+  padding: '0px',
   whiteSpace: 'normal'
 };
 
