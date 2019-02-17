@@ -22,7 +22,7 @@ const createButton = (contents, props, group = {}, index = null) => {
       isGroup = true;
       return createButton(item, { ...props, ...childPropList[i] }, {}, i);
     }
-    return getChild(item, index);
+    return getChild(item, i);
   });
 
   const key =
@@ -33,7 +33,9 @@ const createButton = (contents, props, group = {}, index = null) => {
       : {};
 
   return isGroup ? (
-    <Button.Group {...groupProps}>{children}</Button.Group>
+    <Button.Group {...key} {...groupProps}>
+      {children}
+    </Button.Group>
   ) : (
     <Button {...key} {...props}>
       {children}

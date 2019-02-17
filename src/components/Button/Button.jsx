@@ -42,7 +42,7 @@ const Button = ({
     hasClickEffect && setToggleState();
   }, [propOnClick, hasClickEffect]);
 
-  const immutableStyle = useMemo(() => {
+  const solidStyle = useMemo(() => {
     return {
       display: 'inline-flex',
       position: 'relative',
@@ -143,14 +143,14 @@ const Button = ({
 
   const style = useMemo(() => {
     return {
-      ...immutableStyle,
+      ...solidStyle,
       ...shapeStyle,
       ...colorStyle,
       ...deepMergeOverrideArray(nestedColorStyle, propNestedStyle),
       ...propStyle
     };
   }, [
-    immutableStyle,
+    solidStyle,
     shapeStyle,
     colorStyle,
     nestedColorStyle,

@@ -1,46 +1,60 @@
-import React from 'react';
-import { css, cx } from 'emotion';
-import Link from 'components/Link';
-import ListItem from 'components/ListItem';
+import React, { useCallback, useMemo } from 'react';
+import { Order } from 'components';
+import {
+  UlElement,
+  LiElement,
+  DivElement,
+  AElement,
+  ButtonElement,
+  InputSubmitElement
+} from 'components/_Elements';
 
 const List = ({
-  render,
-  propList = [],
-  componentList = [],
-  mode = 'render',
-  ids = []
+  children,
+  style: propStyle = {},
+  width = '256px',
+  ...props
 }) => {
-  const pLength = propList.length,
-    cLength = componentList.length,
-    idsLength = ids.length,
-    possible = pLength > 0 || cLength > 0,
-    isRender = mode === 'render',
-    isComponent = mode === 'component',
-    hocExists = isComponent && possible && pLength === cLength,
-    idsExists = idsLength === pLength || idsLength === cLength;
+  const solidStyle = useMemo(() => {
+    return {};
+  }, []);
 
-  let child, list, elList;
-  if (isRender && possible) {
-    list = propList;
-    elList = list.map((item, index) => {
-      child = render(item);
-      return (
-        <ListItem key={(idsExists && ids[index]) || index}>{child}</ListItem>
-      );
-    });
-  } else if (isComponent && possible) {
-    list = componentList;
-    elList = list.map((item, index) => {
-      child =
-        (hocExists && typeof item === 'function' && item(propList[index])) ||
-        item;
-      return (
-        <ListItem key={(idsExists && ids[index]) || index}>{child}</ListItem>
-      );
-    });
-  }
-  return <>{elList}</>;
+  const fluidStyle = useMemo(() => {
+    return {
+      width: width
+    };
+  }, [width]);
+
+  const style = useMemo(() => {
+    return {
+      ...solidStyle,
+      ...fluidStyle,
+      ...propStyle
+    };
+  }, [solidStyle, fluidStyle, propStyle]);
+
+  return (
+    <UlElement style={style} classNames={['uc-list']} {...props}>
+      {children}
+    </UlElement>
+  );
 };
 
+const Group = ({ children, title, ...props }) => {
+  const titleComponent = title && <DivElement>{title}</DivElement>;
+  return (
+    <LiElement classNames={['uc-list-group']} {...props}>
+      {titleComponent}
+      <UlElement>{children}</UlElement>
+    </LiElement>
+  );
+};
+
+const Item = ({ children, ...props }) => {
+  return <LiElement {...props}>{children}</LiElement>;
+};
+
+List.Group = Group;
+List.Item = Item;
+
 export default List;
-// export default React.memo(List);

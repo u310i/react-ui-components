@@ -73,7 +73,7 @@ const Icon = ({
 
   const baseName = `uc-svg-i-${iconData.type}`;
 
-  const immutableStyle = useMemo(() => {
+  const solidStyle = useMemo(() => {
     return {
       display: 'inline-block',
       overflow: 'visible',
@@ -83,14 +83,14 @@ const Icon = ({
     };
   }, []);
 
-  let mutableStyle = {};
+  let fluidStyle = {};
 
   if (marginLeft)
-    mutableStyle.marginLeft = isString(marginLeft) ? marginLeft : '0.5em';
+    fluidStyle.marginLeft = isString(marginLeft) ? marginLeft : '0.5em';
   if (marginRight)
-    mutableStyle.marginRight = isString(marginRight) ? marginRight : '0.5em';
+    fluidStyle.marginRight = isString(marginRight) ? marginRight : '0.5em';
 
-  if (size) mutableStyle.fontSize = getFontSize(size);
+  if (size) fluidStyle.fontSize = getFontSize(size);
 
   if (typeof currentColor === 'undefined') {
     currentColor = isPath && true;
@@ -102,21 +102,21 @@ const Icon = ({
   const precision = 3;
 
   if (fixedWidth && !border) {
-    mutableStyle.width =
+    fluidStyle.width =
       typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
         ? fixedWidth
         : `${roundNumber(height * widthRatioAtFixed, precision)}em`;
   } else {
-    mutableStyle.width = `${roundNumber(height * iconData.ratio, precision)}em`;
+    fluidStyle.width = `${roundNumber(height * iconData.ratio, precision)}em`;
   }
 
   if (border) {
     const borderIsObject = isObject(border);
     if (borderIsObject) {
-      mutableStyle = { ...mutableStyle, ...border };
+      fluidStyle = { ...fluidStyle, ...border };
     } else {
-      mutableStyle = {
-        ...mutableStyle,
+      fluidStyle = {
+        ...fluidStyle,
         height: `${height}em`,
         border: 'solid 0.08em #eee',
         borderRadius: '0.1em',
@@ -124,27 +124,24 @@ const Icon = ({
       };
     }
     if (fixedWidth) {
-      mutableStyle.width =
+      fluidStyle.width =
         typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
           ? fixedWidth
           : `${roundNumber(height * widthRatioAtFixed, precision)}em`;
     } else {
-      mutableStyle.width = `${roundNumber(
-        height * iconData.ratio,
-        precision
-      )}em`;
+      fluidStyle.width = `${roundNumber(height * iconData.ratio, precision)}em`;
     }
   }
 
   if (pull === 'left') {
-    mutableStyle = {
-      ...mutableStyle,
+    fluidStyle = {
+      ...fluidStyle,
       marginRight: '0.3em',
       float: 'left'
     };
   } else if (pull === 'right') {
-    mutableStyle = {
-      ...mutableStyle,
+    fluidStyle = {
+      ...fluidStyle,
       marginLeft: '0.3em',
       float: 'right'
     };
@@ -165,7 +162,7 @@ const Icon = ({
       transformList.push(scale);
     }
 
-    mutableStyle['transform'] = transformList.join(' ');
+    fluidStyle['transform'] = transformList.join(' ');
   }
 
   if (spin || pulse) {
@@ -178,10 +175,10 @@ const Icon = ({
       }
     });
     spin
-      ? (mutableStyle.animation = `${rotateAnimation} ${
+      ? (fluidStyle.animation = `${rotateAnimation} ${
           isString(spin) ? spin : '1s infinite linear'
         }`)
-      : (mutableStyle.animation = `${rotateAnimation} ${
+      : (fluidStyle.animation = `${rotateAnimation} ${
           isString(pulse) ? pulse : '1s infinite steps(8)'
         }`);
   }
@@ -217,7 +214,7 @@ const Icon = ({
 
   props.role = role;
 
-  props.style = { ...immutableStyle, ...mutableStyle, ...propStyle };
+  props.style = { ...solidStyle, ...fluidStyle, ...propStyle };
 
   return <SVG {...props} />;
 };

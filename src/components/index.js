@@ -11,6 +11,7 @@ import List from './List';
 import ListItem from './ListItem';
 import Menu from './Menu';
 import SVG from './SVG';
+import Order from './Order';
 
 export {
   AppBar,
@@ -25,5 +26,6 @@ export {
   List,
   ListItem,
   Menu,
-  SVG
+  SVG,
+  Order
 };

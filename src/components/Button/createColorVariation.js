@@ -21,8 +21,8 @@ const assignColors = list => {
 };
 
 const createColorVariation = (mainColor, type, toFill, disable) => {
-  let colorStyle = {};
-  let nestedColorStyle = {};
+  let style = {};
+  let nestedStyle = {};
 
   const ligntenColor = LightenDarkenHex(mainColor, 25);
   const darkenColor = LightenDarkenHex(mainColor, -35);
@@ -33,42 +33,42 @@ const createColorVariation = (mainColor, type, toFill, disable) => {
     switch (type) {
       case 'normal':
         assignColors([
-          [colorStyle, _normal_font_color, _white, _light_gray],
+          [style, _normal_font_color, _white, _light_gray],
           [hfStyle, mainColor, null, mainColor],
           [aStyle, darkenColor, null, darkenColor]
         ]);
         break;
       case 'normal-outline':
         assignColors([
-          [colorStyle, _white, _transparent, _white],
+          [style, _white, _transparent, _white],
           [hfStyle, mainColor, null, mainColor],
           [aStyle, darkenColor, null, darkenColor]
         ]);
         break;
       case 'dark':
         assignColors([
-          [colorStyle, _white, _dark_gray, _dark_gray],
+          [style, _white, _dark_gray, _dark_gray],
           [hfStyle, null, mainColor, mainColor],
           [aStyle, null, darkenColor, darkenColor]
         ]);
         break;
       case 'dark-outline':
         assignColors([
-          [colorStyle, _dark_gray, _transparent, _dark_gray],
+          [style, _dark_gray, _transparent, _dark_gray],
           [hfStyle, mainColor, null, mainColor],
           [aStyle, darkenColor, null, darkenColor]
         ]);
         break;
       case 'outline':
         assignColors([
-          [colorStyle, mainColor, _transparent, mainColor],
+          [style, mainColor, _transparent, mainColor],
           [hfStyle, ligntenColor, null, ligntenColor],
           [aStyle, darkenColor, null, darkenColor]
         ]);
         break;
       case 'fill':
         assignColors([
-          [colorStyle, _white, mainColor, mainColor],
+          [style, _white, mainColor, mainColor],
           [hfStyle, null, ligntenColor, ligntenColor],
           [aStyle, null, darkenColor, darkenColor]
         ]);
@@ -80,7 +80,7 @@ const createColorVariation = (mainColor, type, toFill, disable) => {
         [aStyle, _white, darkenColor, darkenColor]
       ]);
     }
-    nestedColorStyle = {
+    nestedStyle = {
       [_hover_selector]: hfStyle,
       [_focus_selector]: hfStyle,
       [_active_selector]: aStyle
@@ -88,8 +88,8 @@ const createColorVariation = (mainColor, type, toFill, disable) => {
   }
 
   if (disable) {
-    colorStyle = {
-      ...colorStyle,
+    style = {
+      ...style,
       color: 'rgba(0, 0, 0, 0.25)',
       backgroundColor: '#f5f5f5',
       borderColor: '#d9d9d9',
@@ -101,7 +101,7 @@ const createColorVariation = (mainColor, type, toFill, disable) => {
       backgroundColor: '#f5f5f5',
       borderColor: '#d9d9d9'
     };
-    nestedColorStyle = {
+    nestedStyle = {
       [_hover_selector]: hoverFocusStyle,
       [_focus_selector]: hoverFocusStyle
     };
@@ -110,21 +110,21 @@ const createColorVariation = (mainColor, type, toFill, disable) => {
       type === 'normal-outline' ||
       type === 'dark-outline'
     ) {
-      colorStyle = {
-        ...colorStyle,
+      style = {
+        ...style,
         backgroundColor: 'transparent',
         borderColor: 'rgba(0, 0, 0, 0.25)'
       };
       const hoverFocusStyle = {
         backgroundColor: 'transparent'
       };
-      nestedColorStyle = {
+      nestedStyle = {
         [_hover_selector]: hoverFocusStyle,
         [_focus_selector]: hoverFocusStyle
       };
     }
   }
-  return [colorStyle, nestedColorStyle];
+  return [style, nestedStyle];
 };
 
 export default createColorVariation;

@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { css, cx } from 'react-emotion';
 import Icon from 'components/Icon';
-import check from 'check-types';
 import {
   isString,
   isArray,
@@ -17,257 +15,104 @@ import {
   ButtonElement,
   InputSubmitElement
 } from 'components/_Elements';
-import { Button } from 'components';
-
-const List = ({ children, style }) => {
-  return (
-    <UlElement style={style} classNames={['uc-list']}>
-      {children}
-    </UlElement>
-  );
-};
-
-List.Item = ({ children, style }) => {
-  return (
-    <LiElement style={style} classNames={['uc-list-item']}>
-      {children}
-    </LiElement>
-  );
-};
-
-export const Order = ({ children, list: propList }) => {
-  const list = propList.map(({ key: propKey, ...props }, index) => {
-    const key = propKey || index;
-    return children({ key, ...props });
-  });
-  return list;
-};
-
-const propList = [
-  { className: css({ backgroundColor: '#ff7f50' }) },
-  { className: css({ backgroundColor: '#dc143c' }) },
-  { className: css({ backgroundColor: '#ff1493' }) }
-];
-check.array(propList);
+import { Button, Order, List } from 'components';
 
 export default ({}) => {
-  const color = '#1890ff';
-  const color2 = '#ff4500';
-  const [state, setState] = useState(color);
-  const onClick = () => {
-    setState(color2);
-  };
   return (
-    <List style={{ padding: '1em' }}>
-      {/* <Button>
-        <Icon icon="sys-envelope" size="sm" />
-      </Button> */}
-      <Order list={propList}>
-        {props => <DivElement {...props}>order</DivElement>}
-      </Order>
-      <DivElement style={{ backgroundColor: 'white', margin: '1em' }}>
-        <Button.Coordinator
-          contents={[
-            [{ icon: 'sys-envelope' }, 'Aaaa'],
-            [{ icon: 'sys-envelope' }, 'Bbbb'],
-            [{ icon: 'sys-envelope' }, 'Cccc']
-          ]}
-          group={{
-            between: '0.2em',
-            childPropList: [, { disable: true }, { loading: true }]
-          }}
-          color={state}
-          size=""
-          type="normal"
-          onClick={onClick}
-        />
-      </DivElement>
-
-      <DivElement style={{ backgroundColor: 'white' }}>
-        <Button.Coordinator
-          contents={[{ icon: 'sys-envelope' }]}
-          style={{ margin: '0.5em' }}
-          color={state}
-          size="lg"
-          type="normal"
-          onClick={onClick}
-          toFill
-          shape="circle"
-          loading
-        />
-        <Button.Coordinator
-          contents={['Download', { icon: 'sys-envelope' }]}
-          style={{ margin: '0.5em' }}
-          color={state}
-          size="lg"
-          type="normal"
-          toFill
-          loading
-        />
-        <Button.Coordinator
-          contents={['Download']}
-          style={{ margin: '0.5em' }}
-          color={state}
-          size="lg"
-          type="dark"
-          toFill
-          loading
-        />
-        <Button.Coordinator
-          contents={[
-            { icon: 'sys-envelope' },
-            { icon: 'sys-envelope' },
-            'Download'
-          ]}
-          style={{ margin: '0.5em' }}
-          color={state}
-          size="lg"
-          type="dark-outline"
-          toFill
-          shape="round"
-          loading
-        />
-        <Button.Coordinator
-          contents={['Download', { icon: 'sys-envelope' }, 'Download']}
-          style={{ margin: '0.5em' }}
-          color={state}
-          size="lg"
-          type="outline"
-          toFill
-          shape="round"
-          borderStyle="dotted"
-        />
-        <Button.Coordinator
-          contents={[{ icon: 'sys-envelope' }, 'Download']}
-          style={{ margin: '0.5em' }}
-          color={state}
-          size="lg"
-          type="fill"
-          toFill
-          shape="round"
-        />
-      </DivElement>
-
-      <Order list={propList}>
-        {props => <DivElement {...props}>order</DivElement>}
-      </Order>
-      <List.Item>test</List.Item>
-      <List.Item>test</List.Item>
-      <List.Item>
-        <Icon
-          icon="sys-envelope"
-          size="sm"
-          marginRight={'1em'}
-          marginLeft
-          aria-hidden={true}
-        />
-        TEST
-      </List.Item>
-      <AElement href="#">絶対パスでリンクします</AElement>
-      <AElement href="http://www.htmq.com/style/vertical-align.shtml">
-        絶対パスでリンクします
-      </AElement>
-      <InputSubmitElement value="Submity" />
-      <ButtonElement>ButtonElement</ButtonElement>
-      <Icon icon="sys-envelope" spin />
-      <Icon icon="sys-envelope" pulse />
-      <Icon icon="sys-envelope" spin />
-    </List>
+    <DivElement style={{ backgroundColor: '#00bfff' }}>
+      <List>
+        <List.Group
+          title="Navigation One"
+          style={{ backgroundColor: '#ee82ee', padding: '1em 0' }}
+        >
+          <List.Group
+            title="Item 1"
+            style={{ backgroundColor: '#00fa9a', padding: '1em 0' }}
+          >
+            <LiElement
+              style={{
+                backgroundColor: '#ffdead',
+                padding: '0.5em 1.5rem'
+              }}
+            >
+              Option 1
+            </LiElement>
+            <LiElement
+              style={{
+                backgroundColor: '#b0e0e6',
+                padding: '0.5em 1.5rem'
+              }}
+            >
+              Option 2
+            </LiElement>
+          </List.Group>
+        </List.Group>
+      </List>
+    </DivElement>
   );
 };
-// {
-//   if (nthChildStyle) {
-//     for (let [n, style] of nthChildStyle) {
-//       childStyle[`& > :nth-child(${n})`] = style;
-//     }
-//   }
-//   if (firstChildStyle) {
-//     childStyle['& > :first-child'] = firstChildStyle;
-//   }
-//   if (lastChildStyle) {
-//     childStyle['& > :last-child'] = lastChildStyle;
-//   }
 
-//   if (children.length >= 2 && firstChildRightSpace) {
-//     const marginRight = isString(firstChildRightSpace)
-//       ? firstChildRightSpace
-//       : '0.5em';
-//     if (!childStyle['& > :first-child']) {
-//       childStyle['& > :first-child'] = {};
-//     }
-//     childStyle['& > :first-child'].marginRight = marginRight;
-//   }
-
-//   if (children.length >= 3 && lastChildLeftSpace) {
-//     const marginLeft = isString(lastChildLeftSpace)
-//       ? lastChildLeftSpace
-//       : '0.5em';
-//     if (!childStyle['& > :last-child']) {
-//       childStyle['& > :last-child'] = {};
-//     }
-//     childStyle['& > :last-child'].marginLeft = marginLeft;
-//   }
-// }
+// const entries = [
+//   [{ style: { backgroundColor: '#dc143c', padding: '1em 0px' } }, 'aaa'],
+//   [{ style: { backgroundColor: '#ff7f50', padding: '1em 0px' } }, 'bbb'],
+//   [{ style: { backgroundColor: '#ff1493', padding: '1em 0px' } }, 'ccc']
+// ];
 
 {
-  /* <Button.Coordinator
-contents={[{ icon: 'sys-envelope' }, 'Download']}
-style={{ marginBottom: '1em', marginTop: '1em' }}
-size="3x"
-ghost
-onClick={onClick}
-color={state}
-/>
+  /* <DivElement style={{ padding: '1em' }}>
+<Order list={entries}>
+  {({ props, child }) => <DivElement {...props}>{child}</DivElement>}
+</Order>
+</DivElement> */
+}
+
+{
+  /* <DivElement style={{ padding: '1em' }}>
+<DivElement style={{ padding: '1em', backgroundColor: '#f0f8ff' }}>
+  <List>
+    <List.Item>aaa</List.Item>
+    <List.Item>bbb</List.Item>
+    <List.Item>ccc</List.Item>
+  </List>
+</DivElement> */
+}
+
+// const color = '#1890ff';
+// const color2 = '#ff4500';
+// const [state, setState] = useState(color);
+// const onClick = () => {
+//   setState(color2);
+// };
+
+{
+  /* <DivElement style={{ backgroundColor: 'white', margin: '1em' }}>
 <Button.Coordinator
-contents={[{ icon: 'sys-envelope' }, 'Download']}
-style={{ marginBottom: '1em', marginTop: '1em' }}
-size="3x"
-color={state}
-/>
-<DivElement style={{ height: '4em', backgroundColor: 'green' }}>
-<Button.Coordinator
-  contents={[{ icon: 'sys-envelope' }, 'Download']}
-  style={{ marginBottom: '1em' }}
-  shape="corner"
-  fullHeight
+  contents={[
+    [{ icon: 'sys-envelope' }, 'Aaaa'],
+    [{ icon: 'sys-envelope' }, 'Bbbb'],
+    [{ icon: 'sys-envelope' }, 'Cccc']
+  ]}
+  group={{
+    between: '0.2em',
+    childPropList: [, { disable: true }, { loading: true }]
+  }}
+  shape="round"
   color={state}
+  size=""
+  type="normal"
+  onClick={onClick}
 />
 </DivElement>
 
+<DivElement style={{ backgroundColor: 'white' }}>
 <Button.Coordinator
-contents={[{ icon: 'sys-envelope' }, 'Download']}
-shape="round"
-size="2x"
-borderStyle="dashed"
-borderWidth="1.8px"
-disable
-color={state}
+  contents={[{ icon: 'sys-envelope' }, 'Download']}
+  style={{ margin: '0.5em' }}
+  color={state}
+  size="lg"
+  type="fill"
+  toFill
+  shape="round"
 />
-<Button.Coordinator
-contents={['Download']}
-shape="round"
-size="2x"
-loading
-color={state}
-/>
-<Button.Coordinator
-contents={['ロード中', 'ロード中']}
-shape="round"
-size="2x"
-loading
-disable
-color={state}
-/>
-<Button.Coordinator
-contents={[{ icon: 'sys-envelope' }]}
-shape="circle"
-size="3x"
-loading
-color={state}
-/>
-<Button.Coordinator
-contents={[{ icon: 'sys-envelope' }]}
-shape="circle"
-size="3x"
-/> */
+</DivElement> */
 }
