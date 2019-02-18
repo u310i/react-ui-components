@@ -8,9 +8,9 @@ import React, {
 } from 'react';
 
 import { css, cx } from 'react-emotion';
-import { getIsArrivedToElOnScrollEvent } from 'utilities/windowEvents';
-import { useAddWindowEvent } from 'utilities/hooks/useEffects';
-import { useGetDomProperties } from 'utilities/hooks/useLayoutEffects';
+import { getIsArrivedToElOnScrollEvent } from 'scripts';
+import { useAddWindowEvent } from 'scripts';
+import { useGetDomProperties } from 'scripts';
 // import { useSetVerticalState } from '.utils';
 
 import Dummy from 'components/Dummy';

@@ -1,3 +1,5 @@
+import { defaultTheme, genTheme, resetGlobalStyle } from './init';
+
 import {
   deepMerge,
   deepMergeOverrideArray,
@@ -16,7 +18,7 @@ import {
   genReactCSSTransitionStyle,
   genSimpleTransitionStyle,
   assignTransitionDuration
-} from './styleUtils';
+} from './style';
 
 import {
   toFullHexa,
@@ -25,7 +27,7 @@ import {
   rgba2hsla,
   toCssColor,
   LightenDarkenHex
-} from './colorUtils';
+} from './color';
 
 import {
   isReact,
@@ -52,7 +54,7 @@ import {
   extractCurrentScreenSizeProps,
   useGetInitBreakpoint,
   getComponentByBreakpoint
-} from './breakpointUtils';
+} from './breakpoint';
 
 import { testCssNumberRegExp } from './regExp';
 
@@ -82,6 +84,8 @@ import {
   useGetDomProperty,
   useGetDomProperties
 } from './hooks/useLayoutEffects';
+
+export { defaultTheme, genTheme, resetGlobalStyle };
 
 export {
   deepMerge,

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'utilities/polyfill';
-import resetGlobalStyle from 'utilities/initPageUtils/resetGlobalStyle';
+import 'scripts/polyfill';
+import { resetGlobalStyle } from 'scripts';
 
 // import App from './app';
 

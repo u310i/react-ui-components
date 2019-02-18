@@ -2,7 +2,7 @@ import params from './params';
 import common from './common';
 import baseTheme from './theme';
 
-import genTheme from 'utilities/initPageUtils/genTheme';
+import genTheme from 'scripts';
 
 const theme = genTheme(baseTheme);
 

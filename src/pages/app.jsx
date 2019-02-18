@@ -11,8 +11,8 @@ import {
   faAmbulance
 } from '@fortawesome/free-solid-svg-icons';
 import { faApple, faCcPaypal } from '@fortawesome/free-brands-svg-icons';
-// import createPagePropsTheme from 'utilities/initPageUtils/createPagePropsTheme';
-// import {defaultTheme} from 'utilities/initPageUtils/defaultTheme';
+// import createPagePropsTheme from 'scripts';
+// import {defaultTheme} from 'scripts';
 // import baseTheme from './_this_theme';
 // import baseProps from './_this_props';
 import { params, theme } from './props';

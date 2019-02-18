@@ -13,14 +13,14 @@ import {
   genReactCSSTransitionStyle,
   extractOverlapObjectProperty,
   makeTransitionalProperty
-} from 'utilities/utils';
+} from 'scripts';
 import {
   getDisplayStateOnScrollEvent,
   getIsArrivedToElOnScrollEvent
-} from 'utilities/windowEvents';
-import { useAddWindowEvent, useIntersectionObserver } from 'utilities/effects';
-import { useGetDomProperty } from 'utilities/layoutEffects';
-import { useIsSecondRendering } from 'utilities/hooks';
+} from 'scripts';
+import { useAddWindowEvent, useIntersectionObserver } from 'scripts';
+import { useGetDomProperty } from 'scripts';
+import { useIsSecondRendering } from 'scripts';
 
 import List from 'components/List';
 

@@ -35,183 +35,183 @@ const inputFile_style = {
 };
 
 export const InputHidden = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
-    <Input type="hidden" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="hidden" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputButton = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     ...button_inputButton_inputReset_inputSubmit_style
   };
   return (
-    <Input type="button" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="button" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputSubmit = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     ...button_inputButton_inputReset_inputSubmit_style
   };
   return (
-    <Input type="submit" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="submit" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputReset = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     ...button_inputButton_inputReset_inputSubmit_style
   };
   return (
-    <Input type="reset" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="reset" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputCheckbox = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     inputCheckbox_inputRadio_style
   };
   return (
-    <Input type="checkbox" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="checkbox" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputRadio = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     ...inputCheckbox_inputRadio_style
   };
   return (
-    <Input type="radio" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="radio" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputColor = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
-    <Input type="color" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="color" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputFile = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     ...inputFile_style
   };
   return (
-    <Input type="file" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="file" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputImage = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
-    <Input type="image" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="image" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputNumber = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     ...inputNumber_style
   };
   return (
-    <Input type="number" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="number" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputRange = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
-    <Input type="range" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="range" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputText = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
-    <Input type="text" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="text" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputEmail = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
-    <Input type="email" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="email" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputPassword = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
-    <Input type="password" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="password" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputTel = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
-    <Input type="tel" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="tel" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputSearch = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     ...inputSearch_style
   };
   return (
-    <Input type="search" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="search" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputUrl = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
-    <Input type="url" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="url" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputTime = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     ...inputTime_inputDate_inputDatetimeLocal_inputMonth
   };
   return (
-    <Input type="time" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="time" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputDate = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     ...inputTime_inputDate_inputDatetimeLocal_inputMonth
   };
   return (
-    <Input type="date" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="date" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputDatetimeLocal = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     ...inputTime_inputDate_inputDatetimeLocal_inputMonth
   };
   return (
     <Input
       type="datetime-local"
-      style={{ ...immutableStyle, ...style }}
+      style={{ ...solidStyle, ...style }}
       {...props}
     />
   );
 };
 
 export const InputWeek = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
-    <Input type="week" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="week" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const InputMonth = ({ style, ...props }) => {
-  const immutableStyle = {
+  const solidStyle = {
     ...inputTime_inputDate_inputDatetimeLocal_inputMonth
   };
   return (
-    <Input type="month" style={{ ...immutableStyle, ...style }} {...props} />
+    <Input type="month" style={{ ...solidStyle, ...style }} {...props} />
   );
 };

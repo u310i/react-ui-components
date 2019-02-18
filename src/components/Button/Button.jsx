@@ -1,12 +1,12 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useContext } from 'react';
 import {
   getFontSize,
   deepMergeOverrideArray,
   keyframes,
   useTimerWithToggle
-} from 'utilities';
+} from 'scripts';
 
-import { ButtonElement, DivElement } from 'components/_Elements';
+import { ButtonElement, DivElement } from 'elements';
 import Coordinator from './Coordinator';
 import Group from './Group';
 import defineContents from './defineContents';
@@ -50,8 +50,6 @@ const Button = ({
       alignItems: 'center',
       verticalAlign: 'middle',
       height: '2em',
-      padding: '0 1em',
-      borderRadius: '0.25em',
       touchAction: 'manipulation',
       whiteSpace: 'nowrap',
       userSelect: 'none',
@@ -126,6 +124,9 @@ const Button = ({
         style.padding = '0 1.25em';
         style.borderRadius = '0';
       }
+    } else {
+      style.padding = '0 1em';
+      style.borderRadius = '0.25em';
     }
     if (size) style.fontSize = getFontSize(size);
     style.borderStyle = borderStyle;

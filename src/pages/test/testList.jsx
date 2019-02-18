@@ -1,21 +1,17 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import Icon from 'components/Icon';
-import {
-  isString,
-  isArray,
-  isReact,
-  isReactComponent
-} from 'utilities/checkTypes';
+import { isString, isArray, isReact, isReactComponent } from 'scripts';
 
 import {
   UlElement,
   LiElement,
   DivElement,
+  SpanElement,
   AElement,
   ButtonElement,
   InputSubmitElement
-} from 'components/_Elements';
-import { Button, Order, List } from 'components';
+} from 'elements';
+import { Button, Order, List, Divider } from 'components';
+// import Theme from 'components/Theme';
 
 export default ({}) => {
   return (
@@ -23,34 +19,65 @@ export default ({}) => {
       <List>
         <List.Group
           title="Navigation One"
-          style={{ backgroundColor: '#ee82ee', padding: '1em 0' }}
+          style={{ backgroundColor: '#ee82ee' }}
         >
-          <List.Group
-            title="Item 1"
-            style={{ backgroundColor: '#00fa9a', padding: '1em 0' }}
-          >
-            <LiElement
+          <List.Group title="Item 1" style={{ backgroundColor: '#00fa9a' }}>
+            <List.Item
               style={{
-                backgroundColor: '#ffdead',
-                padding: '0.5em 1.5rem'
+                backgroundColor: '#ffdead'
               }}
             >
               Option 1
-            </LiElement>
-            <LiElement
+            </List.Item>
+            {/* <Divider /> */}
+            <List.Item
               style={{
-                backgroundColor: '#b0e0e6',
-                padding: '0.5em 1.5rem'
+                backgroundColor: '#b0e0e6'
               }}
             >
               Option 2
-            </LiElement>
+            </List.Item>
           </List.Group>
         </List.Group>
       </List>
+      <Button.Coordinator
+        contents={[
+          [{ icon: 'sys-envelope' }, 'Aaaa'],
+          [{ icon: 'sys-envelope' }, 'Bbbb'],
+          [{ icon: 'sys-envelope' }, 'Cccc']
+        ]}
+        group={{
+          style: {
+            margin: '1em'
+          }
+        }}
+        shape="round"
+        color={'#b0e0e6'}
+        // size="lg"
+        type="normal"
+      />
     </DivElement>
   );
 };
+
+{
+  /* <Button.Coordinator
+contents={[
+  [{ icon: 'sys-envelope' }, 'Aaaa'],
+  [{ icon: 'sys-envelope' }, 'Bbbb'],
+  [{ icon: 'sys-envelope' }, 'Cccc']
+]}
+group={{
+  style: {
+    margin: '1em'
+  }
+}}
+shape="round"
+color={'#b0e0e6'}
+size="lg"
+type="normal"
+/> */
+}
 
 // const entries = [
 //   [{ style: { backgroundColor: '#dc143c', padding: '1em 0px' } }, 'aaa'],
@@ -100,7 +127,6 @@ export default ({}) => {
   color={state}
   size=""
   type="normal"
-  onClick={onClick}
 />
 </DivElement>
 

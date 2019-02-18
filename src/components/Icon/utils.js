@@ -1,4 +1,4 @@
-import { roundNumber } from 'utilities/utils';
+import { roundNumber } from 'scripts';
 import iconList from 'src/icons';
 
 export const getIcon = name => {

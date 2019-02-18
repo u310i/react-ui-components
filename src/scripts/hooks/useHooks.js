@@ -1,7 +1,9 @@
 import { useState, useRef, useCallback, useMemo } from 'react';
-import { useAddWindowEvent } from 'utilities/hooks/useEffects';
-import { useGetInitBreakpoint } from 'utilities/breakpointUtils';
-import { setBreakpointOnResizeEvent } from 'utilities/windowEvents';
+import {
+  useAddWindowEvent,
+  useGetInitBreakpoint,
+  setBreakpointOnResizeEvent
+} from 'scripts';
 
 export const useSetBreakpoint = breakpoints => {
   const initValue = useMemo(() => {

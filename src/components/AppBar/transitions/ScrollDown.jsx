@@ -3,9 +3,9 @@ import { CSSTransition } from 'react-transition-group';
 import {
   genSimpleTransitionStyle,
   assignTransitionDuration
-} from 'utilities/styleUtils';
-import { getDisplayStateOnScrollEvent } from 'utilities/windowEvents';
-import { useAddWindowEvent } from 'utilities/hooks/useEffects';
+} from 'scripts';
+import { getDisplayStateOnScrollEvent } from 'scripts';
+import { useAddWindowEvent } from 'scripts';
 
 const name = 'scrollDown';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { isArray, isString, isObject } from 'utilities';
+import { isArray, isString, isObject } from 'scripts';
 
 import { Icon } from 'components';
 import Button from './Button';

@@ -67,8 +67,8 @@ export const h6_style = {
 };
 
 export const hr_style = {
-  boxSizing: 'content-box',
-  height: '0',
+  height: '1px',
+  border: 'none',
   overflow: 'visible'
 };
 

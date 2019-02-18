@@ -1,6 +1,11 @@
-import { fromCamelCase } from './utils';
-import { extractOverlapObjectProperty } from 'utilities/utils';
-import { isArray, isString, isNumber } from 'utilities/checkTypes';
+import {
+  fromCamelCase,
+  extractOverlapObjectProperty,
+  isArray,
+  isString,
+  isNumber
+} from 'scripts';
+
 import { keyframes as emotionKeyframes } from 'react-emotion';
 
 export const keyframes = emotionKeyframes;

@@ -9,7 +9,7 @@ import {
   isObject,
   getFontSize,
   keyframes
-} from 'utilities';
+} from 'scripts';
 import { getIcon } from './utils';
 
 import SVG from 'components/SVG';

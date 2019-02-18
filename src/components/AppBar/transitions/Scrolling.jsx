@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import { genSimpleTransitionStyle } from 'utilities/styleUtils';
+import { genSimpleTransitionStyle } from 'scripts';
 
 const name = 'scrolling';
 

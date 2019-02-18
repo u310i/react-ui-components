@@ -2,7 +2,7 @@ export default {
   ':root': {
     fontFamily: 'sans-serif',
     lineHeight: '1',
-    'line-sizing': 'normal',
+    lineSizing: 'normal',
     textSpacing:
       'trim-start allow-end trim-adjacent ideograph-alpha ideograph-numeric',
     '-webkit-text-size-adjust': '100%',
@@ -14,7 +14,7 @@ export default {
       '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
     fontSize: '1rem',
     fontWeight: '400',
-    color: '#212529',
+    color: 'rgb(33, 37, 41)',
     textAlign: 'left',
     backgroundColor: '#fff'
   },

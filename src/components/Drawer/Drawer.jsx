@@ -13,8 +13,8 @@ import { css, cx } from 'emotion';
 import {
   genReactCSSTransitionStyle,
   genSimpleTransitionStyle
-} from 'utilities/styleUtils';
-import { useAddCssInBody } from 'utilities/hooks/useEffects';
+} from 'scripts';
+import { useAddCssInBody } from 'scripts';
 import Link from 'components/Link';
 import IconButton from 'components/IconButton';
 

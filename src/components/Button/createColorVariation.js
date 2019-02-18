@@ -1,14 +1,14 @@
-import { LightenDarkenHex } from 'utilities';
+import { LightenDarkenHex } from 'scripts';
 
 const _hover_selector = '&:hover';
 const _focus_selector = '&:focus';
 const _active_selector = '&:active';
 
 const _white = '#fff';
-const _dark_gray = '#4e4e4e';
-const _light_gray = '#d9d9d9';
+const _dark_gray = 'rgb(78, 78, 78)';
+const _light_gray = 'rgb(217, 217, 217)';
 const _transparent = 'transparent';
-const _normal_font_color = '#595959';
+const _normal_font_color = 'rgb(89, 89, 89)';
 
 const assignColors = list => {
   for (let stage of list) {

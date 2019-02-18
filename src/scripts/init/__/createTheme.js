@@ -1,4 +1,4 @@
-import defaultTheme from 'utilities/initPageUtils/defaultTheme';
+import defaultTheme from 'scripts';
 import { deepMerge } from 'utilities/utils';
 
 export default theme => {

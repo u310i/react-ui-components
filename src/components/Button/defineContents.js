@@ -1,5 +1,5 @@
 import React from 'react';
-import { isString, isArray, isReactComponent } from 'utilities';
+import { isString, isArray, isReactComponent } from 'scripts';
 
 import { IElement, SpanElement } from 'components/_Elements';
 import Icon from 'components/Icon';

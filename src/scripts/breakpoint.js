@@ -1,4 +1,4 @@
-import { deepMergeOverrideArray } from 'utilities/utils';
+import { deepMergeOverrideArray } from 'scripts';
 
 export const extractCurrentScreenSizeProps = (state, options) => {
   const { xs, sm, md, lg, xl, ...common } = options;

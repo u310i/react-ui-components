@@ -2,62 +2,62 @@ import React from 'react';
 import Base from './Base';
 
 export const Svg = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
     <Base
       elementType="svg"
-      style={{ ...immutableStyle, ...style }}
+      style={{ ...solidStyle, ...style }}
       {...props}
     />
   );
 };
 
 export const G = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
-    <Base elementType="g" style={{ ...immutableStyle, ...style }} {...props} />
+    <Base elementType="g" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
 export const Symbol = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
     <Base
       elementType="symbol"
-      style={{ ...immutableStyle, ...style }}
+      style={{ ...solidStyle, ...style }}
       {...props}
     />
   );
 };
 
 export const Use = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
     <Base
       elementType="use"
-      style={{ ...immutableStyle, ...style }}
+      style={{ ...solidStyle, ...style }}
       {...props}
     />
   );
 };
 
 export const Title = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
     <Base
       elementType="title"
-      style={{ ...immutableStyle, ...style }}
+      style={{ ...solidStyle, ...style }}
       {...props}
     />
   );
 };
 
 export const Desc = ({ style, ...props }) => {
-  const immutableStyle = {};
+  const solidStyle = {};
   return (
     <Base
       elementType="desc"
-      style={{ ...immutableStyle, ...style }}
+      style={{ ...solidStyle, ...style }}
       {...props}
     />
   );

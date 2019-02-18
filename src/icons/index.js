@@ -15,4 +15,5 @@ for (let icons of iconPackageList) {
     });
   }
 }
+
 export default iconList;

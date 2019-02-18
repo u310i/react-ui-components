@@ -12,6 +12,7 @@ import ListItem from './ListItem';
 import Menu from './Menu';
 import SVG from './SVG';
 import Order from './Order';
+import Divider from './Divider';
 
 export {
   AppBar,
@@ -27,5 +28,6 @@ export {
   ListItem,
   Menu,
   SVG,
-  Order
+  Order,
+  Divider
 };

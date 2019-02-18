@@ -4,8 +4,8 @@ import { css, cx } from 'react-emotion';
 
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import {} from 'utilities/utils';
-import {} from 'utilities/hooks';
+import {} from 'scripts';
+import {} from 'scripts';
 import Header from 'components/Header';
 import IconButton from 'components/IconButton';
 import Drawer from 'components/Drawer';

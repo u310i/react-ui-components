@@ -1,6 +1,6 @@
 import React from 'react';
-import { isString } from 'utilities';
-import { DivElement } from 'components/_Elements';
+import { isString } from 'scripts';
+import { DivElement } from 'elements';
 
 const Group = ({
   children,

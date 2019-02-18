@@ -1,4 +1,4 @@
-import { isString } from 'utilities';
+import { isString } from 'scripts';
 
 export const toFullHexa = (() => {
   const hexChar = 'a-f\\d';

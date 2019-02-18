@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { roundNumber } from 'utilities/utils';
+import { roundNumber } from 'scripts';
 import {
   SvgElement,
   GElement,
@@ -8,7 +8,7 @@ import {
   UseElement,
   TitleElement,
   DescElement
-} from 'components/_Elements';
+} from 'elements';
 
 const xml = {
   xmlns: 'http://www.w3.org/2000/svg',
@@ -27,12 +27,15 @@ const SVG = ({
   title,
   desc,
   role = 'img',
+  style = {},
   ...props
 }) => {
   const titleTag = title && <TitleElement>{title}</TitleElement>;
   const descTag = desc && <DescElement>{desc}</DescElement>;
 
   props.role = role;
+  style.pointerEvents = 'none';
+  props.style = style;
 
   let createGroupedComponent;
   if (transform) {

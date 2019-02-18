@@ -1,5 +1,4 @@
-import defaultTheme from 'utilities/initPageUtils/defaultTheme';
-import { deepMergeOverrideArray } from 'utilities/utils';
+import { defaultTheme, deepMergeOverrideArray } from 'scripts';
 
 export default baseTheme => {
   const theme = deepMergeOverrideArray(defaultTheme, baseTheme);

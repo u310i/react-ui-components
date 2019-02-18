@@ -6,7 +6,7 @@ import {
   useCallback,
   useMemo
 } from 'react';
-import { genUniqueId, createOptimizedEvent } from 'utilities/utils';
+import { genUniqueId, createOptimizedEvent } from 'scripts';
 
 export const useDidUpdate = (fn, dependencies) => {
   const isMount = useRef(true).current;
