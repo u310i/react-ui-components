@@ -1,4 +1,12 @@
-import { defaultTheme, genTheme, resetGlobalStyle } from './init';
+import {
+  defaultTheme,
+  genTheme,
+  resetGlobalStyle,
+  createAppMaterials,
+  createPageMaterials,
+  createComponentMaterials,
+  getComponentMaterials
+} from './init';
 
 import {
   deepMerge,
@@ -25,8 +33,11 @@ import {
   hexa2rgba,
   hexa2hsla,
   rgba2hsla,
+  cssRgb2Array,
   toCssColor,
-  LightenDarkenHex
+  LightenDarkenHex,
+  adustBrightness,
+  adustBrightnessFromCssRgb
 } from './color';
 
 import {
@@ -85,7 +96,17 @@ import {
   useGetDomProperties
 } from './hooks/useLayoutEffects';
 
-export { defaultTheme, genTheme, resetGlobalStyle };
+import { useGlobalState } from './hooks/useGlobalState';
+
+export {
+  defaultTheme,
+  genTheme,
+  resetGlobalStyle,
+  createAppMaterials,
+  createPageMaterials,
+  createComponentMaterials,
+  getComponentMaterials
+};
 
 export {
   deepMerge,
@@ -112,8 +133,11 @@ export {
   hexa2rgba,
   hexa2hsla,
   rgba2hsla,
+  cssRgb2Array,
   toCssColor,
-  LightenDarkenHex
+  LightenDarkenHex,
+  adustBrightness,
+  adustBrightnessFromCssRgb
 };
 
 export {
@@ -163,3 +187,5 @@ export {
 };
 
 export { useGetDomProperty, useGetDomProperties };
+
+export { useGlobalState };

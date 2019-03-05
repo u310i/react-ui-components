@@ -1,22 +1,24 @@
 import React, { useCallback, useMemo, useContext } from 'react';
+import './_materials';
 import {
   getFontSize,
   deepMergeOverrideArray,
   keyframes,
-  useTimerWithToggle
+  useTimerWithToggle,
+  getComponentMaterials
 } from 'scripts';
-
 import { ButtonElement, DivElement } from 'elements';
 import Coordinator from './Coordinator';
 import Group from './Group';
 import defineContents from './defineContents';
-import createColorVariation from './createColorVariation';
+import genColors from './genColors';
+
+const materials = getComponentMaterials('button');
 
 const Button = ({
   children,
   style: propStyle,
-  nestedStyle: propNestedStyle = {},
-  color: mainColor = '#1890ff',
+  color: keyColor,
   type = 'normal',
   toFill,
   loading,
@@ -58,12 +60,14 @@ const Button = ({
   }, []);
 
   const [clickAnimationStyle, loadingMaskStyle] = useMemo(() => {
+    const effectRange = `calc(-${borderWidth} - 5px)`;
+    const effectRangeFallback = '-6px';
     const waveAnimation = keyframes({
       to: {
-        top: ['-6px', `calc(-${borderWidth} - 5px)`],
-        left: ['-6px', `calc(-${borderWidth} - 5px)`],
-        bottom: ['-6px', `calc(-${borderWidth} - 5px)`],
-        right: ['-6px', `calc(-${borderWidth} - 5px)`],
+        top: [effectRangeFallback, effectRange],
+        left: [effectRangeFallback, effectRange],
+        bottom: [effectRangeFallback, effectRange],
+        right: [effectRangeFallback, effectRange],
         borderWidth: ['6px', `calc(${borderWidth} + 5px)`]
       }
     });
@@ -81,7 +85,7 @@ const Button = ({
       borderRadius: 'inherit',
       borderWidth: '0px',
       borderStyle: 'solid',
-      borderColor: effectColor || mainColor,
+      borderColor: effectColor || keyColor,
       opacity: '.25',
       animation: `${fadeAnimation} 2s cubic-bezier(.08, .82, .17, 1), ${waveAnimation} .4s cubic-bezier(.08, .82, .17, 1)`,
       animationFillMode: 'forwards',
@@ -105,7 +109,7 @@ const Button = ({
         }
       : {};
     return [clickAnimationStyle, loadingMaskStyle];
-  }, [borderWidth, mainColor, effectColor, loading]);
+  }, [borderWidth, keyColor, effectColor, loading]);
 
   // changeShapeStyle
   const shapeStyle = useMemo(() => {
@@ -138,26 +142,18 @@ const Button = ({
   }, [shape, size, borderStyle, borderWidth, fullWidth, fullHeight, loading]);
 
   // changeColorStyle
-  const [colorStyle, nestedColorStyle] = useMemo(() => {
-    return createColorVariation(mainColor, type, toFill, disable);
-  }, [mainColor, type, toFill, disable]);
+  const colorStyle = useMemo(() => {
+    return genColors(type, toFill, disable, keyColor);
+  }, [keyColor, type, toFill, disable]);
 
   const style = useMemo(() => {
     return {
       ...solidStyle,
       ...shapeStyle,
       ...colorStyle,
-      ...deepMergeOverrideArray(nestedColorStyle, propNestedStyle),
       ...propStyle
     };
-  }, [
-    solidStyle,
-    shapeStyle,
-    colorStyle,
-    nestedColorStyle,
-    propNestedStyle,
-    propStyle
-  ]);
+  }, [solidStyle, shapeStyle, colorStyle, propStyle]);
 
   let contents = useMemo(() => {
     return defineContents(children, between, loading);
@@ -177,7 +173,12 @@ const Button = ({
   }, [loading]);
 
   return (
-    <ButtonElement style={style} onClick={onClick} {...props}>
+    <ButtonElement
+      style={style}
+      onClick={onClick}
+      disabled={disable || loading}
+      {...props}
+    >
       {contents}
       {loadingMaskComponent}
       {clickEffectComponent}

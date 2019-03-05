@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { isString, isArray, isReact, isReactComponent } from 'scripts';
+import './_materials';
+import {
+  isString,
+  isArray,
+  isReact,
+  isReactComponent,
+  deepMergeOverrideArray
+} from 'scripts';
 
 import {
   UlElement,
@@ -11,7 +18,12 @@ import {
   InputSubmitElement
 } from 'elements';
 import { Button, Order, List, Divider } from 'components';
-// import Theme from 'components/Theme';
+
+// createPageMaterials({
+//   button: {
+//     test: 'test'
+//   }
+// });
 
 export default ({}) => {
   return (
@@ -44,16 +56,24 @@ export default ({}) => {
         contents={[
           [{ icon: 'sys-envelope' }, 'Aaaa'],
           [{ icon: 'sys-envelope' }, 'Bbbb'],
+          [{ icon: 'sys-envelope' }, 'Cccc'],
+          [{ icon: 'sys-envelope' }, 'Aaaa'],
+          [{ icon: 'sys-envelope' }, 'Bbbb'],
           [{ icon: 'sys-envelope' }, 'Cccc']
         ]}
         group={{
-          style: {
-            margin: '1em'
-          }
+          between: '0.2em',
+          childPropList: [
+            { type: 'normal' },
+            { type: 'dark-outline' },
+            { type: 'outline' },
+            { type: 'fill', disable: true },
+            { type: 'outline', disable: true },
+            { type: 'dark-outline', loading: true }
+          ]
         }}
         shape="round"
-        color={'#b0e0e6'}
-        // size="lg"
+        size=""
         type="normal"
       />
     </DivElement>

@@ -52,7 +52,7 @@ const Group = ({
   titleStyle: propTitleStyle,
   ...props
 }) => {
-  console.log(children.length);
+  // console.log(children.length);
   const solidStyle = useMemo(() => {
     return {};
   }, []);

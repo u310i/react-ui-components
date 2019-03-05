@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './props/materials';
 import 'scripts/polyfill';
 import { resetGlobalStyle } from 'scripts';
 
@@ -9,8 +10,8 @@ import { resetGlobalStyle } from 'scripts';
 // ReactDOM.render(<App />, document.getElementById('app'));
 
 import { css, injectGlobal, sheet } from 'react-emotion';
-import Test from './test/testList';
+import TestApp from './test/TestApp';
 
 injectGlobal(resetGlobalStyle);
 
-ReactDOM.render(<Test />, document.getElementById('app'));
+ReactDOM.render(<TestApp />, document.getElementById('app'));
