@@ -4,11 +4,24 @@ const colors = {
   transparent: 'transparent'
 };
 
+const cssProperties = {
+  ariaLabel: 'aria-label'
+};
+
 const selectors = {
   hover: '&:hover',
   focus: '&:focus',
   active: '&:active',
-  hover_focus: '&:hover,&:focus'
+  hover_focus: '&:hover,&:focus',
+  nested: {
+    child: '& > *',
+    firstChild: '& > :first-child',
+    lastChild: '& > :last-child',
+    notFirstChild: '& > :not(:first-child)',
+    notLastChild: '& > :not(:last-child)',
+    nthChild: n => `& > :nth-child(${n})`,
+    notNthChild: n => `& > :not(:nth-child(${n}))`
+  }
 };
 
 const cubicBeziers = {
@@ -30,6 +43,7 @@ const cubicBeziers = {
 
 export default {
   colors,
+  cssProperties,
   selectors,
   cubicBeziers
 };

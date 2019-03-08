@@ -1,17 +1,5 @@
 import React from 'react';
 
-export const isReact = data => {
-  return React.isValidElement(data);
-};
-
-export const isReactComponent = data => {
-  return isReact(data) && isFunction(data.type);
-};
-
-export const isReactElement = data => {
-  return isReact(data) && isString(data.type);
-};
-
 export const isArray = data => {
   return Array.isArray(data);
 };
@@ -71,12 +59,33 @@ export const isDate = data => {
   return instanceStrict(data, Date) && integer(data.getTime());
 };
 
+export const isReact = data => {
+  return React.isValidElement(data);
+};
+
+export const isReactComponent = data => {
+  return isReact(data) && isFunction(data.type);
+};
+
+export const isReactElement = data => {
+  return isReact(data) && isString(data.type);
+};
+
+export const isUndefined = data => {
+  return data === undefined;
+};
+
 export const getType = data => {
   if (isNaN(data)) {
     return 'NaN';
   }
   if (isReact(data)) {
-    return 'react';
+    if (isReactComponent(data)) {
+      return 'reactComponent';
+    }
+    if (isReactElement) {
+      return 'reactElement';
+    }
   }
   return Object.prototype.toString
     .call(data)

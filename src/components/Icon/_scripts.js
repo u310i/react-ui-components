@@ -1,7 +1,7 @@
 import { roundNumber } from 'scripts';
 import iconList from 'src/icons';
 
-export const getIcon = name => {
+const getIcon = name => {
   const icon = iconList.get(name);
   if (!icon) return null;
   const w = icon.viewBox[2];
@@ -11,4 +11,8 @@ export const getIcon = name => {
     ...icon,
     ratio: ratio
   };
+};
+
+export default {
+  getIcon: getIcon
 };

@@ -1,18 +1,23 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-
+import './_materials';
 import {
+  getComponentMaterials,
   roundNumber,
   testCssNumberRegExp,
   getType,
   isString,
   isArray,
   isObject,
+  isUndefined,
   getFontSize,
   keyframes
 } from 'scripts';
-import { getIcon } from './utils';
-
+import scripts from './_scripts';
 import SVG from 'components/SVG';
+
+const materials = getComponentMaterials('icon');
+const mStyles = materials.styles;
+const mNames = materials.names;
 
 const Icon = ({
   icon,
@@ -39,23 +44,24 @@ const Icon = ({
 
   let name = '';
   let ariaLabel = '';
+  const ariaLabelPrefix = mNames.ariaLabelPrefix;
   if (iconType === 'string') {
     name = icon;
-    ariaLabel = 'icon: ' + icon;
+    ariaLabel = ariaLabelPrefix + icon;
   } else if (iconType === 'array') {
     name = icon.join('-');
-    ariaLabel = 'icon: ' + icon[1];
+    ariaLabel = ariaLabelPrefix + icon[1];
   } else if (iconType === 'object') {
     if (isString(icon.name)) {
       name = icon.name;
-      ariaLabel = 'icon: ' + icon.name;
+      ariaLabel = ariaLabelPrefix + icon.name;
     } else if (isArray(icon.name)) {
       icon.name.join('-');
-      ariaLabel = 'icon: ' + icon.name[1];
+      ariaLabel = ariaLabelPrefix + icon.name[1];
     }
   }
 
-  props['aria-label'] = ariaLabel;
+  props[materials.origin.cssProperties.ariaLabel] = ariaLabel;
 
   const iconData =
     iconType === 'object'
@@ -66,7 +72,7 @@ const Icon = ({
           tag: icon.tag,
           title: icon.title || ''
         }
-      : getIcon(name);
+      : scripts.getIcon(name);
   if (!iconData) return null;
 
   const isPath = !!iconData.path;
@@ -74,38 +80,36 @@ const Icon = ({
   const baseName = `uc-svg-i-${iconData.type}`;
 
   const solidStyle = useMemo(() => {
-    return {
-      display: 'inline-block',
-      overflow: 'visible',
-      height: '1em',
-      fontSize: 'inherit',
-      verticalAlign: '-.125em'
-    };
+    return mStyles.solid;
   }, []);
 
   let fluidStyle = {};
 
   if (marginLeft)
-    fluidStyle.marginLeft = isString(marginLeft) ? marginLeft : '0.5em';
+    fluidStyle.marginLeft = isString(marginLeft)
+      ? marginLeft
+      : mStyles.marginLeft;
   if (marginRight)
-    fluidStyle.marginRight = isString(marginRight) ? marginRight : '0.5em';
+    fluidStyle.marginRight = isString(marginRight)
+      ? marginRight
+      : mStyles.marginRight;
 
   if (size) fluidStyle.fontSize = getFontSize(size);
 
-  if (typeof currentColor === 'undefined') {
+  if (isUndefined(currentColor)) {
     currentColor = isPath && true;
   }
-  if (currentColor) props.fill = 'currentColor';
+  if (currentColor) props.fill = mStyles.currentColor;
 
-  const height = border ? 1.5 : 1;
-  const widthRatioAtFixed = 1.25;
-  const precision = 3;
+  const height = border ? mStyles.heightOnBorder : mStyles.height;
+  const widthRatioOnFixed = mStyles.widthRatioOnFixed;
+  const precision = mStyles.precision;
 
   if (fixedWidth && !border) {
     fluidStyle.width =
       typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
         ? fixedWidth
-        : `${roundNumber(height * widthRatioAtFixed, precision)}em`;
+        : `${roundNumber(height * widthRatioOnFixed, precision)}em`;
   } else {
     fluidStyle.width = `${roundNumber(height * iconData.ratio, precision)}em`;
   }
@@ -118,16 +122,14 @@ const Icon = ({
       fluidStyle = {
         ...fluidStyle,
         height: `${height}em`,
-        border: 'solid 0.08em #eee',
-        borderRadius: '0.1em',
-        padding: '0.2em 0.25em 0.15em'
+        ...mStyles.border
       };
     }
     if (fixedWidth) {
       fluidStyle.width =
         typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
           ? fixedWidth
-          : `${roundNumber(height * widthRatioAtFixed, precision)}em`;
+          : `${roundNumber(height * widthRatioOnFixed, precision)}em`;
     } else {
       fluidStyle.width = `${roundNumber(height * iconData.ratio, precision)}em`;
     }
@@ -136,14 +138,12 @@ const Icon = ({
   if (pull === 'left') {
     fluidStyle = {
       ...fluidStyle,
-      marginRight: '0.3em',
-      float: 'left'
+      ...mStyles.pullLeft
     };
   } else if (pull === 'right') {
     fluidStyle = {
       ...fluidStyle,
-      marginLeft: '0.3em',
-      float: 'right'
+      ...mStyles.pullRight
     };
   }
 
@@ -156,9 +156,9 @@ const Icon = ({
     }
     if (flip) {
       let scale;
-      flip === 'horizontal' && (scale = `scale(-1, 1)`);
-      flip === 'vertical' && (scale = `scale(1, -1)`);
-      flip === 'both' && (scale = `scale(-1, -1)`);
+      flip === 'horizontal' && (scale = mStyles.flipHorizontal);
+      flip === 'vertical' && (scale = mStyles.flipVertical);
+      flip === 'both' && (scale = mStyles.flipBoth);
       transformList.push(scale);
     }
 
@@ -167,19 +167,15 @@ const Icon = ({
 
   if (spin || pulse) {
     const rotateAnimation = keyframes({
-      from: {
-        transform: 'rotate(0deg)'
-      },
-      to: {
-        transform: 'rotate(360deg)'
-      }
+      from: mStyles.roll.from,
+      to: mStyles.roll.to
     });
     spin
       ? (fluidStyle.animation = `${rotateAnimation} ${
-          isString(spin) ? spin : '1s infinite linear'
+          isString(spin) ? spin : mStyles.roll.spin
         }`)
       : (fluidStyle.animation = `${rotateAnimation} ${
-          isString(pulse) ? pulse : '1s infinite steps(8)'
+          isString(pulse) ? pulse : mStyles.roll.pulse
         }`);
   }
 

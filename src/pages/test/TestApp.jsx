@@ -17,7 +17,7 @@ import {
   ButtonElement,
   InputSubmitElement
 } from 'elements';
-import { Button, Order, List, Divider } from 'components';
+import { Button, Order, List, Divider, Icon } from 'components';
 
 // createPageMaterials({
 //   button: {
@@ -26,20 +26,40 @@ import { Button, Order, List, Divider } from 'components';
 // });
 
 export default ({}) => {
+  const [state, setState] = useState(false);
+  const handler = () => {
+    setState(prev => !prev);
+  };
   return (
-    <DivElement style={{ backgroundColor: '#00bfff' }}>
-      <List>
-        <List.Group
-          title="Navigation One"
-          style={{ backgroundColor: '#ee82ee' }}
-        >
-          <List.Group title="Item 1" style={{ backgroundColor: '#00fa9a' }}>
+    <DivElement style={{ backgroundColor: '#fff' }}>
+      <Button.Coordinator
+        contents={[{ icon: 'sys-envelope' }, 'Download']}
+        style={{ margin: '0.5em' }}
+        type="fill"
+        toFill
+        onClick={handler}
+      />
+      <DivElement
+        style={{
+          backgroundColor: '#ff00ff',
+          width: '256px',
+          height: '256px',
+          margin: '36px'
+        }}
+      />
+      <List
+        width="400px"
+        space={1}
+        levelStyle={[{ paddingLeft: '0.5em' }, { paddingLeft: '2.5em' }]}
+      >
+        <List.Group title="root-1" style={{ backgroundColor: '#ee82ee' }}>
+          <List.Group title="group-1" style={{ backgroundColor: '#00fa9a' }}>
             <List.Item
               style={{
-                backgroundColor: '#ffdead'
+                backgroundColor: '#b0e0e6'
               }}
             >
-              Option 1
+              root-1_group-1_item1
             </List.Item>
             {/* <Divider /> */}
             <List.Item
@@ -47,10 +67,44 @@ export default ({}) => {
                 backgroundColor: '#b0e0e6'
               }}
             >
-              Option 2
+              root-1_group-1_item2
             </List.Item>
+            <List.Group title="group-2" style={{ backgroundColor: '#90ee90' }}>
+              <List.Item
+                style={{
+                  backgroundColor: '#b0e0e6'
+                }}
+              >
+                root-1_group-2_item1
+              </List.Item>
+              <List.Item
+                style={{
+                  backgroundColor: '#b0e0e6'
+                }}
+              >
+                root-1_group-2_item2
+              </List.Item>
+            </List.Group>
           </List.Group>
         </List.Group>
+        <List.Group title="root-2" style={{ backgroundColor: '#66cdaa' }}>
+          <List.Item
+            style={{
+              backgroundColor: '#ffb6c1'
+            }}
+          >
+            root-2_item1
+          </List.Item>
+        </List.Group>
+        <List.Item
+          style={{
+            backgroundColor: '#ee82ee'
+          }}
+        >
+          root_item
+        </List.Item>
+        <div>div</div>
+        text
       </List>
       <Button.Coordinator
         contents={[
@@ -62,7 +116,7 @@ export default ({}) => {
           [{ icon: 'sys-envelope' }, 'Cccc']
         ]}
         group={{
-          between: '0.2em',
+          // between: '0.2em',
           childPropList: [
             { type: 'normal' },
             { type: 'dark-outline' },
@@ -75,6 +129,48 @@ export default ({}) => {
         shape="round"
         size=""
         type="normal"
+      />
+      <Icon
+        type="fa"
+        icon={['fab', 'apple']}
+        size="2x"
+        // flip="both"
+        // border
+        // rotation={90}
+        // flip="horizontal"
+        transform="translate(100 -200)  rotate(150 0 0)  scale(1 1.5)"
+        className="aaaaaaaaaaaaaaaaaaaaaaaaaa"
+      />
+      <Icon
+        type="fa"
+        icon={['fab', 'apple']}
+        size="2x"
+        // flip="both"
+        // pull="right"
+      />
+      aaaaaaaaaaa
+      <Icon
+        type="fa"
+        icon={['fas', 'angle-double-left']}
+        size="2x"
+        // flip="both"
+        // border
+        // pull="right"
+      />
+      <Icon
+        type="fa"
+        icon={['fab', 'apple']}
+        size="2x"
+        // flip="both"
+        border
+      />
+      <Icon
+        type="fa"
+        icon={['fab', 'apple']}
+        size="2x"
+        // flip="both"
+        border={{ border: 'solid 0.12em #c71585' }}
+        fixedWidth
       />
     </DivElement>
   );

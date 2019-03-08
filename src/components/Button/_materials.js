@@ -1,137 +1,137 @@
-import originMaterials from 'components/_materials';
-import { createComponentMaterials, adustBrightnessFromCssRgb } from 'scripts';
-
-const { colors, selectors, cubicBeziers } = originMaterials;
-
-const normalTextColor = 'rgb(89, 89, 89)';
-const normalBorderColor = 'rgb(217, 217, 217)';
-const darkColor = 'rgb(78, 78, 78)';
-const disableTextColor = 'rgba(0, 0, 0, 0.25)';
-const disableBackgroundColor = 'rgb(245, 245, 245)';
-const disableBorderColor = 'rgb(217, 217, 217)';
-const activeColor = adustBrightnessFromCssRgb(colors.main, -35);
-const hoverColor = adustBrightnessFromCssRgb(colors.main, 25);
+import origin from 'components/_materials';
+import { createComponentMaterials } from 'scripts';
 
 const materials = {
-  origin: originMaterials,
   styles: {
-    types: {
-      normal: {
-        color: normalTextColor,
-        backgroundColor: colors.white,
-        borderColor: normalBorderColor,
-        [selectors.hover_focus]: {
-          color: colors.main,
-          backgroundColor: null,
-          borderColor: colors.main
-        },
-        [selectors.active]: {
-          color: activeColor,
-          backgroundColor: null,
-          borderColor: activeColor
-        }
+    solid: {
+      display: 'inline-flex',
+      position: 'relative',
+      justifyContent: 'center',
+      alignItems: 'center',
+      verticalAlign: 'middle',
+      height: '2em',
+      touchAction: 'manipulation',
+      whiteSpace: 'nowrap',
+      userSelect: 'none',
+      transition: `all .3s ${origin.cubicBeziers.easeInOut}`
+    },
+    clickEffectDuration: 2000,
+    waveKeyframes: {
+      effectRange: '5px',
+      effectRangeFallback: '6px'
+    },
+    waveDuration: '.4s',
+    fadeKeyframes: {
+      opacity: '0'
+    },
+    fadeDuration: '2s',
+    clickEffect: {
+      position: 'absolute',
+      borderRadius: 'inherit',
+      borderWidth: '0px',
+      borderStyle: 'solid',
+      opacity: '.25',
+      animationFillMode: 'forwards',
+      display: 'block',
+      pointerEvents: 'none',
+      zIndex: '100'
+    },
+    loadingMask: {
+      position: 'absolute',
+      pointerEvents: 'none',
+      backgroundColor: '#fff',
+      borderRadius: 'inherit',
+      opacity: '.35',
+      transition: 'opacity .2s',
+      zIndex: '100'
+    },
+    shape: {
+      round: {
+        padding: '0 1.25em',
+        borderRadius: '1em'
       },
-      normalOutline: {
-        color: colors.white,
-        backgroundColor: colors.transparent,
-        borderColor: colors.white,
-        [selectors.hover_focus]: {
-          color: colors.main,
-          backgroundColor: null,
-          borderColor: colors.main
-        },
-        [selectors.active]: {
-          color: activeColor,
-          backgroundColor: null,
-          borderColor: activeColor
-        }
+      circle: {
+        width: '2em',
+        padding: '0',
+        borderRadius: '50%'
       },
-      dark: {
-        color: colors.white,
-        backgroundColor: darkColor,
-        borderColor: darkColor,
-        [selectors.hover_focus]: {
-          color: null,
-          backgroundColor: colors.main,
-          borderColor: colors.main
-        },
-        [selectors.active]: {
-          color: null,
-          backgroundColor: activeColor,
-          borderColor: activeColor
-        }
+      corner: {
+        padding: '0 1.25em',
+        borderRadius: '0'
       },
-      darkOutline: {
-        color: darkColor,
-        backgroundColor: colors.transparent,
-        borderColor: darkColor,
-        [selectors.hover_focus]: {
-          color: colors.main,
-          backgroundColor: null,
-          borderColor: colors.main
-        },
-        [selectors.active]: {
-          color: activeColor,
-          backgroundColor: null,
-          borderColor: activeColor
-        }
-      },
-      outline: {
-        color: colors.main,
-        backgroundColor: colors.transparent,
-        borderColor: colors.main,
-        [selectors.hover_focus]: {
-          color: hoverColor,
-          backgroundColor: null,
-          borderColor: hoverColor
-        },
-        [selectors.active]: {
-          color: activeColor,
-          backgroundColor: null,
-          borderColor: activeColor
-        }
-      },
-      fill: {
-        color: colors.white,
-        backgroundColor: colors.main,
-        borderColor: colors.main,
-        [selectors.hover_focus]: {
-          color: null,
-          backgroundColor: hoverColor,
-          borderColor: hoverColor
-        },
-        [selectors.active]: {
-          color: null,
-          backgroundColor: activeColor,
-          borderColor: activeColor
-        }
+      default: {
+        padding: '0 1em',
+        borderRadius: '0.25em'
       }
     },
-    toFill: {
-      [selectors.hover_focus]: {
-        color: colors.white,
-        backgroundColor: hoverColor,
-        borderColor: hoverColor
+    fontSize: '1em',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    fullWidth: {
+      width: '100%'
+    },
+    fullHeight: {
+      height: '100%'
+    },
+    loading: {
+      pointerEvents: 'none'
+    },
+    colors: {
+      normalTextColor: 'rgb(89, 89, 89)',
+      normalBorderColor: 'rgb(217, 217, 217)',
+      darkColor: 'rgb(78, 78, 78)',
+      disableTextColor: 'rgba(0, 0, 0, 0.25)',
+      disableBackgroundColor: 'rgb(245, 245, 245)',
+      disableBorderColor: 'rgb(217, 217, 217)'
+    }
+  },
+  contents: {
+    names: {
+      loading: 'loading',
+      ucButtonLoading: 'uc-button-loading',
+      sysLoading: 'sys-loading',
+      ucButtonIcon: 'uc-button-icon',
+      ucButtonInner: 'uc-button-inner'
+    },
+    styles: {
+      span: {
+        lineHeight: '1.499',
+        marginTop: '-.125em'
       },
-      [selectors.active]: {
-        color: colors.white,
-        backgroundColor: activeColor,
-        borderColor: activeColor
+      between: '0.5em',
+      noneBetween: '0px'
+    }
+  },
+  group: {
+    names: {
+      ucButtonGroup: 'uc-button-group'
+    },
+    styles: {
+      firstChild: {
+        borderTopRightRadius: '0px',
+        borderBottomRightRadius: '0px'
+      },
+      lastChild: {
+        borderTopLeftRadius: '0px',
+        borderBottomLeftRadius: '0px'
+      },
+      notFirstChild: {
+        borderTopLeftRadius: '0px',
+        borderBottomLeftRadius: '0px',
+        [origin.selectors.hover]: {
+          borderLeftStyle: 'solid'
+        }
+      },
+      notLastChild: {
+        borderTopRightRadius: '0px',
+        borderBottomRightRadius: '0px'
+      },
+      between: {
+        defaultSpace: '0.2em',
+        noneSpace: {
+          borderLeftColor: 'rgba(255, 255, 255, 0)'
+        }
       }
-    },
-    disable: {
-      color: disableTextColor,
-      backgroundColor: disableBackgroundColor,
-      borderColor: disableBorderColor,
-      boxShadow: 'none',
-      cursor: 'not-allowed'
-    },
-    outlineDisable: {
-      color: disableTextColor,
-      backgroundColor: colors.transparent,
-      borderColor: disableTextColor,
-      boxShadow: 'none',
-      cursor: 'not-allowed'
     }
   }
 };

@@ -1,3 +1,4 @@
+import origin from 'components/_materials';
 import { deepMergeOverrideArray } from 'scripts';
 
 let globalMaterials = {};
@@ -23,6 +24,7 @@ export const createComponentMaterials = (materials, type) => {
   } else {
     componentMaterials[type] = materials;
   }
+  componentMaterials[type].origin = origin;
 };
 
 export const getComponentMaterials = type => {

@@ -1,5 +1,6 @@
 import AppBar from './AppBar';
 import Button from './Button';
+import Collapse from './Collapse';
 import Drawer from './Drawer';
 import Flex from './Flex';
 import Header from './Header';
@@ -17,6 +18,7 @@ import Divider from './Divider';
 export {
   AppBar,
   Button,
+  Collapse,
   Drawer,
   Flex,
   Header,

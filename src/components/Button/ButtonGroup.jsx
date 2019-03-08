@@ -1,6 +1,10 @@
 import React from 'react';
-import { isString } from 'scripts';
+import { getComponentMaterials, isString } from 'scripts';
 import { DivElement } from 'elements';
+
+const materials = getComponentMaterials('button');
+const mStyles = materials.group.styles;
+const mSelectors = materials.origin.selectors;
 
 const Group = ({
   children,
@@ -14,49 +18,42 @@ const Group = ({
   between
 }) => {
   const nestedStyle = {};
-  nestedStyle['& > :first-child'] = {
-    borderTopRightRadius: '0px',
-    borderBottomRightRadius: '0px',
+  nestedStyle[mSelectors.nested.firstChild] = {
+    ...mStyles.firstChild,
     ...firstChildStyle
   };
-  nestedStyle['& > :last-child'] = {
-    borderTopLeftRadius: '0px',
-    borderBottomLeftRadius: '0px',
+  nestedStyle[mSelectors.nested.lastChild] = {
+    ...mStyles.lastChild,
     ...lastChildStyle
   };
 
   const betweenStyle = between
-    ? { marginLeft: isString(between) ? between : '0.2em' }
-    : { borderLeftColor: 'rgba(255, 255, 255, 0)' };
+    ? { marginLeft: isString(between) ? between : mStyles.between.defaultSpace }
+    : { ...mStyles.between.noneSpace };
 
-  nestedStyle['& > :not(:first-child)'] = {
-    borderTopLeftRadius: '0px',
-    borderBottomLeftRadius: '0px',
+  nestedStyle[mSelectors.nested.notFirstChild] = {
+    ...mStyles.notFirstChild,
     ...betweenStyle,
-    ['&:hover']: {
-      borderLeftStyle: 'solid'
-    },
     ...notFirstChildStyle
   };
-  nestedStyle['& > :not(:last-child)'] = {
-    borderTopRightRadius: '0px',
-    borderBottomRightRadius: '0px',
+  nestedStyle[mSelectors.nested.notLastChild] = {
+    ...mStyles.notLastChild,
     ...notLastChildStyle
   };
   if (nthChildStyleList) {
     for (let [n, style] of nthChildStyleList) {
-      nestedStyle[`& > :nth-child(${n})`] = style;
+      nestedStyle[mSelectors.nested.nthChild(n)] = style;
     }
   }
   if (notNthChildStyleList) {
     for (let [n, style] of notNthChildStyleList) {
-      nestedStyle[`& > :not(:nth-child(${n}))`] = style;
+      nestedStyle[mSelectors.nested.notNthChild(n)] = style;
     }
   }
   return (
     <DivElement
       style={{ ...propStyle, ...nestedStyle }}
-      classNames={['uc-button-group']}
+      classNames={[materials.group.names.ucButtonGroup]}
     >
       {children}
     </DivElement>

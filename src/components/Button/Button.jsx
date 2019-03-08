@@ -1,41 +1,42 @@
 import React, { useCallback, useMemo, useContext } from 'react';
 import './_materials';
 import {
+  getComponentMaterials,
   getFontSize,
-  deepMergeOverrideArray,
   keyframes,
-  useTimerWithToggle,
-  getComponentMaterials
+  useTimerWithToggle
 } from 'scripts';
 import { ButtonElement, DivElement } from 'elements';
-import Coordinator from './Coordinator';
-import Group from './Group';
-import defineContents from './defineContents';
-import genColors from './genColors';
+import ButtonCoordinator from './ButtonCoordinator';
+import ButtonGroup from './ButtonGroup';
+import scripts from './_scripts';
 
 const materials = getComponentMaterials('button');
+const mStyles = materials.styles;
 
 const Button = ({
   children,
   style: propStyle,
   color: keyColor,
-  type = 'normal',
+  type,
   toFill,
   loading,
   disable,
   effectColor,
-  between = true,
+  between,
   shape,
   size,
   fullWidth,
   fullHeight,
-  borderStyle = 'solid',
-  borderWidth = '1px',
+  borderStyle,
+  borderWidth,
   clickEffect = true,
   onClick: propOnClick,
   ...props
 }) => {
-  const [toggleState, setToggleState] = useTimerWithToggle(2000);
+  const [toggleState, setToggleState] = useTimerWithToggle(
+    mStyles.clickEffectDuration
+  );
 
   const hasClickEffect = clickEffect && !disable && !loading;
 
@@ -44,106 +45,44 @@ const Button = ({
     hasClickEffect && setToggleState();
   }, [propOnClick, hasClickEffect]);
 
-  const solidStyle = useMemo(() => {
-    return {
-      display: 'inline-flex',
-      position: 'relative',
-      justifyContent: 'center',
-      alignItems: 'center',
-      verticalAlign: 'middle',
-      height: '2em',
-      touchAction: 'manipulation',
-      whiteSpace: 'nowrap',
-      userSelect: 'none',
-      transition: 'all .3s cubic-bezier(0.645, 0.045, 0.355, 1)'
-    };
-  }, []);
+  const solidStyle = mStyles.solid;
 
-  const [clickAnimationStyle, loadingMaskStyle] = useMemo(() => {
-    const effectRange = `calc(-${borderWidth} - 5px)`;
-    const effectRangeFallback = '-6px';
-    const waveAnimation = keyframes({
+  const clickEffectStyle = useMemo(() => {
+    const waveKeyframes = keyframes(scripts.genWaveKeyframes(borderWidth));
+    const fadeKeyframes = keyframes({
       to: {
-        top: [effectRangeFallback, effectRange],
-        left: [effectRangeFallback, effectRange],
-        bottom: [effectRangeFallback, effectRange],
-        right: [effectRangeFallback, effectRange],
-        borderWidth: ['6px', `calc(${borderWidth} + 5px)`]
+        ...mStyles.fadeKeyframes
       }
     });
-    const fadeAnimation = keyframes({
-      to: {
-        opacity: 0
-      }
-    });
-    const clickAnimationStyle = {
-      position: 'absolute',
-      top: `-${borderWidth}`,
-      bottom: `-${borderWidth}`,
-      left: `-${borderWidth}`,
-      right: `-${borderWidth}`,
-      borderRadius: 'inherit',
-      borderWidth: '0px',
-      borderStyle: 'solid',
-      borderColor: effectColor || keyColor,
-      opacity: '.25',
-      animation: `${fadeAnimation} 2s cubic-bezier(.08, .82, .17, 1), ${waveAnimation} .4s cubic-bezier(.08, .82, .17, 1)`,
-      animationFillMode: 'forwards',
-      display: 'block',
-      pointerEvents: 'none',
-      zIndex: '100'
-    };
-    const loadingMaskStyle = loading
-      ? {
-          position: 'absolute',
-          top: `-${borderWidth}`,
-          bottom: `-${borderWidth}`,
-          left: `-${borderWidth}`,
-          right: `-${borderWidth}`,
-          pointerEvents: 'none',
-          backgroundColor: '#fff',
-          borderRadius: 'inherit',
-          opacity: '.35',
-          transition: 'opacity .2s',
-          zIndex: '100'
-        }
-      : {};
-    return [clickAnimationStyle, loadingMaskStyle];
-  }, [borderWidth, keyColor, effectColor, loading]);
+    const style = scripts.genClickEffectStyle(
+      borderWidth,
+      effectColor,
+      waveKeyframes,
+      fadeKeyframes
+    );
+    return style;
+  }, [borderWidth, effectColor]);
 
-  // changeShapeStyle
+  const loadingMaskStyle = useMemo(() => {
+    return loading ? scripts.genLoadingMask(borderWidth) : {};
+  }, [loading, borderWidth]);
+
   const shapeStyle = useMemo(() => {
-    const style = {};
-    if (shape) {
-      if (shape === 'round') {
-        style.padding = '0 1.25em';
-        style.borderRadius = '1em';
-      }
-      if (shape === 'circle') {
-        style.width = '2em';
-        style.padding = '0';
-        style.borderRadius = '50%';
-      }
-      if (shape === 'corner') {
-        style.padding = '0 1.25em';
-        style.borderRadius = '0';
-      }
-    } else {
-      style.padding = '0 1em';
-      style.borderRadius = '0.25em';
-    }
-    if (size) style.fontSize = getFontSize(size);
-    style.borderStyle = borderStyle;
-    style.borderWidth = borderWidth;
-    if (fullWidth) style.width = '100%';
-    if (fullHeight) style.height = '100%';
-    if (loading) style.pointerEvents = 'none';
+    const style = {
+      ...scripts.genShape(shape),
+      ...(loading ? mStyles.loading : {}),
+      ...(fullWidth ? mStyles.fullWidth : {}),
+      ...(fullHeight ? mStyles.fullHeight : {})
+    };
+    style.fontSize = size ? getFontSize(size) : mStyles.fontSize;
+    style.borderStyle = borderStyle || mStyles.borderStyle;
+    style.borderWidth = borderWidth || mStyles.borderWidth;
+
     return style;
   }, [shape, size, borderStyle, borderWidth, fullWidth, fullHeight, loading]);
 
-  // changeColorStyle
   const colorStyle = useMemo(() => {
-    return genColors(type, toFill, disable, keyColor);
+    return scripts.genColor(type, toFill, disable, keyColor);
   }, [keyColor, type, toFill, disable]);
 
   const style = useMemo(() => {
@@ -153,17 +92,17 @@ const Button = ({
       ...colorStyle,
       ...propStyle
     };
-  }, [solidStyle, shapeStyle, colorStyle, propStyle]);
+  }, [shapeStyle, colorStyle, propStyle]);
 
   let contents = useMemo(() => {
-    return defineContents(children, between, loading);
+    return scripts.defineContents(children, between, loading);
   }, [children, between, loading]);
 
   const clickEffectComponent = useMemo(() => {
     return (
       toggleState !== undefined &&
       hasClickEffect && (
-        <DivElement key={toggleState} noRole style={clickAnimationStyle} />
+        <DivElement key={toggleState} noRole style={clickEffectStyle} />
       )
     );
   }, [toggleState, hasClickEffect]);
@@ -186,7 +125,7 @@ const Button = ({
   );
 };
 
-Button.Group = Group;
-Button.Coordinator = Coordinator;
+Button.Group = ButtonGroup;
+Button.Coordinator = ButtonCoordinator;
 
 export default Button;

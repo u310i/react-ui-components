@@ -12,7 +12,7 @@ export const keyframes = emotionKeyframes;
 
 export const getFontSize = data => {
   if (isNumber(data)) return `${Math.round(data * 100) / 100}px`;
-  if (!isString(data)) return;
+  if (!isString(data)) return '1em';
   switch (data) {
     case 'xs':
       return '.75em';

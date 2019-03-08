@@ -41,9 +41,6 @@ import {
 } from './color';
 
 import {
-  isReact,
-  isReactComponent,
-  isReactElement,
   isArray,
   isEmptyArray,
   isObject,
@@ -58,6 +55,10 @@ import {
   isBoolean,
   isFunction,
   isDate,
+  isReact,
+  isReactComponent,
+  isReactElement,
+  isUndefined,
   getType
 } from './checkTypes';
 
@@ -141,9 +142,6 @@ export {
 };
 
 export {
-  isReact,
-  isReactComponent,
-  isReactElement,
   isArray,
   isEmptyArray,
   isObject,
@@ -158,6 +156,10 @@ export {
   isBoolean,
   isFunction,
   isDate,
+  isReact,
+  isReactComponent,
+  isReactElement,
+  isUndefined,
   getType
 };
 
