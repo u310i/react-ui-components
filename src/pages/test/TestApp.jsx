@@ -17,7 +17,8 @@ import {
   ButtonElement,
   InputSubmitElement
 } from 'elements';
-import { Button, Order, List, Divider, Icon } from 'components';
+import { Button, Order, List, Divider, Icon, Collapse } from 'components';
+import MuCollapse from '@material-ui/core/Collapse';
 
 // createPageMaterials({
 //   button: {
@@ -26,7 +27,7 @@ import { Button, Order, List, Divider, Icon } from 'components';
 // });
 
 export default ({}) => {
-  const [state, setState] = useState(false);
+  const [state, setState] = useState(true);
   const handler = () => {
     setState(prev => !prev);
   };
@@ -39,14 +40,47 @@ export default ({}) => {
         toFill
         onClick={handler}
       />
-      <DivElement
-        style={{
-          backgroundColor: '#ff00ff',
-          width: '256px',
-          height: '256px',
-          margin: '36px'
-        }}
-      />
+      <Collapse open={state} duration={1000}>
+        <DivElement
+          style={{
+            backgroundColor: '#ff00ff',
+            width: '256px',
+            height: '256px',
+            width: '100%'
+            // overflow: 'hidden'
+          }}
+        >
+          aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa
+        </DivElement>
+      </Collapse>
+      {/* <MuCollapse in={state} timeout={1000}>
+        <DivElement
+          style={{
+            backgroundColor: '#00ced1',
+            width: '256px',
+            height: '256px'
+          }}
+        >
+          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+        </DivElement>
+      </MuCollapse> */}
       <List
         width="400px"
         space={1}
