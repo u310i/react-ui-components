@@ -1,17 +1,11 @@
 import React, { useCallback, useMemo, useContext } from 'react';
-import './_materials';
-import {
-  getComponentMaterials,
-  getFontSize,
-  keyframes,
-  useTimerWithToggle
-} from 'scripts';
+import materials from './_materials';
+import { getFontSize, keyframes, useTimerWithToggle } from 'scripts';
 import { ButtonElement, DivElement } from 'elements';
 import ButtonCoordinator from './ButtonCoordinator';
 import ButtonGroup from './ButtonGroup';
 import scripts from './_scripts';
 
-const materials = getComponentMaterials('button');
 const mStyles = materials.styles;
 
 const Button = ({

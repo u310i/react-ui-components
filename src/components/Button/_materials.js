@@ -1,7 +1,23 @@
 import origin from 'components/_materials';
-import { createComponentMaterials } from 'scripts';
+import { createComponentMaterials, getComponentMaterials } from 'scripts';
 
 const materials = {
+  colors: {
+    main: origin.colors.main,
+    white: origin.colors.white,
+    transparent: origin.colors.transparent,
+    normalTextColor: 'rgb(89, 89, 89)',
+    normalBorderColor: 'rgb(217, 217, 217)',
+    darkColor: 'rgb(78, 78, 78)',
+    disableTextColor: 'rgba(0, 0, 0, 0.25)',
+    disableBackgroundColor: 'rgb(245, 245, 245)',
+    disableBorderColor: 'rgb(217, 217, 217)'
+  },
+  selectors: {
+    hover_focus: origin.selectors.hover_focus,
+    active: origin.selectors.active,
+    hover_focus: origin.selectors.hover_focus
+  },
   styles: {
     solid: {
       display: 'inline-flex',
@@ -16,6 +32,7 @@ const materials = {
       transition: `all .3s ${origin.cubicBeziers.easeInOut}`
     },
     clickEffectDuration: 2000,
+    clickEffectCubicBeziers: origin.cubicBeziers.easeOutCirc,
     waveKeyframes: {
       effectRange: '5px',
       effectRangeFallback: '6px'
@@ -75,14 +92,6 @@ const materials = {
     },
     loading: {
       pointerEvents: 'none'
-    },
-    colors: {
-      normalTextColor: 'rgb(89, 89, 89)',
-      normalBorderColor: 'rgb(217, 217, 217)',
-      darkColor: 'rgb(78, 78, 78)',
-      disableTextColor: 'rgba(0, 0, 0, 0.25)',
-      disableBackgroundColor: 'rgb(245, 245, 245)',
-      disableBorderColor: 'rgb(217, 217, 217)'
     }
   },
   contents: {
@@ -105,6 +114,14 @@ const materials = {
   group: {
     names: {
       ucButtonGroup: 'uc-button-group'
+    },
+    selectors: {
+      firstChild: origin.selectors.firstChild,
+      lastChild: origin.selectors.lastChild,
+      notFirstChild: origin.selectors.notFirstChild,
+      notLastChild: origin.selectors.notLastChild,
+      nthChild: origin.selectors.nthChild,
+      notNthChild: origin.selectors.notNthChild
     },
     styles: {
       firstChild: {
@@ -137,3 +154,5 @@ const materials = {
 };
 
 createComponentMaterials(materials, 'button');
+
+export default getComponentMaterials('button');

@@ -10,6 +10,8 @@ import { keyframes as emotionKeyframes } from 'react-emotion';
 
 export const keyframes = emotionKeyframes;
 
+export const reflow = node => node.scrollTop;
+
 export const getFontSize = data => {
   if (isNumber(data)) return `${Math.round(data * 100) / 100}px`;
   if (!isString(data)) return '1em';
@@ -27,6 +29,21 @@ export const getFontSize = data => {
       }
       return data;
   }
+};
+
+export const genTransitionProp = list => {
+  let transitionProp = [];
+  for (let prop of list) {
+    transitionProp.push(
+      [
+        prop[0] ? prop[0] : 'all',
+        prop[1] ? `${prop[1]}ms` : '0ms',
+        prop[2] && prop[2],
+        prop[3] && `${prop[3]}ms`
+      ].join(' ')
+    );
+  }
+  return transitionProp.join(', ');
 };
 
 export const genTransitionProperty = style => {

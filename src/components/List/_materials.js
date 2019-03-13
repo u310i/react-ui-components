@@ -1,5 +1,5 @@
 import origin from 'components/_materials';
-import { createComponentMaterials } from 'scripts';
+import { createComponentMaterials, getComponentMaterials } from 'scripts';
 
 const materials = {
   names: {
@@ -8,7 +8,8 @@ const materials = {
   },
   selectors: {
     divFirstChild: '& > div:first-child',
-    ulSecondChild: '& > ul:nth-child(2)'
+    ulSecondChild: '& > ul:nth-child(2)',
+    nthChild: origin.selectors.nested.nthChild
   },
   styles: {
     list: {
@@ -34,3 +35,5 @@ const materials = {
 };
 
 createComponentMaterials(materials, 'list');
+
+export default getComponentMaterials('list');

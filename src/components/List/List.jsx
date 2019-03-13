@@ -1,10 +1,9 @@
 import React, { useMemo } from 'react';
-import './_materials';
+import materials from './_materials';
+import { isString, isReact } from 'scripts';
 import { UlElement, LiElement, DivElement, SpanElement } from 'elements';
-import { getComponentMaterials, isString, isReact } from 'scripts';
 import scripts from './_scripts';
 
-const materials = getComponentMaterials('list');
 const mStyles = materials.styles;
 const mNames = materials.names;
 

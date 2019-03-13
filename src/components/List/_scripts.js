@@ -2,7 +2,6 @@ import { getComponentMaterials, isArray, isReactComponent } from 'scripts';
 
 const materials = getComponentMaterials('list');
 const mSelectors = materials.selectors;
-const mOSelectors = materials.origin.selectors;
 
 const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
   if (!level) level = 0;
@@ -19,7 +18,7 @@ const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
         level
       );
       if (v.props.title) {
-        style[mOSelectors.nested.nthChild(i + 1)] = {
+        style[mSelectors.nthChild(i + 1)] = {
           [mSelectors.divFirstChild]: {
             paddingLeft: paddingLeftValue,
             ...levelStyle[level - 1]
@@ -30,7 +29,7 @@ const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
         };
       }
     } else {
-      style[mOSelectors.nested.nthChild(i + 1)] = {
+      style[mSelectors.nthChild(i + 1)] = {
         paddingLeft: paddingLeftValue,
         ...levelStyle[level - 1]
       };

@@ -1,13 +1,18 @@
 import React, { useMemo, useCallback, useRef } from 'react';
+import materials from './_materials';
+import { reflow } from 'scripts';
 import { Transition } from 'react-transition-group';
 import { DivElement } from 'elements';
 
+const mNames = materials.names;
+const mStyles = materials.styles;
+
 const Collapse = ({
-  open,
+  in: inProp,
   children,
-  duration,
-  timingFunction,
-  collapsedHeight = '0px',
+  duration = mStyles.defaultDuration,
+  easing = mStyles.defaultEasing,
+  collapsedHeight = mStyles.collapsedHeight,
   onEnter,
   onEntering,
   onEntered,
@@ -20,14 +25,12 @@ const Collapse = ({
   const style = useMemo(() => {
     return {
       main: {
-        height: open ? 'auto' : collapsedHeight,
+        height: inProp ? mStyles.defaultHeight : collapsedHeight,
         transitionDuration: `${duration}ms`,
-        transitionProperty: 'all',
-        overflow: 'hidden'
+        transitionTimingFunction: easing,
+        ...mStyles.main
       },
-      inner: {
-        display: 'flex'
-      }
+      inner: mStyles.inner
     };
   }, []);
 
@@ -49,7 +52,7 @@ const Collapse = ({
 
   const handleEntered = useCallback(
     node => {
-      node.style.height = `auto`;
+      node.style.height = mStyles.defaultHeight;
       if (onEntered) onEntered(node);
     },
     [onEntered]
@@ -58,7 +61,7 @@ const Collapse = ({
   const handleExit = useCallback(
     node => {
       node.style.height = `${elRef.current.clientHeight}px`;
-      node.scrollTop;
+      reflow(node);
       if (onExit) onExit(node);
     },
     [onExit, elRef.current]
@@ -74,7 +77,7 @@ const Collapse = ({
 
   return (
     <Transition
-      in={open}
+      in={inProp}
       timeout={duration}
       onEnter={handleEnter}
       onEntering={handleEntering}
@@ -83,17 +86,25 @@ const Collapse = ({
       onExiting={handleExiting}
       {...props}
     >
-      <DivElement style={style.main} className="uc-collapse">
-        <DivElement
-          elementRef={ref => {
-            elRef.current = ref;
-          }}
-          style={style.inner}
-          className="uc-collapse-inner"
-        >
-          {children}
-        </DivElement>
-      </DivElement>
+      {(state, childProps) => {
+        return (
+          <DivElement
+            style={style.main}
+            className={mNames.ucCollapse}
+            {...childProps}
+          >
+            <DivElement
+              elementRef={ref => {
+                elRef.current = ref;
+              }}
+              style={style.inner}
+              className={mNames.ucCollapseInner}
+            >
+              {children}
+            </DivElement>
+          </DivElement>
+        );
+      }}
     </Transition>
   );
 };

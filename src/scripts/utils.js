@@ -58,12 +58,12 @@ export const fromCamelCase = (camel, insert = '-') => {
   });
 };
 
-export const roundNumber = (number, precision) => {
-  var shift = function(number, precision, reverseShift) {
+export const roundNumber = (number, precision = 0) => {
+  const shift = (number, precision, reverseShift) => {
     if (reverseShift) {
       precision = -precision;
     }
-    var numArray = ('' + number).split('e');
+    const numArray = ('' + number).split('e');
     return +(
       numArray[0] +
       'e' +

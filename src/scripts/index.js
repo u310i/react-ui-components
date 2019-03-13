@@ -21,7 +21,9 @@ import {
 
 import {
   keyframes,
+  reflow,
   getFontSize,
+  genTransitionProp,
   genTransitionProperty,
   genReactCSSTransitionStyle,
   genSimpleTransitionStyle,
@@ -122,7 +124,9 @@ export {
 
 export {
   keyframes,
+  reflow,
   getFontSize,
+  genTransitionProp,
   genTransitionProperty,
   genReactCSSTransitionStyle,
   genSimpleTransitionStyle,

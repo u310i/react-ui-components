@@ -3,6 +3,8 @@ import Button from './Button';
 import Collapse from './Collapse';
 import Drawer from './Drawer';
 import Flex from './Flex';
+import Fade from './Fade';
+import Grow from './Grow';
 import Header from './Header';
 import HeaderImage from './HeaderImage';
 import Icon from './Icon';
@@ -21,6 +23,8 @@ export {
   Collapse,
   Drawer,
   Flex,
+  Fade,
+  Grow,
   Header,
   HeaderImage,
   Icon,

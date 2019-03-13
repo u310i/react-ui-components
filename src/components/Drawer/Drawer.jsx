@@ -10,10 +10,7 @@ import ReactDOM from 'react-dom';
 
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'emotion';
-import {
-  genReactCSSTransitionStyle,
-  genSimpleTransitionStyle
-} from 'scripts';
+import { genReactCSSTransitionStyle, genSimpleTransitionStyle } from 'scripts';
 import { useAddCssInBody } from 'scripts';
 import Link from 'components/Link';
 import IconButton from 'components/IconButton';
@@ -74,8 +71,7 @@ const Drawer = ({
       },
       list: {
         style: {
-          height: '100%',
-          height: 'calc(100% - 3rem)',
+          height: ['100%', 'calc(100% - 3rem)'],
           paddingTop: '1rem',
           paddingBottom: '1rem',
           paddingLeft: '0.5rem',

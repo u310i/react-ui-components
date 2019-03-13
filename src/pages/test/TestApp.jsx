@@ -17,7 +17,16 @@ import {
   ButtonElement,
   InputSubmitElement
 } from 'elements';
-import { Button, Order, List, Divider, Icon, Collapse } from 'components';
+import {
+  Button,
+  Order,
+  List,
+  Divider,
+  Icon,
+  Fade,
+  Collapse,
+  Grow
+} from 'components';
 // import MuCollapse from '@material-ui/core/Collapse';
 
 // createPageMaterials({
@@ -40,7 +49,7 @@ export default ({}) => {
         toFill
         onClick={handler}
       />
-      <Collapse open={state} duration={1000}>
+      <Grow in={state} duration={300} appear={true}>
         <DivElement
           style={{
             backgroundColor: '#ff00ff',
@@ -61,7 +70,7 @@ export default ({}) => {
           aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
           aaaaaaaaaaaaaaaaaaaaaaaaa
         </DivElement>
-      </Collapse>
+      </Grow>
       {/* <MuCollapse in={state} timeout={1000}>
         <DivElement
           style={{

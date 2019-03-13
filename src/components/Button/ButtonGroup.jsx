@@ -4,7 +4,7 @@ import { DivElement } from 'elements';
 
 const materials = getComponentMaterials('button');
 const mStyles = materials.group.styles;
-const mSelectors = materials.origin.selectors;
+const mGSelectors = materials.group.selectors;
 
 const Group = ({
   children,
@@ -18,11 +18,11 @@ const Group = ({
   between
 }) => {
   const nestedStyle = {};
-  nestedStyle[mSelectors.nested.firstChild] = {
+  nestedStyle[mGSelectors.firstChild] = {
     ...mStyles.firstChild,
     ...firstChildStyle
   };
-  nestedStyle[mSelectors.nested.lastChild] = {
+  nestedStyle[mGSelectors.lastChild] = {
     ...mStyles.lastChild,
     ...lastChildStyle
   };
@@ -31,23 +31,23 @@ const Group = ({
     ? { marginLeft: isString(between) ? between : mStyles.between.defaultSpace }
     : { ...mStyles.between.noneSpace };
 
-  nestedStyle[mSelectors.nested.notFirstChild] = {
+  nestedStyle[mGSelectors.notFirstChild] = {
     ...mStyles.notFirstChild,
     ...betweenStyle,
     ...notFirstChildStyle
   };
-  nestedStyle[mSelectors.nested.notLastChild] = {
+  nestedStyle[mGSelectors.notLastChild] = {
     ...mStyles.notLastChild,
     ...notLastChildStyle
   };
   if (nthChildStyleList) {
     for (let [n, style] of nthChildStyleList) {
-      nestedStyle[mSelectors.nested.nthChild(n)] = style;
+      nestedStyle[mGSelectors.nthChild(n)] = style;
     }
   }
   if (notNthChildStyleList) {
     for (let [n, style] of notNthChildStyleList) {
-      nestedStyle[mSelectors.nested.notNthChild(n)] = style;
+      nestedStyle[mGSelectors.notNthChild(n)] = style;
     }
   }
   return (

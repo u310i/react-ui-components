@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import './_materials';
+import materials from './_materials';
 import {
-  getComponentMaterials,
   roundNumber,
   testCssNumberRegExp,
   getType,
@@ -15,7 +14,6 @@ import {
 import scripts from './_scripts';
 import SVG from 'components/SVG';
 
-const materials = getComponentMaterials('icon');
 const mStyles = materials.styles;
 const mNames = materials.names;
 
@@ -61,7 +59,7 @@ const Icon = ({
     }
   }
 
-  props[materials.origin.cssProperties.ariaLabel] = ariaLabel;
+  props[materials.cssProperties.ariaLabel] = ariaLabel;
 
   const iconData =
     iconType === 'object'

@@ -3,10 +3,9 @@ import defineContents from './_defineContents';
 
 const materials = getComponentMaterials('button');
 
-const mOrigin = materials.origin;
 const mStyles = materials.styles;
-const mColors = mStyles.colors;
-const mOSelectors = mOrigin.selectors;
+const mColors = materials.colors;
+const mSelectors = materials.selectors;
 
 export default {
   defineContents: defineContents,
@@ -30,7 +29,7 @@ export default {
   },
   genClickEffectStyle: (
     borderWidth = mStyles.borderWidth,
-    effectColor = mOrigin.colors.main,
+    effectColor = mColors.main,
     waveKeyframes,
     fadeKeyframes
   ) => {
@@ -42,9 +41,9 @@ export default {
       right: commonPosition,
       borderColor: effectColor,
       animation: `${waveKeyframes} ${mStyles.waveDuration} ${
-        mOrigin.cubicBeziers.easeOutCirc
+        mStyles.clickEffectCubicBeziers
       }, ${fadeKeyframes} ${mStyles.fadeDuration} ${
-        mOrigin.cubicBeziers.easeOutCirc
+        mStyles.clickEffectCubicBeziers
       }`,
       ...mStyles.clickEffect
     };
@@ -72,7 +71,7 @@ export default {
     }
   },
   genColor: (type, toFill, disable, keyColor) => {
-    keyColor = keyColor || mOrigin.colors.main;
+    keyColor = keyColor || mColors.main;
     const activeColor = adustBrightnessFromCssRgb(keyColor, -35);
     const hoverColor = adustBrightnessFromCssRgb(keyColor, 25);
 
@@ -81,15 +80,15 @@ export default {
     switch (type) {
       case 'normal-outline':
         style = {
-          color: mOrigin.colors.white,
-          backgroundColor: mOrigin.colors.transparent,
-          borderColor: mOrigin.colors.white,
-          [mOSelectors.hover_focus]: {
+          color: mColors.white,
+          backgroundColor: mColors.transparent,
+          borderColor: mColors.white,
+          [mSelectors.hover_focus]: {
             color: keyColor,
             backgroundColor: null,
             borderColor: keyColor
           },
-          [mOSelectors.active]: {
+          [mSelectors.active]: {
             color: activeColor,
             backgroundColor: null,
             borderColor: activeColor
@@ -98,15 +97,15 @@ export default {
         break;
       case 'dark':
         style = {
-          color: mOrigin.colors.white,
+          color: mColors.white,
           backgroundColor: mColors.darkColor,
           borderColor: mColors.darkColor,
-          [mOSelectors.hover_focus]: {
+          [mSelectors.hover_focus]: {
             color: null,
             backgroundColor: keyColor,
             borderColor: keyColor
           },
-          [mOSelectors.active]: {
+          [mSelectors.active]: {
             color: null,
             backgroundColor: activeColor,
             borderColor: activeColor
@@ -116,14 +115,14 @@ export default {
       case 'dark-outline':
         style = {
           color: mColors.darkColor,
-          backgroundColor: mOrigin.colors.transparent,
+          backgroundColor: mColors.transparent,
           borderColor: mColors.darkColor,
-          [mOSelectors.hover_focus]: {
+          [mSelectors.hover_focus]: {
             color: keyColor,
             backgroundColor: null,
             borderColor: keyColor
           },
-          [mOSelectors.active]: {
+          [mSelectors.active]: {
             color: activeColor,
             backgroundColor: null,
             borderColor: activeColor
@@ -133,14 +132,14 @@ export default {
       case 'outline':
         style = {
           color: keyColor,
-          backgroundColor: mOrigin.colors.transparent,
+          backgroundColor: mColors.transparent,
           borderColor: keyColor,
-          [mOSelectors.hover_focus]: {
+          [mSelectors.hover_focus]: {
             color: hoverColor,
             backgroundColor: null,
             borderColor: hoverColor
           },
-          [mOSelectors.active]: {
+          [mSelectors.active]: {
             color: activeColor,
             backgroundColor: null,
             borderColor: activeColor
@@ -149,15 +148,15 @@ export default {
         break;
       case 'fill':
         style = {
-          color: mOrigin.colors.white,
+          color: mColors.white,
           backgroundColor: keyColor,
           borderColor: keyColor,
-          [mOSelectors.hover_focus]: {
+          [mSelectors.hover_focus]: {
             color: null,
             backgroundColor: hoverColor,
             borderColor: hoverColor
           },
-          [mOSelectors.active]: {
+          [mSelectors.active]: {
             color: null,
             backgroundColor: activeColor,
             borderColor: activeColor
@@ -168,14 +167,14 @@ export default {
       default:
         style = {
           color: mColors.normalTextColor,
-          backgroundColor: mOrigin.colors.white,
+          backgroundColor: mColors.white,
           borderColor: mColors.normalBorderColor,
-          [mOSelectors.hover_focus]: {
+          [mSelectors.hover_focus]: {
             color: keyColor,
             backgroundColor: null,
             borderColor: keyColor
           },
-          [mOSelectors.active]: {
+          [mSelectors.active]: {
             color: activeColor,
             backgroundColor: null,
             borderColor: activeColor
@@ -186,13 +185,13 @@ export default {
     if (!disable) {
       if (toFill) {
         const toFillStyle = {
-          [mOSelectors.hover_focus]: {
-            color: mOrigin.colors.white,
+          [mSelectors.hover_focus]: {
+            color: mColors.white,
             backgroundColor: hoverColor,
             borderColor: hoverColor
           },
-          [mOSelectors.active]: {
-            color: mOrigin.colors.white,
+          [mSelectors.active]: {
+            color: mColors.white,
             backgroundColor: activeColor,
             borderColor: activeColor
           }
@@ -212,7 +211,7 @@ export default {
       ) {
         const outlineDisableStyle = {
           color: mColors.disableTextColor,
-          backgroundColor: mOrigin.colors.transparent,
+          backgroundColor: mColors.transparent,
           borderColor: mColors.disableTextColor,
           boxShadow: 'none',
           cursor: 'not-allowed'

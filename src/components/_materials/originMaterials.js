@@ -38,7 +38,8 @@ const cubicBeziers = {
   easeInOutCirc: 'cubic-bezier(0.78, 0.14, 0.15, 0.86)',
   easeOutQuint: 'cubic-bezier(0.23, 1, 0.32, 1)',
   easeInQuint: 'cubic-bezier(0.755, 0.05, 0.855, 0.06)',
-  easeInOutQuint: 'cubic-bezier(0.86, 0, 0.07, 1)'
+  easeInOutQuint: 'cubic-bezier(0.86, 0, 0.07, 1)',
+  easeInOutEndSlowly: 'cubic-bezier(0.4, 0, 0.2, 1)'
 };
 
 export default {
