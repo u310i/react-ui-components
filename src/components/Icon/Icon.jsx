@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import materials from './_materials';
+import $materials from './_materials';
 import {
   roundNumber,
   testCssNumberRegExp,
@@ -14,8 +14,8 @@ import {
 import scripts from './_scripts';
 import SVG from 'components/SVG';
 
-const mStyles = materials.styles;
-const mNames = materials.names;
+const $styles = $materials.styles;
+const $names = $materials.names;
 
 const Icon = ({
   icon,
@@ -42,7 +42,7 @@ const Icon = ({
 
   let name = '';
   let ariaLabel = '';
-  const ariaLabelPrefix = mNames.ariaLabelPrefix;
+  const ariaLabelPrefix = $names.ariaLabelPrefix;
   if (iconType === 'string') {
     name = icon;
     ariaLabel = ariaLabelPrefix + icon;
@@ -59,7 +59,7 @@ const Icon = ({
     }
   }
 
-  props[materials.cssProperties.ariaLabel] = ariaLabel;
+  props[$materials.cssProperties.ariaLabel] = ariaLabel;
 
   const iconData =
     iconType === 'object'
@@ -78,7 +78,7 @@ const Icon = ({
   const baseName = `uc-svg-i-${iconData.type}`;
 
   const solidStyle = useMemo(() => {
-    return mStyles.solid;
+    return $styles.solid;
   }, []);
 
   let fluidStyle = {};
@@ -86,22 +86,22 @@ const Icon = ({
   if (marginLeft)
     fluidStyle.marginLeft = isString(marginLeft)
       ? marginLeft
-      : mStyles.marginLeft;
+      : $styles.marginLeft;
   if (marginRight)
     fluidStyle.marginRight = isString(marginRight)
       ? marginRight
-      : mStyles.marginRight;
+      : $styles.marginRight;
 
   if (size) fluidStyle.fontSize = getFontSize(size);
 
   if (isUndefined(currentColor)) {
     currentColor = isPath && true;
   }
-  if (currentColor) props.fill = mStyles.currentColor;
+  if (currentColor) props.fill = $styles.currentColor;
 
-  const height = border ? mStyles.heightOnBorder : mStyles.height;
-  const widthRatioOnFixed = mStyles.widthRatioOnFixed;
-  const precision = mStyles.precision;
+  const height = border ? $styles.heightOnBorder : $styles.height;
+  const widthRatioOnFixed = $styles.widthRatioOnFixed;
+  const precision = $styles.precision;
 
   if (fixedWidth && !border) {
     fluidStyle.width =
@@ -120,7 +120,7 @@ const Icon = ({
       fluidStyle = {
         ...fluidStyle,
         height: `${height}em`,
-        ...mStyles.border
+        ...$styles.border
       };
     }
     if (fixedWidth) {
@@ -136,12 +136,12 @@ const Icon = ({
   if (pull === 'left') {
     fluidStyle = {
       ...fluidStyle,
-      ...mStyles.pullLeft
+      ...$styles.pullLeft
     };
   } else if (pull === 'right') {
     fluidStyle = {
       ...fluidStyle,
-      ...mStyles.pullRight
+      ...$styles.pullRight
     };
   }
 
@@ -154,9 +154,9 @@ const Icon = ({
     }
     if (flip) {
       let scale;
-      flip === 'horizontal' && (scale = mStyles.flipHorizontal);
-      flip === 'vertical' && (scale = mStyles.flipVertical);
-      flip === 'both' && (scale = mStyles.flipBoth);
+      flip === 'horizontal' && (scale = $styles.flipHorizontal);
+      flip === 'vertical' && (scale = $styles.flipVertical);
+      flip === 'both' && (scale = $styles.flipBoth);
       transformList.push(scale);
     }
 
@@ -165,15 +165,15 @@ const Icon = ({
 
   if (spin || pulse) {
     const rotateAnimation = keyframes({
-      from: mStyles.roll.from,
-      to: mStyles.roll.to
+      from: $styles.roll.from,
+      to: $styles.roll.to
     });
     spin
       ? (fluidStyle.animation = `${rotateAnimation} ${
-          isString(spin) ? spin : mStyles.roll.spin
+          isString(spin) ? spin : $styles.roll.spin
         }`)
       : (fluidStyle.animation = `${rotateAnimation} ${
-          isString(pulse) ? pulse : mStyles.roll.pulse
+          isString(pulse) ? pulse : $styles.roll.pulse
         }`);
   }
 

@@ -9,24 +9,24 @@ import {
 import { IElement, SpanElement } from 'components/_Elements';
 import Icon from 'components/Icon';
 
-const materials = getComponentMaterials('button');
-const mNames = materials.contents.names;
-const mStyles = materials.contents.styles;
+const $materials = getComponentMaterials('button');
+const $names = $materials.contents.names;
+const $styles = $materials.contents.styles;
 
 const LoadingIcon = ({ style: propStyle }) => {
   return (
     <IElement
-      key={mNames.loading}
+      key={$names.loading}
       style={propStyle}
-      className={mNames.ucButtonLoading}
+      className={$names.ucButtonLoading}
     >
-      <Icon icon={mNames.sysLoading} spin />
+      <Icon icon={$names.sysLoading} spin />
     </IElement>
   );
 };
 
 const defineContents = (children, between = true, loading) => {
-  const spanStyle = mStyles.span;
+  const spanStyle = $styles.span;
 
   let contents;
 
@@ -34,22 +34,22 @@ const defineContents = (children, between = true, loading) => {
   if (between) {
     isString(between)
       ? (betweenValue = between)
-      : (betweenValue = mStyles.between);
+      : (betweenValue = $styles.between);
   } else {
-    betweenValue = mStyles.noneBetween;
+    betweenValue = $styles.noneBetween;
   }
 
   if (isArray(children) && React.Children.count(children) > 1) {
     contents = React.Children.map(children, (child, index) => {
       let item;
-      const marginLeft = index === 0 ? mStyles.noneBetween : betweenValue;
+      const marginLeft = index === 0 ? $styles.noneBetween : betweenValue;
       if (isReactComponent(child) && child.type.name === 'Icon') {
         if (index === 0 && loading) return <LoadingIcon />;
         item = (
           <IElement
             key={index}
             style={{ marginLeft: marginLeft }}
-            className={mNames.ucButtonIcon}
+            className={$names.ucButtonIcon}
             children={child}
           />
         );
@@ -58,7 +58,7 @@ const defineContents = (children, between = true, loading) => {
           <SpanElement
             key={index}
             style={{ marginLeft: marginLeft, ...spanStyle }}
-            className={mNames.ucButtonInner}
+            className={$names.ucButtonInner}
             children={child}
           />
         );
@@ -79,13 +79,13 @@ const defineContents = (children, between = true, loading) => {
       contents = loading ? (
         <LoadingIcon />
       ) : (
-        <IElement className={mNames.ucButtonIcon} children={child} />
+        <IElement className={$names.ucButtonIcon} children={child} />
       );
     } else {
       contents = (
         <SpanElement
           style={spanStyle}
-          className={mNames.ucButtonInner}
+          className={$names.ucButtonInner}
           children={child}
         />
       );

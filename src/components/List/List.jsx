@@ -1,16 +1,16 @@
 import React, { useMemo } from 'react';
-import materials from './_materials';
+import $materials from './_materials';
 import { isString, isReact } from 'scripts';
 import { UlElement, LiElement, DivElement, SpanElement } from 'elements';
 import scripts from './_scripts';
 
-const mStyles = materials.styles;
-const mNames = materials.names;
+const $styles = $materials.styles;
+const $names = $materials.names;
 
 const List = ({
   children,
   style: propStyle = {},
-  width = mStyles.list.width,
+  width = $styles.list.width,
   space,
   levelStyle,
   ...props
@@ -32,7 +32,7 @@ const List = ({
   }, [fluidStyle, propStyle]);
 
   return (
-    <UlElement style={style} classNames={[mNames.ucList]} {...props}>
+    <UlElement style={style} classNames={[$names.ucList]} {...props}>
       {children}
     </UlElement>
   );
@@ -54,7 +54,7 @@ const ListGroup = ({
   const titleComponent = useMemo(() => {
     if (title) {
       if (isString(title)) {
-        const titleStyle = mStyles.group.title;
+        const titleStyle = $styles.group.title;
         return (
           <DivElement style={{ ...titleStyle, ...propTitleStyle }}>
             <SpanElement>{title}</SpanElement>
@@ -67,7 +67,7 @@ const ListGroup = ({
   }, [title]);
 
   return (
-    <LiElement style={style} classNames={[mNames.ucListGroup]} {...props}>
+    <LiElement style={style} classNames={[$names.ucListGroup]} {...props}>
       {titleComponent}
       <UlElement>{children}</UlElement>
     </LiElement>
@@ -77,7 +77,7 @@ const ListGroup = ({
 // -------------------------------------------------------------
 
 const ListItem = ({ children, style: propStyle, ...props }) => {
-  const solidStyle = mStyles.item.solid;
+  const solidStyle = $styles.item.solid;
 
   const style = useMemo(() => {
     return { ...solidStyle, ...propStyle };

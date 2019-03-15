@@ -1,17 +1,17 @@
 import React, { useMemo, useCallback, useRef } from 'react';
-import materials from './_materials';
+import $materials from './_materials';
 import { reflow } from 'scripts';
 import { Transition } from 'react-transition-group';
 import { DivElement } from 'elements';
 
-const mNames = materials.names;
-const mStyles = materials.styles;
+const $names = $materials.names;
+const $styles = $materials.styles;
 
 const Fade = ({
   in: inProp,
   children,
-  duration = mStyles.defaultDuration,
-  easing = mStyles.defaultEasing,
+  duration = $styles.defaultDuration,
+  easing = $styles.defaultEasing,
   appear = true,
   onEnter,
   ...props
@@ -20,7 +20,7 @@ const Fade = ({
     return {
       transitionDuration: `${duration}ms`,
       transitionTimingFunction: easing,
-      transitionProperty: mStyles.transitionProperty
+      transitionProperty: $styles.transitionProperty
     };
   }, []);
 
@@ -47,14 +47,14 @@ const Fade = ({
               ...style,
               opacity:
                 state === 'entering' || state === 'entered'
-                  ? mStyles.enteredOpacity
-                  : mStyles.exitedOpacity,
+                  ? $styles.enteredOpacity
+                  : $styles.exitedOpacity,
               visibility:
                 state === 'exited' && !inProp
-                  ? mStyles.exitedVisibility
+                  ? $styles.exitedVisibility
                   : undefined
             }}
-            className={mNames.ucFade}
+            className={$names.ucFade}
             {...childProps}
           >
             {children}

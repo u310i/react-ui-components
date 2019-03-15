@@ -1,5 +1,5 @@
 import React from 'react';
-import materials from './_materials';
+import $materials from './_materials';
 import { roundNumber } from 'scripts';
 import {
   SvgElement,
@@ -10,7 +10,7 @@ import {
   DescElement
 } from 'elements';
 
-const mStyles = materials.styles;
+const $styles = $materials.styles;
 
 const SVG = ({
   viewBox,
@@ -23,7 +23,7 @@ const SVG = ({
   transform = false,
   title,
   desc,
-  role = mStyles.role,
+  role = $styles.role,
   style = {},
   ...props
 }) => {
@@ -31,7 +31,7 @@ const SVG = ({
   const descTag = desc && <DescElement>{desc}</DescElement>;
 
   props.role = role;
-  style.pointerEvents = mStyles.pointerEvents;
+  style.pointerEvents = $styles.pointerEvents;
   props.style = style;
 
   let createGroupedComponent;
@@ -63,9 +63,9 @@ const SVG = ({
   if (symbol) {
     return (
       <SvgElement
-        display={mStyles.symbolDisplay}
-        xmlns={mStyles.xmlns}
-        xmlnsXlink={mStyles.xmlnsXlink}
+        display={$styles.symbolDisplay}
+        xmlns={$styles.xmlns}
+        xmlnsXlink={$styles.xmlnsXlink}
       >
         <SymbolElement viewBox={viewBox.join(' ')} {...props}>
           {InnerComponent}
@@ -77,8 +77,8 @@ const SVG = ({
     return (
       <SvgElement
         {...props}
-        xmlns={mStyles.xmlns}
-        xmlnsXlink={mStyles.xmlnsXlink}
+        xmlns={$styles.xmlns}
+        xmlnsXlink={$styles.xmlnsXlink}
       >
         {titleTag}
         {descTag}
@@ -90,8 +90,8 @@ const SVG = ({
       <SvgElement
         viewBox={viewBox.join(' ')}
         {...props}
-        xmlns={mStyles.xmlns}
-        xmlnsXlink={mStyles.xmlnsXlink}
+        xmlns={$styles.xmlns}
+        xmlnsXlink={$styles.xmlnsXlink}
       >
         {titleTag}
         {descTag}

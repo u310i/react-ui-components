@@ -1,16 +1,16 @@
 import { getComponentMaterials, adustBrightnessFromCssRgb } from 'scripts';
 import defineContents from './_defineContents';
 
-const materials = getComponentMaterials('button');
+const $materials = getComponentMaterials('button');
 
-const mStyles = materials.styles;
-const mColors = materials.colors;
-const mSelectors = materials.selectors;
+const $styles = $materials.styles;
+const $colors = $materials.colors;
+const $selectors = $materials.selectors;
 
 export default {
   defineContents: defineContents,
   genWaveKeyframes: borderWidth => {
-    const waveKeyframes = mStyles.waveKeyframes;
+    const waveKeyframes = $styles.waveKeyframes;
 
     const position = `calc(-${borderWidth} - ${waveKeyframes.effectRange})`;
     const positionFallback = `-${waveKeyframes.effectRangeFallback}`;
@@ -28,8 +28,8 @@ export default {
     };
   },
   genClickEffectStyle: (
-    borderWidth = mStyles.borderWidth,
-    effectColor = mColors.main,
+    borderWidth = $styles.borderWidth,
+    effectColor = $colors.main,
     waveKeyframes,
     fadeKeyframes
   ) => {
@@ -40,12 +40,12 @@ export default {
       left: commonPosition,
       right: commonPosition,
       borderColor: effectColor,
-      animation: `${waveKeyframes} ${mStyles.waveDuration} ${
-        mStyles.clickEffectCubicBeziers
-      }, ${fadeKeyframes} ${mStyles.fadeDuration} ${
-        mStyles.clickEffectCubicBeziers
+      animation: `${waveKeyframes} ${$styles.waveDuration} ${
+        $styles.clickEffectCubicBeziers
+      }, ${fadeKeyframes} ${$styles.fadeDuration} ${
+        $styles.clickEffectCubicBeziers
       }`,
-      ...mStyles.clickEffect
+      ...$styles.clickEffect
     };
   },
   genLoadingMask: borderWidth => {
@@ -55,23 +55,23 @@ export default {
       bottom: commonPosition,
       left: commonPosition,
       right: commonPosition,
-      ...mStyles.loadingMask
+      ...$styles.loadingMask
     };
   },
   genShape: shape => {
     switch (shape) {
       case 'round':
-        return mStyles.shape.round;
+        return $styles.shape.round;
       case 'circle':
-        return mStyles.shape.circle;
+        return $styles.shape.circle;
       case 'corner':
-        return mStyles.shape.corner;
+        return $styles.shape.corner;
       default:
-        return mStyles.shape.default;
+        return $styles.shape.default;
     }
   },
   genColor: (type, toFill, disable, keyColor) => {
-    keyColor = keyColor || mColors.main;
+    keyColor = keyColor || $colors.main;
     const activeColor = adustBrightnessFromCssRgb(keyColor, -35);
     const hoverColor = adustBrightnessFromCssRgb(keyColor, 25);
 
@@ -80,15 +80,15 @@ export default {
     switch (type) {
       case 'normal-outline':
         style = {
-          color: mColors.white,
-          backgroundColor: mColors.transparent,
-          borderColor: mColors.white,
-          [mSelectors.hover_focus]: {
+          color: $colors.white,
+          backgroundColor: $colors.transparent,
+          borderColor: $colors.white,
+          [$selectors.hover_focus]: {
             color: keyColor,
             backgroundColor: null,
             borderColor: keyColor
           },
-          [mSelectors.active]: {
+          [$selectors.active]: {
             color: activeColor,
             backgroundColor: null,
             borderColor: activeColor
@@ -97,15 +97,15 @@ export default {
         break;
       case 'dark':
         style = {
-          color: mColors.white,
-          backgroundColor: mColors.darkColor,
-          borderColor: mColors.darkColor,
-          [mSelectors.hover_focus]: {
+          color: $colors.white,
+          backgroundColor: $colors.darkColor,
+          borderColor: $colors.darkColor,
+          [$selectors.hover_focus]: {
             color: null,
             backgroundColor: keyColor,
             borderColor: keyColor
           },
-          [mSelectors.active]: {
+          [$selectors.active]: {
             color: null,
             backgroundColor: activeColor,
             borderColor: activeColor
@@ -114,15 +114,15 @@ export default {
         break;
       case 'dark-outline':
         style = {
-          color: mColors.darkColor,
-          backgroundColor: mColors.transparent,
-          borderColor: mColors.darkColor,
-          [mSelectors.hover_focus]: {
+          color: $colors.darkColor,
+          backgroundColor: $colors.transparent,
+          borderColor: $colors.darkColor,
+          [$selectors.hover_focus]: {
             color: keyColor,
             backgroundColor: null,
             borderColor: keyColor
           },
-          [mSelectors.active]: {
+          [$selectors.active]: {
             color: activeColor,
             backgroundColor: null,
             borderColor: activeColor
@@ -132,14 +132,14 @@ export default {
       case 'outline':
         style = {
           color: keyColor,
-          backgroundColor: mColors.transparent,
+          backgroundColor: $colors.transparent,
           borderColor: keyColor,
-          [mSelectors.hover_focus]: {
+          [$selectors.hover_focus]: {
             color: hoverColor,
             backgroundColor: null,
             borderColor: hoverColor
           },
-          [mSelectors.active]: {
+          [$selectors.active]: {
             color: activeColor,
             backgroundColor: null,
             borderColor: activeColor
@@ -148,15 +148,15 @@ export default {
         break;
       case 'fill':
         style = {
-          color: mColors.white,
+          color: $colors.white,
           backgroundColor: keyColor,
           borderColor: keyColor,
-          [mSelectors.hover_focus]: {
+          [$selectors.hover_focus]: {
             color: null,
             backgroundColor: hoverColor,
             borderColor: hoverColor
           },
-          [mSelectors.active]: {
+          [$selectors.active]: {
             color: null,
             backgroundColor: activeColor,
             borderColor: activeColor
@@ -166,15 +166,15 @@ export default {
       case 'normal':
       default:
         style = {
-          color: mColors.normalTextColor,
-          backgroundColor: mColors.white,
-          borderColor: mColors.normalBorderColor,
-          [mSelectors.hover_focus]: {
+          color: $colors.normalTextColor,
+          backgroundColor: $colors.white,
+          borderColor: $colors.normalBorderColor,
+          [$selectors.hover_focus]: {
             color: keyColor,
             backgroundColor: null,
             borderColor: keyColor
           },
-          [mSelectors.active]: {
+          [$selectors.active]: {
             color: activeColor,
             backgroundColor: null,
             borderColor: activeColor
@@ -185,13 +185,13 @@ export default {
     if (!disable) {
       if (toFill) {
         const toFillStyle = {
-          [mSelectors.hover_focus]: {
-            color: mColors.white,
+          [$selectors.hover_focus]: {
+            color: $colors.white,
             backgroundColor: hoverColor,
             borderColor: hoverColor
           },
-          [mSelectors.active]: {
-            color: mColors.white,
+          [$selectors.active]: {
+            color: $colors.white,
             backgroundColor: activeColor,
             borderColor: activeColor
           }
@@ -210,18 +210,18 @@ export default {
         type === 'dark-outline'
       ) {
         const outlineDisableStyle = {
-          color: mColors.disableTextColor,
-          backgroundColor: mColors.transparent,
-          borderColor: mColors.disableTextColor,
+          color: $colors.disableTextColor,
+          backgroundColor: $colors.transparent,
+          borderColor: $colors.disableTextColor,
           boxShadow: 'none',
           cursor: 'not-allowed'
         };
         style = outlineDisableStyle;
       } else {
         const disableStyle = {
-          color: mColors.disableTextColor,
-          backgroundColor: mColors.disableBackgroundColor,
-          borderColor: mColors.disableBorderColor,
+          color: $colors.disableTextColor,
+          backgroundColor: $colors.disableBackgroundColor,
+          borderColor: $colors.disableBorderColor,
           boxShadow: 'none',
           cursor: 'not-allowed'
         };

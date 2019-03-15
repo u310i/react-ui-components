@@ -1,18 +1,19 @@
 import React, { useMemo, useCallback } from 'react';
-import materials from './_materials';
+import $materials from './_materials';
 import { reflow, roundNumber, genTransitionProp } from 'scripts';
 import { Transition } from 'react-transition-group';
 import { DivElement } from 'elements';
 
-const mNames = materials.names;
-const mStyles = materials.styles;
+const $names = $materials.names;
+const $styles = $materials.styles;
 
 const Slide = ({
   in: inProp,
   children,
-  duration = mStyles.defaultDuration,
-  easing = mStyles.defaultEasing,
+  duration = $styles.defaultDuration,
+  easing = $styles.defaultEasing,
   appear = true,
+  direction = 'down',
   onEnter,
   ...props
 }) => {
@@ -20,10 +21,10 @@ const Slide = ({
     node => {
       reflow(node);
       node.style.transition = genTransitionProp([
-        [mStyles.transitionOpacity, duration, easing],
+        [$styles.transitionOpacity, duration, easing],
         [
-          mStyles.transitionTransform,
-          roundNumber(duration * mStyles.scaleDurationRatio, 0),
+          $styles.transitionTransform,
+          roundNumber(duration * $styles.scaleDurationRatio, 0),
           easing
         ]
       ]);
@@ -35,12 +36,12 @@ const Slide = ({
   const handleExit = useCallback(
     node => {
       node.style.transition = genTransitionProp([
-        [mStyles.transitionOpacity, duration, easing],
+        [$styles.transitionOpacity, duration, easing],
         [
-          mStyles.transitionTransform,
-          roundNumber(duration * mStyles.scaleDurationRatio, 0),
+          $styles.transitionTransform,
+          roundNumber(duration * $styles.scaleDurationRatio, 0),
           easing,
-          roundNumber(duration * mStyles.outScalingDelayRatioFromDuration, 0)
+          roundNumber(duration * $styles.outScalingDelayRatioFromDuration, 0)
         ]
       ]);
       if (onEnter) onEnter(node);
@@ -51,14 +52,14 @@ const Slide = ({
   const enteredStyle = useMemo(() => {
     return {
       opacity: 1,
-      transform: mStyles.exitedScale
+      transform: $styles.exitedScale
     };
   }, []);
 
   const exitedStyle = useMemo(() => {
     return {
       opacity: 0,
-      transform: `scale(${mStyles.scaleXRatio}, ${mStyles.scaleYRatio})`
+      transform: `scale(${$styles.scaleXRatio}, ${$styles.scaleYRatio})`
     };
   }, []);
 
@@ -79,7 +80,7 @@ const Slide = ({
                 ? enteredStyle
                 : exitedStyle
             }
-            className={mNames.ucSlide}
+            className={$names.ucSlide}
             {...childProps}
           >
             {children}

@@ -1,7 +1,7 @@
 import { getComponentMaterials, isArray, isReactComponent } from 'scripts';
 
-const materials = getComponentMaterials('list');
-const mSelectors = materials.selectors;
+const $materials = getComponentMaterials('list');
+const $selectors = $materials.selectors;
 
 const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
   if (!level) level = 0;
@@ -18,18 +18,18 @@ const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
         level
       );
       if (v.props.title) {
-        style[mSelectors.nthChild(i + 1)] = {
-          [mSelectors.divFirstChild]: {
+        style[$selectors.nthChild(i + 1)] = {
+          [$selectors.divFirstChild]: {
             paddingLeft: paddingLeftValue,
             ...levelStyle[level - 1]
           },
-          [mSelectors.ulSecondChild]: {
+          [$selectors.ulSecondChild]: {
             ...innerStyle
           }
         };
       }
     } else {
-      style[mSelectors.nthChild(i + 1)] = {
+      style[$selectors.nthChild(i + 1)] = {
         paddingLeft: paddingLeftValue,
         ...levelStyle[level - 1]
       };

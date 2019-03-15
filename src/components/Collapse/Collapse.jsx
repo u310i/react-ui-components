@@ -1,18 +1,18 @@
 import React, { useMemo, useCallback, useRef } from 'react';
-import materials from './_materials';
+import $materials from './_materials';
 import { reflow } from 'scripts';
 import { Transition } from 'react-transition-group';
 import { DivElement } from 'elements';
 
-const mNames = materials.names;
-const mStyles = materials.styles;
+const $names = $materials.names;
+const $styles = $materials.styles;
 
 const Collapse = ({
   in: inProp,
   children,
-  duration = mStyles.defaultDuration,
-  easing = mStyles.defaultEasing,
-  collapsedHeight = mStyles.collapsedHeight,
+  duration = $styles.defaultDuration,
+  easing = $styles.defaultEasing,
+  collapsedHeight = $styles.collapsedHeight,
   onEnter,
   onEntering,
   onEntered,
@@ -25,12 +25,12 @@ const Collapse = ({
   const style = useMemo(() => {
     return {
       main: {
-        height: inProp ? mStyles.defaultHeight : collapsedHeight,
+        height: inProp ? $styles.defaultHeight : collapsedHeight,
         transitionDuration: `${duration}ms`,
         transitionTimingFunction: easing,
-        ...mStyles.main
+        ...$styles.main
       },
-      inner: mStyles.inner
+      inner: $styles.inner
     };
   }, []);
 
@@ -52,7 +52,7 @@ const Collapse = ({
 
   const handleEntered = useCallback(
     node => {
-      node.style.height = mStyles.defaultHeight;
+      node.style.height = $styles.defaultHeight;
       if (onEntered) onEntered(node);
     },
     [onEntered]
@@ -90,7 +90,7 @@ const Collapse = ({
         return (
           <DivElement
             style={style.main}
-            className={mNames.ucCollapse}
+            className={$names.ucCollapse}
             {...childProps}
           >
             <DivElement
@@ -98,7 +98,7 @@ const Collapse = ({
                 elRef.current = ref;
               }}
               style={style.inner}
-              className={mNames.ucCollapseInner}
+              className={$names.ucCollapseInner}
             >
               {children}
             </DivElement>

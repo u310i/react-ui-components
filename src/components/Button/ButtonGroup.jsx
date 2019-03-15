@@ -2,9 +2,9 @@ import React from 'react';
 import { getComponentMaterials, isString } from 'scripts';
 import { DivElement } from 'elements';
 
-const materials = getComponentMaterials('button');
-const mStyles = materials.group.styles;
-const mGSelectors = materials.group.selectors;
+const $materials = getComponentMaterials('button');
+const $gStyles = $materials.group.styles;
+const $gSelectors = $materials.group.selectors;
 
 const Group = ({
   children,
@@ -18,42 +18,44 @@ const Group = ({
   between
 }) => {
   const nestedStyle = {};
-  nestedStyle[mGSelectors.firstChild] = {
-    ...mStyles.firstChild,
+  nestedStyle[$gSelectors.firstChild] = {
+    ...$gStyles.firstChild,
     ...firstChildStyle
   };
-  nestedStyle[mGSelectors.lastChild] = {
-    ...mStyles.lastChild,
+  nestedStyle[$gSelectors.lastChild] = {
+    ...$gStyles.lastChild,
     ...lastChildStyle
   };
 
   const betweenStyle = between
-    ? { marginLeft: isString(between) ? between : mStyles.between.defaultSpace }
-    : { ...mStyles.between.noneSpace };
+    ? {
+        marginLeft: isString(between) ? between : $gStyles.between.defaultSpace
+      }
+    : { ...$gStyles.between.noneSpace };
 
-  nestedStyle[mGSelectors.notFirstChild] = {
-    ...mStyles.notFirstChild,
+  nestedStyle[$gSelectors.notFirstChild] = {
+    ...$gStyles.notFirstChild,
     ...betweenStyle,
     ...notFirstChildStyle
   };
-  nestedStyle[mGSelectors.notLastChild] = {
-    ...mStyles.notLastChild,
+  nestedStyle[$gSelectors.notLastChild] = {
+    ...$gStyles.notLastChild,
     ...notLastChildStyle
   };
   if (nthChildStyleList) {
     for (let [n, style] of nthChildStyleList) {
-      nestedStyle[mGSelectors.nthChild(n)] = style;
+      nestedStyle[$gSelectors.nthChild(n)] = style;
     }
   }
   if (notNthChildStyleList) {
     for (let [n, style] of notNthChildStyleList) {
-      nestedStyle[mGSelectors.notNthChild(n)] = style;
+      nestedStyle[$gSelectors.notNthChild(n)] = style;
     }
   }
   return (
     <DivElement
       style={{ ...propStyle, ...nestedStyle }}
-      classNames={[materials.group.names.ucButtonGroup]}
+      classNames={[$materials.group.names.ucButtonGroup]}
     >
       {children}
     </DivElement>

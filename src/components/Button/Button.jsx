@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo, useContext } from 'react';
-import materials from './_materials';
+import $materials from './_materials';
 import { getFontSize, keyframes, useTimerWithToggle } from 'scripts';
 import { ButtonElement, DivElement } from 'elements';
 import ButtonCoordinator from './ButtonCoordinator';
 import ButtonGroup from './ButtonGroup';
 import scripts from './_scripts';
 
-const mStyles = materials.styles;
+const $styles = $materials.styles;
 
 const Button = ({
   children,
@@ -29,7 +29,7 @@ const Button = ({
   ...props
 }) => {
   const [toggleState, setToggleState] = useTimerWithToggle(
-    mStyles.clickEffectDuration
+    $styles.clickEffectDuration
   );
 
   const hasClickEffect = clickEffect && !disable && !loading;
@@ -39,13 +39,13 @@ const Button = ({
     hasClickEffect && setToggleState();
   }, [propOnClick, hasClickEffect]);
 
-  const solidStyle = mStyles.solid;
+  const solidStyle = $styles.solid;
 
   const clickEffectStyle = useMemo(() => {
     const waveKeyframes = keyframes(scripts.genWaveKeyframes(borderWidth));
     const fadeKeyframes = keyframes({
       to: {
-        ...mStyles.fadeKeyframes
+        ...$styles.fadeKeyframes
       }
     });
     const style = scripts.genClickEffectStyle(
@@ -64,13 +64,13 @@ const Button = ({
   const shapeStyle = useMemo(() => {
     const style = {
       ...scripts.genShape(shape),
-      ...(loading ? mStyles.loading : {}),
-      ...(fullWidth ? mStyles.fullWidth : {}),
-      ...(fullHeight ? mStyles.fullHeight : {})
+      ...(loading ? $styles.loading : {}),
+      ...(fullWidth ? $styles.fullWidth : {}),
+      ...(fullHeight ? $styles.fullHeight : {})
     };
-    style.fontSize = size ? getFontSize(size) : mStyles.fontSize;
-    style.borderStyle = borderStyle || mStyles.borderStyle;
-    style.borderWidth = borderWidth || mStyles.borderWidth;
+    style.fontSize = size ? getFontSize(size) : $styles.fontSize;
+    style.borderStyle = borderStyle || $styles.borderStyle;
+    style.borderWidth = borderWidth || $styles.borderWidth;
 
     return style;
   }, [shape, size, borderStyle, borderWidth, fullWidth, fullHeight, loading]);
