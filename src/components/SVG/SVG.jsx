@@ -1,5 +1,5 @@
 import React from 'react';
-import $materials from './_materials';
+import $ from './_materials';
 import { roundNumber } from 'scripts';
 import {
   SvgElement,
@@ -8,9 +8,9 @@ import {
   UseElement,
   TitleElement,
   DescElement
-} from 'elements';
+} from '../_Elements';
 
-const $styles = $materials.styles;
+const $styles = $.styles;
 
 const SVG = ({
   viewBox,

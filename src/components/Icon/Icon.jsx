@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import $materials from './_materials';
+import $ from './_materials';
 import {
   roundNumber,
   testCssNumberRegExp,
@@ -14,8 +14,8 @@ import {
 import scripts from './_scripts';
 import SVG from 'components/SVG';
 
-const $styles = $materials.styles;
-const $names = $materials.names;
+const $styles = $.styles;
+const $names = $.names;
 
 const Icon = ({
   icon,
@@ -59,7 +59,7 @@ const Icon = ({
     }
   }
 
-  props[$materials.cssProperties.ariaLabel] = ariaLabel;
+  props['aria-label'] = ariaLabel;
 
   const iconData =
     iconType === 'object'

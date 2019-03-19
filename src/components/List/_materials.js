@@ -1,5 +1,7 @@
-import origin from 'components/_materials';
+import $ from 'components/_materials';
 import { createComponentMaterials, getComponentMaterials } from 'scripts';
+
+const name = 'list';
 
 const materials = {
   names: {
@@ -9,7 +11,7 @@ const materials = {
   selectors: {
     divFirstChild: '& > div:first-child',
     ulSecondChild: '& > ul:nth-child(2)',
-    nthChild: origin.selectors.nested.nthChild
+    nthChild: $.selectors.nested.nthChild
   },
   styles: {
     list: {
@@ -34,6 +36,6 @@ const materials = {
   }
 };
 
-createComponentMaterials(materials, 'list');
+createComponentMaterials(materials, name);
 
-export default getComponentMaterials('list');
+export default getComponentMaterials(name);

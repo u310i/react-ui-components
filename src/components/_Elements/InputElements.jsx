@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from './Elements';
+import { InputElement } from './Elements';
 import { button_inputButton_inputReset_inputSubmit_style } from './style';
 
 const inputTime_inputDate_inputDatetimeLocal_inputMonth = {
@@ -34,165 +34,193 @@ const inputFile_style = {
   }
 };
 
-export const InputHidden = ({ style, ...props }) => {
+export const InputHiddenElement = ({ style, ...props }) => {
   const solidStyle = {};
   return (
-    <Input type="hidden" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement
+      type="hidden"
+      style={{ ...solidStyle, ...style }}
+      {...props}
+    />
   );
 };
 
-export const InputButton = ({ style, ...props }) => {
+export const InputButtonElement = ({ style, ...props }) => {
   const solidStyle = {
     ...button_inputButton_inputReset_inputSubmit_style
   };
   return (
-    <Input type="button" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement
+      type="button"
+      style={{ ...solidStyle, ...style }}
+      {...props}
+    />
   );
 };
 
-export const InputSubmit = ({ style, ...props }) => {
+export const InputSubmitElement = ({ style, ...props }) => {
   const solidStyle = {
     ...button_inputButton_inputReset_inputSubmit_style
   };
   return (
-    <Input type="submit" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement
+      type="submit"
+      style={{ ...solidStyle, ...style }}
+      {...props}
+    />
   );
 };
 
-export const InputReset = ({ style, ...props }) => {
+export const InputResetElement = ({ style, ...props }) => {
   const solidStyle = {
     ...button_inputButton_inputReset_inputSubmit_style
   };
   return (
-    <Input type="reset" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="reset" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputCheckbox = ({ style, ...props }) => {
+export const InputCheckboxElement = ({ style, ...props }) => {
   const solidStyle = {
     inputCheckbox_inputRadio_style
   };
   return (
-    <Input type="checkbox" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement
+      type="checkbox"
+      style={{ ...solidStyle, ...style }}
+      {...props}
+    />
   );
 };
 
-export const InputRadio = ({ style, ...props }) => {
+export const InputRadioElement = ({ style, ...props }) => {
   const solidStyle = {
     ...inputCheckbox_inputRadio_style
   };
   return (
-    <Input type="radio" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="radio" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputColor = ({ style, ...props }) => {
+export const InputColorElement = ({ style, ...props }) => {
   const solidStyle = {};
   return (
-    <Input type="color" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="color" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputFile = ({ style, ...props }) => {
+export const InputFileElement = ({ style, ...props }) => {
   const solidStyle = {
     ...inputFile_style
   };
   return (
-    <Input type="file" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="file" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputImage = ({ style, ...props }) => {
+export const InputImageElement = ({ style, ...props }) => {
   const solidStyle = {};
   return (
-    <Input type="image" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="image" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputNumber = ({ style, ...props }) => {
+export const InputNumberElement = ({ style, ...props }) => {
   const solidStyle = {
     ...inputNumber_style
   };
   return (
-    <Input type="number" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement
+      type="number"
+      style={{ ...solidStyle, ...style }}
+      {...props}
+    />
   );
 };
 
-export const InputRange = ({ style, ...props }) => {
+export const InputRangeElement = ({ style, ...props }) => {
   const solidStyle = {};
   return (
-    <Input type="range" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="range" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputText = ({ style, ...props }) => {
+export const InputTextElement = ({ style, ...props }) => {
   const solidStyle = {};
   return (
-    <Input type="text" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="text" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputEmail = ({ style, ...props }) => {
+export const InputEmailElement = ({ style, ...props }) => {
   const solidStyle = {};
   return (
-    <Input type="email" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="email" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputPassword = ({ style, ...props }) => {
+export const InputPasswordElement = ({ style, ...props }) => {
   const solidStyle = {};
   return (
-    <Input type="password" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement
+      type="password"
+      style={{ ...solidStyle, ...style }}
+      {...props}
+    />
   );
 };
 
-export const InputTel = ({ style, ...props }) => {
+export const InputTelElement = ({ style, ...props }) => {
   const solidStyle = {};
   return (
-    <Input type="tel" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="tel" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputSearch = ({ style, ...props }) => {
+export const InputSearchElement = ({ style, ...props }) => {
   const solidStyle = {
     ...inputSearch_style
   };
   return (
-    <Input type="search" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement
+      type="search"
+      style={{ ...solidStyle, ...style }}
+      {...props}
+    />
   );
 };
 
-export const InputUrl = ({ style, ...props }) => {
+export const InputUrlElement = ({ style, ...props }) => {
   const solidStyle = {};
   return (
-    <Input type="url" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="url" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputTime = ({ style, ...props }) => {
+export const InputTimeElement = ({ style, ...props }) => {
   const solidStyle = {
     ...inputTime_inputDate_inputDatetimeLocal_inputMonth
   };
   return (
-    <Input type="time" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="time" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputDate = ({ style, ...props }) => {
+export const InputDateElement = ({ style, ...props }) => {
   const solidStyle = {
     ...inputTime_inputDate_inputDatetimeLocal_inputMonth
   };
   return (
-    <Input type="date" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="date" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputDatetimeLocal = ({ style, ...props }) => {
+export const InputDatetimeLocalElement = ({ style, ...props }) => {
   const solidStyle = {
     ...inputTime_inputDate_inputDatetimeLocal_inputMonth
   };
   return (
-    <Input
+    <InputElement
       type="datetime-local"
       style={{ ...solidStyle, ...style }}
       {...props}
@@ -200,18 +228,18 @@ export const InputDatetimeLocal = ({ style, ...props }) => {
   );
 };
 
-export const InputWeek = ({ style, ...props }) => {
+export const InputWeekElement = ({ style, ...props }) => {
   const solidStyle = {};
   return (
-    <Input type="week" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="week" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const InputMonth = ({ style, ...props }) => {
+export const InputMonthElement = ({ style, ...props }) => {
   const solidStyle = {
     ...inputTime_inputDate_inputDatetimeLocal_inputMonth
   };
   return (
-    <Input type="month" style={{ ...solidStyle, ...style }} {...props} />
+    <InputElement type="month" style={{ ...solidStyle, ...style }} {...props} />
   );
 };

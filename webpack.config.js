@@ -74,7 +74,6 @@ module.exports = {
       src: path.resolve(__dirname, 'src/'),
       components: path.resolve(__dirname, 'src/components/'),
       scripts: path.resolve(__dirname, 'src/scripts'),
-      elements: path.resolve(__dirname, 'src/components/_Elements'),
       'react-emotion': path.resolve(__dirname, './no-prefix-emotion.js')
     }
   }

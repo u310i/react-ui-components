@@ -1,10 +1,10 @@
 import React from 'react';
 import { getComponentMaterials, isString } from 'scripts';
-import { DivElement } from 'elements';
+import { DivElement } from '../_Elements';
 
-const $materials = getComponentMaterials('button');
-const $gStyles = $materials.group.styles;
-const $gSelectors = $materials.group.selectors;
+const $ = getComponentMaterials('button');
+const $gStyles = $.group.styles;
+const $gSelectors = $.group.selectors;
 
 const Group = ({
   children,
@@ -55,7 +55,7 @@ const Group = ({
   return (
     <DivElement
       style={{ ...propStyle, ...nestedStyle }}
-      classNames={[$materials.group.names.ucButtonGroup]}
+      classNames={[$.group.names.ucButtonGroup]}
     >
       {children}
     </DivElement>

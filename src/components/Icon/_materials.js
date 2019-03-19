@@ -1,12 +1,11 @@
-import origin from 'components/_materials';
+import $ from 'components/_materials';
 import { createComponentMaterials, getComponentMaterials } from 'scripts';
+
+const name = 'icon';
 
 const materials = {
   names: {
     ariaLabelPrefix: 'icon: '
-  },
-  cssProperties: {
-    ariaLabel: origin.cssProperties.ariaLabel
   },
   styles: {
     solid: {
@@ -52,6 +51,6 @@ const materials = {
   }
 };
 
-createComponentMaterials(materials, 'icon');
+createComponentMaterials(materials, name);
 
-export default getComponentMaterials('icon');
+export default getComponentMaterials(name);

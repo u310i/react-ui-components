@@ -1,26 +1,32 @@
-import origin from 'components/_materials';
+import $ from 'components/_materials';
 import { createComponentMaterials, getComponentMaterials } from 'scripts';
+
+const name = 'collapse';
+
+const $tSelectors = $.selectors.transition;
 
 const materials = {
   names: {
     ucCollapse: 'uc-collapse',
     ucCollapseInner: 'uc-collapse-inner'
   },
+  selectors: {
+    enters: $tSelectors.enters,
+    exit: $tSelectors.exit
+  },
   styles: {
-    defaultHeight: 'auto',
-    defaultDuration: 300,
-    defaultEasing: origin.cubicBeziers.easeInOut,
+    height: 'auto',
+    duration: $.props.transitionDuration,
+    easing: $.props.transitionEasing,
     collapsedHeight: '0px',
-    main: {
-      transitionProperty: 'height',
-      overflow: 'hidden'
-    },
+    transitionProperty: 'height',
+    overflow: 'hidden',
     inner: {
       display: 'flex'
     }
   }
 };
 
-createComponentMaterials(materials, 'collapse');
+createComponentMaterials(materials, name);
 
-export default getComponentMaterials('collapse');
+export default getComponentMaterials(name);

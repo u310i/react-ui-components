@@ -51,10 +51,27 @@ export const useIntersectionObserver = (
   }, dependencies);
 };
 
+// Safely detecting option support
+// https://developer.mozilla.org/ja/docs/Web/API/EventTarget/addEventListener
+// let passiveSupported = false;
+// try {
+//   const options = Object.defineProperty({}, 'passive', {
+//     get: function() {
+//       passiveSupported = true;
+//     }
+//   });
+
+//   window.addEventListener('test', options, options);
+//   window.removeEventListener('test', options, options);
+// } catch (err) {
+//   passiveSupported = false;
+// }
+
 export const useAddWindowEvent = (
   type,
   callback,
   enable = true,
+  // options = {},
   dependencies = [],
   optimized = true
 ) => {
@@ -66,6 +83,11 @@ export const useAddWindowEvent = (
       handle =
         (optimized && createOptimizedEvent(event, rafHandleRef)) || event;
       window.addEventListener(type, handle);
+      // window.addEventListener(
+      //   type,
+      //   handle,
+      //   passiveSupported ? options : options.capture ? true : false
+      // );
     }
     return () => {
       if (enable) {

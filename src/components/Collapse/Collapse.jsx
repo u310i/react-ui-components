@@ -1,18 +1,20 @@
 import React, { useMemo, useCallback, useRef } from 'react';
-import $materials from './_materials';
-import { reflow } from 'scripts';
-import { Transition } from 'react-transition-group';
-import { DivElement } from 'elements';
+import $ from './_materials';
+import { reflow, genTransitionProp, genDurationsEasings } from 'scripts';
+import CSSTransition from '../CSSTransition';
+import { DivElement } from '../_Elements';
 
-const $names = $materials.names;
-const $styles = $materials.styles;
+const $names = $.names;
+const $selectors = $.selectors;
+const $styles = $.styles;
 
 const Collapse = ({
   in: inProp,
   children,
-  duration = $styles.defaultDuration,
-  easing = $styles.defaultEasing,
+  duration = $styles.duration,
+  easing = $styles.easing,
   collapsedHeight = $styles.collapsedHeight,
+  appear = true,
   onEnter,
   onEntering,
   onEntered,
@@ -22,38 +24,41 @@ const Collapse = ({
 }) => {
   const elRef = useRef(null);
 
+  const [durations, easings] = genDurationsEasings(duration, easing);
+
   const style = useMemo(() => {
     return {
       main: {
-        height: inProp ? $styles.defaultHeight : collapsedHeight,
-        transitionDuration: `${duration}ms`,
-        transitionTimingFunction: easing,
-        ...$styles.main
+        height: !appear && inProp ? $styles.height : collapsedHeight,
+        overflow: $styles.overflow,
+        [$selectors.enters]: {
+          transition: genTransitionProp([
+            [$styles.transitionProperty, durations.enter, easings.enter]
+          ])
+        },
+        [$selectors.exit]: {
+          transition: genTransitionProp([
+            [$styles.transitionProperty, durations.exit, easings.exit]
+          ])
+        }
       },
       inner: $styles.inner
     };
   }, []);
 
-  const handleEnter = useCallback(
-    node => {
-      node.style.height = collapsedHeight;
-      if (onEnter) onEnter(node);
-    },
-    [onEnter]
-  );
-
   const handleEntering = useCallback(
-    node => {
+    (node, appearing) => {
+      reflow(node);
       node.style.height = `${elRef.current.clientHeight}px`;
-      if (onEntering) onEntering(node);
+      if (onEntering) onEntering(node, appearing);
     },
     [onEntering]
   );
 
   const handleEntered = useCallback(
-    node => {
-      node.style.height = $styles.defaultHeight;
-      if (onEntered) onEntered(node);
+    (node, appearing) => {
+      node.style.height = $styles.height;
+      if (onEntered) onEntered(node, appearing);
     },
     [onEntered]
   );
@@ -76,14 +81,14 @@ const Collapse = ({
   );
 
   return (
-    <Transition
+    <CSSTransition
       in={inProp}
-      timeout={duration}
-      onEnter={handleEnter}
+      timeout={durations}
       onEntering={handleEntering}
       onEntered={handleEntered}
       onExit={handleExit}
       onExiting={handleExiting}
+      appear={appear}
       {...props}
     >
       {(state, childProps) => {
@@ -94,9 +99,7 @@ const Collapse = ({
             {...childProps}
           >
             <DivElement
-              elementRef={ref => {
-                elRef.current = ref;
-              }}
+              refer={elRef}
               style={style.inner}
               className={$names.ucCollapseInner}
             >
@@ -105,7 +108,7 @@ const Collapse = ({
           </DivElement>
         );
       }}
-    </Transition>
+    </CSSTransition>
   );
 };
 

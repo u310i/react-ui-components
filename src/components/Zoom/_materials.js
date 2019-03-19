@@ -1,28 +1,29 @@
 import $ from 'components/_materials';
 import { createComponentMaterials, getComponentMaterials } from 'scripts';
 
-const name = 'slide';
+const name = 'zoom';
 
 const $tSelectors = $.selectors.transition;
-const $easeOutCubicBeziers = $.cubicBeziers.easeOut;
 
 const materials = {
   names: {
-    ucSlide: 'uc-slide'
+    ucSlide: 'uc-zoom'
   },
   selectors: {
+    enters: $tSelectors.enters,
+    enterings: $tSelectors.enterings,
+    entered: $tSelectors.entered,
+    exit: $tSelectors.exit,
+    exiting: $tSelectors.exiting,
     exited: $tSelectors.exited
   },
   styles: {
     duration: $.props.transitionDuration,
-    easing: {
-      enter: $easeOutCubicBeziers,
-      exit: $easeOutCubicBeziers
-    },
+    easing: $.props.transitionEasing,
+    exitedScale: 'scale(0)',
+    enteredScale: 'scale(1)',
     transitionProperty: 'transform',
-    direction: 'down',
-    exitedVisibility: 'hidden',
-    enteredTranslate: 'translate(0, 0)'
+    exitedVisibility: 'hidden'
   }
 };
 

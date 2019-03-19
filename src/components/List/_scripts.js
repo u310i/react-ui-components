@@ -1,7 +1,7 @@
 import { getComponentMaterials, isArray, isReactComponent } from 'scripts';
 
-const $materials = getComponentMaterials('list');
-const $selectors = $materials.selectors;
+const $ = getComponentMaterials('list');
+const $selectors = $.selectors;
 
 const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
   if (!level) level = 0;

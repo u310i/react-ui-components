@@ -1,6 +1,5 @@
 import React from 'react';
 import { isObject, isArray, isString } from 'scripts';
-import { DivElement } from 'elements';
 
 const Order = ({ children, list = [] }) => {
   const contents = list.map((item, index) => {

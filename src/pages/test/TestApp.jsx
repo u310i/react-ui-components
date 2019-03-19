@@ -9,15 +9,6 @@ import {
 } from 'scripts';
 
 import {
-  UlElement,
-  LiElement,
-  DivElement,
-  SpanElement,
-  AElement,
-  ButtonElement,
-  InputSubmitElement
-} from 'elements';
-import {
   Button,
   Order,
   List,
@@ -25,7 +16,16 @@ import {
   Icon,
   Fade,
   Collapse,
-  Grow
+  Grow,
+  Slide,
+  Zoom,
+  UlElement,
+  LiElement,
+  DivElement,
+  SpanElement,
+  AElement,
+  ButtonElement,
+  InputSubmitElement
 } from 'components';
 // import MuCollapse from '@material-ui/core/Collapse';
 
@@ -42,6 +42,7 @@ export default ({}) => {
   };
   return (
     <DivElement style={{ backgroundColor: '#fff' }}>
+      <DivElement style={{ height: '100px' }} />
       <Button.Coordinator
         contents={[{ icon: 'sys-envelope' }, 'Download']}
         style={{ margin: '0.5em' }}
@@ -49,28 +50,34 @@ export default ({}) => {
         toFill
         onClick={handler}
       />
-      <Grow in={state} duration={300} appear={true}>
+      <Zoom
+        in={state}
+        duration={{ enter: 2000, exit: 1000 }}
+        appear={true}
+        direction="left"
+      >
         <DivElement
           style={{
             backgroundColor: '#ff00ff',
             width: '256px',
             height: '256px',
-            width: '100%'
-            // overflow: 'hidden'
+            // width: '100%',
+            overflow: 'hidden',
+            marginLeft: '100px'
           }}
+          id="el"
         >
-          aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
           aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
           aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
           aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
           aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
           aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
           aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
         </DivElement>
-      </Grow>
+      </Zoom>
       {/* <MuCollapse in={state} timeout={1000}>
         <DivElement
           style={{

@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
-import $materials from './_materials';
+import $ from './_materials';
 import { isString, isReact } from 'scripts';
-import { UlElement, LiElement, DivElement, SpanElement } from 'elements';
+import { UlElement, LiElement, DivElement, SpanElement } from '../_Elements';
 import scripts from './_scripts';
 
-const $styles = $materials.styles;
-const $names = $materials.names;
+const $styles = $.styles;
+const $names = $.names;
 
 const List = ({
   children,

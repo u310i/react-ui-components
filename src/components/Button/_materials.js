@@ -1,11 +1,17 @@
-import origin from 'components/_materials';
+import $ from 'components/_materials';
 import { createComponentMaterials, getComponentMaterials } from 'scripts';
+
+const name = 'button';
+
+const $colors = $.colors;
+const $selectors = $.selectors;
+const $cubicBeziers = $.cubicBeziers;
 
 const materials = {
   colors: {
-    main: origin.colors.main,
-    white: origin.colors.white,
-    transparent: origin.colors.transparent,
+    main: $colors.main,
+    white: $colors.white,
+    transparent: $colors.transparent,
     normalTextColor: 'rgb(89, 89, 89)',
     normalBorderColor: 'rgb(217, 217, 217)',
     darkColor: 'rgb(78, 78, 78)',
@@ -14,9 +20,9 @@ const materials = {
     disableBorderColor: 'rgb(217, 217, 217)'
   },
   selectors: {
-    hover_focus: origin.selectors.hover_focus,
-    active: origin.selectors.active,
-    hover_focus: origin.selectors.hover_focus
+    hover_focus: $selectors.hover_focus,
+    active: $selectors.active,
+    hover_focus: $selectors.hover_focus
   },
   styles: {
     solid: {
@@ -29,10 +35,10 @@ const materials = {
       touchAction: 'manipulation',
       whiteSpace: 'nowrap',
       userSelect: 'none',
-      transition: `all .3s ${origin.cubicBeziers.easeInOut}`
+      transition: `all .3s ${$cubicBeziers.easeInOut}`
     },
     clickEffectDuration: 2000,
-    clickEffectCubicBeziers: origin.cubicBeziers.easeOutCirc,
+    clickEffectCubicBeziers: $cubicBeziers.easeOutCirc,
     waveKeyframes: {
       effectRange: '5px',
       effectRangeFallback: '6px'
@@ -116,12 +122,12 @@ const materials = {
       ucButtonGroup: 'uc-button-group'
     },
     selectors: {
-      firstChild: origin.selectors.firstChild,
-      lastChild: origin.selectors.lastChild,
-      notFirstChild: origin.selectors.notFirstChild,
-      notLastChild: origin.selectors.notLastChild,
-      nthChild: origin.selectors.nthChild,
-      notNthChild: origin.selectors.notNthChild
+      firstChild: $selectors.firstChild,
+      lastChild: $selectors.lastChild,
+      notFirstChild: $selectors.notFirstChild,
+      notLastChild: $selectors.notLastChild,
+      nthChild: $selectors.nthChild,
+      notNthChild: $selectors.notNthChild
     },
     styles: {
       firstChild: {
@@ -135,7 +141,7 @@ const materials = {
       notFirstChild: {
         borderTopLeftRadius: '0px',
         borderBottomLeftRadius: '0px',
-        [origin.selectors.hover]: {
+        [$selectors.hover]: {
           borderLeftStyle: 'solid'
         }
       },
@@ -153,6 +159,6 @@ const materials = {
   }
 };
 
-createComponentMaterials(materials, 'button');
+createComponentMaterials(materials, name);
 
-export default getComponentMaterials('button');
+export default getComponentMaterials(name);

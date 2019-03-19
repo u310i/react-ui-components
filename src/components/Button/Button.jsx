@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo, useContext } from 'react';
-import $materials from './_materials';
+import $ from './_materials';
 import { getFontSize, keyframes, useTimerWithToggle } from 'scripts';
-import { ButtonElement, DivElement } from 'elements';
+import { ButtonElement, DivElement } from '../_Elements';
 import ButtonCoordinator from './ButtonCoordinator';
 import ButtonGroup from './ButtonGroup';
 import scripts from './_scripts';
 
-const $styles = $materials.styles;
+const $styles = $.styles;
 
 const Button = ({
   children,

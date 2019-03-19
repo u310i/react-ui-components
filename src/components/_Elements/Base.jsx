@@ -12,7 +12,7 @@ const Base = ({
   roles = [],
   role: propRole = '',
   noRole = false,
-  elementRef,
+  refer,
   ...props
 }) => {
   if (propClassName) classNames.push(propClassName);
@@ -35,7 +35,7 @@ const Base = ({
     elementType,
     {
       className: cx(css(style), className),
-      ref: elementRef,
+      ref: refer,
       ...props
     },
     children

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { HrElement } from 'elements';
+import { HrElement } from '../_Elements';
 
 const Divider = props => {
   const solidStyle = useMemo(() => {

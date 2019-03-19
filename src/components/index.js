@@ -1,10 +1,13 @@
-import AppBar from './AppBar';
-import Button from './Button';
 import Collapse from './Collapse';
-import Drawer from './Drawer';
-import Flex from './Flex';
 import Fade from './Fade';
 import Grow from './Grow';
+import Slide from './Slide';
+import Zoom from './Zoom';
+import AppBar from './AppBar';
+import Button from './Button';
+import CSSTransition from './CSSTransition';
+import Drawer from './Drawer';
+import Flex from './Flex';
 import Header from './Header';
 import HeaderImage from './HeaderImage';
 import Icon from './Icon';
@@ -18,13 +21,15 @@ import Order from './Order';
 import Divider from './Divider';
 
 export {
-  AppBar,
-  Button,
   Collapse,
-  Drawer,
-  Flex,
   Fade,
   Grow,
+  Slide,
+  Zoom,
+  AppBar,
+  Button,
+  Drawer,
+  Flex,
   Header,
   HeaderImage,
   Icon,
@@ -35,5 +40,8 @@ export {
   Menu,
   SVG,
   Order,
-  Divider
+  Divider,
+  CSSTransition
 };
+
+export * from './_Elements';

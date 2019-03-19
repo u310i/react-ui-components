@@ -9,9 +9,9 @@ import {
 import { IElement, SpanElement } from 'components/_Elements';
 import Icon from 'components/Icon';
 
-const $materials = getComponentMaterials('button');
-const $names = $materials.contents.names;
-const $styles = $materials.contents.styles;
+const $ = getComponentMaterials('button');
+const $names = $.contents.names;
+const $styles = $.contents.styles;
 
 const LoadingIcon = ({ style: propStyle }) => {
   return (

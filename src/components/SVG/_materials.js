@@ -1,5 +1,6 @@
-import origin from 'components/_materials';
 import { createComponentMaterials, getComponentMaterials } from 'scripts';
+
+const name = 'svg';
 
 const materials = {
   styles: {
@@ -11,6 +12,6 @@ const materials = {
   }
 };
 
-createComponentMaterials(materials, 'svg');
+createComponentMaterials(materials, name);
 
-export default getComponentMaterials('svg');
+export default getComponentMaterials(name);

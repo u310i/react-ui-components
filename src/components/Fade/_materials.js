@@ -1,20 +1,32 @@
-import origin from 'components/_materials';
+import $ from 'components/_materials';
 import { createComponentMaterials, getComponentMaterials } from 'scripts';
+
+const name = 'fade';
+
+const $tSelectors = $.selectors.transition;
 
 const materials = {
   names: {
     ucFade: 'uc-fade'
   },
+  selectors: {
+    enters: $tSelectors.enters,
+    enterings: $tSelectors.enterings,
+    entered: $tSelectors.entered,
+    exit: $tSelectors.exit,
+    exiting: $tSelectors.exiting,
+    exited: $tSelectors.exited
+  },
   styles: {
+    duration: $.props.transitionDuration,
+    easing: $.props.transitionEasing,
     exitedOpacity: '0',
     enteredOpacity: '1',
-    defaultDuration: 300,
-    defaultEasing: origin.cubicBeziers.easeInOutEndSlowly,
     transitionProperty: 'opacity',
     exitedVisibility: 'hidden'
   }
 };
 
-createComponentMaterials(materials, 'fade');
+createComponentMaterials(materials, name);
 
-export default getComponentMaterials('fade');
+export default getComponentMaterials(name);

@@ -45,7 +45,7 @@ import {
 
 category: Sections
 */
-export const Section = ({ style, ...props }) => {
+export const SectionElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -58,20 +58,16 @@ export const Section = ({ style, ...props }) => {
   );
 };
 
-export const Nav = ({ style, ...props }) => {
+export const NavElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="nav"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="nav" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Article = ({ style, ...props }) => {
+export const ArticleElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -84,20 +80,16 @@ export const Article = ({ style, ...props }) => {
   );
 };
 
-export const Aside = ({ style, ...props }) => {
+export const AsideElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="aside"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="aside" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const H1 = ({ style, ...props }) => {
+export const H1Element = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...h1_h2_h3_h4_h5_h6_style,
@@ -108,7 +100,7 @@ export const H1 = ({ style, ...props }) => {
   );
 };
 
-export const H2 = ({ style, ...props }) => {
+export const H2Element = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...h1_h2_h3_h4_h5_h6_style,
@@ -119,7 +111,7 @@ export const H2 = ({ style, ...props }) => {
   );
 };
 
-export const H3 = ({ style, ...props }) => {
+export const H3Element = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...h1_h2_h3_h4_h5_h6_style,
@@ -130,7 +122,7 @@ export const H3 = ({ style, ...props }) => {
   );
 };
 
-export const H4 = ({ style, ...props }) => {
+export const H4Element = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...h1_h2_h3_h4_h5_h6_style,
@@ -141,7 +133,7 @@ export const H4 = ({ style, ...props }) => {
   );
 };
 
-export const H5 = ({ style, ...props }) => {
+export const H5Element = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...h1_h2_h3_h4_h5_h6_style,
@@ -152,7 +144,7 @@ export const H5 = ({ style, ...props }) => {
   );
 };
 
-export const H6 = ({ style, ...props }) => {
+export const H6Element = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...h1_h2_h3_h4_h5_h6_style,
@@ -163,33 +155,25 @@ export const H6 = ({ style, ...props }) => {
   );
 };
 
-export const Header = ({ style, ...props }) => {
+export const HeaderElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="header"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="header" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Footer = ({ style, ...props }) => {
+export const FooterElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="footer"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="footer" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Address = ({ style, ...props }) => {
+export const AddressElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -212,7 +196,7 @@ export const Address = ({ style, ...props }) => {
 
 category: Grouping content
 */
-export const P = ({ style, ...props }) => {
+export const PElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...p_style
@@ -222,7 +206,7 @@ export const P = ({ style, ...props }) => {
   );
 };
 
-export const Hr = ({ style, ...props }) => {
+export const HrElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...hr_style
@@ -232,22 +216,18 @@ export const Hr = ({ style, ...props }) => {
   );
 };
 
-export const Pre = ({ style, ...props }) => {
+export const PreElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...pre_code_kbd_samp_style,
     ...pre_style
   };
   return (
-    <Base
-      elementType="pre"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="pre" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Blockquote = ({ style, ...props }) => {
+export const BlockquoteElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -260,7 +240,7 @@ export const Blockquote = ({ style, ...props }) => {
   );
 };
 
-export const Ol = ({ style, ...props }) => {
+export const OlElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...ul_ol_style
@@ -270,7 +250,7 @@ export const Ol = ({ style, ...props }) => {
   );
 };
 
-export const Ul = ({ style, ...props }) => {
+export const UlElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...ul_ol_style
@@ -280,7 +260,7 @@ export const Ul = ({ style, ...props }) => {
   );
 };
 
-export const Li = ({ style, ...props }) => {
+export const LiElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -289,7 +269,7 @@ export const Li = ({ style, ...props }) => {
   );
 };
 
-export const Dl = ({ style, ...props }) => {
+export const DlElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -298,7 +278,7 @@ export const Dl = ({ style, ...props }) => {
   );
 };
 
-export const Dt = ({ style, ...props }) => {
+export const DtElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -307,7 +287,7 @@ export const Dt = ({ style, ...props }) => {
   );
 };
 
-export const Dd = ({ style, ...props }) => {
+export const DdElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -316,20 +296,16 @@ export const Dd = ({ style, ...props }) => {
   );
 };
 
-export const Figure = ({ style, ...props }) => {
+export const FigureElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="figure"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="figure" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Figcaption = ({ style, ...props }) => {
+export const FigcaptionElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -342,30 +318,22 @@ export const Figcaption = ({ style, ...props }) => {
   );
 };
 
-export const Div = ({ style, ...props }) => {
+export const DivElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="div"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="div" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Main = ({ style, ...props }) => {
+export const MainElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...main_style
   };
   return (
-    <Base
-      elementType="main"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="main" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 /*
@@ -379,7 +347,7 @@ export const Main = ({ style, ...props }) => {
 
 category: Text-level semantics
 */
-export const A = ({ style, ...props }) => {
+export const AElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...a_style
@@ -389,7 +357,7 @@ export const A = ({ style, ...props }) => {
   );
 };
 
-export const Em = ({ style, ...props }) => {
+export const EmElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -398,35 +366,27 @@ export const Em = ({ style, ...props }) => {
   );
 };
 
-export const Strong = ({ style, ...props }) => {
+export const StrongElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...b_strong_style
   };
   return (
-    <Base
-      elementType="strong"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="strong" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Small = ({ style, ...props }) => {
+export const SmallElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...small_style
   };
   return (
-    <Base
-      elementType="small"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="small" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const S = ({ style, ...props }) => {
+export const SElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -435,20 +395,16 @@ export const S = ({ style, ...props }) => {
   );
 };
 
-export const Cite = ({ style, ...props }) => {
+export const CiteElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="cite"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="cite" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Q = ({ style, ...props }) => {
+export const QElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -457,132 +413,96 @@ export const Q = ({ style, ...props }) => {
   );
 };
 
-export const Dfn = ({ style, ...props }) => {
+export const DfnElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="dfn"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="dfn" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Abbr = ({ style, ...props }) => {
+export const AbbrElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...abbr_style
   };
   return (
-    <Base
-      elementType="abbr"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="abbr" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Time = ({ style, ...props }) => {
+export const TimeElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="time"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="time" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Code = ({ style, ...props }) => {
+export const CodeElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...pre_code_kbd_samp_style
   };
   return (
-    <Base
-      elementType="code"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="code" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Var = ({ style, ...props }) => {
+export const VarElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="var"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="var" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Samp = ({ style, ...props }) => {
+export const SampElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...pre_code_kbd_samp_style
   };
   return (
-    <Base
-      elementType="samp"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="samp" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Kbd = ({ style, ...props }) => {
+export const KbdElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...pre_code_kbd_samp_style
   };
   return (
-    <Base
-      elementType="kbd"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="kbd" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Sub = ({ style, ...props }) => {
+export const SubElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...sub_sup_style,
     ...sub_style
   };
   return (
-    <Base
-      elementType="sub"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="sub" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Sup = ({ style, ...props }) => {
+export const SupElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...sub_sup_style,
     ...sup_style
   };
   return (
-    <Base
-      elementType="sup"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="sup" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const I = ({ style, ...props }) => {
+export const IElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -591,7 +511,7 @@ export const I = ({ style, ...props }) => {
   );
 };
 
-export const B = ({ style, ...props }) => {
+export const BElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...b_strong_style
@@ -601,33 +521,25 @@ export const B = ({ style, ...props }) => {
   );
 };
 
-export const Mark = ({ style, ...props }) => {
+export const MarkElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="mark"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="mark" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Ruby = ({ style, ...props }) => {
+export const RubyElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="ruby"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="ruby" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Rt = ({ style, ...props }) => {
+export const RtElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -636,7 +548,7 @@ export const Rt = ({ style, ...props }) => {
   );
 };
 
-export const Rp = ({ style, ...props }) => {
+export const RpElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -645,42 +557,30 @@ export const Rp = ({ style, ...props }) => {
   );
 };
 
-export const Bdo = ({ style, ...props }) => {
+export const BdoElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="bdo"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="bdo" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Span = ({ style, ...props }) => {
+export const SpanElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="span"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="span" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Wbr = ({ style, ...props }) => {
+export const WbrElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="wbr"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="wbr" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 /*
@@ -694,29 +594,21 @@ export const Wbr = ({ style, ...props }) => {
 
 category: Edits
 */
-export const Ins = ({ style, ...props }) => {
+export const InsElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="ins"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="ins" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Del = ({ style, ...props }) => {
+export const DelElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="del"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="del" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 /*
@@ -730,147 +622,103 @@ export const Del = ({ style, ...props }) => {
 
 category: Embedded content
 */
-export const Img = ({ style, ...props }) => {
+export const ImgElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...img_style
   };
   return (
-    <Base
-      elementType="img"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="img" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Iframe = ({ style, ...props }) => {
+export const IframeElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="iframe"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="iframe" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Embed = ({ style, ...props }) => {
+export const EmbedElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="embed"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="embed" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Object = ({ style, ...props }) => {
+export const ObjectElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="object"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="object" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Param = ({ style, ...props }) => {
+export const ParamElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="param"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="param" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Video = ({ style, ...props }) => {
+export const VideoElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="video"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="video" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Audio = ({ style, ...props }) => {
+export const AudioElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="audio"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="audio" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Source = ({ style, ...props }) => {
+export const SourceElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="source"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="source" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Canvas = ({ style, ...props }) => {
+export const CanvasElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="canvas"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="canvas" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Map = ({ style, ...props }) => {
+export const MapElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="map"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="map" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Area = ({ style, ...props }) => {
+export const AreaElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="area"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="area" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 /*
@@ -884,20 +732,16 @@ export const Area = ({ style, ...props }) => {
 
 category: Tabular data
 */
-export const Table = ({ style, ...props }) => {
+export const TableElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="table"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="table" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Caption = ({ style, ...props }) => {
+export const CaptionElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -910,7 +754,7 @@ export const Caption = ({ style, ...props }) => {
   );
 };
 
-export const Colgroup = ({ style, ...props }) => {
+export const ColgroupElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -923,59 +767,43 @@ export const Colgroup = ({ style, ...props }) => {
   );
 };
 
-export const Col = ({ style, ...props }) => {
+export const ColElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="col"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="col" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Tbody = ({ style, ...props }) => {
+export const TbodyElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="tbody"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="tbody" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Thead = ({ style, ...props }) => {
+export const TheadElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="thead"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="thead" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Tfoot = ({ style, ...props }) => {
+export const TfootElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="tfoot"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="tfoot" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Tr = ({ style, ...props }) => {
+export const TrElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -984,7 +812,7 @@ export const Tr = ({ style, ...props }) => {
   );
 };
 
-export const Td = ({ style, ...props }) => {
+export const TdElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -993,7 +821,7 @@ export const Td = ({ style, ...props }) => {
   );
 };
 
-export const Th = ({ style, ...props }) => {
+export const ThElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -1012,20 +840,16 @@ export const Th = ({ style, ...props }) => {
 
 category: Forms
 */
-export const Form = ({ style, ...props }) => {
+export const FormElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="form"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="form" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Fieldset = ({ style, ...props }) => {
+export const FieldsetElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...fieldset_style
@@ -1039,49 +863,37 @@ export const Fieldset = ({ style, ...props }) => {
   );
 };
 
-export const Legend = ({ style, ...props }) => {
+export const LegendElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     legend_style
   };
   return (
-    <Base
-      elementType="legend"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="legend" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Label = ({ style, ...props }) => {
+export const LabelElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="label"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="label" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Input = ({ style, ...props }) => {
+export const InputElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...button_input_optgroup_select_textarea_style,
     ...button_input_style
   };
   return (
-    <Base
-      elementType="input"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="input" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Button = ({ style, ...props }) => {
+export const ButtonElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...button_input_optgroup_select_textarea_style,
@@ -1090,30 +902,22 @@ export const Button = ({ style, ...props }) => {
     ...button_inputButton_inputReset_inputSubmit_style
   };
   return (
-    <Base
-      elementType="button"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="button" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Select = ({ style, ...props }) => {
+export const SelectElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...button_input_optgroup_select_textarea_style,
     ...button_select_style
   };
   return (
-    <Base
-      elementType="select"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="select" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Datalist = ({ style, ...props }) => {
+export const DatalistElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -1126,7 +930,7 @@ export const Datalist = ({ style, ...props }) => {
   );
 };
 
-export const Optgroup = ({ style, ...props }) => {
+export const OptgroupElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...button_input_optgroup_select_textarea_style
@@ -1140,20 +944,16 @@ export const Optgroup = ({ style, ...props }) => {
   );
 };
 
-export const Option = ({ style, ...props }) => {
+export const OptionElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="option"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="option" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Textarea = ({ style, ...props }) => {
+export const TextareaElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...button_input_optgroup_select_textarea_style,
@@ -1168,33 +968,25 @@ export const Textarea = ({ style, ...props }) => {
   );
 };
 
-export const Keygen = ({ style, ...props }) => {
+export const KeygenElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="keygen"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="keygen" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Output = ({ style, ...props }) => {
+export const OutputElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="output"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="output" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 
-export const Progress = ({ style, ...props }) => {
+export const ProgressElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...progress_style
@@ -1208,16 +1000,12 @@ export const Progress = ({ style, ...props }) => {
   );
 };
 
-export const Meter = ({ style, ...props }) => {
+export const MeterElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="meter"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="meter" style={{ ...solidStyle, ...style }} {...props} />
   );
 };
 /*
@@ -1231,7 +1019,7 @@ export const Meter = ({ style, ...props }) => {
 
 category: Interactive elements
 */
-export const Details = ({ style, ...props }) => {
+export const DetailsElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...details_style
@@ -1245,7 +1033,7 @@ export const Details = ({ style, ...props }) => {
   );
 };
 
-export const Summary = ({ style, ...props }) => {
+export const SummaryElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle,
     ...summary_style
@@ -1259,7 +1047,7 @@ export const Summary = ({ style, ...props }) => {
   );
 };
 
-export const Command = ({ style, ...props }) => {
+export const CommandElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
@@ -1272,15 +1060,11 @@ export const Command = ({ style, ...props }) => {
   );
 };
 
-export const Menu = ({ style, ...props }) => {
+export const MenuElement = ({ style, ...props }) => {
   const solidStyle = {
     ...allElementsCommonStyle
   };
   return (
-    <Base
-      elementType="menu"
-      style={{ ...solidStyle, ...style }}
-      {...props}
-    />
+    <Base elementType="menu" style={{ ...solidStyle, ...style }} {...props} />
   );
 };

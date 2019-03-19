@@ -1,93 +1,169 @@
-import React, { useMemo, useCallback } from 'react';
-import $materials from './_materials';
-import { reflow, roundNumber, genTransitionProp } from 'scripts';
-import { Transition } from 'react-transition-group';
-import { DivElement } from 'elements';
+import React, {
+  useMemo,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef
+} from 'react';
+import $ from './_materials';
+import { genTransitionProp, genDurationsEasings, ownerWindow } from 'scripts';
+import CSSTransition from '../CSSTransition';
 
-const $names = $materials.names;
-const $styles = $materials.styles;
+const $names = $.names;
+const $selectors = $.selectors;
+const $styles = $.styles;
+
+const GUTTER = 24;
+
+const getExitedTranslateValue = (node, direction) => {
+  const rect = node.getBoundingClientRect();
+
+  const computedStyle = ownerWindow(node).getComputedStyle(node);
+  const transform =
+    computedStyle.getPropertyValue('-webkit-transform') ||
+    computedStyle.getPropertyValue('transform');
+  let offsetX = 0;
+  let offsetY = 0;
+  if (transform && transform !== 'none' && typeof transform === 'string') {
+    const transformValues = transform
+      .split('(')[1]
+      .split(')')[0]
+      .split(',');
+    offsetX = parseInt(transformValues[4], 10);
+    offsetY = parseInt(transformValues[5], 10);
+  }
+
+  switch (direction) {
+    case 'left':
+      return `translateX(100vw) translateX(-${rect.left - offsetX}px)`;
+    case 'right':
+      return `translateX(-${rect.left + rect.width + GUTTER - offsetX}px)`;
+    case 'up':
+      return `translateY(100vh) translateY(-${rect.top - offsetY}px)`;
+    default:
+      return `translateY(-${rect.top + rect.height + GUTTER - offsetY}px)`;
+  }
+};
+
+const setTransition = (node, value) => {
+  node.style.webkitTransition = value;
+  node.style.transition = value;
+};
+
+const setTransform = (node, value) => {
+  node.style.webkitTransform = value;
+  node.style.transform = value;
+};
 
 const Slide = ({
   in: inProp,
   children,
-  duration = $styles.defaultDuration,
-  easing = $styles.defaultEasing,
+  duration = $styles.duration,
+  easing = $styles.easing,
   appear = true,
-  direction = 'down',
+  direction = $styles.direction,
   onEnter,
+  onEntering,
+  onExiting,
+  onExited,
+  classNames = [],
   ...props
 }) => {
-  const handleEnter = useCallback(
-    node => {
-      reflow(node);
-      node.style.transition = genTransitionProp([
-        [$styles.transitionOpacity, duration, easing],
-        [
-          $styles.transitionTransform,
-          roundNumber(duration * $styles.scaleDurationRatio, 0),
-          easing
-        ]
-      ]);
-      if (onEnter) onEnter(node);
-    },
-    [onEnter]
-  );
+  const elRef = useRef(null);
 
-  const handleExit = useCallback(
-    node => {
-      node.style.transition = genTransitionProp([
-        [$styles.transitionOpacity, duration, easing],
-        [
-          $styles.transitionTransform,
-          roundNumber(duration * $styles.scaleDurationRatio, 0),
-          easing,
-          roundNumber(duration * $styles.outScalingDelayRatioFromDuration, 0)
-        ]
-      ]);
-      if (onEnter) onEnter(node);
-    },
-    [onEnter]
-  );
+  const [durations, easings] = genDurationsEasings(duration, easing);
 
-  const enteredStyle = useMemo(() => {
+  const style = useMemo(() => {
     return {
-      opacity: 1,
-      transform: $styles.exitedScale
+      [$selectors.exited]: {
+        visibility: $styles.exitedVisibility
+      }
     };
   }, []);
 
-  const exitedStyle = useMemo(() => {
-    return {
-      opacity: 0,
-      transform: `scale(${$styles.scaleXRatio}, ${$styles.scaleYRatio})`
-    };
+  useLayoutEffect(() => {
+    const node = elRef.current;
+    if (appear || !inProp) {
+      const translate = getExitedTranslateValue(node, direction);
+      setTransform(node, translate);
+    }
+  }, []);
+
+  const handleEnter = useCallback(
+    (node, appearing) => {
+      if (!appearing) {
+        const translate = getExitedTranslateValue(node, direction);
+        setTransform(node, translate);
+      }
+      if (onEnter) onEnter(node, appearing);
+    },
+    [onEnter]
+  );
+
+  const handleEntering = useCallback(
+    (node, appearing) => {
+      setTransition(
+        node,
+        genTransitionProp([
+          [$styles.transitionProperty, durations.enter, easings.enter]
+        ])
+      );
+      setTransform(node, $styles.enteredTranslate);
+      if (onEntering) onEntering(node, appearing);
+    },
+    [onEntering]
+  );
+
+  const handleExiting = useCallback(
+    node => {
+      setTransition(
+        node,
+        genTransitionProp([
+          [$styles.transitionProperty, durations.exit, easings.exit]
+        ])
+      );
+      const translate = getExitedTranslateValue(node, direction);
+      setTransform(node, translate);
+      if (onExiting) onExiting(node);
+    },
+    [onExiting]
+  );
+
+  const handleExited = useCallback(
+    node => {
+      setTransition(node, '');
+      if (onExited) onExited(node);
+    },
+    [onExited]
+  );
+
+  useMemo(() => {
+    classNames.push($names.ucSlide);
   }, []);
 
   return (
-    <Transition
+    <CSSTransition
       appear={appear}
       in={inProp}
-      timeout={duration}
+      timeout={durations}
       onEnter={handleEnter}
-      onExit={handleExit}
+      onEntering={handleEntering}
+      onExiting={handleExiting}
+      onExited={handleExited}
       {...props}
     >
       {(state, childProps) => {
         return (
-          <DivElement
-            style={
-              state === 'entering' || state === 'entered'
-                ? enteredStyle
-                : exitedStyle
-            }
-            className={$names.ucSlide}
+          <children.type
+            {...children.props}
+            style={{ ...style, ...children.props.style }}
+            classNames={classNames}
             {...childProps}
-          >
-            {children}
-          </DivElement>
+            refer={elRef}
+          />
         );
       }}
-    </Transition>
+    </CSSTransition>
   );
 };
 

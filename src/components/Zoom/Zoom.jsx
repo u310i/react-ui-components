@@ -1,45 +1,43 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback, useRef } from 'react';
 import $ from './_materials';
 import { genTransitionProp, genDurationsEasings } from 'scripts';
 import CSSTransition from '../CSSTransition';
-import { DivElement } from '../_Elements';
 
 const $names = $.names;
 const $selectors = $.selectors;
 const $styles = $.styles;
 
-const Fade = ({
+const Zoom = ({
   in: inProp,
   children,
   duration = $styles.duration,
   easing = $styles.easing,
   appear = true,
-  onEnter,
+  classNames = [],
   ...props
 }) => {
   const [durations, easings] = genDurationsEasings(duration, easing);
 
   const style = useMemo(() => {
     return {
-      opacity:
-        !appear && inProp ? $styles.enteredOpacity : $styles.exitedOpacity,
+      transform: !appear && inProp ? $styles.enteredScale : $styles.exitedScale,
       [$selectors.enters]: {
         transition: genTransitionProp([
           [$styles.transitionProperty, durations.enter, easings.enter]
         ]),
-        opacity: $styles.exitedOpacity
+        transform: $styles.exitedScale
       },
       [`${$selectors.enterings},${$selectors.entered}`]: {
-        opacity: $styles.enteredOpacity
+        transform: $styles.enteredScale
       },
       [$selectors.exit]: {
         transition: genTransitionProp([
           [$styles.transitionProperty, durations.exit, easings.exit]
         ]),
-        opacity: $styles.enteredOpacity
+        transform: $styles.enteredScale
       },
       [`${$selectors.exiting},${$selectors.exited}`]: {
-        opacity: $styles.exitedOpacity
+        transform: $styles.exitedScale
       },
       [$selectors.exited]: {
         visibility: $styles.exitedVisibility
@@ -47,17 +45,24 @@ const Fade = ({
     };
   }, []);
 
+  useMemo(() => {
+    classNames.push($names.ucGrow);
+  }, []);
+
   return (
-    <CSSTransition appear={appear} in={inProp} timeout={durations} {...props}>
+    <CSSTransition in={inProp} timeout={durations} appear={appear} {...props}>
       {(state, childProps) => {
         return (
-          <DivElement style={style} className={$names.ucFade} {...childProps}>
-            {children}
-          </DivElement>
+          <children.type
+            {...children.props}
+            style={{ ...style, ...children.props.style }}
+            classNames={classNames}
+            {...childProps}
+          />
         );
       }}
     </CSSTransition>
   );
 };
 
-export default Fade;
+export default Zoom;

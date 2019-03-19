@@ -1,11 +1,11 @@
 import { getComponentMaterials, adustBrightnessFromCssRgb } from 'scripts';
 import defineContents from './_defineContents';
 
-const $materials = getComponentMaterials('button');
+const $ = getComponentMaterials('button');
 
-const $styles = $materials.styles;
-const $colors = $materials.colors;
-const $selectors = $materials.selectors;
+const $styles = $.styles;
+const $colors = $.colors;
+const $selectors = $.selectors;
 
 export default {
   defineContents: defineContents,

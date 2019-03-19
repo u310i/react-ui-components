@@ -4,9 +4,14 @@ const colors = {
   transparent: 'transparent'
 };
 
-const cssProperties = {
-  ariaLabel: 'aria-label'
-};
+const appear = '&.appear';
+const appearing = '&.appear-active';
+const enter = '&.enter';
+const entering = '&.enter-active';
+const entered = '&.enter-done';
+const exit = '&.exit';
+const exiting = '&.exit-active';
+const exited = '&.exit-done';
 
 const selectors = {
   hover: '&:hover',
@@ -21,6 +26,18 @@ const selectors = {
     notLastChild: '& > :not(:last-child)',
     nthChild: n => `& > :nth-child(${n})`,
     notNthChild: n => `& > :not(:nth-child(${n}))`
+  },
+  transition: {
+    appear: appear,
+    appearing: appearing,
+    enter: enter,
+    entering: entering,
+    entered: entered,
+    exit: exit,
+    exiting: exiting,
+    exited: exited,
+    enters: `${appear},${enter}`,
+    enterings: `${appearing},${entering}`
   }
 };
 
@@ -42,9 +59,17 @@ const cubicBeziers = {
   easeInOutEndSlowly: 'cubic-bezier(0.4, 0, 0.2, 1)'
 };
 
+const props = {
+  transitionDuration: { enter: 300, exit: 300 },
+  transitionEasing: {
+    enter: cubicBeziers.easeInOutEndSlowly,
+    exit: cubicBeziers.easeInOutEndSlowly
+  }
+};
+
 export default {
   colors,
-  cssProperties,
   selectors,
-  cubicBeziers
+  cubicBeziers,
+  props
 };

@@ -1,92 +1,93 @@
-import React, { useMemo, useCallback } from 'react';
-import $materials from './_materials';
-import { reflow, roundNumber, genTransitionProp } from 'scripts';
-import { Transition } from 'react-transition-group';
-import { DivElement } from 'elements';
+import React, { useMemo } from 'react';
+import $ from './_materials';
+import { roundNumber, genTransitionProp, genDurationsEasings } from 'scripts';
+import CSSTransition from '../CSSTransition';
 
-const $names = $materials.names;
-const $styles = $materials.styles;
+const $names = $.names;
+const $selectors = $.selectors;
+const $styles = $.styles;
 
 const Grow = ({
   in: inProp,
   children,
-  duration = $styles.defaultDuration,
-  easing = $styles.defaultEasing,
+  duration = $styles.duration,
+  easing = $styles.easing,
   appear = true,
   onEnter,
+  classNames = [],
   ...props
 }) => {
-  const handleEnter = useCallback(
-    node => {
-      reflow(node);
-      node.style.transition = genTransitionProp([
-        [$styles.transitionOpacity, duration, easing],
-        [
-          $styles.transitionTransform,
-          roundNumber(duration * $styles.scaleDurationRatio, 0),
-          easing
-        ]
-      ]);
-      if (onEnter) onEnter(node);
-    },
-    [onEnter]
-  );
+  const [durations, easings] = genDurationsEasings(duration, easing);
 
-  const handleExit = useCallback(
-    node => {
-      node.style.transition = genTransitionProp([
-        [$styles.transitionOpacity, duration, easing],
-        [
-          $styles.transitionTransform,
-          roundNumber(duration * $styles.scaleDurationRatio, 0),
-          easing,
-          roundNumber(duration * $styles.outScalingDelayRatioFromDuration, 0)
-        ]
-      ]);
-      if (onEnter) onEnter(node);
-    },
-    [onEnter]
-  );
+  const style = useMemo(() => {
+    const enteredStyle = {
+      opacity: $styles.enteredOpacity,
+      transform: $styles.enteredScale
+    };
+    const exitedStyle = {
+      opacity: $styles.exitedOpacity,
+      transform: `scale(${$styles.scaleXRatio}, ${$styles.scaleYRatio})`
+    };
 
-  const enteredStyle = useMemo(() => {
+    const defaultTransitionalStyle =
+      !appear && inProp ? enteredStyle : exitedStyle;
+
+    const enterTransitionProp = genTransitionProp([
+      [$styles.transitionOpacity, durations.enter, easings.enter],
+      [
+        $styles.transitionTransform,
+        roundNumber(durations.enter * $styles.scaleDurationRatio, 0),
+        easings.enter
+      ]
+    ]);
+    const exitTransitionProp = genTransitionProp([
+      [$styles.transitionOpacity, durations.exit, easings.exit],
+      [
+        $styles.transitionTransform,
+        roundNumber(durations.exit * $styles.scaleDurationRatio, 0),
+        easings.exit,
+        roundNumber(
+          durations.exit * $styles.outScalingDelayRatioFromDuration,
+          0
+        )
+      ]
+    ]);
+
     return {
-      opacity: 1,
-      transform: $styles.exitedScale
+      ...defaultTransitionalStyle,
+      [$selectors.enters]: {
+        transition: enterTransitionProp,
+        ...exitedStyle
+      },
+      [`${$selectors.enterings},${$selectors.entered}`]: enteredStyle,
+      [$selectors.exit]: {
+        transition: exitTransitionProp,
+        ...enteredStyle
+      },
+      [`${$selectors.exiting},${$selectors.exited}`]: exitedStyle,
+      [$selectors.exited]: {
+        visibility: $styles.exitedVisibility
+      }
     };
   }, []);
 
-  const exitedStyle = useMemo(() => {
-    return {
-      opacity: 0,
-      transform: `scale(${$styles.scaleXRatio}, ${$styles.scaleYRatio})`
-    };
+  useMemo(() => {
+    classNames.push($names.ucGrow);
   }, []);
 
   return (
-    <Transition
-      appear={appear}
-      in={inProp}
-      timeout={duration}
-      onEnter={handleEnter}
-      onExit={handleExit}
-      {...props}
-    >
+    <CSSTransition appear={appear} in={inProp} timeout={durations} {...props}>
       {(state, childProps) => {
         return (
-          <DivElement
-            style={
-              state === 'entering' || state === 'entered'
-                ? enteredStyle
-                : exitedStyle
-            }
-            className={$names.ucGrow}
+          <children.type
+            {...children.props}
+            style={{ ...style, ...children.props.style }}
+            classNames={classNames}
             {...childProps}
-          >
-            {children}
-          </DivElement>
+          />
         );
       }}
-    </Transition>
+    </CSSTransition>
   );
 };
 
