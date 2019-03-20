@@ -106,7 +106,7 @@ const AppBar = ({
           paddingLeft: '0.5rem',
           paddingRight: '0.5rem',
           width: '100%',
-          zIndex: 1100
+          zIndex: theme.zIndex.appBar
         }
       }
     };
@@ -138,8 +138,7 @@ const AppBar = ({
   const createAppBar = useMemo(() => {
     return style => (
       <div className={cx(css(style), 'uc-appbar-main')}>
-        {/* <List componentList={list} mode="component" /> */}
-        test
+        <List componentList={list} mode="component" />
       </div>
     );
   }, []);

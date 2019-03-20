@@ -4,7 +4,7 @@ import './props/materials';
 import 'scripts/polyfill';
 import { resetGlobalStyle } from 'scripts';
 
-// import App from './app';
+// import App from './app2';
 
 // injectGlobal(resetGlobalCss);
 // ReactDOM.render(<App />, document.getElementById('app'));

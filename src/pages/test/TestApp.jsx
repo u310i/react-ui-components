@@ -9,6 +9,7 @@ import {
 } from 'scripts';
 
 import {
+  AppBar,
   Button,
   Order,
   List,
@@ -40,6 +41,34 @@ export default ({}) => {
   const handler = () => {
     setState(prev => !prev);
   };
+  const appBarProps = {
+    style: {
+      backgroundColor: '#2f4f4f'
+    },
+    height: '5rem',
+    mode: 'absoluteToFixed',
+    actionMode: 'scrollDown',
+    action: {
+      timingFunction: 'ease-out',
+      duration: 200,
+      scrollDown: {
+        preset: 'hide',
+        beforeStyle: {},
+        afterStyle: {}
+      },
+      scrolling: {
+        beforeStyle: {
+          opacity: 1
+        },
+        afterStyle: {
+          // height: '3rem',
+          opacity: 0.3,
+          backgroundColor: '#ff0000'
+        }
+      }
+    }
+  };
+
   return (
     <DivElement style={{ backgroundColor: '#fff' }}>
       <DivElement style={{ height: '100px' }} />
@@ -78,6 +107,11 @@ export default ({}) => {
           aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
         </DivElement>
       </Zoom>
+      <DivElement style={{ height: '100px', backgroundColor: '#e6e6fa' }} />
+      <DivElement
+        style={{ height: '80px', width: '100%', backgroundColor: '#ff6347' }}
+      />
+      {/* <AppBar {...appBarProps} /> */}
       {/* <MuCollapse in={state} timeout={1000}>
         <DivElement
           style={{
@@ -180,6 +214,7 @@ export default ({}) => {
         size=""
         type="normal"
       />
+      <DivElement style={{ height: '512px' }} />
       <Icon
         type="fa"
         icon={['fab', 'apple']}
