@@ -25,3 +25,7 @@ export * from './hooks/useEffects';
 export * from './hooks/useLayoutEffects';
 
 export * from './hooks/useGlobalState';
+
+export * from './addEventListener';
+
+export * from './setCssProp';

@@ -6,8 +6,13 @@ import React, {
   useRef
 } from 'react';
 import $ from './_materials';
-import { genTransitionProp, genDurationsEasings, ownerWindow } from 'scripts';
-import CSSTransition from '../CSSTransition';
+import {
+  genTransitionProp,
+  genDurationsEasings,
+  setTransition,
+  setTransform
+} from 'scripts';
+import { CSSTransition } from '..';
 
 const $names = $.names;
 const $selectors = $.selectors;
@@ -18,7 +23,7 @@ const GUTTER = 24;
 const getExitedTranslateValue = (node, direction) => {
   const rect = node.getBoundingClientRect();
 
-  const computedStyle = ownerWindow(node).getComputedStyle(node);
+  const computedStyle = window.getComputedStyle(node);
   const transform =
     computedStyle.getPropertyValue('-webkit-transform') ||
     computedStyle.getPropertyValue('transform');
@@ -35,24 +40,16 @@ const getExitedTranslateValue = (node, direction) => {
 
   switch (direction) {
     case 'left':
-      return `translateX(100vw) translateX(-${rect.left - offsetX}px)`;
+      return `translateX(${window.innerWidth}px) translateX(-${rect.left -
+        offsetX}px)`;
     case 'right':
       return `translateX(-${rect.left + rect.width + GUTTER - offsetX}px)`;
     case 'up':
-      return `translateY(100vh) translateY(-${rect.top - offsetY}px)`;
+      return `translateY(${window.innerHeight}px) translateY(-${rect.top -
+        offsetY}px)`;
     default:
       return `translateY(-${rect.top + rect.height + GUTTER - offsetY}px)`;
   }
-};
-
-const setTransition = (node, value) => {
-  node.style.webkitTransition = value;
-  node.style.transition = value;
-};
-
-const setTransform = (node, value) => {
-  node.style.webkitTransform = value;
-  node.style.transform = value;
 };
 
 const Slide = ({
@@ -131,7 +128,7 @@ const Slide = ({
 
   const handleExited = useCallback(
     node => {
-      setTransition(node, '');
+      setTransition(node, null);
       if (onExited) onExited(node);
     },
     [onExited]

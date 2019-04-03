@@ -1,6 +1,6 @@
 import React from 'react';
 import { getComponentMaterials, isString } from 'scripts';
-import { DivElement } from '../_Elements';
+import { DivElement } from '..';
 
 const $ = getComponentMaterials('button');
 const $gStyles = $.group.styles;

@@ -17,17 +17,17 @@ export const genUniqueId = () => {
     .substr(2, 9);
 };
 
-export const createOptimizedEvent = (fn, handleRef) => {
+export const createOptimizedEvent = (fn, cancelRef) => {
   let ticking = false;
   let handle;
   return () => {
     if (!ticking) {
       handle = raf(() => {
         fn();
-        handleRef.current = false;
+        cancelRef.current = false;
         ticking = false;
       });
-      handleRef.current = () => raf.cancel(handle);
+      cancelRef.current = () => raf.cancel(handle);
       ticking = true;
     }
   };

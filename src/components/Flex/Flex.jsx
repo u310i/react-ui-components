@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DivElement } from '../_Elements';
+import { DivElement } from '..';
 
 const Flex = ({
   children,

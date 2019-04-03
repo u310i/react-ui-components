@@ -70,8 +70,8 @@ export const useIntersectionObserver = (
 export const useAddWindowEvent = (
   type,
   callback,
-  enable = true,
   // options = {},
+  enable = true,
   dependencies = [],
   optimized = true
 ) => {

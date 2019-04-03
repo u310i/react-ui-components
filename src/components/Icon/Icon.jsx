@@ -12,7 +12,7 @@ import {
   keyframes
 } from 'scripts';
 import scripts from './_scripts';
-import SVG from 'components/SVG';
+import { SVG } from '..';
 
 const $styles = $.styles;
 const $names = $.names;
@@ -23,6 +23,7 @@ const Icon = ({
   classNames = [],
   ids = [],
   role = 'icon',
+  ariaLabel: propAriaLabel,
   symbol,
   use,
   currentColor,
@@ -41,25 +42,19 @@ const Icon = ({
   const iconType = getType(icon);
 
   let name = '';
-  let ariaLabel = '';
-  const ariaLabelPrefix = $names.ariaLabelPrefix;
   if (iconType === 'string') {
     name = icon;
-    ariaLabel = ariaLabelPrefix + icon;
   } else if (iconType === 'array') {
     name = icon.join('-');
-    ariaLabel = ariaLabelPrefix + icon[1];
   } else if (iconType === 'object') {
     if (isString(icon.name)) {
       name = icon.name;
-      ariaLabel = ariaLabelPrefix + icon.name;
     } else if (isArray(icon.name)) {
       icon.name.join('-');
-      ariaLabel = ariaLabelPrefix + icon.name[1];
     }
   }
 
-  props['aria-label'] = ariaLabel;
+  if (propAriaLabel) props['aria-label'] = propAriaLabel;
 
   const iconData =
     iconType === 'object'

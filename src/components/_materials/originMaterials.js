@@ -1,3 +1,5 @@
+import shadow from './shadow';
+
 const colors = {
   white: '#fff',
   main: 'rgb(24, 144, 255)',
@@ -59,6 +61,24 @@ const cubicBeziers = {
   easeInOutEndSlowly: 'cubic-bezier(0.4, 0, 0.2, 1)'
 };
 
+const zIndex = {
+  button: 100,
+  slide: 200,
+  mobileStepper: 1000,
+  appBar: 1100,
+  drawer: 1200,
+  modal: 1300,
+  snackbar: 1400,
+  tooltip: 1500
+};
+
+const shape = {
+  corner: '0',
+  default: '0.25em',
+  round: '1em',
+  circle: '50%'
+};
+
 const props = {
   transitionDuration: { enter: 300, exit: 300 },
   transitionEasing: {
@@ -71,5 +91,8 @@ export default {
   colors,
   selectors,
   cubicBeziers,
+  zIndex,
+  shape,
+  shadow,
   props
 };

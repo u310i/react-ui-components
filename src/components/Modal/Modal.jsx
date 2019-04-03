@@ -11,8 +11,8 @@ import { DivElement, EventListener } from '..';
 
 const $names = $.names;
 
-const Drawer = ({}) => {
+const Modal = ({}) => {
   return <DivElement>test</DivElement>;
 };
 
-export default Drawer;
+export default Modal;

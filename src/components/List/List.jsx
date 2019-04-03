@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import $ from './_materials';
 import { isString, isReact } from 'scripts';
-import { UlElement, LiElement, DivElement, SpanElement } from '../_Elements';
+import { UlElement, LiElement, DivElement, SpanElement } from '..';
 import scripts from './_scripts';
 
 const $styles = $.styles;

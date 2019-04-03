@@ -6,7 +6,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { extractCurrentScreenSizeProps } from 'scripts';
 
 import IconButton from 'components/IconButton';
-import { Generator as GenerateDrawer } from 'components/Drawer';
+// import { Generator as GenerateDrawer } from 'components/Drawer';
 import Menu from 'components/Menu';
 import AppBar from 'components/AppBar';
 /*
@@ -71,15 +71,15 @@ const Header = ({
 
   const container = useMemo(() => document.getElementById('app'), []);
 
-  const drawerContainer = GenerateDrawer({
-    theme: theme,
-    parentProps: {},
-    options: drawer.options,
-    list: list,
-    breakpoint: breakpoint,
-    showBreakpoint: ['sm'],
-    container
-  });
+  // const drawerContainer = GenerateDrawer({
+  //   theme: theme,
+  //   parentProps: {},
+  //   options: drawer.options,
+  //   list: list,
+  //   breakpoint: breakpoint,
+  //   showBreakpoint: ['sm'],
+  //   container
+  // });
 
   const MenuItem = useMemo(() => {
     return (

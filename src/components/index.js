@@ -3,9 +3,9 @@ import Fade from './Fade';
 import Grow from './Grow';
 import Slide from './Slide';
 import Zoom from './Zoom';
+import Sticky from './Sticky';
 import AppBar from './AppBar';
 import Button from './Button';
-import CSSTransition from './CSSTransition';
 import Drawer from './Drawer';
 import Flex from './Flex';
 import Header from './Header';
@@ -18,7 +18,10 @@ import ListItem from './ListItem';
 import Menu from './Menu';
 import SVG from './SVG';
 import Order from './Order';
+import Paper from './Paper';
 import Divider from './Divider';
+import CSSTransition from './CSSTransition';
+import EventListener from './EventListener';
 
 export {
   Collapse,
@@ -26,6 +29,7 @@ export {
   Grow,
   Slide,
   Zoom,
+  Sticky,
   AppBar,
   Button,
   Drawer,
@@ -40,8 +44,10 @@ export {
   Menu,
   SVG,
   Order,
+  Paper,
   Divider,
-  CSSTransition
+  CSSTransition,
+  EventListener
 };
 
 export * from './_Elements';

@@ -6,6 +6,7 @@ const name = 'button';
 const $colors = $.colors;
 const $selectors = $.selectors;
 const $cubicBeziers = $.cubicBeziers;
+const $shape = $.shape;
 
 const materials = {
   colors: {
@@ -71,20 +72,20 @@ const materials = {
     shape: {
       round: {
         padding: '0 1.25em',
-        borderRadius: '1em'
+        borderRadius: $shape.round
       },
       circle: {
         width: '2em',
         padding: '0',
-        borderRadius: '50%'
+        borderRadius: $shape.circle
       },
       corner: {
         padding: '0 1.25em',
-        borderRadius: '0'
+        borderRadius: $shape.corner
       },
       default: {
         padding: '0 1em',
-        borderRadius: '0.25em'
+        borderRadius: $shape.default
       }
     },
     fontSize: '1em',

@@ -53,6 +53,7 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-emotion": "^9.2.12",
+    "react-focus-on": "^2.0.0",
     "react-transition-group": "^2.5.0"
   }
 }

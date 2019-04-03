@@ -1,7 +1,7 @@
 import React from 'react';
 import { isArray, isString, isObject } from 'scripts';
 
-import { Icon } from 'components';
+import { Icon } from '..';
 import Button from './Button';
 
 const getChild = (item, index) => {

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import $ from './_materials';
 import { roundNumber, genTransitionProp, genDurationsEasings } from 'scripts';
-import CSSTransition from '../CSSTransition';
+import { CSSTransition } from '..';
 
 const $names = $.names;
 const $selectors = $.selectors;

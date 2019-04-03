@@ -1,268 +1,278 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import './_materials';
-import {
-  isString,
-  isArray,
-  isReact,
-  isReactComponent,
-  deepMergeOverrideArray
-} from 'scripts';
+import { isString, isArray, isReact, isReactComponent, deepMergeOverrideArray } from 'scripts';
 
 import {
-  AppBar,
-  Button,
-  Order,
-  List,
-  Divider,
-  Icon,
-  Fade,
-  Collapse,
-  Grow,
-  Slide,
-  Zoom,
-  UlElement,
-  LiElement,
-  DivElement,
-  SpanElement,
-  AElement,
-  ButtonElement,
-  InputSubmitElement
+	AppBar,
+	Button,
+	Order,
+	List,
+	Divider,
+	Icon,
+	Fade,
+	Collapse,
+	Grow,
+	Slide,
+	Zoom,
+	Sticky,
+	UlElement,
+	LiElement,
+	DivElement,
+	SpanElement,
+	AElement,
+	ButtonElement,
+	InputSubmitElement,
+	Paper
 } from 'components';
-// import MuCollapse from '@material-ui/core/Collapse';
-
-// createPageMaterials({
-//   button: {
-//     test: 'test'
-//   }
-// });
+import { FocusOn } from 'react-focus-on';
 
 export default ({}) => {
-  const [state, setState] = useState(true);
-  const handler = () => {
-    setState(prev => !prev);
-  };
-  const appBarProps = {
-    style: {
-      backgroundColor: '#2f4f4f'
-    },
-    height: '5rem',
-    mode: 'absoluteToFixed',
-    actionMode: 'scrollDown',
-    action: {
-      timingFunction: 'ease-out',
-      duration: 200,
-      scrollDown: {
-        preset: 'hide',
-        beforeStyle: {},
-        afterStyle: {}
-      },
-      scrolling: {
-        beforeStyle: {
-          opacity: 1
-        },
-        afterStyle: {
-          // height: '3rem',
-          opacity: 0.3,
-          backgroundColor: '#ff0000'
-        }
-      }
-    }
-  };
+	const [ state, setState ] = useState(false);
+	const handler = () => {
+		setState((prev) => !prev);
+	};
+	const onClose = () => {
+		setState(false);
+	};
+	console.log(state);
+	const appBarProps = {
+		style: {
+			backgroundColor: '#2f4f4f'
+		},
+		height: '5rem',
+		mode: 'absoluteToFixed',
+		actionMode: 'scrollDown',
+		action: {
+			timingFunction: 'ease-out',
+			duration: 200,
+			scrollDown: {
+				preset: 'hide',
+				beforeStyle: {},
+				afterStyle: {}
+			},
+			scrolling: {
+				beforeStyle: {
+					opacity: 1
+				},
+				afterStyle: {
+					// height: '3rem',
+					opacity: 0.3,
+					backgroundColor: '#ff0000'
+				}
+			}
+		}
+	};
 
-  return (
-    <DivElement style={{ backgroundColor: '#fff' }}>
-      <DivElement style={{ height: '100px' }} />
-      <Button.Coordinator
-        contents={[{ icon: 'sys-envelope' }, 'Download']}
-        style={{ margin: '0.5em' }}
-        type="fill"
-        toFill
-        onClick={handler}
-      />
-      <Zoom
-        in={state}
-        duration={{ enter: 2000, exit: 1000 }}
-        appear={true}
-        direction="left"
-      >
-        <DivElement
-          style={{
-            backgroundColor: '#ff00ff',
-            width: '256px',
-            height: '256px',
-            // width: '100%',
-            overflow: 'hidden',
-            marginLeft: '100px'
-          }}
-          id="el"
-        >
-          aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-        </DivElement>
-      </Zoom>
-      <DivElement style={{ height: '100px', backgroundColor: '#e6e6fa' }} />
-      <DivElement
-        style={{ height: '80px', width: '100%', backgroundColor: '#ff6347' }}
-      />
-      {/* <AppBar {...appBarProps} /> */}
-      {/* <MuCollapse in={state} timeout={1000}>
-        <DivElement
-          style={{
-            backgroundColor: '#00ced1',
-            width: '256px',
-            height: '256px'
-          }}
-        >
-          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-          aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-        </DivElement>
-      </MuCollapse> */}
-      <List
-        width="400px"
-        space={1}
-        levelStyle={[{ paddingLeft: '0.5em' }, { paddingLeft: '2.5em' }]}
-      >
-        <List.Group title="root-1" style={{ backgroundColor: '#ee82ee' }}>
-          <List.Group title="group-1" style={{ backgroundColor: '#00fa9a' }}>
-            <List.Item
-              style={{
-                backgroundColor: '#b0e0e6'
-              }}
-            >
-              root-1_group-1_item1
-            </List.Item>
-            {/* <Divider /> */}
-            <List.Item
-              style={{
-                backgroundColor: '#b0e0e6'
-              }}
-            >
-              root-1_group-1_item2
-            </List.Item>
-            <List.Group title="group-2" style={{ backgroundColor: '#90ee90' }}>
-              <List.Item
-                style={{
-                  backgroundColor: '#b0e0e6'
-                }}
-              >
-                root-1_group-2_item1
-              </List.Item>
-              <List.Item
-                style={{
-                  backgroundColor: '#b0e0e6'
-                }}
-              >
-                root-1_group-2_item2
-              </List.Item>
-            </List.Group>
-          </List.Group>
-        </List.Group>
-        <List.Group title="root-2" style={{ backgroundColor: '#66cdaa' }}>
-          <List.Item
-            style={{
-              backgroundColor: '#ffb6c1'
-            }}
-          >
-            root-2_item1
-          </List.Item>
-        </List.Group>
-        <List.Item
-          style={{
-            backgroundColor: '#ee82ee'
-          }}
-        >
-          root_item
-        </List.Item>
-        <div>div</div>
-        text
-      </List>
-      <Button.Coordinator
-        contents={[
-          [{ icon: 'sys-envelope' }, 'Aaaa'],
-          [{ icon: 'sys-envelope' }, 'Bbbb'],
-          [{ icon: 'sys-envelope' }, 'Cccc'],
-          [{ icon: 'sys-envelope' }, 'Aaaa'],
-          [{ icon: 'sys-envelope' }, 'Bbbb'],
-          [{ icon: 'sys-envelope' }, 'Cccc']
-        ]}
-        group={{
-          // between: '0.2em',
-          childPropList: [
-            { type: 'normal' },
-            { type: 'dark-outline' },
-            { type: 'outline' },
-            { type: 'fill', disable: true },
-            { type: 'outline', disable: true },
-            { type: 'dark-outline', loading: true }
-          ]
-        }}
-        shape="round"
-        size=""
-        type="normal"
-      />
-      <DivElement style={{ height: '512px' }} />
-      <Icon
-        type="fa"
-        icon={['fab', 'apple']}
-        size="2x"
-        // flip="both"
-        // border
-        // rotation={90}
-        // flip="horizontal"
-        transform="translate(100 -200)  rotate(150 0 0)  scale(1 1.5)"
-        className="aaaaaaaaaaaaaaaaaaaaaaaaaa"
-      />
-      <Icon
-        type="fa"
-        icon={['fab', 'apple']}
-        size="2x"
-        // flip="both"
-        // pull="right"
-      />
-      aaaaaaaaaaa
-      <Icon
-        type="fa"
-        icon={['fas', 'angle-double-left']}
-        size="2x"
-        // flip="both"
-        // border
-        // pull="right"
-      />
-      <Icon
-        type="fa"
-        icon={['fab', 'apple']}
-        size="2x"
-        // flip="both"
-        border
-      />
-      <Icon
-        type="fa"
-        icon={['fab', 'apple']}
-        size="2x"
-        // flip="both"
-        border={{ border: 'solid 0.12em #c71585' }}
-        fixedWidth
-      />
-    </DivElement>
-  );
+	return (
+		<DivElement style={{ backgroundColor: '#fff' }}>
+			<DivElement style={{ height: '1000px', backgroundColor: '#e6e6fa' }} />
+			<FocusOn enabled={state} onClickOutside={onClose} onEscapeKey={onClose}>
+				<Paper
+					elevation={24}
+					shape="round"
+					style={{
+						backgroundColor: state ? '#f0e68c' : '#ff69b4',
+						width: '256px',
+						height: '256px',
+						// width: '100%',
+						overflow: 'hidden',
+						marginLeft: '100px'
+					}}
+					id="el2"
+				>
+					aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+				</Paper>
+			</FocusOn>
+			<DivElement style={{ backgroundColor: '#b0c4de', height: '100px' }} />
+			<Button.Coordinator
+				contents={[ { icon: 'sys-envelope' }, 'Download' ]}
+				style={{ margin: '0.5em' }}
+				type="fill"
+				toFill
+				onClick={handler}
+			/>
+			<Slide in={state} direction="left">
+				<Paper
+					elevation={24}
+					shape="round"
+					style={{
+						backgroundColor: state ? '#ff6347' : '#008080',
+						width: '256px',
+						height: '256px',
+						// width: '100%',
+						overflow: 'hidden',
+						marginLeft: '100px'
+					}}
+					id="el2"
+				>
+					aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+				</Paper>
+			</Slide>
+			<DivElement style={{ height: '100px', backgroundColor: '#e6e6fa' }} />
+			<List width="400px" space={1} levelStyle={[ { paddingLeft: '0.5em' }, { paddingLeft: '2.5em' } ]}>
+				<List.Group title="root-1" style={{ backgroundColor: '#ee82ee' }}>
+					<List.Group title="group-1" style={{ backgroundColor: '#00fa9a' }}>
+						<List.Item
+							style={{
+								backgroundColor: '#b0e0e6'
+							}}
+						>
+							root-1_group-1_item1
+						</List.Item>
+						{/* <Divider /> */}
+						<List.Item
+							style={{
+								backgroundColor: '#b0e0e6'
+							}}
+						>
+							root-1_group-1_item2
+						</List.Item>
+						<List.Group title="group-2" style={{ backgroundColor: '#90ee90' }}>
+							<List.Item
+								style={{
+									backgroundColor: '#b0e0e6'
+								}}
+							>
+								root-1_group-2_item1
+							</List.Item>
+							<List.Item
+								style={{
+									backgroundColor: '#b0e0e6'
+								}}
+							>
+								root-1_group-2_item2
+							</List.Item>
+						</List.Group>
+					</List.Group>
+				</List.Group>
+				<List.Group title="root-2" style={{ backgroundColor: '#66cdaa' }}>
+					<List.Item
+						style={{
+							backgroundColor: '#ffb6c1'
+						}}
+					>
+						root-2_item1
+					</List.Item>
+				</List.Group>
+				<List.Item
+					style={{
+						backgroundColor: '#ee82ee'
+					}}
+				>
+					root_item
+				</List.Item>
+				<div>div</div>
+				text
+			</List>
+			<Button.Coordinator
+				contents={[
+					[ { icon: 'sys-envelope' }, 'Aaaa' ],
+					[ { icon: 'sys-envelope' }, 'Bbbb' ],
+					[ { icon: 'sys-envelope' }, 'Cccc' ],
+					[ { icon: 'sys-envelope' }, 'Aaaa' ],
+					[ { icon: 'sys-envelope' }, 'Bbbb' ],
+					[ { icon: 'sys-envelope' }, 'Cccc' ]
+				]}
+				group={{
+					// between: '0.2em',
+					childPropList: [
+						{ type: 'normal' },
+						{ type: 'dark-outline' },
+						{ type: 'outline' },
+						{ type: 'fill', disable: state },
+						{ type: 'outline', disable: true },
+						{ type: 'dark-outline', loading: state }
+					]
+				}}
+				shape="round"
+				size=""
+				type="normal"
+			/>
+			<DivElement style={{ height: '512px' }} />
+			<Icon
+				type="fa"
+				icon={[ 'fab', 'apple' ]}
+				size="2x"
+				// flip="both"
+				// border
+				// rotation={90}
+				// flip="horizontal"
+				transform="translate(100 -200)  rotate(150 0 0)  scale(1 1.5)"
+				className="aaaaaaaaaaaaaaaaaaaaaaaaaa"
+			/>
+			<Icon
+				type="fa"
+				icon={[ 'fab', 'apple' ]}
+				size="2x"
+				// flip="both"
+				// pull="right"
+			/>
+			<Icon
+				type="fa"
+				icon={[ 'fas', 'angle-double-left' ]}
+				size="2x"
+				// flip="both"
+				// border
+				// pull="right"
+			/>
+			<Icon
+				type="fa"
+				icon={[ 'fab', 'apple' ]}
+				size="2x"
+				// flip="both"
+				border
+			/>
+			<Icon
+				type="fa"
+				icon={[ 'fab', 'apple' ]}
+				size="2x"
+				// flip="both"
+				border={{ border: 'solid 0.12em #c71585' }}
+				fixedWidth
+			/>
+		</DivElement>
+	);
 };
 
 {
-  /* <Button.Coordinator
+	/* <Sticky offsetTop={10} style={{}} absolute>
+{(isTop, isBottom) => {
+	return (
+		<DivElement
+			style={{
+				backgroundColor: state ? '#4169e1' : '#ffa500',
+				width: '2560px',
+				height: '256px',
+				// width: '100%',
+				overflow: 'hidden',
+				marginLeft: '100px'
+			}}
+			id="el"
+		>
+			aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+			aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+			aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+			aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+			aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+			aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+		</DivElement>
+	);
+}}
+</Sticky> */
+}
+
+{
+	/* <Button.Coordinator
 contents={[
   [{ icon: 'sys-envelope' }, 'Aaaa'],
   [{ icon: 'sys-envelope' }, 'Bbbb'],
@@ -287,7 +297,7 @@ type="normal"
 // ];
 
 {
-  /* <DivElement style={{ padding: '1em' }}>
+	/* <DivElement style={{ padding: '1em' }}>
 <Order list={entries}>
   {({ props, child }) => <DivElement {...props}>{child}</DivElement>}
 </Order>
@@ -295,7 +305,7 @@ type="normal"
 }
 
 {
-  /* <DivElement style={{ padding: '1em' }}>
+	/* <DivElement style={{ padding: '1em' }}>
 <DivElement style={{ padding: '1em', backgroundColor: '#f0f8ff' }}>
   <List>
     <List.Item>aaa</List.Item>
@@ -313,7 +323,7 @@ type="normal"
 // };
 
 {
-  /* <DivElement style={{ backgroundColor: 'white', margin: '1em' }}>
+	/* <DivElement style={{ backgroundColor: 'white', margin: '1em' }}>
 <Button.Coordinator
   contents={[
     [{ icon: 'sys-envelope' }, 'Aaaa'],

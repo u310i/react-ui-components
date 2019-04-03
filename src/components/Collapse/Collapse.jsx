@@ -1,8 +1,7 @@
 import React, { useMemo, useCallback, useRef } from 'react';
 import $ from './_materials';
 import { reflow, genTransitionProp, genDurationsEasings } from 'scripts';
-import CSSTransition from '../CSSTransition';
-import { DivElement } from '../_Elements';
+import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
 const $selectors = $.selectors;

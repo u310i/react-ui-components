@@ -8,7 +8,7 @@ import {
   UseElement,
   TitleElement,
   DescElement
-} from '../_Elements';
+} from '..';
 
 const $styles = $.styles;
 
