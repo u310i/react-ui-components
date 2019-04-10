@@ -22,7 +22,8 @@ import {
 	AElement,
 	ButtonElement,
 	InputSubmitElement,
-	Paper
+	Paper,
+	Modal
 } from 'components';
 import { FocusOn } from 'react-focus-on';
 
@@ -34,6 +35,7 @@ export default ({}) => {
 	const onClose = () => {
 		setState(false);
 	};
+
 	console.log(state);
 	const appBarProps = {
 		style: {
@@ -66,7 +68,34 @@ export default ({}) => {
 	return (
 		<DivElement style={{ backgroundColor: '#fff' }}>
 			<DivElement style={{ height: '1000px', backgroundColor: '#e6e6fa' }} />
-			<FocusOn enabled={state} onClickOutside={onClose} onEscapeKey={onClose}>
+			<Button.Coordinator
+				contents={[ { icon: 'sys-envelope' }, 'Download' ]}
+				style={{ margin: '0.5em' }}
+				type="fill"
+				toFill
+				onClick={handler}
+			/>
+			<Modal open={state} onClickOutside={onClose} onEscapeKey={onClose}>
+				<Paper
+					elevation={24}
+					shape="round"
+					style={{
+						backgroundColor: state ? '#f0e68c' : '#ff69b4',
+						width: '256px',
+						height: '256px',
+						// width: '100%',
+						overflow: 'hidden',
+						marginLeft: '100px'
+					}}
+					id="el2"
+				>
+					bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbbaa
+					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
+					bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
+					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa
+				</Paper>
+			</Modal>
+			{/* <FocusOn enabled={state} onClickOutside={onClose} onEscapeKey={onClose}>
 				<Paper
 					elevation={24}
 					shape="round"
@@ -87,15 +116,9 @@ export default ({}) => {
 					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
 					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
 				</Paper>
-			</FocusOn>
+			</FocusOn> */}
 			<DivElement style={{ backgroundColor: '#b0c4de', height: '100px' }} />
-			<Button.Coordinator
-				contents={[ { icon: 'sys-envelope' }, 'Download' ]}
-				style={{ margin: '0.5em' }}
-				type="fill"
-				toFill
-				onClick={handler}
-			/>
+
 			<Slide in={state} direction="left">
 				<Paper
 					elevation={24}

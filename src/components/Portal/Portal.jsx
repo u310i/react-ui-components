@@ -1,9 +1,10 @@
-import React, { useState, useMemo, useCallback, useLayoutEffect, useRef } from 'react';
-import { isUndefined, isNumber, isFunction } from 'scripts';
-import { DivElement, EventListener } from '..';
+import React from 'react';
+import { createPortal } from 'react-dom';
+import {} from 'scripts';
+import {} from '..';
 
-const Portal = ({ children }) => {
-	return <DivElement>test</DivElement>;
+const Portal = ({ children, mountNode = document.body }) => {
+	return createPortal(children, mountNode);
 };
 
 export default Portal;

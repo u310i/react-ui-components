@@ -22,32 +22,36 @@ import Paper from './Paper';
 import Divider from './Divider';
 import CSSTransition from './CSSTransition';
 import EventListener from './EventListener';
+import Portal from './Portal';
+import Modal from './Modal';
 
 export {
-  Collapse,
-  Fade,
-  Grow,
-  Slide,
-  Zoom,
-  Sticky,
-  AppBar,
-  Button,
-  Drawer,
-  Flex,
-  Header,
-  HeaderImage,
-  Icon,
-  Image,
-  Link,
-  List,
-  ListItem,
-  Menu,
-  SVG,
-  Order,
-  Paper,
-  Divider,
-  CSSTransition,
-  EventListener
+	Collapse,
+	Fade,
+	Grow,
+	Slide,
+	Zoom,
+	Sticky,
+	AppBar,
+	Button,
+	Drawer,
+	Flex,
+	Header,
+	HeaderImage,
+	Icon,
+	Image,
+	Link,
+	List,
+	ListItem,
+	Menu,
+	SVG,
+	Order,
+	Paper,
+	Divider,
+	CSSTransition,
+	EventListener,
+	Portal,
+	Modal
 };
 
 export * from './_Elements';
