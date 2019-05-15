@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback, useLayoutEffect, useRef } from 'react';
 import $ from './_materials';
 import { isUndefined, isNumber, isFunction } from 'scripts';
-import { DivElement, EventListener, Portal } from '..';
+import { DivElement, EventListener, Portal, HideOtherAria } from '..';
 import { FocusOn } from 'react-focus-on';
 
 const $names = $.names;
@@ -18,11 +18,12 @@ const Modal = ({ children, mountNode, open, onClickOutside, onEscapeKey }) => {
 	return (
 		open && (
 			<Portal mountNode={mountNode}>
-				<div style={style}>
+				{/* <div style={style}>
 					<FocusOn enabled={open} onClickOutside={onClickOutside} onEscapeKey={onEscapeKey}>
 						{children}
 					</FocusOn>
-				</div>
+				</div> */}
+				<HideOtherAria>{children}</HideOtherAria>
 			</Portal>
 		)
 	);

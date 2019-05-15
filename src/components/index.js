@@ -21,9 +21,10 @@ import Order from './Order';
 import Paper from './Paper';
 import Divider from './Divider';
 import CSSTransition from './CSSTransition';
-import EventListener from './EventListener';
+import EventListener, { KeyEventListener } from './EventListener';
 import Portal from './Portal';
 import Modal from './Modal';
+import HideOtherAria from './HideOtherAria';
 
 export {
 	Collapse,
@@ -50,8 +51,10 @@ export {
 	Divider,
 	CSSTransition,
 	EventListener,
+	KeyEventListener,
 	Portal,
-	Modal
+	Modal,
+	HideOtherAria
 };
 
 export * from './_Elements';

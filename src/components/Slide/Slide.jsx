@@ -110,7 +110,6 @@ const Slide = ({
 	useMemo(() => {
 		classNames.push($names.ucSlide);
 	}, []);
-	console.log(children);
 	return (
 		<CSSTransition
 			appear={appear}

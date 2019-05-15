@@ -36,7 +36,6 @@ export default ({}) => {
 		setState(false);
 	};
 
-	console.log(state);
 	const appBarProps = {
 		style: {
 			backgroundColor: '#2f4f4f'
@@ -89,6 +88,7 @@ export default ({}) => {
 					}}
 					id="el2"
 				>
+					<input type="text" />
 					bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbbaa
 					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
 					bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
