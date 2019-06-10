@@ -21,10 +21,13 @@ import Order from './Order';
 import Paper from './Paper';
 import Divider from './Divider';
 import CSSTransition from './CSSTransition';
-import EventListener, { KeyEventListener } from './EventListener';
+import EventListener from './EventListener';
+import HotKeys from './HotKeys';
 import Portal from './Portal';
 import Modal from './Modal';
 import HideOtherAria from './HideOtherAria';
+import FocusTrap from './FocusTrap';
+import Backdrop from './Backdrop';
 
 export {
 	Collapse,
@@ -51,10 +54,12 @@ export {
 	Divider,
 	CSSTransition,
 	EventListener,
-	KeyEventListener,
+	HotKeys,
 	Portal,
 	Modal,
-	HideOtherAria
+	HideOtherAria,
+	FocusTrap,
+	Backdrop
 };
 
 export * from './_Elements';
