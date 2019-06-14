@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  getComponentMaterials,
+  getComponentConstants,
   isString,
   isArray,
   isReactComponent
@@ -9,7 +9,7 @@ import {
 import { IElement, SpanElement } from 'components/_Elements';
 import Icon from 'components/Icon';
 
-const $ = getComponentMaterials('button');
+const $ = getComponentConstants('button');
 const $names = $.contents.names;
 const $styles = $.contents.styles;
 

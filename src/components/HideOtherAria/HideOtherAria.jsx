@@ -2,8 +2,9 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import {} from 'scripts';
 import { DivElement } from '..';
 
-const HideOtherAria = ({ children, parent = document.body }) => {
+const HideOtherAria = ({ children, style: propStyle = {}, parent = document.body, refer, ...props }) => {
 	const targetRef = useRef();
+	refer = targetRef;
 	const hiddenNodes = useRef([]);
 
 	const deep = (parent) => {
@@ -34,12 +35,8 @@ const HideOtherAria = ({ children, parent = document.body }) => {
 		};
 	}, []);
 
-	const style = useMemo(() => {
-		return {};
-	});
-
 	return (
-		<DivElement refer={targetRef} style={style} className="uc-hideOtherAria">
+		<DivElement refer={targetRef} style={propStyle} className="uc-hideOtherAria" {...props}>
 			{children}
 		</DivElement>
 	);

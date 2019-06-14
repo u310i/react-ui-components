@@ -1,8 +1,8 @@
 import React from 'react';
-import { getComponentMaterials, isString } from 'scripts';
+import { getComponentConstants, isString } from 'scripts';
 import { DivElement } from '..';
 
-const $ = getComponentMaterials('button');
+const $ = getComponentConstants('button');
 const $gStyles = $.group.styles;
 const $gSelectors = $.group.selectors;
 

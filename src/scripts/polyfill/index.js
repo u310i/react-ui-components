@@ -3,4 +3,4 @@ import 'classlist-polyfill';
 // import '@babel/polyfill';
 
 import './standardObject';
-import './domNode';
+import './documentObject';

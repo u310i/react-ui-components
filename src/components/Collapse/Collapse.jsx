@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback, useRef } from 'react';
-import $ from './_materials';
+import $ from './_constants';
 import { reflow, genTransitionProp, genDurationsEasings } from 'scripts';
 import { CSSTransition, DivElement } from '..';
 

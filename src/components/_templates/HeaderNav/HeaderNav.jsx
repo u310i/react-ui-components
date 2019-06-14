@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'react-emotion';
 
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-main-svg-icons';
 
 import {} from 'scripts';
 import {} from 'scripts';

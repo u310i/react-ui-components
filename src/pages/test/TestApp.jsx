@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import './_materials';
+import './_constants';
 import { isString, isArray, isReact, isReactComponent, deepMergeOverrideArray } from 'scripts';
 
 import {
@@ -23,9 +23,10 @@ import {
 	ButtonElement,
 	InputSubmitElement,
 	Paper,
-	Modal
+	Modal,
+	Backdrop
 } from 'components';
-import { FocusOn } from 'react-focus-on';
+// import { FocusOn } from 'react-focus-on';
 
 export default ({}) => {
 	const [ state, setState ] = useState(false);
@@ -66,6 +67,7 @@ export default ({}) => {
 
 	return (
 		<DivElement style={{ backgroundColor: '#fff' }}>
+			{/* {state ? <Backdrop open={state} /> : null} */}
 			<DivElement style={{ height: '1000px', backgroundColor: '#e6e6fa' }} />
 			<Button.Coordinator
 				contents={[ { icon: 'sys-envelope' }, 'Download' ]}
@@ -74,57 +76,66 @@ export default ({}) => {
 				toFill
 				onClick={handler}
 			/>
-			<Modal open={state} onClickOutside={onClose} onEscapeKey={onClose}>
+			{/* onClickOutside={onClose} onEscapeKey={onClose} */}
+			<Modal open={state} onEscape={onClose}>
+				{/* <button
+					onClick={handler}
+					style={{
+						backgroundColor: state ? '#f0e68c' : '#ff69b4',
+						width: '256px',
+						height: '400px',
+						// width: '100%',
+						overflow: 'hidden',
+						zIndex: 2000,
+						position: 'absolute',
+						top: '50px',
+						left: '200px'
+					}}
+				/> */}
 				<Paper
 					elevation={24}
 					shape="round"
 					style={{
 						backgroundColor: state ? '#f0e68c' : '#ff69b4',
 						width: '256px',
-						height: '256px',
+						height: '400px',
 						// width: '100%',
 						overflow: 'hidden',
-						marginLeft: '100px'
+						zIndex: 2000,
+						position: 'absolute',
+						top: '50px',
+						left: '200px'
 					}}
 					id="el2"
 				>
+					<a href="#">Another focusable thing</a>
 					<input type="text" />
 					bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbbaa
 					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
 					bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
 					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa
+					<Button.Coordinator
+						contents={[ { icon: 'sys-envelope' }, 'Download' ]}
+						style={{ margin: '0.5em' }}
+						type="fill"
+						toFill
+						onClick={onClose}
+					/>
+					{/* <Button style={{ margin: '0.5em' }} type="fill" toFill onClick={handler}>
+						Download
+					</Button> */}
+					{/* <button onClick={handler}>aaa</button> */}
 				</Paper>
 			</Modal>
-			{/* <FocusOn enabled={state} onClickOutside={onClose} onEscapeKey={onClose}>
-				<Paper
-					elevation={24}
-					shape="round"
-					style={{
-						backgroundColor: state ? '#f0e68c' : '#ff69b4',
-						width: '256px',
-						height: '256px',
-						// width: '100%',
-						overflow: 'hidden',
-						marginLeft: '100px'
-					}}
-					id="el2"
-				>
-					aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-				</Paper>
-			</FocusOn> */}
+
 			<DivElement style={{ backgroundColor: '#b0c4de', height: '100px' }} />
 
-			<Slide in={state} direction="left">
+			<Slide in={state}>
 				<Paper
 					elevation={24}
 					shape="round"
 					style={{
-						backgroundColor: state ? '#ff6347' : '#008080',
+						backgroundColor: '#ff6347',
 						width: '256px',
 						height: '256px',
 						// width: '100%',

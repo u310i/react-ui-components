@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import $ from './_materials';
+import $ from './_constants';
 import { isString, isReact } from 'scripts';
 import { UlElement, LiElement, DivElement, SpanElement } from '..';
 import scripts from './_scripts';
@@ -17,7 +17,7 @@ const List = ({
 }) => {
   const leftSpaceStyle = scripts.addLeftSpace(children, space, levelStyle);
 
-  const fluidStyle = useMemo(() => {
+  const mutableStyle = useMemo(() => {
     return {
       width: width
     };
@@ -25,11 +25,11 @@ const List = ({
 
   const style = useMemo(() => {
     return {
-      ...fluidStyle,
+      ...mutableStyle,
       ...leftSpaceStyle,
       ...propStyle
     };
-  }, [fluidStyle, propStyle]);
+  }, [mutableStyle, propStyle]);
 
   return (
     <UlElement style={style} classNames={[$names.ucList]} {...props}>
@@ -77,10 +77,10 @@ const ListGroup = ({
 // -------------------------------------------------------------
 
 const ListItem = ({ children, style: propStyle, ...props }) => {
-  const solidStyle = $styles.item.solid;
+  const mainStyle = $styles.item.main;
 
   const style = useMemo(() => {
-    return { ...solidStyle, ...propStyle };
+    return { ...mainStyle, ...propStyle };
   }, [propStyle]);
 
   return (

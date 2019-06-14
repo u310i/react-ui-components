@@ -2,18 +2,18 @@ import defaultTheme from './defaultTheme';
 import genTheme from './genTheme';
 import resetGlobalStyle from './resetGlobalStyle';
 import {
-  createAppMaterials,
-  createPageMaterials,
-  createComponentMaterials,
-  getComponentMaterials
-} from './materialAccessor';
+	createAppConstants,
+	createPageConstants,
+	createComponentConstants,
+	getComponentConstants
+} from './constantsAccessor';
 
 export {
-  defaultTheme,
-  genTheme,
-  resetGlobalStyle,
-  createAppMaterials,
-  createPageMaterials,
-  createComponentMaterials,
-  getComponentMaterials
+	defaultTheme,
+	genTheme,
+	resetGlobalStyle,
+	createAppConstants,
+	createPageConstants,
+	createComponentConstants,
+	getComponentConstants
 };

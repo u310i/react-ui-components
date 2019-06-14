@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './props/materials';
+import './props/constants';
 import 'scripts/polyfill';
 import { resetGlobalStyle } from 'scripts';
 

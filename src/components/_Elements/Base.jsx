@@ -1,5 +1,6 @@
 import React from 'react';
 import { css, cx } from 'emotion';
+import style from './style';
 
 const Base = ({
 	elementType,
@@ -11,7 +12,7 @@ const Base = ({
 	id: propId = '',
 	roles = [],
 	role: propRole = '',
-	ariaHidden = false,
+	ref,
 	refer,
 	...props
 }) => {
@@ -27,12 +28,12 @@ const Base = ({
 		props.role = roles.join(' ');
 	}
 
-	if (ariaHidden) props['aria-hidden'] = true;
+	ref = refer;
 
 	return React.createElement(
 		elementType,
 		{
-			className: cx(css(style), className),
+			className: cx(css({ ...style.allElementsCommonStyle, ...style }), className),
 			ref: refer,
 			...props
 		},

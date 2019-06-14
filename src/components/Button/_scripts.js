@@ -1,7 +1,7 @@
-import { getComponentMaterials, adustBrightnessFromCssRgb } from 'scripts';
+import { getComponentConstants, adustBrightnessFromCssRgb } from 'scripts';
 import defineContents from './_defineContents';
 
-const $ = getComponentMaterials('button');
+const $ = getComponentConstants('button');
 
 const $styles = $.styles;
 const $colors = $.colors;

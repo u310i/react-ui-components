@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
-import $ from './_materials';
+import $ from './_constants';
 import { genTransitionProp, genDurationsEasings, setTransition, setTransform } from 'scripts';
 import { CSSTransition } from '..';
 
@@ -38,6 +38,7 @@ const getExitedTranslateValue = (node, direction) => {
 const Slide = ({
 	in: inProp,
 	children,
+	style: propStyle = {},
 	duration = $styles.duration,
 	easing = $styles.easing,
 	appear = true,
@@ -57,7 +58,8 @@ const Slide = ({
 		return {
 			[$selectors.exited]: {
 				visibility: $styles.exitedVisibility
-			}
+			},
+			...propStyle
 		};
 	}, []);
 

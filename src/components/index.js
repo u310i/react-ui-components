@@ -28,6 +28,8 @@ import Modal from './Modal';
 import HideOtherAria from './HideOtherAria';
 import FocusTrap from './FocusTrap';
 import Backdrop from './Backdrop';
+import ClickOrTouch from './ClickOrTouch';
+import ClickOrTouchOnOutside from './ClickOrTouchOnOutside';
 
 export {
 	Collapse,
@@ -59,7 +61,9 @@ export {
 	Modal,
 	HideOtherAria,
 	FocusTrap,
-	Backdrop
+	Backdrop,
+	ClickOrTouch,
+	ClickOrTouchOnOutside
 };
 
 export * from './_Elements';

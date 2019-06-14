@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useContext } from 'react';
-import $ from './_materials';
-import { getFontSize, keyframes, useTimerWithToggle } from 'scripts';
+import $ from './_constants';
+import { getFontSize, keyframes, useSlowActingToggle } from 'scripts';
 import { ButtonElement, DivElement } from '..';
 import ButtonCoordinator from './ButtonCoordinator';
 import ButtonGroup from './ButtonGroup';
@@ -28,7 +28,7 @@ const Button = ({
 	onClick: propOnClick,
 	...props
 }) => {
-	const [ toggleState, setToggleState ] = useTimerWithToggle($styles.clickEffectDuration);
+	const [ toggleState, setToggleState ] = useSlowActingToggle($styles.clickEffectDuration);
 
 	const hasClickEffect = clickEffect && !disable && !loading;
 
@@ -40,7 +40,7 @@ const Button = ({
 		[ propOnClick, hasClickEffect ]
 	);
 
-	const solidStyle = $styles.solid;
+	const mainStyle = $styles.main;
 
 	const clickEffectStyle = useMemo(
 		() => {
@@ -90,7 +90,7 @@ const Button = ({
 	const style = useMemo(
 		() => {
 			return {
-				...solidStyle,
+				...mainStyle,
 				...shapeStyle,
 				...colorStyle,
 				...propStyle
@@ -110,7 +110,7 @@ const Button = ({
 		() => {
 			return (
 				toggleState !== undefined &&
-				hasClickEffect && <DivElement key={toggleState} ariaHidden style={clickEffectStyle} />
+				hasClickEffect && <DivElement key={toggleState} aria-hidden={true} style={clickEffectStyle} />
 			);
 		},
 		[ toggleState, hasClickEffect ]
@@ -118,7 +118,7 @@ const Button = ({
 
 	const loadingMaskComponent = useMemo(
 		() => {
-			return loading && <DivElement ariaHidden style={loadingMaskStyle} />;
+			return loading && <DivElement aria-hidden={true} style={loadingMaskStyle} />;
 		},
 		[ loading ]
 	);

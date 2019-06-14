@@ -1,6 +1,6 @@
-import { getComponentMaterials, isArray, isReactComponent } from 'scripts';
+import { getComponentConstants, isArray, isReactComponent } from 'scripts';
 
-const $ = getComponentMaterials('list');
+const $ = getComponentConstants('list');
 const $selectors = $.selectors;
 
 const addLeftSpace = (children, space = 1, levelStyle = [], level) => {

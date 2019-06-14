@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useLayoutEffect, useRef } from 'react';
-import $ from './_materials';
-import { isUndefined, isNumber, isFunction } from 'scripts';
+import $ from './_constants';
+import { isNumber } from 'scripts';
 import { DivElement, EventListener } from '..';
 
 const $names = $.names;
@@ -41,7 +41,10 @@ const Sticky = ({
 	const innerRef = useRef(null);
 
 	const [ canStickingTop, canStickingBottom ] = useMemo(() => {
-		return [ !isUndefined(offsetTop) && isNumber(offsetTop), !isUndefined(offsetBottom) && isNumber(offsetBottom) ];
+		return [
+			typeof offsetTop !== 'undefined' && isNumber(offsetTop),
+			typeof offsetBottom !== 'undefined' && isNumber(offsetBottom)
+		];
 	}, []);
 
 	const setStickingState = useCallback(() => {
@@ -124,7 +127,7 @@ const Sticky = ({
 	const innerComponent = (
 		<DivElement refer={outerRef} style={style.outer} className={$names.ucSlideOuter}>
 			<DivElement refer={innerRef} style={style.inner} className={$names.ucSlideInner}>
-				{isFunction(children) ? children(isTop, isBottom) : children}
+				{typeof children === 'function' ? children(isTop, isBottom) : children}
 			</DivElement>
 		</DivElement>
 	);
