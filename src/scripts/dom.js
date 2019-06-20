@@ -1,3 +1,5 @@
+import { isBoolean } from 'scripts';
+
 export const ownerDocument = (node) => {
 	return (node && node.ownerDocument) || document;
 };
@@ -5,6 +7,12 @@ export const ownerDocument = (node) => {
 export const ownerWindow = (node, fallback = window) => {
 	const doc = ownerDocument(node);
 	return doc.defaultView || doc.parentView || fallback;
+};
+
+export const clickedScrollbar = (event) => {
+	return (
+		document.documentElement.clientWidth <= event.clientX || document.documentElement.clientHeight <= event.clientY
+	);
 };
 
 // Safely detecting option support
@@ -32,8 +40,40 @@ const passiveSupported = (() => {
 
 export const testPassiveEventSupport = () => passiveSupported;
 
-export const clickedScrollbar = (event) => {
-	return (
-		document.documentElement.clientWidth <= event.clientX || document.documentElement.clientHeight <= event.clientY
-	);
+const createListenerOptions = passiveSupported
+	? (options) => {
+			const passive = options.passive;
+			options.passive = passive === undefined ? true : passive;
+			return options;
+		}
+	: (options) => {
+			!!options.capture;
+		};
+
+export const addEventListener = (target, type, callback, options = {}) => {
+	const listenerOptions = isBoolean(options) ? options : createListenerOptions(options);
+	target.addEventListener(type, callback, listenerOptions);
 };
+
+export const removeEventListener = (target, type, callback, options = false) => {
+	const capture = isBoolean(options) ? options : !!options.capture;
+	target.removeEventListener(type, callback, capture);
+};
+
+export const getTransitionEndName = (() => {
+	const transitions = {
+		transition: 'transitionend',
+		WebkitTransition: 'webkitTransitionEnd',
+		MozTransition: 'transitionend',
+		OTransition: 'oTransitionEnd otransitionend'
+	};
+	const testElementStyle = document.body.style;
+	let transitionEndName = false;
+	for (let t of Object.keys(transitions)) {
+		if (testElementStyle[t] !== undefined) {
+			transitionEndName = transitions[t];
+			break;
+		}
+	}
+	return () => transitionEndName;
+})();

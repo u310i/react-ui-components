@@ -13,15 +13,27 @@ import CreateFocusTrap from 'focus-trap';
 const FocusTrap = ({
 	children,
 	style: propStyle = {},
-	options = {},
 	active = true,
 	paused = false,
-	refer,
+	returnFocusOnDeactivate,
+	onActivate,
+	onDeactivate,
+	initialFocus,
+	fallbackFocus,
+	escapeDeactivates,
+	clickOutsideDeactivates,
 	...props
 }) => {
 	const ref = useRef(null);
-	const { returnFocusOnDeactivate, ...tailoredOptions } = options;
-	tailoredOptions.returnFocusOnDeactivate = false;
+	const tailoredOptions = {
+		returnFocusOnDeactivate: false,
+		onActivate,
+		onDeactivate,
+		initialFocus,
+		fallbackFocus,
+		escapeDeactivates,
+		clickOutsideDeactivates
+	};
 
 	const focusTrapRef = useRef(null);
 	const previouslyFocusedElementRef = useRef(document.activeElement);
@@ -40,7 +52,7 @@ const FocusTrap = ({
 				if (paused) focusTrap.paused();
 			} else {
 				if (prevActiveRef.current && !active) {
-					const returnFocus = options.returnFocusOnDeactivate || false;
+					const returnFocus = returnFocusOnDeactivate || false;
 					focusTrap.deactivate({ returnFocus });
 				} else if (!prevActiveRef.current && active) {
 					focusTrap.activate();
@@ -59,7 +71,7 @@ const FocusTrap = ({
 			return () => {
 				focusTrap.deactivate();
 				if (
-					options.returnFocusOnDeactivate !== false &&
+					returnFocusOnDeactivate !== false &&
 					previouslyFocusedElementRef.current &&
 					previouslyFocusedElementRef.current.focus
 				) {
@@ -69,8 +81,6 @@ const FocusTrap = ({
 		},
 		[ active, paused ]
 	);
-
-	refer.current = ref.current;
 
 	return (
 		<DivElement style={propStyle} className="uc-focusTrap" refer={ref} {...props}>

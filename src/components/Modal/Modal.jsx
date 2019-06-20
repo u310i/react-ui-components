@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import $ from './_constants';
-import { isNumber } from 'scripts';
+import { isNumber, getTransitionEndName } from 'scripts';
 import {
 	DivElement,
 	EventListener,
@@ -12,63 +12,131 @@ import {
 	HotKeys,
 	ClickOrTouchOnOutside
 } from '..';
-// import { FocusOn } from 'react-focus-on';
 
 const $names = $.names;
+const $styles = $.styles;
 
 const Modal = ({
 	children,
+	refer,
 	style: propStyle = {},
 	classNames: propClassNames = [],
 	mountNode,
 	open,
 	onClose,
-	onEscape,
+	onRendered,
+	onEscapeKeyDown,
 	onOutsideClick,
-	disableEscape = false,
+	onAfterTransition,
+	closeAfterTransition = false,
+	disableEscapeKeyDown = false,
 	disableOutsideClick = false,
 	disableHideOtherAria = false,
 	disableRestoreFocus = false,
 	disableAutoFocus = false,
-	hideBackdrop = false
+	hideBackdrop = false,
+	propsOfHideOtherAria = {},
+	propsOfClickOrTouchOnOutside = {},
+	propsOfBackdrop = {},
+	propsOfFocustrap = {}
 }) => {
-	const style = {
-		position: 'fixed',
-		top: 0,
-		left: 0,
-		zIndex: 1300
-	};
+	const mountedChildRef = useRef(false);
+	const childRef = useRef(null);
+	const openRef = useRef(false);
 
-	const ref = useRef(null);
+	useEffect(
+		() => {
+			if (childRef.current && !mountedChildRef.current) {
+				mountedChildRef.current = true;
+			}
+			if (!childRef.current && mountedChildRef.current) {
+				mountedChildRef.current = false;
+			}
+			if (mountedChildRef.current && open) {
+				mountedChildRef.current = false;
+				onRendered(childRef.current);
+			}
+		},
+		[ open ]
+	);
 
-	const Container = disableHideOtherAria ? DivElement : HideOtherAria;
+	const handleEscapeKeyDown = useCallback(
+		(event) => {
+			event.stopPropagation();
+			onClose && onClose(event, 'escapeKeyDown');
+			onEscapeKeyDown && onEscapeKeyDown(event);
+		},
+		[ onClose, onEscapeKeyDown ]
+	);
+
+	const handleOutsideClick = useCallback(
+		(event) => {
+			onClose && onClose(event, 'outsideClick');
+			onOutsideClick && onOutsideClick(event);
+		},
+		[ onClose, onOutsideClick ]
+	);
+
+	const addedCloseAfterTransitionEventRef = useRef(false);
+	const [ _updateForCloseAfterTransitionState, updateForCloseAfterTransition ] = useState(false);
+
+	const onCloseAfterTransition = useCallback(
+		() => {
+			openRef.current = false;
+			onAfterTransition && onAfterTransition();
+			updateForCloseAfterTransition((prev) => !prev);
+		},
+		[ onAfterTransition ]
+	);
+
+	if (closeAfterTransition && getTransitionEndName()) {
+		if (!openRef.current && open) {
+			openRef.current = true;
+		} else if (!addedCloseAfterTransitionEventRef.current && openRef.current && !open) {
+			childRef.current.addEventListener(getTransitionEndName(), onCloseAfterTransition);
+			addedCloseAfterTransitionEventRef.current = true;
+		} else if (addedCloseAfterTransitionEventRef.current && !openRef.current && !open) {
+			childRef.current.removeEventListener(getTransitionEndName(), onCloseAfterTransition);
+			addedCloseAfterTransitionEventRef.current = false;
+			openRef.current = false;
+		}
+	} else {
+		openRef.current = open;
+	}
+
+	const childNode = <children.type {...children.props} refer={childRef} />;
+
+	const style = $styles.main;
+
+	const HideOtherAriaOrDiv = disableHideOtherAria ? DivElement : HideOtherAria;
 
 	return (
-		open && (
+		openRef.current && (
 			<Portal mountNode={mountNode}>
-				<Container style={propStyle} classNames={[ $names.ucModa, ...propClassNames ]}>
-					{!disableEscape && <HotKeys hotkeys={[ 'esc', 'escape' ]} action={onEscape} />}
-					{!hideBackdrop && <Backdrop />}
-					{!disableOutsideClick && (
+				<HideOtherAriaOrDiv
+					style={propStyle}
+					classNames={[ $names.ucModa, ...propClassNames ]}
+					refer={refer}
+					{...propsOfHideOtherAria}
+				>
+					{open && !disableEscapeKeyDown && <HotKeys hotkeys={[ 'escape' ]} action={handleEscapeKeyDown} />}
+					{!hideBackdrop && <Backdrop open={open} {...propsOfBackdrop} />}
+					{open &&
+					!disableOutsideClick && (
 						<ClickOrTouchOnOutside
-							target={ref}
-							action={() => {
-								console.log('close');
-							}}
+							targetRef={childRef}
+							action={handleOutsideClick}
+							{...propsOfClickOrTouchOnOutside}
 						/>
 					)}
 					{disableAutoFocus ? (
-						<DivElement style={style}>{children}</DivElement>
+						<DivElement style={style}>{childNode}</DivElement>
 					) : (
-						<FocusTrap
-							style={style}
-							options={{ returnFocusOnDeactivate: !disableRestoreFocus }}
-							refer={ref}
-						>
-							{children}
+						<FocusTrap style={style} returnFocusOnDeactivate={!disableRestoreFocus} {...propsOfFocustrap}>
+							{childNode}
 						</FocusTrap>
 					)}
-				</Container>
+				</HideOtherAriaOrDiv>
 			</Portal>
 		)
 	);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { css, cx } from 'emotion';
 import style from './style';
 
@@ -6,19 +6,23 @@ const Base = ({
 	elementType,
 	children,
 	style = {},
-	classNames = [],
-	className: propClassName = '',
+	className: propClassName,
+	classNames: propClassNames = [],
 	ids = [],
 	id: propId = '',
 	roles = [],
 	role: propRole = '',
-	ref,
 	refer,
 	...props
 }) => {
-	if (propClassName) classNames.push(propClassName);
-	let className = '';
-	if (classNames.length !== 0) className = classNames.join(' ');
+	const className = useMemo(
+		() => {
+			const classNames = propClassName ? [ propClassName ] : [];
+			propClassNames.length !== 0 && classNames.push(propClassNames);
+			return classNames.join(' ');
+		},
+		[ propClassName, propClassNames ]
+	);
 
 	if (propId) ids.push(propId);
 	if (ids.length !== 0) props.id = ids.join(' ');
@@ -27,8 +31,6 @@ const Base = ({
 	if (roles.length !== 0) {
 		props.role = roles.join(' ');
 	}
-
-	ref = refer;
 
 	return React.createElement(
 		elementType,

@@ -38,6 +38,7 @@ const getExitedTranslateValue = (node, direction) => {
 const Slide = ({
 	in: inProp,
 	children,
+	refer,
 	style: propStyle = {},
 	duration = $styles.duration,
 	easing = $styles.easing,
@@ -50,7 +51,7 @@ const Slide = ({
 	classNames = [],
 	...props
 }) => {
-	const elRef = useRef(null);
+	const ref = useRef(null);
 
 	const [ durations, easings ] = genDurationsEasings(duration, easing);
 
@@ -64,7 +65,7 @@ const Slide = ({
 	}, []);
 
 	useLayoutEffect(() => {
-		const node = elRef.current;
+		const node = ref.current;
 		if (appear || !inProp) {
 			const translate = getExitedTranslateValue(node, direction);
 			setTransform(node, translate);
@@ -130,7 +131,10 @@ const Slide = ({
 						style={{ ...style, ...children.props.style }}
 						classNames={classNames}
 						{...childProps}
-						refer={elRef}
+						refer={(element) => {
+							ref.current = element;
+							if (refer) refer.current = element;
+						}}
 					/>
 				);
 			}}

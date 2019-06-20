@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useContext } from 'react';
 import $ from './_constants';
-import { getFontSize, keyframes, useSlowActingToggle } from 'scripts';
+import { getFontSize, keyframes, useLateUpdate } from 'scripts';
 import { ButtonElement, DivElement } from '..';
 import ButtonCoordinator from './ButtonCoordinator';
 import ButtonGroup from './ButtonGroup';
@@ -28,14 +28,14 @@ const Button = ({
 	onClick: propOnClick,
 	...props
 }) => {
-	const [ toggleState, setToggleState ] = useSlowActingToggle($styles.clickEffectDuration);
+	const [ lateUpdateStatus, lateUpdate ] = useLateUpdate($styles.clickEffectDuration);
 
 	const hasClickEffect = clickEffect && !disable && !loading;
 
 	const onClick = useCallback(
 		() => {
 			propOnClick && propOnClick();
-			hasClickEffect && setToggleState();
+			hasClickEffect && lateUpdate();
 		},
 		[ propOnClick, hasClickEffect ]
 	);
@@ -109,11 +109,11 @@ const Button = ({
 	const clickEffectComponent = useMemo(
 		() => {
 			return (
-				toggleState !== undefined &&
-				hasClickEffect && <DivElement key={toggleState} aria-hidden={true} style={clickEffectStyle} />
+				lateUpdateStatus !== undefined &&
+				hasClickEffect && <DivElement key={lateUpdateStatus} aria-hidden={true} style={clickEffectStyle} />
 			);
 		},
-		[ toggleState, hasClickEffect ]
+		[ lateUpdateStatus, hasClickEffect ]
 	);
 
 	const loadingMaskComponent = useMemo(

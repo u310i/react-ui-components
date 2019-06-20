@@ -10,18 +10,18 @@ export const useSetBreakpoint = (breakpoints) => {
 	return state;
 };
 
-export const useSlowActingToggle = (timeout) => {
-	const [ state, setState ] = useState(undefined);
+export const useLateUpdate = (timeout) => {
+	const [ lateUpdateStatus, update ] = useState(undefined);
 	const timeoutId = useRef(null);
 
-	const setToggleState = useCallback(
+	const lateUpdate = useCallback(
 		() => {
 			if (timeoutId.current !== null) clearTimeout(timeoutId.current);
 			timeoutId.current = setTimeout(() => {
-				setState(undefined);
+				update(undefined);
 				timeoutId.current = null;
 			}, timeout);
-			setState((prev) => !prev);
+			update((prev) => !prev);
 		},
 		[ timeout ]
 	);
@@ -32,7 +32,7 @@ export const useSlowActingToggle = (timeout) => {
 		};
 	});
 
-	return [ state, setToggleState ];
+	return [ lateUpdateStatus, lateUpdate ];
 };
 
 export const didMount = () => {

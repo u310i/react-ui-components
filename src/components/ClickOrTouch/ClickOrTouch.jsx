@@ -1,26 +1,34 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import $ from './_constants';
-import { testPassiveEventSupport } from 'scripts';
+import { testPassiveEventSupport, isArray, addEventListener, removeEventListener } from 'scripts';
 import {} from '..';
 
 const $names = $.names;
 
-const ClickOrTouch = ({ children, target = document, action, types = [ 'touchstart', 'mousedown' ], options = {} }) => {
+const ClickOrTouch = ({
+	children,
+	target = document,
+	action,
+	types = [ 'touchstart', 'mousedown' ],
+	buttonNumber = 0,
+	listenerOptions = {}
+}) => {
 	const existTouchEventRef = useRef(false);
-	useEffect(() => {
-		const eventNames =
-			typeof types === 'string' ? [ types ] : Array.isArray(types) ? types : [ 'touchstart', 'mousedown' ];
 
-		const supportPassiveEvent = testPassiveEventSupport();
-		const listenerOptions = supportPassiveEvent ? options : !!options.capture;
-		if (supportPassiveEvent) {
-			const passive = listenerOptions.passive;
-			// passive option default to true
-			listenerOptions.passive = passive === undefined ? true : passive;
-		}
+	useEffect(() => {
+		const listenerTypes =
+			typeof types === 'string' ? [ types ] : Array.isArray(types) ? types : [ 'touchstart', 'mousedown' ];
 
 		const touchAction = (event) => {
 			existTouchEventRef.current = true;
+			action(event);
+		};
+
+		const clickAction = (event) => {
+			if (existTouchEventRef.current) {
+				existTouchEventRef.current = false;
+				return;
+			}
 			action(event);
 		};
 
@@ -29,22 +37,22 @@ const ClickOrTouch = ({ children, target = document, action, types = [ 'touchsta
 				existTouchEventRef.current = false;
 				return;
 			}
-			action(event);
+			if (event.button === buttonNumber) action(event);
 		};
 
 		const listeners = [];
-		eventNames.forEach((eventName, index) => {
+		listenerTypes.forEach((listenerType, index) => {
 			listeners.push(
-				eventName.includes('touch')
+				listenerType.includes('touch')
 					? touchAction
-					: (eventName.includes('mouse') || eventName === 'click') && mouseAction
+					: listenerType === 'click' ? clickAction : listenerType.includes('mouse') ? mouseAction : () => {}
 			);
-			target.addEventListener(eventName, listeners[index], listenerOptions);
+			addEventListener(target, listenerType, listeners[index], listenerOptions);
 		});
 
 		return () => {
-			eventNames.forEach((eventName, index) => {
-				target.removeEventListener(eventName, listeners[index], listenerOptions);
+			listenerTypes.forEach((listenerType, index) => {
+				removeEventListener(target, listenerType, listeners[index], listenerOptions);
 			});
 		};
 	}, []);

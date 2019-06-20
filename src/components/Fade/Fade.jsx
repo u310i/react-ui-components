@@ -14,7 +14,6 @@ const Fade = ({
 	duration = $styles.duration,
 	easing = $styles.easing,
 	appear = true,
-	onEnter,
 	...props
 }) => {
 	const [ durations, easings ] = genDurationsEasings(duration, easing);
