@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import {} from 'scripts';
 import { DivElement } from '..';
 
-const HideOtherAria = ({ children, style: propStyle = {}, parent = document.body, refer, ...props }) => {
+const HideOtherAria = ({ children, refer, style: propStyle = {}, parent = document.body, ...props }) => {
 	const ref = useRef();
 	const hiddenNodes = useRef([]);
 

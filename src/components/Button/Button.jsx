@@ -25,19 +25,20 @@ const Button = ({
 	borderStyle,
 	borderWidth,
 	clickEffect = true,
-	onClick: propOnClick,
+	onClick,
+	test,
 	...props
 }) => {
 	const [ lateUpdateStatus, lateUpdate ] = useLateUpdate($styles.clickEffectDuration);
 
 	const hasClickEffect = clickEffect && !disable && !loading;
 
-	const onClick = useCallback(
+	const handleClick = useCallback(
 		() => {
-			propOnClick && propOnClick();
+			onClick && onClick();
 			hasClickEffect && lateUpdate();
 		},
-		[ propOnClick, hasClickEffect ]
+		[ onClick, hasClickEffect ]
 	);
 
 	const mainStyle = $styles.main;
@@ -82,6 +83,9 @@ const Button = ({
 
 	const colorStyle = useMemo(
 		() => {
+			if (test) {
+				console.log(scripts.genColor(type, toFill, disable, keyColor));
+			}
 			return scripts.genColor(type, toFill, disable, keyColor);
 		},
 		[ keyColor, type, toFill, disable ]
@@ -109,7 +113,7 @@ const Button = ({
 	const clickEffectComponent = useMemo(
 		() => {
 			return (
-				lateUpdateStatus !== undefined &&
+				lateUpdateStatus &&
 				hasClickEffect && <DivElement key={lateUpdateStatus} aria-hidden={true} style={clickEffectStyle} />
 			);
 		},
@@ -134,7 +138,13 @@ const Button = ({
 	);
 
 	return (
-		<ButtonElement style={style} onClick={onClick} disabled={disable || loading} {...accessibilityProps} {...props}>
+		<ButtonElement
+			style={style}
+			onClick={handleClick}
+			disabled={disable || loading}
+			{...accessibilityProps}
+			{...props}
+		>
 			{contents}
 			{loadingMaskComponent}
 			{clickEffectComponent}

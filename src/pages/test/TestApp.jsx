@@ -34,7 +34,7 @@ export default ({}) => {
 		setState((prev) => !prev);
 	};
 	const onClose = () => {
-		setState(false);
+		setState((prev) => prev && false);
 	};
 
 	const appBarProps = {
@@ -64,6 +64,7 @@ export default ({}) => {
 			}
 		}
 	};
+	console.log('root');
 
 	return (
 		<DivElement style={{ backgroundColor: '#fff' }}>
@@ -79,11 +80,11 @@ export default ({}) => {
 			{/* onClickOutside={onClose} onEscapeKey={onClose} */}
 			<Modal
 				open={state}
+				closeAfterTransition={true}
 				onEscapeKeyDown={onClose}
 				onOutsideClick={onClose}
-				onClose={(e, reason) => console.log(e)}
-				closeAfterTransition
-				onRendered={(e) => console.log('mounted child')}
+				onClose={(element, reason) => console.log('on close:   ' + reason)}
+				onRendered={(element) => console.log('on rendered')}
 			>
 				<Fade in={state} duration={1000}>
 					<Paper
@@ -104,21 +105,24 @@ export default ({}) => {
 					>
 						<a href="#">Another focusable thing</a>
 						<input type="text" />
-						bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba
-						bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba
-						bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
-						bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
-						aaaaaaaaaaaaaaaaaaaaaaaaa
-						<Button.Coordinator
+						<div>
+							bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba
+							bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba
+							bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
+							bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
+							aaaaaaaaaaaaaaaaaaaaaaaaa
+						</div>
+						{/* <Button.Coordinator
 							contents={[ { icon: 'sys-envelope' }, 'Download' ]}
 							style={{ margin: '0.5em' }}
 							type="fill"
 							toFill
 							onClick={onClose}
-						/>
-						{/* <Button style={{ margin: '0.5em' }} type="fill" toFill onClick={handler}>
-						Download
-					</Button> */}
+						/> */}
+						{/* <button onClick={onClose}>button</button> */}
+						<Button style={{ margin: '0.5em' }} type="fill" toFill onClick={onClose} test>
+							Download
+						</Button>
 						{/* <button onClick={handler}>aaa</button> */}
 					</Paper>
 				</Fade>

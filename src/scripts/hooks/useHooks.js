@@ -11,17 +11,19 @@ export const useSetBreakpoint = (breakpoints) => {
 };
 
 export const useLateUpdate = (timeout) => {
-	const [ lateUpdateStatus, update ] = useState(undefined);
+	const [ lateUpdateStatus, update ] = useState(false);
 	const timeoutId = useRef(null);
 
 	const lateUpdate = useCallback(
 		() => {
 			if (timeoutId.current !== null) clearTimeout(timeoutId.current);
 			timeoutId.current = setTimeout(() => {
-				update(undefined);
+				update(false);
 				timeoutId.current = null;
 			}, timeout);
-			update((prev) => !prev);
+			update((prev) => {
+				return !prev || prev === 2 ? 1 : 2;
+			});
 		},
 		[ timeout ]
 	);

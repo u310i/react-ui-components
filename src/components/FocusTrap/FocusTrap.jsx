@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
+import { focusTrap as CreateFocusTrap } from 'scripts';
 import { DivElement } from '..';
-import CreateFocusTrap from 'focus-trap';
 
 // https://github.com/davidtheclark/focus-trap-react
 
@@ -15,24 +15,24 @@ const FocusTrap = ({
 	style: propStyle = {},
 	active = true,
 	paused = false,
-	returnFocusOnDeactivate,
 	onActivate,
 	onDeactivate,
 	initialFocus,
 	fallbackFocus,
-	escapeDeactivates,
-	clickOutsideDeactivates,
+	disableRestoreFocus = false,
+	disableEscapeKeyDown = true,
+	disableOutsideClick = true,
 	...props
 }) => {
 	const ref = useRef(null);
 	const tailoredOptions = {
-		returnFocusOnDeactivate: false,
 		onActivate,
 		onDeactivate,
 		initialFocus,
 		fallbackFocus,
-		escapeDeactivates,
-		clickOutsideDeactivates
+		returnFocusOnDeactivate: false,
+		escapeDeactivates: !disableEscapeKeyDown,
+		clickOutsideDeactivates: !disableOutsideClick
 	};
 
 	const focusTrapRef = useRef(null);
@@ -46,13 +46,12 @@ const FocusTrap = ({
 				focusTrapRef.current = CreateFocusTrap(ref.current, tailoredOptions);
 			}
 			const focusTrap = focusTrapRef.current;
-
 			if (prevActiveRef.current === null) {
 				if (active) focusTrap.activate();
 				if (paused) focusTrap.paused();
 			} else {
 				if (prevActiveRef.current && !active) {
-					const returnFocus = returnFocusOnDeactivate || false;
+					const returnFocus = !disableRestoreFocus || false;
 					focusTrap.deactivate({ returnFocus });
 				} else if (!prevActiveRef.current && active) {
 					focusTrap.activate();
@@ -71,7 +70,7 @@ const FocusTrap = ({
 			return () => {
 				focusTrap.deactivate();
 				if (
-					returnFocusOnDeactivate !== false &&
+					!disableRestoreFocus &&
 					previouslyFocusedElementRef.current &&
 					previouslyFocusedElementRef.current.focus
 				) {

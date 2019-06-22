@@ -28,6 +28,8 @@ import {
 	assignTransitionDuration
 } from './style';
 import {
+	focusTrap,
+	mousetrap,
 	ownerDocument,
 	ownerWindow,
 	clickedScrollbar,
@@ -35,7 +37,7 @@ import {
 	addEventListener,
 	removeEventListener,
 	getTransitionEndName
-} from './dom';
+} from './domHelpers';
 import { genDurationsEasings } from './transition';
 import {
 	toFullHexa,
@@ -117,7 +119,9 @@ export {
 	genReactCSSTransitionStyle,
 	genSimpleTransitionStyle,
 	assignTransitionDuration,
-	// dom
+	// domHelpers
+	focusTrap,
+	mousetrap,
 	ownerDocument,
 	ownerWindow,
 	clickedScrollbar,

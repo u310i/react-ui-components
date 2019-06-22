@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import Mousetrap from 'mousetrap';
-import { isReact } from 'scripts';
+import { isReact, mousetrap as Mousetrap } from 'scripts';
 
 // https://github.com/ccampbell/mousetrap
 

@@ -1,5 +1,11 @@
 import { isBoolean } from 'scripts';
 
+import focusTrap from './focusTrap';
+import mousetrap from 'mousetrap';
+
+export { focusTrap };
+export { mousetrap };
+
 export const ownerDocument = (node) => {
 	return (node && node.ownerDocument) || document;
 };

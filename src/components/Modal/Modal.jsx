@@ -1,6 +1,6 @@
-import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef, useReducer } from 'react';
 import $ from './_constants';
-import { isNumber, getTransitionEndName } from 'scripts';
+import { isNumber, getTransitionEndName, addEventListener, removeEventListener } from 'scripts';
 import {
 	DivElement,
 	EventListener,
@@ -16,6 +16,20 @@ import {
 const $names = $.names;
 const $styles = $.styles;
 
+const Empty = ({ onMount, onUnmount }) => {
+	useEffect(() => {
+		onMount && onMount();
+		return () => {
+			onUnmount && onUnmount();
+		};
+	}, []);
+	return <React.Fragment />;
+};
+let i = 0;
+const cancel = (e) => {
+	i += 1;
+	console.log('++++++++++cancel ');
+};
 const Modal = ({
 	children,
 	refer,
@@ -27,84 +41,75 @@ const Modal = ({
 	onRendered,
 	onEscapeKeyDown,
 	onOutsideClick,
-	onAfterTransition,
 	closeAfterTransition = false,
 	disableEscapeKeyDown = false,
 	disableOutsideClick = false,
 	disableHideOtherAria = false,
+	disableEnforceFocus = false,
 	disableRestoreFocus = false,
-	disableAutoFocus = false,
 	hideBackdrop = false,
 	propsOfHideOtherAria = {},
 	propsOfClickOrTouchOnOutside = {},
 	propsOfBackdrop = {},
 	propsOfFocustrap = {}
 }) => {
-	const mountedChildRef = useRef(false);
+	const mountedChildRef = useRef(null);
 	const childRef = useRef(null);
-	const openRef = useRef(false);
+	const openRef = useRef(null);
+	const closingReasonRef = useRef(null);
 
-	useEffect(
-		() => {
-			if (childRef.current && !mountedChildRef.current) {
-				mountedChildRef.current = true;
-			}
-			if (!childRef.current && mountedChildRef.current) {
-				mountedChildRef.current = false;
-			}
-			if (mountedChildRef.current && open) {
-				mountedChildRef.current = false;
-				onRendered(childRef.current);
-			}
-		},
-		[ open ]
-	);
+	const addedCloseAfterTransitionEventRef = useRef(null);
+	const [ , forceUpdate ] = useReducer((x) => x + 1, 0);
 
-	const handleEscapeKeyDown = useCallback(
-		(event) => {
-			event.stopPropagation();
-			onClose && onClose(event, 'escapeKeyDown');
-			onEscapeKeyDown && onEscapeKeyDown(event);
-		},
-		[ onClose, onEscapeKeyDown ]
-	);
+	const enableCloseAfterTransition = closeAfterTransition && getTransitionEndName();
 
-	const handleOutsideClick = useCallback(
-		(event) => {
-			onClose && onClose(event, 'outsideClick');
-			onOutsideClick && onOutsideClick(event);
-		},
-		[ onClose, onOutsideClick ]
-	);
+	const handleRendered = useCallback(() => {
+		onRendered(childRef.current);
+	}, []);
 
-	const addedCloseAfterTransitionEventRef = useRef(false);
-	const [ _updateForCloseAfterTransitionState, updateForCloseAfterTransition ] = useState(false);
-
-	const onCloseAfterTransition = useCallback(
-		() => {
-			openRef.current = false;
-			onAfterTransition && onAfterTransition();
-			updateForCloseAfterTransition((prev) => !prev);
-		},
-		[ onAfterTransition ]
-	);
-
-	if (closeAfterTransition && getTransitionEndName()) {
-		if (!openRef.current && open) {
-			openRef.current = true;
-		} else if (!addedCloseAfterTransitionEventRef.current && openRef.current && !open) {
-			childRef.current.addEventListener(getTransitionEndName(), onCloseAfterTransition);
+	const handleClose = useCallback(() => {
+		if (enableCloseAfterTransition) {
+			addEventListener(childRef.current, getTransitionEndName(), handleCloseAfterTransition);
+			addEventListener(childRef.current, 'transitioncancel', cancel);
 			addedCloseAfterTransitionEventRef.current = true;
-		} else if (addedCloseAfterTransitionEventRef.current && !openRef.current && !open) {
-			childRef.current.removeEventListener(getTransitionEndName(), onCloseAfterTransition);
-			addedCloseAfterTransitionEventRef.current = false;
-			openRef.current = false;
+		}
+		onClose && onClose(childRef.current, closingReasonRef.current);
+		closingReasonRef.current = null;
+	}, []);
+
+	const handleCloseAfterTransition = useCallback((event) => {
+		openRef.current = null;
+		forceUpdate();
+	}, []);
+
+	const handleEscapeKeyDown = useCallback((event) => {
+		event.stopPropagation();
+		closingReasonRef.current = 'escapeKeyDown';
+		onEscapeKeyDown && onEscapeKeyDown(event);
+	}, []);
+
+	const handleOutsideClick = useCallback((event) => {
+		closingReasonRef.current = 'outsideClick';
+		onOutsideClick && onOutsideClick(event);
+	}, []);
+
+	if (enableCloseAfterTransition && addedCloseAfterTransitionEventRef.current && !openRef.current && !open) {
+		console.log('remove close after transition event');
+		addedCloseAfterTransitionEventRef.current = null;
+		removeEventListener(childRef.current, getTransitionEndName(), handleCloseAfterTransition);
+		removeEventListener(childRef.current, 'transitioncancel', cancel);
+	}
+
+	if (enableCloseAfterTransition) {
+		if (!openRef.current && open) {
+			openRef.current = open;
 		}
 	} else {
 		openRef.current = open;
 	}
+	console.log('openRef:  ' + openRef.current);
 
-	const childNode = <children.type {...children.props} refer={childRef} />;
+	const childComponent = <children.type {...children.props} refer={childRef} />;
 
 	const style = $styles.main;
 
@@ -115,27 +120,33 @@ const Modal = ({
 			<Portal mountNode={mountNode}>
 				<HideOtherAriaOrDiv
 					style={propStyle}
-					classNames={[ $names.ucModa, ...propClassNames ]}
+					classNames={[ $names.ucModal, ...propClassNames ]}
 					refer={refer}
-					{...propsOfHideOtherAria}
+					{...(disableHideOtherAria ? {} : propsOfHideOtherAria)}
 				>
 					{open && !disableEscapeKeyDown && <HotKeys hotkeys={[ 'escape' ]} action={handleEscapeKeyDown} />}
 					{!hideBackdrop && <Backdrop open={open} {...propsOfBackdrop} />}
 					{open &&
 					!disableOutsideClick && (
 						<ClickOrTouchOnOutside
-							targetRef={childRef}
+							target={childRef}
 							action={handleOutsideClick}
 							{...propsOfClickOrTouchOnOutside}
 						/>
 					)}
-					{disableAutoFocus ? (
-						<DivElement style={style}>{childNode}</DivElement>
+					{disableEnforceFocus ? (
+						<DivElement style={style}>{childComponent}</DivElement>
 					) : (
-						<FocusTrap style={style} returnFocusOnDeactivate={!disableRestoreFocus} {...propsOfFocustrap}>
-							{childNode}
+						<FocusTrap
+							style={style}
+							disableRestoreFocus={disableRestoreFocus}
+							fallbackFocus={() => childRef.current}
+							{...propsOfFocustrap}
+						>
+							{childComponent}
 						</FocusTrap>
 					)}
+					{open && <Empty onMount={handleRendered} onUnmount={handleClose} />}
 				</HideOtherAriaOrDiv>
 			</Portal>
 		)
