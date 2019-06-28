@@ -1,44 +1,60 @@
-import React, { useMemo, useEffect, useRef } from 'react';
-import {} from 'scripts';
+import React, { useCallback, useMemo, useEffect, useRef } from 'react';
+import { getElementRef } from 'scripts';
 import { DivElement } from '..';
 
-const HideOtherAria = ({ children, refer, style: propStyle = {}, parent = document.body, ...props }) => {
+const HideOtherAria = ({ children, refer, style: propStyle = {}, parent = document.body, active = true, ...props }) => {
 	const ref = useRef();
-	const hiddenNodes = useRef([]);
+	const hiddenNodesRef = useRef([]);
+	const prevActiveRef = useRef(null);
 
-	const deep = (parent) => {
-		if (ref.current === parent || parent.children.length === 0) return;
+	const activate = useCallback(
+		(parent) => {
+			if (ref.current === parent || parent.children.length === 0) return;
+			Array.from(parent.children, (childNode) => {
+				if (childNode.contains(ref.current)) {
+					activate(childNode);
+				} else {
+					const attr = childNode.getAttribute('aria-hidden');
+					const alreadyHidden = attr !== null && attr !== 'false';
 
-		Array.from(parent.children, (childNode) => {
-			if (childNode.contains(ref.current)) {
-				deep(childNode);
-			} else {
-				const attr = childNode.getAttribute('aria-hidden');
-				const alreadyHidden = attr !== null && attr !== 'false';
-
-				if (!alreadyHidden) {
-					hiddenNodes.current.push(childNode);
-					childNode.setAttribute('aria-hidden', 'true');
+					if (!alreadyHidden) {
+						hiddenNodesRef.current.push(childNode);
+						childNode.setAttribute('aria-hidden', 'true');
+					}
 				}
-			}
-		});
-	};
-
-	useEffect(() => {
-		deep(parent);
-		return () => {
-			hiddenNodes.current.forEach((node) => {
-				node.removeAttribute('aria-hidden');
 			});
-			hiddenNodes.current = [];
-		};
+		},
+		[ parent, active ]
+	);
+
+	const deactivate = useCallback(() => {
+		hiddenNodesRef.current.forEach((node) => {
+			node.removeAttribute('aria-hidden');
+		});
+		hiddenNodesRef.current = [];
 	}, []);
+
+	useEffect(
+		() => {
+			if (!prevActiveRef.current && active) {
+				activate(parent);
+			} else if (prevActiveRef.current && !active) {
+				deactivate();
+			}
+			prevActiveRef.current = active;
+			return () => {
+				deactivate();
+				prevActiveRef.current = false;
+			};
+		},
+		[ active ]
+	);
 
 	return (
 		<DivElement
 			refer={(element) => {
 				ref.current = element;
-				if (refer) refer.current = element;
+				getElementRef(refer, element);
 			}}
 			style={propStyle}
 			className="uc-hideOtherAria"

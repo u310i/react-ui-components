@@ -1,9 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import $ from './_constants';
-import { clickedScrollbar } from 'scripts';
-import { DivElement, ClickOrTouch } from '..';
-
-const $names = $.names;
+import { getNode, clickedScrollbar } from 'scripts';
+import { ClickOrTouch } from '..';
 
 const ClickOrTouchOnOutside = ({
 	children,
@@ -11,18 +8,18 @@ const ClickOrTouchOnOutside = ({
 	target,
 	action,
 	includeScrollbar = false,
-	propsOfClickOrTouch = {},
+	clickOrTouchProps = {},
 	...props
 }) => {
 	const listener = useCallback((event) => {
-		const targetElement = target.current || target;
-		if (targetElement.contains(event.target)) return;
+		const node = getNode(target);
+		if (node.contains(event.target)) return;
 		if (!includeScrollbar && clickedScrollbar(event)) return;
 		action(event);
 	}, []);
 
 	return (
-		<ClickOrTouch action={listener} {...propsOfClickOrTouch}>
+		<ClickOrTouch action={listener} {...clickOrTouchProps}>
 			{children || null}
 		</ClickOrTouch>
 	);

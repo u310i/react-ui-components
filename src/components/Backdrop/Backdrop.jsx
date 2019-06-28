@@ -8,18 +8,24 @@ const Backdrop = ({
 	style: propStyle = {},
 	classNames: propClassNames = [],
 	open = true,
+	disablePointerEvents = false,
 	duration,
 	invisible,
 	refer,
+	fadeProps,
 	...props
 }) => {
-	const style = useMemo(() => {
-		return {
-			...$.styles.main,
-			...(invisible ? $.styles.invisible : {}),
-			...propStyle
-		};
-	}, []);
+	const style = useMemo(
+		() => {
+			return {
+				...$.styles.main,
+				...(invisible ? $.styles.invisible : {}),
+				...(disablePointerEvents ? $.styles.disablePointerEvents : {}),
+				...propStyle
+			};
+		},
+		[ propStyle, invisible, disablePointerEvents ]
+	);
 
 	const classNames = useMemo(() => {
 		return [ $.names.ucBackdrop, ...propClassNames ];
@@ -32,9 +38,9 @@ const Backdrop = ({
 			style={$.styles.fadeComponent}
 			classNames={classNames}
 			aria-hidden={true}
-			{...props}
+			{...fadeProps}
 		>
-			<DivElement style={style} refer={refer} className={$.names.ucBackdropMain}>
+			<DivElement style={style} refer={refer} className={$.names.ucBackdropMain} {...props}>
 				{children}
 			</DivElement>
 		</Fade>

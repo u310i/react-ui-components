@@ -83,9 +83,6 @@ const Button = ({
 
 	const colorStyle = useMemo(
 		() => {
-			if (test) {
-				console.log(scripts.genColor(type, toFill, disable, keyColor));
-			}
 			return scripts.genColor(type, toFill, disable, keyColor);
 		},
 		[ keyColor, type, toFill, disable ]

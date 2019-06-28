@@ -1,9 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import $ from './_constants';
-import { testPassiveEventSupport, isArray, addEventListener, removeEventListener } from 'scripts';
-import {} from '..';
-
-const $names = $.names;
+import { getNode, testPassiveEventSupport, isArray, addEventListener, removeEventListener } from 'scripts';
 
 const ClickOrTouch = ({
 	children,
@@ -16,6 +12,7 @@ const ClickOrTouch = ({
 	const existTouchEventRef = useRef(false);
 
 	useEffect(() => {
+		const node = getNode(target);
 		const listenerTypes =
 			typeof types === 'string' ? [ types ] : Array.isArray(types) ? types : [ 'touchstart', 'mousedown' ];
 
@@ -47,12 +44,12 @@ const ClickOrTouch = ({
 					? touchAction
 					: listenerType === 'click' ? clickAction : listenerType.includes('mouse') ? mouseAction : () => {}
 			);
-			addEventListener(target, listenerType, listeners[index], listenerOptions);
+			addEventListener(node, listenerType, listeners[index], listenerOptions);
 		});
 
 		return () => {
 			listenerTypes.forEach((listenerType, index) => {
-				removeEventListener(target, listenerType, listeners[index], listenerOptions);
+				removeEventListener(node, listenerType, listeners[index], listenerOptions);
 			});
 		};
 	}, []);

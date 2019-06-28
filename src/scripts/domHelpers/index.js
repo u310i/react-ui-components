@@ -2,9 +2,15 @@ import { isBoolean } from 'scripts';
 
 import focusTrap from './focusTrap';
 import mousetrap from 'mousetrap';
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 export { focusTrap };
 export { mousetrap };
+export const scrollLock = {
+	lock: disableBodyScroll,
+	restore: enableBodyScroll,
+	clearAll: clearAllBodyScrollLocks
+};
 
 export const ownerDocument = (node) => {
 	return (node && node.ownerDocument) || document;
@@ -83,3 +89,22 @@ export const getTransitionEndName = (() => {
 	}
 	return () => transitionEndName;
 })();
+
+export const getNode = (value) => {
+	if (!value) {
+		return null;
+	}
+	const node =
+		value.current ||
+		(typeof value === 'function' && value()) ||
+		(typeof value === 'string' && document.querySelector(value)) ||
+		value;
+
+	return node;
+};
+
+export const getElementRef = (ref, element) => {
+	if (ref) {
+		typeof ref === 'function' ? ref(element) : (ref.current = element);
+	}
+};

@@ -10,6 +10,7 @@ const $styles = $.styles;
 const Fade = ({
 	in: inProp,
 	children,
+	refer,
 	style: propStyle = {},
 	duration = $styles.duration,
 	easing = $styles.easing,
@@ -46,7 +47,7 @@ const Fade = ({
 		<CSSTransition appear={appear} in={inProp} timeout={durations} {...props}>
 			{(state, childProps) => {
 				return (
-					<DivElement style={style} className={$names.ucFade} {...childProps}>
+					<DivElement style={style} className={$names.ucFade} refer={refer} {...childProps}>
 						{children}
 					</DivElement>
 				);

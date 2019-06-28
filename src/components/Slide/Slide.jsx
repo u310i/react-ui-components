@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import $ from './_constants';
-import { genTransitionProp, genDurationsEasings, setTransition, setTransform } from 'scripts';
+import { genTransitionProp, genDurationsEasings, setTransition, setTransform, getElementRef } from 'scripts';
 import { CSSTransition } from '..';
 
 const $names = $.names;
@@ -133,7 +133,7 @@ const Slide = ({
 						{...childProps}
 						refer={(element) => {
 							ref.current = element;
-							if (refer) refer.current = element;
+							getElementRef(refer, element);
 						}}
 					/>
 				);

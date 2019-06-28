@@ -26,6 +26,7 @@ const removeSpaceFromOuter = (outerNode) => {
 
 const Sticky = ({
 	children,
+	refer,
 	style: propOuterStyle = {},
 	innerStyle: propInnerStyle = {},
 	offsetTop = 0,
@@ -135,7 +136,7 @@ const Sticky = ({
 	return (
 		<EventListener target={window} type="scroll" callback={setStickingState} options={{ passive: true }} {...props}>
 			{absolute ? (
-				<DivElement style={style.absoluteWrapper} className={$names.ucSlideAbsoluteWrapper}>
+				<DivElement style={style.absoluteWrapper} className={$names.ucSlideAbsoluteWrapper} refer={refer}>
 					{innerComponent}
 				</DivElement>
 			) : (

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { focusTrap as CreateFocusTrap } from 'scripts';
+import { focusTrap as CreateFocusTrap, getElementRef } from 'scripts';
 import { DivElement } from '..';
 
 // https://github.com/davidtheclark/focus-trap-react
@@ -12,6 +12,7 @@ import { DivElement } from '..';
 
 const FocusTrap = ({
 	children,
+	refer,
 	style: propStyle = {},
 	active = true,
 	paused = false,
@@ -82,7 +83,15 @@ const FocusTrap = ({
 	);
 
 	return (
-		<DivElement style={propStyle} className="uc-focusTrap" refer={ref} {...props}>
+		<DivElement
+			style={propStyle}
+			className="uc-focusTrap"
+			refer={(element) => {
+				ref.current = element;
+				getElementRef(refer, element);
+			}}
+			{...props}
+		>
 			{children}
 		</DivElement>
 	);

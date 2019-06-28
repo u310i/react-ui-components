@@ -25,11 +25,13 @@ import EventListener from './EventListener';
 import HotKeys from './HotKeys';
 import Portal from './Portal';
 import Modal from './Modal';
+import Dialog from './Dialog';
 import HideOtherAria from './HideOtherAria';
 import FocusTrap from './FocusTrap';
 import Backdrop from './Backdrop';
 import ClickOrTouch from './ClickOrTouch';
 import ClickOrTouchOnOutside from './ClickOrTouchOnOutside';
+import ScrollLock from './ScrollLock';
 
 export {
 	Collapse,
@@ -59,11 +61,13 @@ export {
 	HotKeys,
 	Portal,
 	Modal,
+	Dialog,
 	HideOtherAria,
 	FocusTrap,
 	Backdrop,
 	ClickOrTouch,
-	ClickOrTouchOnOutside
+	ClickOrTouchOnOutside,
+	ScrollLock
 };
 
 export * from './_Elements';

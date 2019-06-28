@@ -30,13 +30,16 @@ import {
 import {
 	focusTrap,
 	mousetrap,
+	scrollLock,
 	ownerDocument,
 	ownerWindow,
 	clickedScrollbar,
 	testPassiveEventSupport,
 	addEventListener,
 	removeEventListener,
-	getTransitionEndName
+	getTransitionEndName,
+	getNode,
+	getElementRef
 } from './domHelpers';
 import { genDurationsEasings } from './transition';
 import {
@@ -122,6 +125,7 @@ export {
 	// domHelpers
 	focusTrap,
 	mousetrap,
+	scrollLock,
 	ownerDocument,
 	ownerWindow,
 	clickedScrollbar,
@@ -129,6 +133,8 @@ export {
 	addEventListener,
 	removeEventListener,
 	getTransitionEndName,
+	getNode,
+	getElementRef,
 	// transition
 	genDurationsEasings,
 	// color
