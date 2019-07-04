@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import $ from './_constants';
 import { roundNumber, genTransitionProp, genDurationsEasings } from 'scripts';
-import { CSSTransition } from '..';
+import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
 const $selectors = $.selectors;
@@ -15,7 +15,7 @@ const Grow = ({
 	easing = $styles.easing,
 	appear = true,
 	onEnter,
-	classNames = [],
+	classNames: propClassNames,
 	...props
 }) => {
 	const [ durations, easings ] = genDurationsEasings(duration, easing);
@@ -61,28 +61,44 @@ const Grow = ({
 			[$selectors.exited]: {
 				visibility: $styles.exitedVisibility
 			},
+			...$styles.style,
 			...propStyle
 		};
 	}, []);
 
-	useMemo(() => {
-		classNames.push($names.ucGrow);
-	}, []);
+	const classNames = useMemo(
+		() => {
+			return [ $names.ucGrow, ...(propClassNames || []) ];
+		},
+		[ propClassNames ]
+	);
 
 	return (
 		<CSSTransition appear={appear} in={inProp} timeout={durations} {...props}>
 			{(state, childProps) => {
 				return (
-					<children.type
-						{...children.props}
-						style={{ ...style, ...children.props.style }}
-						classNames={classNames}
-						{...childProps}
-					/>
+					<DivElement {...childProps} style={style} classNames={classNames}>
+						{children}
+					</DivElement>
 				);
 			}}
 		</CSSTransition>
 	);
+
+	// return (
+	// 	<CSSTransition appear={appear} in={inProp} timeout={durations} {...props}>
+	// 		{(state, childProps) => {
+	// 			return (
+	// 				<children.type
+	// 					{...children.props}
+	// 					{...childProps}
+	// 					style={{ ...style, ...children.props.style }}
+	// 					classNames={classNames}
+	// 				/>
+	// 			);
+	// 		}}
+	// 	</CSSTransition>
+	// );
 };
 
 export default Grow;

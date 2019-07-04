@@ -23,6 +23,7 @@ const FocusTrap = ({
 	disableRestoreFocus = false,
 	disableEscapeKeyDown = true,
 	disableOutsideClick = true,
+	disablePointerEvents = true,
 	...props
 }) => {
 	const ref = useRef(null);
@@ -84,7 +85,7 @@ const FocusTrap = ({
 
 	return (
 		<DivElement
-			style={propStyle}
+			style={{ pointerEvents: disablePointerEvents ? 'none' : 'auto', ...propStyle }}
 			className="uc-focusTrap"
 			refer={(element) => {
 				ref.current = element;

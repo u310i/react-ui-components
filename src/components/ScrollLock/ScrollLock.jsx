@@ -12,14 +12,14 @@ import { DivElement } from '..';
 
 // https://github.com/willmcpo/body-scroll-lock
 
-const ScrollLock = ({ children, target, active = true }) => {
+const ScrollLock = ({ children, target, active = true, fillGap = true }) => {
 	const prevActiveRef = useRef(null);
 
 	useEffect(
 		() => {
 			const targetElement = getNode(target);
 			if (active && !prevActiveRef.current) {
-				scrollLock.lock(targetElement);
+				scrollLock.lock(targetElement, { reserveScrollBarGap: fillGap });
 			}
 			if (!active && prevActiveRef.current) {
 				scrollLock.restore(targetElement);

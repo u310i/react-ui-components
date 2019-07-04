@@ -1,85 +1,110 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import $ from './_constants';
-import { Modal, Fade, Paper } from '..';
+import { Modal, Fade, Paper, DivElement } from '..';
 
 const $names = $.names;
 const $selectors = $.selectors;
 const $styles = $.styles;
 
 const Dialog = ({
-	id,
 	children,
 	refer,
 	open,
-	onClose,
-	onEscapeKeyDown,
-	onOutsideClick,
-	onEnter,
-	onEntering,
-	onEntered,
-	onExit,
-	onExiting,
-	onExited,
-	disableEscapeKeyDown = false,
-	disableOutsideClick = false,
-	modalProps = {},
-	backdropProps = {},
-	TransitionComponent = Fade,
-	transitionDuration,
-	TransitionProps = {},
+	aria: propAria = {},
+	enableScrollBody = false,
 	fullScreen,
-	fullWidth,
-	maxWidth,
+	modalProps = {},
+	TransitionComponent = Fade,
+	TransitionComponentProps = {},
 	InnerComponent = Paper,
-	innerProps = {},
-	scroll
+	innerComponentProps = {},
+	...props
 }) => {
-	const mainStyle = useMemo(() => {
-		return {
-			flexShrink: '0',
-			backgroundColor: 'rgba(0, 0, 0, 0.12);'
-		};
-	}, []);
+	const innerRef = useRef(null);
 
-	innerProps.style = useMemo(
+	modalProps.classNames = useMemo(
+		() => {
+			return [ $names.ucDialog, ...(modalProps.classNames || []) ];
+		},
+		[ modalProps.classNames ]
+	);
+
+	modalProps.contentComponentProps = useMemo(
 		() => {
 			return {
-				...(innerProps.style ? innerProps.style : {}),
-				backgroundColor: open ? '#f0e68c' : '#ff69b4',
-				width: '256px',
-				height: '400px',
-				// width: '100%',
-				overflow: 'hidden',
-				zIndex: 2000,
-				position: 'absolute',
-				top: '50px',
-				left: '200px'
+				role: 'dialog',
+				aria: {
+					modal: true,
+					...propAria
+				},
+				...modalProps.contentComponentProps
 			};
 		},
-		[ innerProps.style ]
+		[ modalProps.contentComponentProps, propAria ]
+	);
+
+	modalProps.contentComponentProps.style = useMemo(
+		() => {
+			return {
+				...modalProps.contentComponentProps.style
+			};
+		},
+		[ modalProps.contentComponentProps.style ]
+	);
+
+	modalProps.contentComponentProps.classNames = useMemo(
+		() => {
+			return [ $names.ucDialogContainer, ...(modalProps.contentComponentProps.classNames || []) ];
+		},
+		[ modalProps.contentComponentProps.classNames ]
+	);
+
+	TransitionComponentProps.style = useMemo(
+		() => {
+			return {
+				...$styles.transition.style,
+				...(enableScrollBody && $styles.transition.scrollBody),
+				...TransitionComponentProps.style
+			};
+		},
+		[ TransitionComponentProps.style, enableScrollBody ]
+	);
+
+	TransitionComponentProps.classNames = useMemo(
+		() => {
+			return [ $names.ucDialogTransition, ...(TransitionComponentProps.classNames || []) ];
+		},
+		[ TransitionComponentProps.classNames ]
+	);
+
+	innerComponentProps.style = useMemo(
+		() => {
+			return {
+				...$styles.inner.style,
+				...(enableScrollBody && $styles.inner.scrollBody),
+				...(fullScreen && $styles.inner.fullScreen),
+				...innerComponentProps.style
+			};
+		},
+		[ innerComponentProps.style, enableScrollBody ]
+	);
+
+	innerComponentProps.classNames = useMemo(
+		() => {
+			return [ $names.ucDialogInner, ...(innerComponentProps.classNames || []) ];
+		},
+		[ innerComponentProps.classNames ]
 	);
 
 	return (
-		<Modal
-			open={open}
-			closeAfterTransition
-			onEscapeKeyDown={onEscapeKeyDown}
-			onOutsideClick={onOutsideClick}
-			id={id}
-			{...modalProps}
-		>
-			<TransitionComponent
-				in={open}
-				duration={transitionDuration}
-				onEnter={onEnter}
-				onEntering={onEntering}
-				onEntered={onEntered}
-				onExit={onExit}
-				onExiting={onExiting}
-				onExited={onExited}
-				{...TransitionProps}
-			>
-				<InnerComponent elevation={24} shape="round" {...innerProps}>
+		<Modal open={open} closeAfterTransition fallbackFocus={innerRef} {...modalProps} {...props}>
+			<TransitionComponent in={open} {...TransitionComponentProps}>
+				<InnerComponent
+					refer={innerRef}
+					elevation={fullScreen ? 0 : $styles.inner.elevation}
+					shape={fullScreen ? 'corner' : 'default'}
+					{...innerComponentProps}
+				>
 					{children}
 				</InnerComponent>
 			</TransitionComponent>

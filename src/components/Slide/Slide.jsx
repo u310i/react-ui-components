@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import $ from './_constants';
 import { genTransitionProp, genDurationsEasings, setTransition, setTransform, getElementRef } from 'scripts';
-import { CSSTransition } from '..';
+import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
 const $selectors = $.selectors;
@@ -48,7 +48,7 @@ const Slide = ({
 	onEntering,
 	onExiting,
 	onExited,
-	classNames = [],
+	classNames: propClassNames,
 	...props
 }) => {
 	const ref = useRef(null);
@@ -60,6 +60,7 @@ const Slide = ({
 			[$selectors.exited]: {
 				visibility: $styles.exitedVisibility
 			},
+			...$styles.style,
 			...propStyle
 		};
 	}, []);
@@ -110,9 +111,13 @@ const Slide = ({
 		[ onExited ]
 	);
 
-	useMemo(() => {
-		classNames.push($names.ucSlide);
-	}, []);
+	const classNames = useMemo(
+		() => {
+			return [ $names.ucSlide, ...(propClassNames || []) ];
+		},
+		[ propClassNames ]
+	);
+
 	return (
 		<CSSTransition
 			appear={appear}
@@ -126,20 +131,49 @@ const Slide = ({
 		>
 			{(state, childProps) => {
 				return (
-					<children.type
-						{...children.props}
-						style={{ ...style, ...children.props.style }}
-						classNames={classNames}
-						{...childProps}
+					<DivElement
 						refer={(element) => {
 							ref.current = element;
 							getElementRef(refer, element);
 						}}
-					/>
+						{...childProps}
+						style={style}
+						classNames={classNames}
+					>
+						{children}
+					</DivElement>
 				);
 			}}
 		</CSSTransition>
 	);
+
+	// return (
+	// 	<CSSTransition
+	// 		appear={appear}
+	// 		in={inProp}
+	// 		timeout={durations}
+	// 		onEnter={handleEnter}
+	// 		onEntering={handleEntering}
+	// 		onExiting={handleExiting}
+	// 		onExited={handleExited}
+	// 		{...props}
+	// 	>
+	// 		{(state, childProps) => {
+	// 			return (
+	// 				<children.type
+	// 					{...children.props}
+	// 					{...childProps}
+	// 					style={{ ...style, ...children.props.style, ...childProps.style }}
+	// 					classNames={classNames}
+	// 					refer={(element) => {
+	// 						ref.current = element;
+	// 						getElementRef(refer, element);
+	// 					}}
+	// 				/>
+	// 			);
+	// 		}}
+	// 	</CSSTransition>
+	// );
 };
 
 export default Slide;

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef, useReducer } from 'react';
 import $ from './_constants';
-import { isNumber, getTransitionEndName, addEventListener, removeEventListener, getElementRef } from 'scripts';
+import { isNumber, getTransitionEndName, addEventListener, removeEventListener, getElementRef, getNode } from 'scripts';
 import {
 	DivElement,
 	EventListener,
@@ -25,11 +25,9 @@ const modalQueue = [];
 let zIndexCounter = 0;
 
 const Modal = ({
-	id,
 	children,
 	refer,
 	style: propStyle = {},
-	classNames: propClassNames = [],
 	container,
 	open,
 	onMountedChild,
@@ -48,14 +46,15 @@ const Modal = ({
 	scrollTarget,
 	clickOrTouchOnOutsideProps = {},
 	backdropProps = {},
-	focustrapProps = {},
+	fallbackFocus,
+	contentComponentProps = {},
 	...props
 }) => {
 	const containerRef = useRef(null);
 	const childRef = useRef(null);
 	// Becomes true if 'open' is true,
 	//  It will be false when the end transition is exited.
-	const shouldMountRef = useRef(null);
+	const childMountFlagRef = useRef(null);
 	const closingReasonRef = useRef(null);
 	// It is true until 'open' changes to false and is unmounted.
 	const isClosedRef = useRef(null);
@@ -65,7 +64,7 @@ const Modal = ({
 
 	const [ , forceUpdate ] = useReducer((x) => x + 1, 0);
 
-	// A session to manage multiple modes.
+	// A session to manage multiple modals.
 	const modalManagerRef = useRef({ isActive: null, update: forceUpdate });
 
 	if (open && !isOpenRef.current) {
@@ -132,7 +131,7 @@ const Modal = ({
 		(node) => {
 			const childrenOnExited = children && children.props && children.props.onExited;
 			childrenOnExited && childrenOnExited(node);
-			shouldMountRef.current = null;
+			childMountFlagRef.current = null;
 			forceUpdate();
 		},
 		[ children.props.onExited ]
@@ -163,13 +162,18 @@ const Modal = ({
 
 	// If you can't find tabbable elements in your children,
 	//  set the substitute element to 'tabIndex = 0' and focus
-	const fallbackFocus = useCallback(() => {
+	const handleFallbackFocus = useCallback(() => {
+		if (fallbackFocus) {
+			const element = getNode(fallbackFocus);
+			element.tabIndex = 0;
+			return element;
+		}
 		childRef.current.tabIndex = 0;
 		return childRef.current;
 	}, []);
 
 	// when 'open' changes to false.
-	if (shouldMountRef.current && !open && !isClosedRef.current) {
+	if (childMountFlagRef.current && !open && !isClosedRef.current) {
 		isClosedRef.current = true;
 		handleClose();
 	}
@@ -179,11 +183,11 @@ const Modal = ({
 	// If you want to wait for the transition and then unmount,
 	//  the procedure is as usual when 'open' changes to true.
 	if (enableCloseAfterTransition) {
-		if (!shouldMountRef.current && open) {
-			shouldMountRef.current = open;
+		if (!childMountFlagRef.current && open) {
+			childMountFlagRef.current = open;
 		}
 	} else {
-		shouldMountRef.current = open;
+		childMountFlagRef.current = open;
 	}
 
 	const isActive = modalManagerRef.current.isActive;
@@ -196,34 +200,64 @@ const Modal = ({
 
 	const childComponent = <children.type {...childProps} refer={childRef} />;
 
-	props.style = useMemo(
+	const ContainerComponent = disableHideOtherAria ? DivElement : HideOtherAria;
+
+	const ContentComponent = disableEnforceFocus ? DivElement : FocusTrap;
+
+	const style = useMemo(
 		() => {
 			return {
-				...(props.style ? props.style : {}),
+				...propStyle,
 				position: 'relative'
 			};
 		},
-		[ props.style ]
+		[ propStyle ]
 	);
 
-	const style = $styles.main;
+	contentComponentProps.style = useMemo(
+		() => {
+			return {
+				...$styles.content,
+				...contentComponentProps.style
+			};
+		},
+		[ contentComponentProps.style ]
+	);
 
-	const Container = disableHideOtherAria ? DivElement : HideOtherAria;
+	props.classNames = useMemo(
+		() => {
+			return [ $names.ucModal, ...(props.classNames || []) ];
+		},
+		[ props.classNames ]
+	);
+
+	contentComponentProps.classNames = useMemo(
+		() => {
+			return [ $names.ucModalContent, ...(contentComponentProps.classNames || []) ];
+		},
+		[ contentComponentProps.classNames ]
+	);
+
+	backdropProps.classNames = useMemo(
+		() => {
+			return [ $names.ucModalBackdrop, ...(backdropProps.classNames || []) ];
+		},
+		[ backdropProps.classNames ]
+	);
 
 	return (
-		shouldMountRef.current && (
+		childMountFlagRef.current && (
 			<Portal container={container} onMount={handleMountedChild} onUnmount={handleUnmountChild}>
-				<Container
+				<ContainerComponent
 					active={isActive}
-					style={propStyle}
-					classNames={[ $names.ucModal, ...propClassNames ]}
+					style={style}
 					refer={(element) => {
 						containerRef.current = element;
 						getElementRef(refer, element);
 					}}
 					{...props}
 				>
-					{!disableScrollLock && isActive && open && <ScrollLock target={scrollTarget || childRef} />}
+					{!disableScrollLock && <ScrollLock target={scrollTarget || childRef} />}
 					{isActive &&
 					open &&
 					!disableEscapeKeyDown && <HotKeys hotkeys={'escape'} action={handleEscapeKeyDown} />}
@@ -238,19 +272,18 @@ const Modal = ({
 					)}
 					{!disableBackdrop && <Backdrop open={open} disablePointerEvents={!open} {...backdropProps} />}
 					{disableEnforceFocus ? (
-						<DivElement style={style}>{childComponent}</DivElement>
+						<DivElement {...contentComponentProps}>{childComponent}</DivElement>
 					) : (
 						<FocusTrap
 							active={isActive}
-							style={style}
 							disableRestoreFocus={disableRestoreFocus}
-							fallbackFocus={!disableFallbackFocus && fallbackFocus}
-							{...focustrapProps}
+							fallbackFocus={!disableFallbackFocus && handleFallbackFocus}
+							{...contentComponentProps}
 						>
 							{childComponent}
 						</FocusTrap>
 					)}
-				</Container>
+				</ContainerComponent>
 			</Portal>
 		)
 	);

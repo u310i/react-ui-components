@@ -6,30 +6,40 @@ const Base = ({
 	elementType,
 	children,
 	style = {},
-	className: propClassName,
+	className: propClassName = '',
 	classNames: propClassNames = [],
-	ids = [],
+	ids: propIds = [],
 	id: propId = '',
-	roles = [],
+	roles: propRoles = [],
 	role: propRole = '',
+	aria: propArias = {},
 	refer,
 	...props
 }) => {
 	const className = useMemo(
 		() => {
-			const classNames = propClassName ? [ propClassName ] : [];
-			propClassNames.length !== 0 && classNames.push(propClassNames);
-			return classNames.join(' ');
+			return [ ...(propClassName ? [ propClassName ] : []), ...(propClassNames || []) ].join(' ') || null;
 		},
 		[ propClassName, propClassNames ]
 	);
 
-	if (propId) ids.push(propId);
-	if (ids.length !== 0) props.id = ids.join(' ');
+	props.id = useMemo(
+		() => {
+			return [ ...(propId ? [ propId ] : []), ...(propIds || []) ].join(' ') || null;
+		},
+		[ propId, propIds ]
+	);
 
-	if (propRole) roles.push(propRole);
-	if (roles.length !== 0) {
-		props.role = roles.join(' ');
+	props.role = useMemo(
+		() => {
+			return [ ...(propRole ? [ propRole ] : []), ...(propRoles || []) ].join(' ') || null;
+		},
+		[ propRole, propRoles ]
+	);
+
+	const arias = {};
+	for (let key of Object.keys(propArias)) {
+		arias[`aria-${key}`] = propArias[key];
 	}
 
 	return React.createElement(
@@ -37,6 +47,7 @@ const Base = ({
 		{
 			className: cx(css({ ...style.allElementsCommonStyle, ...style }), className),
 			ref: refer,
+			...arias,
 			...props
 		},
 		children

@@ -36,7 +36,7 @@ const constants = {
 		},
 		fadeComponent: {
 			position: 'relative',
-			zIndex: $.zIndex.modal
+			zIndex: $.zIndex.backdrop
 		},
 		disablePointerEvents: {
 			pointerEvents: 'none'

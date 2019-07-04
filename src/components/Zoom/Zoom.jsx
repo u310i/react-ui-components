@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useRef } from 'react';
 import $ from './_constants';
 import { genTransitionProp, genDurationsEasings } from 'scripts';
-import { CSSTransition } from '..';
+import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
 const $selectors = $.selectors;
@@ -14,7 +14,7 @@ const Zoom = ({
 	duration = $styles.duration,
 	easing = $styles.easing,
 	appear = true,
-	classNames = [],
+	classNames: propClassNames,
 	...props
 }) => {
 	const [ durations, easings ] = genDurationsEasings(duration, easing);
@@ -39,28 +39,44 @@ const Zoom = ({
 			[$selectors.exited]: {
 				visibility: $styles.exitedVisibility
 			},
+			...$styles.style,
 			...propStyle
 		};
 	}, []);
 
-	useMemo(() => {
-		classNames.push($names.ucGrow);
-	}, []);
+	const classNames = useMemo(
+		() => {
+			return [ $names.ucZoom, ...(propClassNames || []) ];
+		},
+		[ propClassNames ]
+	);
 
 	return (
 		<CSSTransition in={inProp} timeout={durations} appear={appear} {...props}>
 			{(state, childProps) => {
 				return (
-					<children.type
-						{...children.props}
-						style={{ ...style, ...children.props.style }}
-						classNames={classNames}
-						{...childProps}
-					/>
+					<DivElement {...childProps} style={style} classNames={classNames}>
+						{children}
+					</DivElement>
 				);
 			}}
 		</CSSTransition>
 	);
+
+	// return (
+	// 	<CSSTransition in={inProp} timeout={durations} appear={appear} {...props}>
+	// 		{(state, childProps) => {
+	// 			return (
+	// 				<children.type
+	// 					{...children.props}
+	// 					{...childProps}
+	// 					style={{ ...style, ...children.props.style }}
+	// 					classNames={classNames}
+	// 				/>
+	// 			);
+	// 		}}
+	// 	</CSSTransition>
+	// );
 };
 
 export default Zoom;

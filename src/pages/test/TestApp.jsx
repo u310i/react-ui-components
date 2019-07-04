@@ -32,13 +32,6 @@ import {
 let index = 0;
 
 export default ({}) => {
-	const [ state2, setState2 ] = useState(false);
-	const handler2 = () => {
-		setState2((prev) => !prev);
-	};
-	const onClose2 = () => {
-		setState2((prev) => prev && false);
-	};
 	const [ state, setState ] = useState(false);
 	const handler = () => {
 		setState((prev) => !prev);
@@ -46,7 +39,20 @@ export default ({}) => {
 	const onClose = () => {
 		setState((prev) => prev && false);
 	};
-
+	const [ state2, setState2 ] = useState(false);
+	const handler2 = () => {
+		setState2((prev) => !prev);
+	};
+	const onClose2 = () => {
+		setState2((prev) => prev && false);
+	};
+	const [ state3, setState3 ] = useState(false);
+	const handler3 = () => {
+		setState3((prev) => !prev);
+	};
+	const onClose3 = () => {
+		setState3((prev) => prev && false);
+	};
 	const appBarProps = {
 		style: {
 			backgroundColor: '#2f4f4f'
@@ -77,6 +83,14 @@ export default ({}) => {
 	index += 1;
 	console.log('-----------------------------' + index);
 
+	useEffect(() => {
+		const fn = (event) => console.log(event.target);
+		document.addEventListener('click', fn);
+		return () => {
+			document.removeEventListener('click', fn);
+		};
+	});
+
 	return (
 		<DivElement style={{ backgroundColor: '#fff' }}>
 			{/* {state ? <Backdrop open={state} /> : null} */}
@@ -89,14 +103,34 @@ export default ({}) => {
 				toFill
 				onClick={handler}
 			/>
-			<Dialog open={state} onEscapeKeyDown={onClose} onOutsideClick={onClose} id="A">
+			<Dialog
+				open={state}
+				modalProps={{
+					onEscapeKeyDown: onClose,
+					onOutsideClick: onClose
+				}}
+				enableScrollBody={false}
+				TransitionComponent={Fade}
+				fullScreen={false}
+				className={[ 'AAA' ]}
+			>
 				<a href="#">Another focusable thing</a>
 				<input type="text" />
 				<div>
-					bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbbaa
-					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
+					top bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba
+					bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
+					{/* bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba
+					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa
+					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb
+					bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba
+					bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba
+					bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
 					bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
-					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa
+					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba
+					bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
+					aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
+					aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb */}
+					aaaaaaaaaaaaaaaaaaaaaaaaa bottom
 				</div>
 				<Button.Coordinator
 					contents={[ { icon: 'sys-envelope' }, 'Download' ]}
@@ -114,79 +148,65 @@ export default ({}) => {
 				color="rgb(255, 20, 147)"
 				onClick={handler2}
 			/>
-			<Modal
+			<Dialog
 				open={state2}
-				closeAfterTransition={true}
-				onEscapeKeyDown={onClose2}
-				onOutsideClick={onClose2}
-				id="B"
+				modalProps={{
+					onEscapeKeyDown: onClose2,
+					onOutsideClick: onClose2
+				}}
+				enableScrollBody={false}
+				TransitionComponent={Slide}
+				fullScreen={false}
+				classNames={[ 'BBB' ]}
 			>
-				<Slide in={state2} duration={500}>
+				<a href="#">Another focusable thing</a>
+				<input type="text" />
+				<div>
+					top aabbbbbb aaabbba aaabbba aaabbbaa aabbb aabbb aabbba abbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa
+					bottom
+				</div>
+				<Button.Coordinator
+					contents={[ { icon: 'sys-envelope' }, 'Download' ]}
+					style={{ margin: '0.5em' }}
+					type="fill"
+					toFill
+					onClick={handler}
+				/>
+			</Dialog>
+
+			<DivElement style={{ backgroundColor: '#b0c4de', height: '100px' }} />
+			<Button.Coordinator
+				contents={[ { icon: 'sys-envelope' }, 'Download' ]}
+				style={{ margin: '0.5em' }}
+				type="fill"
+				toFill
+				color="rgb(255, 20, 147)"
+				onClick={handler3}
+			/>
+			<DivElement style={{}}>
+				<Grow in={state3} direction="right">
 					<Paper
 						elevation={24}
 						shape="round"
 						style={{
-							backgroundColor: state2 ? '#4169e1' : '#66cdaa',
+							backgroundColor: '#ff6347',
 							width: '256px',
-							height: '400px',
-							// width: '100%',
-							overflow: 'hidden',
-							zIndex: 2000,
-							position: 'absolute',
-							top: '50px',
-							left: '400px'
+							height: '256px',
+							overflow: 'hidden'
+							// marginLeft: '100px'
 						}}
 						id="el2"
 					>
-						<a href="#">Another focusable thing</a>
-						<input type="text" />
-						<div>
-							bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba
-							bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba
-							bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
-							bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
-							aaaaaaaaaaaaaaaaaaaaaaaaa
-						</div>
-						<Button.Coordinator
-							contents={[ { icon: 'sys-envelope' }, 'Download' ]}
-							style={{ margin: '0.5em' }}
-							type="fill"
-							toFill
-							onClick={handler}
-						/>
-						{/* <button onClick={onClose}>button</button> */}
-						{/* <Button style={{ margin: '0.5em' }} type="fill" toFill onClick={onClose} test>
-							Download
-						</Button> */}
-						{/* <button onClick={handler}>aaa</button> */}
+						aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
 					</Paper>
-				</Slide>
-			</Modal>
+				</Grow>
+			</DivElement>
 
-			<DivElement style={{ backgroundColor: '#b0c4de', height: '100px' }} />
-			{/*
-			<Collapse in={state}>
-				<Paper
-					elevation={24}
-					shape="round"
-					style={{
-						backgroundColor: '#ff6347',
-						width: '256px',
-						height: '256px',
-						// width: '100%',
-						overflow: 'hidden',
-						marginLeft: '100px'
-					}}
-					id="el2"
-				>
-					aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-					aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-				</Paper>
-			</Collapse> */}
 			<DivElement style={{ height: '100px', backgroundColor: '#e6e6fa' }} />
 			<List width="400px" space={1} levelStyle={[ { paddingLeft: '0.5em' }, { paddingLeft: '2.5em' } ]}>
 				<List.Group title="root-1" style={{ backgroundColor: '#ee82ee' }}>

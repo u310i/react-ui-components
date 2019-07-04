@@ -7,23 +7,51 @@ const $tSelectors = $.selectors.transition;
 
 const constants = {
 	names: {
-		ucFade: 'uc-Dialog'
-	},
-	selectors: {
-		enters: $tSelectors.enters,
-		enterings: $tSelectors.enterings,
-		entered: $tSelectors.entered,
-		exit: $tSelectors.exit,
-		exiting: $tSelectors.exiting,
-		exited: $tSelectors.exited
+		ucDialog: 'uc-dialog',
+		ucDialogContainer: 'uc-dialog-container',
+		ucDialogTransition: 'uc-dialog-transition',
+		ucDialogInner: 'uc-dialog-inner'
 	},
 	styles: {
-		duration: $.props.transitionDuration,
-		easing: $.props.transitionEasing,
-		exitedOpacity: '0',
-		enteredOpacity: '1',
-		transitionProperty: 'opacity',
-		exitedVisibility: 'hidden'
+		inner: {
+			elevation: 24,
+			style: {
+				backgroundColor: 'white',
+				maxHeight: 'calc(100% - 96px)',
+				margin: '48px',
+				width: '256px',
+				display: 'flex',
+				flexDirection: 'column',
+				overflowX: 'hidden',
+				overflowY: 'auto',
+				pointerEvents: 'auto'
+			},
+			scrollBody: {
+				maxHeight: 'none'
+				// alignItems: 'hidden'
+			},
+			fullScreen: {
+				width: '100%',
+				height: '100%',
+				margin: '0',
+				maxHeight: 'none'
+			}
+		},
+		transition: {
+			style: {
+				pointerEvents: 'none',
+				width: '100%',
+				height: '100%',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center'
+			},
+			scrollBody: {
+				overflowX: 'hidden',
+				overflowY: 'auto',
+				alignItems: 'start'
+			}
+		}
 	}
 };
 

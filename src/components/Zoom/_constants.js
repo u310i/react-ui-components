@@ -6,25 +6,29 @@ const name = 'zoom';
 const $tSelectors = $.selectors.transition;
 
 const constants = {
-  names: {
-    ucSlide: 'uc-zoom'
-  },
-  selectors: {
-    enters: $tSelectors.enters,
-    enterings: $tSelectors.enterings,
-    entered: $tSelectors.entered,
-    exit: $tSelectors.exit,
-    exiting: $tSelectors.exiting,
-    exited: $tSelectors.exited
-  },
-  styles: {
-    duration: $.props.transitionDuration,
-    easing: $.props.transitionEasing,
-    exitedScale: 'scale(0)',
-    enteredScale: 'scale(1)',
-    transitionProperty: 'transform',
-    exitedVisibility: 'hidden'
-  }
+	names: {
+		ucZoom: 'uc-zoom'
+	},
+	selectors: {
+		enters: $tSelectors.enters,
+		enterings: $tSelectors.enterings,
+		entered: $tSelectors.entered,
+		exit: $tSelectors.exit,
+		exiting: $tSelectors.exiting,
+		exited: $tSelectors.exited
+	},
+	styles: {
+		style: {
+			// alternative to "width: fit-content"
+			display: 'table'
+		},
+		duration: $.props.transitionDuration,
+		easing: $.props.transitionEasing,
+		exitedScale: 'scale(0)',
+		enteredScale: 'scale(1)',
+		transitionProperty: 'transform',
+		exitedVisibility: 'hidden'
+	}
 };
 
 createComponentConstants(constants, name);

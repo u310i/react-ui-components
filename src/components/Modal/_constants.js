@@ -6,13 +6,16 @@ const name = 'Modal';
 const constants = {
 	names: {
 		ucModal: 'uc-modal',
-		ucModalInner: 'uc-modal-inner'
+		ucModalContent: 'uc-modal-content',
+		ucModalBackdrop: 'uc-modal-backdrop'
 	},
 	styles: {
-		main: {
+		content: {
 			position: 'fixed',
 			top: 0,
 			left: 0,
+			right: 0,
+			bottom: 0,
 			zIndex: $.zIndex.modal
 		}
 	}
