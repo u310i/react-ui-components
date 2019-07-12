@@ -4,23 +4,23 @@ import {} from 'scripts';
 import { DivElement } from '..';
 
 const $names = $.names;
+const $styles = $.styles;
 
-const Paper = ({ children, refer, style: propStyle, elevation = 2, shape = 'default', ...props }) => {
-	const style = useMemo(
+const Paper = ({ children, elevation = 2, shape = 'default', ...props }) => {
+	const _style_ = useMemo(
 		() => {
 			return {
-				padding: '16px 24px',
+				...$styles.style,
 				borderRadius: $.shape[shape],
 				boxShadow: $.shadow[elevation],
-				backgroundColor: $.color,
-				...propStyle
+				backgroundColor: $.color
 			};
 		},
-		[ propStyle, shape, elevation ]
+		[ shape, elevation ]
 	);
 
 	return (
-		<DivElement style={style} className={$names.ucPaper} refer={refer} {...props}>
+		<DivElement _style_={_style_} _className_={$names.ucPaper} {...props}>
 			{children}
 		</DivElement>
 	);

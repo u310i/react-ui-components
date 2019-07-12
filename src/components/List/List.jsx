@@ -1,93 +1,97 @@
 import React, { useMemo } from 'react';
 import $ from './_constants';
-import { isString, isReact } from 'scripts';
+import { isString, isReact, isArray, isReactComponent } from 'scripts';
 import { UlElement, LiElement, DivElement, SpanElement } from '..';
-import scripts from './_scripts';
 
 const $styles = $.styles;
 const $names = $.names;
+const $selectors = $.selectors;
 
-const List = ({
-  children,
-  style: propStyle = {},
-  width = $styles.list.width,
-  space,
-  levelStyle,
-  ...props
-}) => {
-  const leftSpaceStyle = scripts.addLeftSpace(children, space, levelStyle);
+const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
+	if (!level) level = 0;
+	level += 1;
+	const inner = isArray(children) ? children : [ children ];
+	const style = {};
+	const paddingLeftValue = `${space * level}em`;
+	inner.forEach((v, i) => {
+		if (isReactComponent(v) && v.type.name === 'ListGroup') {
+			const innerStyle = addLeftSpace(v.props.children, space, levelStyle, level);
+			if (v.props.title) {
+				style[$selectors.nthChild(i + 1)] = {
+					[$selectors.divFirstChild]: {
+						paddingLeft: paddingLeftValue,
+						...levelStyle[level - 1]
+					},
+					[$selectors.ulSecondChild]: {
+						...innerStyle
+					}
+				};
+			}
+		} else {
+			style[$selectors.nthChild(i + 1)] = {
+				paddingLeft: paddingLeftValue,
+				...levelStyle[level - 1]
+			};
+		}
+	});
+	return style;
+};
 
-  const mutableStyle = useMemo(() => {
-    return {
-      width: width
-    };
-  }, [width]);
+const List = ({ children, width = $styles.list.width, space, levelStyle, ...props }) => {
+	const _style_ = useMemo(
+		() => {
+			return {
+				width: width,
+				...addLeftSpace(children, space, levelStyle)
+			};
+		},
+		[ width, children, space, levelStyle ]
+	);
 
-  const style = useMemo(() => {
-    return {
-      ...mutableStyle,
-      ...leftSpaceStyle,
-      ...propStyle
-    };
-  }, [mutableStyle, propStyle]);
-
-  return (
-    <UlElement style={style} classNames={[$names.ucList]} {...props}>
-      {children}
-    </UlElement>
-  );
+	return (
+		<UlElement _style_={_style_} _className_={$names.ucList} {...props}>
+			{children}
+		</UlElement>
+	);
 };
 
 // -------------------------------------------------------------
 
-const ListGroup = ({
-  children,
-  style: propStyle,
-  title,
-  titleStyle: propTitleStyle,
-  ...props
-}) => {
-  const style = useMemo(() => {
-    return propStyle;
-  }, [propStyle]);
+const ListGroup = ({ children, title, titleStyle: propTitleStyle, ...props }) => {
+	const titleComponent = useMemo(
+		() => {
+			if (title) {
+				if (isString(title)) {
+					const titleStyle = $styles.group.title;
+					return (
+						<DivElement style={{ ...titleStyle, ...propTitleStyle }}>
+							<SpanElement>{title}</SpanElement>
+						</DivElement>
+					);
+				} else if (isReact(title)) {
+					return title;
+				}
+			}
+		},
+		[ title ]
+	);
 
-  const titleComponent = useMemo(() => {
-    if (title) {
-      if (isString(title)) {
-        const titleStyle = $styles.group.title;
-        return (
-          <DivElement style={{ ...titleStyle, ...propTitleStyle }}>
-            <SpanElement>{title}</SpanElement>
-          </DivElement>
-        );
-      } else if (isReact(title)) {
-        return title;
-      }
-    }
-  }, [title]);
-
-  return (
-    <LiElement style={style} classNames={[$names.ucListGroup]} {...props}>
-      {titleComponent}
-      <UlElement>{children}</UlElement>
-    </LiElement>
-  );
+	return (
+		<LiElement _className_={$names.ucListGroup} {...props}>
+			{titleComponent}
+			<UlElement>{children}</UlElement>
+		</LiElement>
+	);
 };
 
 // -------------------------------------------------------------
 
-const ListItem = ({ children, style: propStyle, ...props }) => {
-  const mainStyle = $styles.item.main;
-
-  const style = useMemo(() => {
-    return { ...mainStyle, ...propStyle };
-  }, [propStyle]);
-
-  return (
-    <LiElement style={style} {...props}>
-      <DivElement>{children}</DivElement>
-    </LiElement>
-  );
+const ListItem = ({ children, ...props }) => {
+	return (
+		<LiElement _style_={$styles.item.main} {...props}>
+			<DivElement>{children}</DivElement>
+		</LiElement>
+	);
 };
 
 List.Group = ListGroup;

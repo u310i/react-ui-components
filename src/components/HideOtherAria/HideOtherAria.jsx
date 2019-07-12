@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo, useEffect, useRef } from 'react';
-import { getElementRef } from 'scripts';
+import { getElementRef, getNode } from 'scripts';
 import { DivElement } from '..';
 
-const HideOtherAria = ({ children, refer, style: propStyle = {}, parent = document.body, active = true, ...props }) => {
-	const ref = useRef();
+const HideOtherAria = ({ children, parent = document.body, active = true, ...props }) => {
+	const _ref_ = useRef();
 	const hiddenNodesRef = useRef([]);
 	const prevActiveRef = useRef(null);
 
 	const activate = useCallback(
 		(parent) => {
-			if (ref.current === parent || parent.children.length === 0) return;
+			if (_ref_.current === parent || parent.children.length === 0) return;
 			Array.from(parent.children, (childNode) => {
-				if (childNode.contains(ref.current)) {
+				if (childNode.contains(_ref_.current)) {
 					activate(childNode);
 				} else {
 					const attr = childNode.getAttribute('aria-hidden');
@@ -24,7 +24,7 @@ const HideOtherAria = ({ children, refer, style: propStyle = {}, parent = docume
 				}
 			});
 		},
-		[ parent, active ]
+		[ active ]
 	);
 
 	const deactivate = useCallback(() => {
@@ -37,7 +37,8 @@ const HideOtherAria = ({ children, refer, style: propStyle = {}, parent = docume
 	useEffect(
 		() => {
 			if (!prevActiveRef.current && active) {
-				activate(parent);
+				const parentElement = getNode(parent);
+				activate(parentElement);
 			} else if (prevActiveRef.current && !active) {
 				deactivate();
 			}
@@ -47,19 +48,11 @@ const HideOtherAria = ({ children, refer, style: propStyle = {}, parent = docume
 				prevActiveRef.current = false;
 			};
 		},
-		[ active ]
+		[ active, parent ]
 	);
 
 	return (
-		<DivElement
-			refer={(element) => {
-				ref.current = element;
-				getElementRef(refer, element);
-			}}
-			style={propStyle}
-			className="uc-hideOtherAria"
-			{...props}
-		>
+		<DivElement _refer_={_ref_} _className_={'uc-hideOtherAria'} {...props}>
 			{children}
 		</DivElement>
 	);

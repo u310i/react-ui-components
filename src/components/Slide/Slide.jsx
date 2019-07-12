@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import $ from './_constants';
-import { genTransitionProp, genDurationsEasings, setTransition, setTransform, getElementRef } from 'scripts';
+import { genTransitionProp, genDurations, genEasings, setTransition, setTransform, getElementRef } from 'scripts';
 import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
@@ -38,8 +38,6 @@ const getExitedTranslateValue = (node, direction) => {
 const Slide = ({
 	in: inProp,
 	children,
-	refer,
-	style: propStyle = {},
 	duration = $styles.duration,
 	easing = $styles.easing,
 	appear = true,
@@ -48,25 +46,24 @@ const Slide = ({
 	onEntering,
 	onExiting,
 	onExited,
-	classNames: propClassNames,
 	...props
 }) => {
-	const ref = useRef(null);
+	const _ref_ = useRef(null);
 
-	const [ durations, easings ] = genDurationsEasings(duration, easing);
+	const durations = genDurations(duration);
+	const easings = genEasings(easing);
 
-	const style = useMemo(() => {
+	const _style_ = useMemo(() => {
 		return {
 			[$selectors.exited]: {
 				visibility: $styles.exitedVisibility
 			},
-			...$styles.style,
-			...propStyle
+			...$styles.style
 		};
 	}, []);
 
 	useLayoutEffect(() => {
-		const node = ref.current;
+		const node = _ref_.current;
 		if (appear || !inProp) {
 			const translate = getExitedTranslateValue(node, direction);
 			setTransform(node, translate);
@@ -90,7 +87,7 @@ const Slide = ({
 			setTransform(node, $styles.enteredTranslate);
 			if (onEntering) onEntering(node, appearing);
 		},
-		[ onEntering ]
+		[ onEntering, duration, easing ]
 	);
 
 	const handleExiting = useCallback(
@@ -100,7 +97,7 @@ const Slide = ({
 			setTransform(node, translate);
 			if (onExiting) onExiting(node);
 		},
-		[ onExiting ]
+		[ onExiting, duration, easing ]
 	);
 
 	const handleExited = useCallback(
@@ -109,13 +106,6 @@ const Slide = ({
 			if (onExited) onExited(node);
 		},
 		[ onExited ]
-	);
-
-	const classNames = useMemo(
-		() => {
-			return [ $names.ucSlide, ...(propClassNames || []) ];
-		},
-		[ propClassNames ]
 	);
 
 	return (
@@ -131,49 +121,13 @@ const Slide = ({
 		>
 			{(state, childProps) => {
 				return (
-					<DivElement
-						refer={(element) => {
-							ref.current = element;
-							getElementRef(refer, element);
-						}}
-						{...childProps}
-						style={style}
-						classNames={classNames}
-					>
+					<DivElement _refer_={_ref_} _style_={_style_} _className_={$names.ucSlide} {...childProps}>
 						{children}
 					</DivElement>
 				);
 			}}
 		</CSSTransition>
 	);
-
-	// return (
-	// 	<CSSTransition
-	// 		appear={appear}
-	// 		in={inProp}
-	// 		timeout={durations}
-	// 		onEnter={handleEnter}
-	// 		onEntering={handleEntering}
-	// 		onExiting={handleExiting}
-	// 		onExited={handleExited}
-	// 		{...props}
-	// 	>
-	// 		{(state, childProps) => {
-	// 			return (
-	// 				<children.type
-	// 					{...children.props}
-	// 					{...childProps}
-	// 					style={{ ...style, ...children.props.style, ...childProps.style }}
-	// 					classNames={classNames}
-	// 					refer={(element) => {
-	// 						ref.current = element;
-	// 						getElementRef(refer, element);
-	// 					}}
-	// 				/>
-	// 			);
-	// 		}}
-	// 	</CSSTransition>
-	// );
 };
 
 export default Slide;

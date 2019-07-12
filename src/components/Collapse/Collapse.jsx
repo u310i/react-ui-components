@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useRef } from 'react';
 import $ from './_constants';
-import { reflow, genTransitionProp, genDurationsEasings } from 'scripts';
+import { reflow, genTransitionProp, genDurations, genEasings } from 'scripts';
 import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
@@ -19,27 +19,35 @@ const Collapse = ({
 	onEntered,
 	onExit,
 	onExiting,
+	innerProps,
+	outerProps,
 	...props
 }) => {
-	const ref = useRef(null);
+	const _ref_ = useRef(null);
 
-	const [ durations, easings ] = genDurationsEasings(duration, easing);
+	const durations = genDurations(duration);
+	const easings = genEasings(easing);
 
-	const style = useMemo(() => {
-		return {
-			main: {
-				height: !appear && inProp ? $styles.height : collapsedHeight,
-				overflow: $styles.overflow,
-				[$selectors.enters]: {
-					transition: genTransitionProp([ [ $styles.transitionProperty, durations.enter, easings.enter ] ])
+	const _style_ = useMemo(
+		() => {
+			return {
+				outer: {
+					height: !appear && inProp ? $styles.height : collapsedHeight,
+					overflow: $styles.overflow,
+					[$selectors.enters]: {
+						transition: genTransitionProp([
+							[ $styles.transitionProperty, durations.enter, easings.enter ]
+						])
+					},
+					[$selectors.exit]: {
+						transition: genTransitionProp([ [ $styles.transitionProperty, durations.exit, easings.exit ] ])
+					}
 				},
-				[$selectors.exit]: {
-					transition: genTransitionProp([ [ $styles.transitionProperty, durations.exit, easings.exit ] ])
-				}
-			},
-			inner: $styles.inner
-		};
-	}, []);
+				inner: $styles.inner
+			};
+		},
+		[ duration, easing ]
+	);
 
 	const handleEntering = useCallback(
 		(node, appearing) => {
@@ -88,8 +96,13 @@ const Collapse = ({
 		>
 			{(state, childProps) => {
 				return (
-					<DivElement style={style.main} className={$names.ucCollapse} {...childProps}>
-						<DivElement refer={ref} style={style.inner} className={$names.ucCollapseInner}>
+					<DivElement _style_={_style_.outer} _className_={$names.ucCollapse} {...outerProps} {...childProps}>
+						<DivElement
+							_refer_={_ref_}
+							_style_={_style_.inner}
+							_className_={$names.ucCollapseInner}
+							{...innerProps}
+						>
 							{children}
 						</DivElement>
 					</DivElement>

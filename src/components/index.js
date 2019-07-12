@@ -7,6 +7,7 @@ import Sticky from './Sticky';
 import AppBar from './AppBar';
 import Button from './Button';
 import Drawer from './Drawer';
+import SwipeableDrawer from './SwipeableDrawer';
 import Flex from './Flex';
 import Header from './Header';
 import HeaderImage from './HeaderImage';
@@ -43,6 +44,7 @@ export {
 	AppBar,
 	Button,
 	Drawer,
+	SwipeableDrawer,
 	Flex,
 	Header,
 	HeaderImage,

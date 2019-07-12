@@ -1,51 +1,77 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { css, cx } from 'emotion';
-import style from './style';
+import baseStyle from './style';
+import { getElementRef } from 'scripts';
 
 const Base = ({
 	elementType,
 	children,
-	style = {},
-	className: propClassName = '',
+	_style_,
+	style: propStyle,
+	_className_ = '',
 	classNames: propClassNames = [],
+	className: propClassName = '',
+	_id_ = '',
 	ids: propIds = [],
 	id: propId = '',
-	roles: propRoles = [],
-	role: propRole = '',
-	aria: propArias = {},
-	refer,
+	_arias_ = {},
+	arias: propArias = {},
+	_refer_,
+	refer: propRefer,
 	...props
 }) => {
+	const style = useMemo(
+		() => {
+			return { ...baseStyle.allElementsCommonStyle, ..._style_, ...propStyle };
+		},
+		[ _style_, propStyle ]
+	);
+
 	const className = useMemo(
 		() => {
-			return [ ...(propClassName ? [ propClassName ] : []), ...(propClassNames || []) ].join(' ') || null;
+			return (
+				[
+					...(_className_ ? [ _className_ ] : []),
+					...(propClassNames || []),
+					...(propClassName ? [ propClassName ] : [])
+				].join(' ') || null
+			);
 		},
-		[ propClassName, propClassNames ]
+		[ _className_, propClassNames, propClassName ]
 	);
 
-	props.id = useMemo(
+	const id = useMemo(
 		() => {
-			return [ ...(propId ? [ propId ] : []), ...(propIds || []) ].join(' ') || null;
+			return [ ...(_id_ ? [ _id_ ] : []), ...(propIds || []), ...(propId ? [ propId ] : []) ].join(' ') || null;
 		},
-		[ propId, propIds ]
+		[ _id_, propIds, propId ]
 	);
 
-	props.role = useMemo(
+	const arias = useMemo(
 		() => {
-			return [ ...(propRole ? [ propRole ] : []), ...(propRoles || []) ].join(' ') || null;
+			const baseArias = {
+				..._arias_,
+				...propArias
+			};
+			const arias = {};
+			for (let key of Object.keys(baseArias)) {
+				arias[`aria-${key}`] = baseArias[key];
+			}
+			return arias;
 		},
-		[ propRole, propRoles ]
+		[ _arias_, propArias ]
 	);
 
-	const arias = {};
-	for (let key of Object.keys(propArias)) {
-		arias[`aria-${key}`] = propArias[key];
-	}
+	const refer = useCallback((element) => {
+		getElementRef(propRefer, element);
+		getElementRef(_refer_, element);
+	}, []);
 
 	return React.createElement(
 		elementType,
 		{
-			className: cx(css({ ...style.allElementsCommonStyle, ...style }), className),
+			className: cx(css(style), className),
+			id: id,
 			ref: refer,
 			...arias,
 			...props

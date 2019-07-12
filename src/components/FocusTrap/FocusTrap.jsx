@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { focusTrap as CreateFocusTrap, getElementRef } from 'scripts';
 import { DivElement } from '..';
 
@@ -12,8 +12,6 @@ import { DivElement } from '..';
 
 const FocusTrap = ({
 	children,
-	refer,
-	style: propStyle = {},
 	active = true,
 	paused = false,
 	onActivate,
@@ -26,7 +24,7 @@ const FocusTrap = ({
 	disablePointerEvents = true,
 	...props
 }) => {
-	const ref = useRef(null);
+	const _ref_ = useRef(null);
 	const tailoredOptions = {
 		onActivate,
 		onDeactivate,
@@ -45,7 +43,7 @@ const FocusTrap = ({
 	useEffect(
 		() => {
 			if (focusTrapRef.current === null) {
-				focusTrapRef.current = CreateFocusTrap(ref.current, tailoredOptions);
+				focusTrapRef.current = CreateFocusTrap(_ref_.current, tailoredOptions);
 			}
 			const focusTrap = focusTrapRef.current;
 			if (prevActiveRef.current === null) {
@@ -83,16 +81,14 @@ const FocusTrap = ({
 		[ active, paused ]
 	);
 
+	const _style_ = useMemo(() => {
+		return {
+			pointerEvents: disablePointerEvents ? 'none' : 'auto'
+		};
+	});
+
 	return (
-		<DivElement
-			style={{ pointerEvents: disablePointerEvents ? 'none' : 'auto', ...propStyle }}
-			className="uc-focusTrap"
-			refer={(element) => {
-				ref.current = element;
-				getElementRef(refer, element);
-			}}
-			{...props}
-		>
+		<DivElement _style_={_style_} _className_="uc-focusTrap" _refer_={_ref_} {...props}>
 			{children}
 		</DivElement>
 	);

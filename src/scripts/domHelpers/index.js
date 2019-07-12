@@ -22,6 +22,7 @@ export const ownerWindow = (node, fallback = window) => {
 };
 
 export const clickedScrollbar = (event) => {
+	if (!event.clientX || !event.clientY) return;
 	return (
 		document.documentElement.clientWidth <= event.clientX || document.documentElement.clientHeight <= event.clientY
 	);

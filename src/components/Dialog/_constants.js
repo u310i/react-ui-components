@@ -13,8 +13,26 @@ const constants = {
 		ucDialogInner: 'uc-dialog-inner'
 	},
 	styles: {
+		transition: {
+			style: {
+				pointerEvents: 'none',
+				width: '100%',
+				height: '100%',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center'
+			},
+			scrollBody: {
+				style: {
+					overflowX: 'hidden',
+					overflowY: 'auto',
+					alignItems: 'start'
+				}
+			}
+		},
 		inner: {
 			elevation: 24,
+			shape: 'default',
 			style: {
 				backgroundColor: 'white',
 				maxHeight: 'calc(100% - 96px)',
@@ -27,29 +45,19 @@ const constants = {
 				pointerEvents: 'auto'
 			},
 			scrollBody: {
-				maxHeight: 'none'
-				// alignItems: 'hidden'
+				style: {
+					maxHeight: 'none'
+					// alignItems: 'hidden'
+				}
 			},
 			fullScreen: {
-				width: '100%',
-				height: '100%',
-				margin: '0',
-				maxHeight: 'none'
-			}
-		},
-		transition: {
-			style: {
-				pointerEvents: 'none',
-				width: '100%',
-				height: '100%',
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center'
-			},
-			scrollBody: {
-				overflowX: 'hidden',
-				overflowY: 'auto',
-				alignItems: 'start'
+				style: {
+					width: '100%',
+					height: '100%',
+					margin: '0',
+					maxHeight: 'none'
+				},
+				shape: 'corner'
 			}
 		}
 	}

@@ -1,211 +1,219 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useMemo } from 'react';
 import $ from './_constants';
 import {
-  roundNumber,
-  testCssNumberRegExp,
-  getType,
-  isString,
-  isArray,
-  isObject,
-  isUndefined,
-  getFontSize,
-  keyframes
+	roundNumber,
+	testCssNumberRegExp,
+	getType,
+	isString,
+	isArray,
+	isObject,
+	getFontSize,
+	keyframes
 } from 'scripts';
-import scripts from './_scripts';
+import iconList from 'src/icons';
 import { SVG } from '..';
 
 const $styles = $.styles;
 const $names = $.names;
 
+const getIcon = (name) => {
+	const icon = iconList.get(name);
+	if (!icon) return null;
+	const w = icon.viewBox[2];
+	const h = icon.viewBox[3];
+	const ratio = roundNumber(w / h, 3);
+	return {
+		...icon,
+		ratio: ratio
+	};
+};
+
+const getName = (type, icon) => {
+	let name = '';
+
+	if (type === 'string') {
+		name = icon;
+	} else if (type === 'array') {
+		name = icon.join('-');
+	} else if (type === 'object') {
+		if (isString(icon.name)) {
+			name = icon.name;
+		} else if (isArray(icon.name)) {
+			icon.name.join('-');
+		}
+	}
+
+	return name;
+};
+
 const Icon = ({
-  icon,
-  style: propStyle = {},
-  classNames = [],
-  ids = [],
-  role = 'icon',
-  ariaLabel: propAriaLabel,
-  symbol,
-  use,
-  currentColor,
-  size,
-  fixedWidth,
-  pull,
-  border,
-  rotation,
-  flip,
-  spin,
-  pulse,
-  marginLeft,
-  marginRight,
-  ...props
+	icon,
+	role = 'icon',
+	symbol,
+	use,
+	currentColor,
+	size,
+	fixedWidth,
+	pull,
+	border,
+	rotation,
+	flip,
+	spin,
+	pulse,
+	marginLeft,
+	marginRight,
+	...props
 }) => {
-  const iconType = getType(icon);
+	const [ iconData, others ] = useMemo(
+		() => {
+			const iconType = getType(icon);
 
-  let name = '';
-  if (iconType === 'string') {
-    name = icon;
-  } else if (iconType === 'array') {
-    name = icon.join('-');
-  } else if (iconType === 'object') {
-    if (isString(icon.name)) {
-      name = icon.name;
-    } else if (isArray(icon.name)) {
-      icon.name.join('-');
-    }
-  }
+			const name = getName(iconType, icon);
 
-  if (propAriaLabel) props['aria-label'] = propAriaLabel;
+			const iconData =
+				iconType === 'object'
+					? {
+							type: 'inline',
+							viewBox: icon.viewBox,
+							path: icon.path,
+							tag: icon.tag,
+							title: icon.title || ''
+						}
+					: getIcon(name);
 
-  const iconData =
-    iconType === 'object'
-      ? {
-          type: 'inline',
-          viewBox: icon.viewBox,
-          path: icon.path,
-          tag: icon.tag,
-          title: icon.title || ''
-        }
-      : scripts.getIcon(name);
-  if (!iconData) return null;
+			const isPath = !!iconData.path;
 
-  const isPath = !!iconData.path;
+			const baseName = `uc-svg-i-${iconData.type}`;
 
-  const baseName = `uc-svg-i-${iconData.type}`;
+			let others = {};
 
-  const mainStyle = useMemo(() => {
-    return $styles.main;
-  }, []);
+			if (currentColor || isPath) others.fill = $styles.currentColor;
 
-  let mutableStyle = {};
+			if (use) {
+				others = {
+					...others,
+					_className_: `${baseName}-use-${name}`,
+					use: true,
+					xlinkHref: `#${baseName}-symbol-${name}`
+				};
+			} else {
+				others = {
+					...others,
+					viewBox: iconData.viewBox,
+					path: iconData.path,
+					tag: iconData.tag
+				};
+				if (symbol) {
+					others = {
+						...others,
+						symbol: true,
+						_className_: `${baseName}-symbol-${name}`,
+						_id_: `${baseName}-symbol-${name}`
+					};
+				} else {
+					others = {
+						...others,
+						_className_: `${baseName}-${name}`
+					};
+				}
+			}
 
-  if (marginLeft)
-    mutableStyle.marginLeft = isString(marginLeft)
-      ? marginLeft
-      : $styles.marginLeft;
-  if (marginRight)
-    mutableStyle.marginRight = isString(marginRight)
-      ? marginRight
-      : $styles.marginRight;
+			return [ iconData, others ];
+		},
+		[ icon, use, symbol ]
+	);
 
-  if (size) mutableStyle.fontSize = getFontSize(size);
+	if (!iconData) return null;
 
-  if (isUndefined(currentColor)) {
-    currentColor = isPath && true;
-  }
-  if (currentColor) props.fill = $styles.currentColor;
+	const _style_ = useMemo(
+		() => {
+			let style = {};
 
-  const height = border ? $styles.heightOnBorder : $styles.height;
-  const widthRatioOnFixed = $styles.widthRatioOnFixed;
-  const precision = $styles.precision;
+			if (marginLeft) style.marginLeft = isString(marginLeft) ? marginLeft : $styles.marginLeft;
+			if (marginRight) style.marginRight = isString(marginRight) ? marginRight : $styles.marginRight;
 
-  if (fixedWidth && !border) {
-    mutableStyle.width =
-      typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
-        ? fixedWidth
-        : `${roundNumber(height * widthRatioOnFixed, precision)}em`;
-  } else {
-    mutableStyle.width = `${roundNumber(height * iconData.ratio, precision)}em`;
-  }
+			if (size) style.fontSize = getFontSize(size);
 
-  if (border) {
-    const borderIsObject = isObject(border);
-    if (borderIsObject) {
-      mutableStyle = { ...mutableStyle, ...border };
-    } else {
-      mutableStyle = {
-        ...mutableStyle,
-        height: `${height}em`,
-        ...$styles.border
-      };
-    }
-    if (fixedWidth) {
-      mutableStyle.width =
-        typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
-          ? fixedWidth
-          : `${roundNumber(height * widthRatioOnFixed, precision)}em`;
-    } else {
-      mutableStyle.width = `${roundNumber(height * iconData.ratio, precision)}em`;
-    }
-  }
+			const height = border ? $styles.heightOnBorder : $styles.height;
+			const widthRatioOnFixed = $styles.widthRatioOnFixed;
+			const precision = $styles.precision;
 
-  if (pull === 'left') {
-    mutableStyle = {
-      ...mutableStyle,
-      ...$styles.pullLeft
-    };
-  } else if (pull === 'right') {
-    mutableStyle = {
-      ...mutableStyle,
-      ...$styles.pullRight
-    };
-  }
+			if (fixedWidth && !border) {
+				style.width =
+					typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
+						? fixedWidth
+						: `${roundNumber(height * widthRatioOnFixed, precision)}em`;
+			} else {
+				style.width = `${roundNumber(height * iconData.ratio, precision)}em`;
+			}
 
-  if (rotation || flip) {
-    const transformList = [];
+			if (border) {
+				const borderIsObject = isObject(border);
+				if (borderIsObject) {
+					style = { ...style, ...border };
+				} else {
+					style = {
+						...style,
+						height: `${height}em`,
+						...$styles.border
+					};
+				}
+				if (fixedWidth) {
+					style.width =
+						typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
+							? fixedWidth
+							: `${roundNumber(height * widthRatioOnFixed, precision)}em`;
+				} else {
+					style.width = `${roundNumber(height * iconData.ratio, precision)}em`;
+				}
+			}
 
-    if (rotation) {
-      const rotate = `rotate(${rotation}deg)`;
-      transformList.push(rotate);
-    }
-    if (flip) {
-      let scale;
-      flip === 'horizontal' && (scale = $styles.flipHorizontal);
-      flip === 'vertical' && (scale = $styles.flipVertical);
-      flip === 'both' && (scale = $styles.flipBoth);
-      transformList.push(scale);
-    }
+			if (pull === 'left') {
+				style = {
+					...style,
+					...$styles.pullLeft
+				};
+			} else if (pull === 'right') {
+				style = {
+					...style,
+					...$styles.pullRight
+				};
+			}
 
-    mutableStyle['transform'] = transformList.join(' ');
-  }
+			if (rotation || flip) {
+				const transformList = [];
 
-  if (spin || pulse) {
-    const rotateAnimation = keyframes({
-      from: $styles.roll.from,
-      to: $styles.roll.to
-    });
-    spin
-      ? (mutableStyle.animation = `${rotateAnimation} ${
-          isString(spin) ? spin : $styles.roll.spin
-        }`)
-      : (mutableStyle.animation = `${rotateAnimation} ${
-          isString(pulse) ? pulse : $styles.roll.pulse
-        }`);
-  }
+				if (rotation) {
+					const rotate = `rotate(${rotation}deg)`;
+					transformList.push(rotate);
+				}
+				if (flip) {
+					let scale;
+					flip === 'horizontal' && (scale = $styles.flipHorizontal);
+					flip === 'vertical' && (scale = $styles.flipVertical);
+					flip === 'both' && (scale = $styles.flipBoth);
+					transformList.push(scale);
+				}
 
-  if (use) {
-    classNames.push(`${baseName}-use-${name}`);
-    props = {
-      ...props,
-      use: true,
-      xlinkHref: `#${baseName}-symbol-${name}`
-    };
-  } else {
-    props = {
-      ...props,
-      viewBox: iconData.viewBox,
-      path: iconData.path,
-      tag: iconData.tag
-    };
-    if (symbol) {
-      classNames.push(`${baseName}-symbol-${name}`);
-      ids.push(`${baseName}-symbol-${name}`);
-      props = {
-        ...props,
-        symbol: true
-      };
-    } else {
-      classNames.push(`${baseName}-${name}`);
-    }
-  }
+				style['transform'] = transformList.join(' ');
+			}
 
-  props.classNames = classNames;
-  if (ids.length !== 0) props.ids = ids;
+			if (spin || pulse) {
+				const rotateAnimation = keyframes({
+					from: $styles.roll.from,
+					to: $styles.roll.to
+				});
+				spin
+					? (style.animation = `${rotateAnimation} ${isString(spin) ? spin : $styles.roll.spin}`)
+					: (style.animation = `${rotateAnimation} ${isString(pulse) ? pulse : $styles.roll.pulse}`);
+			}
 
-  props.role = role;
+			return { ...$styles.style, ...style };
+		},
+		[ icon, currentColor, size, fixedWidth, pull, border, rotation, flip, spin, pulse, marginLeft, marginRight ]
+	);
 
-  props.style = { ...mainStyle, ...mutableStyle, ...propStyle };
-
-  return <SVG {...props} />;
+	return <SVG _style_={_style_} role={role} {...others} {...props} />;
 };
 
 export default Icon;

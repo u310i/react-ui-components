@@ -26,20 +26,19 @@ const removeSpaceFromOuter = (outerNode) => {
 
 const Sticky = ({
 	children,
-	refer,
-	style: propOuterStyle = {},
-	innerStyle: propInnerStyle = {},
+	innerProps = {},
+	outerProps = {},
+	absoluteWrapperProps = {},
 	offsetTop = 0,
 	offsetBottom,
 	timeout,
-	absolute,
-	...props
+	enableAbsolute = null
 }) => {
 	const [ isTop, setIsTop ] = useState(false);
 	const [ isBottom, setIsBottom ] = useState(false);
 
-	const outerRef = useRef(null);
-	const innerRef = useRef(null);
+	const _outerRef_ = useRef(null);
+	const _innerRef_ = useRef(null);
 
 	const [ canStickingTop, canStickingBottom ] = useMemo(() => {
 		return [
@@ -54,7 +53,7 @@ const Sticky = ({
 		let bottomFlag = false;
 		let bottomPrev;
 		return () => {
-			const rect = outerRef.current.getBoundingClientRect();
+			const rect = _outerRef_.current.getBoundingClientRect();
 			if (canStickingTop) {
 				topPrev = topFlag;
 				topFlag = rect.top < offsetTop;
@@ -73,7 +72,7 @@ const Sticky = ({
 	}, []);
 
 	useLayoutEffect(() => {
-		const rect = outerRef.current.getBoundingClientRect();
+		const rect = _outerRef_.current.getBoundingClientRect();
 		if (canStickingTop) {
 			if (rect.top < offsetTop) {
 				setIsTop(true);
@@ -89,54 +88,56 @@ const Sticky = ({
 	useLayoutEffect(
 		() => {
 			if (isTop) {
-				innerRef.current.style.position = 'fixed';
-				innerRef.current.style.top = `${offsetTop}px`;
-				innerRef.current.style.left = '0px';
-				addSpaceToOuter(outerRef.current, innerRef.current);
+				_innerRef_.current.style.position = 'fixed';
+				_innerRef_.current.style.top = `${offsetTop}px`;
+				_innerRef_.current.style.left = '0px';
+				addSpaceToOuter(_outerRef_.current, _innerRef_.current);
 			} else if (isBottom) {
-				innerRef.current.style.position = 'fixed';
-				innerRef.current.style.bottom = `${offsetBottom}px`;
-				innerRef.current.style.left = '0px';
-				addSpaceToOuter(outerRef.current, innerRef.current);
+				_innerRef_.current.style.position = 'fixed';
+				_innerRef_.current.style.bottom = `${offsetBottom}px`;
+				_innerRef_.current.style.left = '0px';
+				addSpaceToOuter(_outerRef_.current, _innerRef_.current);
 			} else {
-				resetStyle(innerRef.current);
-				removeSpaceFromOuter(outerRef.current);
+				resetStyle(_innerRef_.current);
+				removeSpaceFromOuter(_outerRef_.current);
 			}
 		},
 		[ isTop, isBottom ]
 	);
 
-	const style = useMemo(
+	const _styles_ = useMemo(
 		() => {
 			return {
 				inner: {
-					zIndex: $style.zIndex,
-					...propInnerStyle
+					zIndex: $style.zIndex
 				},
 				outer: {
-					position: absolute ? 'absolute' : '',
-					...propOuterStyle
+					position: enableAbsolute ? 'absolute' : ''
 				},
 				absoluteWrapper: {
 					position: 'relative'
 				}
 			};
 		},
-		[ propInnerStyle, propOuterStyle, absolute ]
+		[ enableAbsolute ]
 	);
 
 	const innerComponent = (
-		<DivElement refer={outerRef} style={style.outer} className={$names.ucSlideOuter}>
-			<DivElement refer={innerRef} style={style.inner} className={$names.ucSlideInner}>
+		<DivElement _refer_={_outerRef_} _style_={_styles_.outer} _className_={$names.ucSlideOuter} {...outerProps}>
+			<DivElement _refer_={_innerRef_} _style_={_styles_.inner} _className_={$names.ucSlideInner} {...innerProps}>
 				{typeof children === 'function' ? children(isTop, isBottom) : children}
 			</DivElement>
 		</DivElement>
 	);
 
 	return (
-		<EventListener target={window} type="scroll" callback={setStickingState} options={{ passive: true }} {...props}>
-			{absolute ? (
-				<DivElement style={style.absoluteWrapper} className={$names.ucSlideAbsoluteWrapper} refer={refer}>
+		<EventListener target={window} type="scroll" callback={setStickingState} options={{ passive: true }}>
+			{enableAbsolute ? (
+				<DivElement
+					_style_={_styles_.absoluteWrapper}
+					_className_={$names.ucSlideAbsoluteWrapper}
+					{...absoluteWrapperProps}
+				>
 					{innerComponent}
 				</DivElement>
 			) : (

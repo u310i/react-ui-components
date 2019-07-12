@@ -25,7 +25,9 @@ import {
 	genTransitionProperty,
 	genReactCSSTransitionStyle,
 	genSimpleTransitionStyle,
-	assignTransitionDuration
+	assignTransitionDuration,
+	genDurations,
+	genEasings
 } from './style';
 import {
 	focusTrap,
@@ -41,7 +43,6 @@ import {
 	getNode,
 	getElementRef
 } from './domHelpers';
-import { genDurationsEasings } from './transition';
 import {
 	toFullHexa,
 	hexa2rgba,
@@ -122,6 +123,8 @@ export {
 	genReactCSSTransitionStyle,
 	genSimpleTransitionStyle,
 	assignTransitionDuration,
+	genEasings,
+	genDurations,
 	// domHelpers
 	focusTrap,
 	mousetrap,
@@ -135,8 +138,6 @@ export {
 	getTransitionEndName,
 	getNode,
 	getElementRef,
-	// transition
-	genDurationsEasings,
 	// color
 	toFullHexa,
 	hexa2rgba,

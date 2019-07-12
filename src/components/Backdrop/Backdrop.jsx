@@ -3,47 +3,51 @@ import $ from './_constants';
 import {} from 'scripts';
 import { Fade, DivElement } from '..';
 
+const $styles = $.styles;
+
 const Backdrop = ({
 	children = null,
-	style: propStyle = {},
-	classNames: propClassNames = [],
 	open = true,
 	disablePointerEvents = false,
 	duration,
 	invisible,
-	refer,
-	fadeProps,
+	TransitionComponent = Fade,
+	transitionProps: propTransitionProps = {},
 	...props
 }) => {
-	const style = useMemo(
+	const _style_ = useMemo(
 		() => {
 			return {
-				...$.styles.main,
-				...(invisible ? $.styles.invisible : {}),
-				...(disablePointerEvents ? $.styles.disablePointerEvents : {}),
-				...propStyle
+				...$styles.style,
+				...(invisible && $styles.invisible.style),
+				...(disablePointerEvents && $styles.disablePointerEvents.style)
 			};
 		},
-		[ propStyle, invisible, disablePointerEvents ]
+		[ invisible, disablePointerEvents ]
 	);
 
-	const classNames = useMemo(() => {
-		return [ $.names.ucBackdrop, ...propClassNames ];
-	}, propClassNames);
+	const transitionProps = {
+		...propTransitionProps,
+		...useMemo(
+			() => {
+				return {
+					style: {
+						...$styles.transition.style,
+						...propTransitionProps.style
+					},
+					classNames: [ $.names.ucBackdrop, ...(propTransitionProps.classNames || []) ]
+				};
+			},
+			[ propTransitionProps.style, propTransitionProps.classNames ]
+		)
+	};
 
 	return (
-		<Fade
-			in={open}
-			duration={duration}
-			style={$.styles.fadeComponent}
-			classNames={classNames}
-			aria-hidden={true}
-			{...fadeProps}
-		>
-			<DivElement style={style} refer={refer} className={$.names.ucBackdropMain} {...props}>
+		<TransitionComponent in={open} duration={duration} aria-hidden={true} {...transitionProps}>
+			<DivElement _style_={_style_} _className_={$.names.ucBackdropInner} {...props}>
 				{children}
 			</DivElement>
-		</Fade>
+		</TransitionComponent>
 	);
 };
 

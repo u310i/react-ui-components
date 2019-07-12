@@ -2,15 +2,7 @@ import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { getNode, clickedScrollbar } from 'scripts';
 import { ClickOrTouch } from '..';
 
-const ClickOrTouchOnOutside = ({
-	children,
-	refer,
-	target,
-	action,
-	includeScrollbar = false,
-	clickOrTouchProps = {},
-	...props
-}) => {
+const ClickOrTouchOnOutside = ({ children, refer, target, action, includeScrollbar = false, ...props }) => {
 	const listener = useCallback((event) => {
 		const node = getNode(target);
 		if (node.contains(event.target)) return;
@@ -19,7 +11,7 @@ const ClickOrTouchOnOutside = ({
 	}, []);
 
 	return (
-		<ClickOrTouch action={listener} {...clickOrTouchProps}>
+		<ClickOrTouch action={listener} {...props}>
 			{children || null}
 		</ClickOrTouch>
 	);

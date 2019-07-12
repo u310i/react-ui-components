@@ -8,7 +8,7 @@ const $tSelectors = $.selectors.transition;
 const constants = {
 	names: {
 		ucBackdrop: 'uc-backdrop',
-		ucBackdropMain: 'uc-backdrop-main'
+		ucBackdropInner: 'uc-backdrop-inner'
 	},
 	selectors: {
 		enters: $tSelectors.enters,
@@ -19,7 +19,7 @@ const constants = {
 		exited: $tSelectors.exited
 	},
 	styles: {
-		main: {
+		style: {
 			position: 'fixed',
 			right: 0,
 			bottom: 0,
@@ -32,14 +32,20 @@ const constants = {
 			touchAction: 'none'
 		},
 		invisible: {
-			backgroundColor: 'transparent'
+			style: {
+				backgroundColor: 'transparent'
+			}
 		},
-		fadeComponent: {
-			position: 'relative',
-			zIndex: $.zIndex.backdrop
+		transition: {
+			style: {
+				position: 'relative',
+				zIndex: $.zIndex.backdrop
+			}
 		},
 		disablePointerEvents: {
-			pointerEvents: 'none'
+			style: {
+				pointerEvents: 'none'
+			}
 		}
 	}
 };
