@@ -104,7 +104,7 @@ const SwipeableDrawer = ({
 			let transition = '';
 
 			if (mode) {
-				transition = genTransitionProp([ 'all', durations[mode], $styles.easing ]);
+				transition = genTransitionProp([ [ 'all', durations[mode], $styles.easing ] ]);
 			}
 
 			if (changeTransition) {
@@ -236,7 +236,7 @@ const SwipeableDrawer = ({
 				return;
 			}
 			const startLocation = horizontalSwipe ? swipeInstance.current.startX : swipeInstance.current.startY;
-			const maxTranslate = getMaxTranslate(horizontalSwipe, paperRef.current);
+			const maxTranslate = getMaxTranslate(horizontalSwipe, transitionRef.current);
 
 			const translate = getTranslate(
 				horizontalSwipe ? currentX : currentY,
@@ -363,8 +363,8 @@ const SwipeableDrawer = ({
 		getElementRef(propModalProps.backdropProps.transitionProps.refer, element);
 	}, []);
 	const modalProps = {
-		// onEscapeKeyDown,
-		// onOutsideClick,
+		onEscapeKeyDown,
+		onOutsideClick,
 		...propModalProps,
 		...useMemo(
 			() => {
@@ -375,11 +375,11 @@ const SwipeableDrawer = ({
 							...propModalProps.backdropProps.transitionProps,
 							refer: handleBackdropTransitionRef
 						}
+					},
+					rootProps: {
+						...propModalProps.rootProps,
+						classNames: [ $names.ucSwipeable_drawer, ...(propModalProps.rootProps.classNames || []) ]
 					}
-					// rootProps: {
-					// 	...propModalProps.rootProps,
-					// 	classNames: [ $names.ucSwipeable_drawer, ...(propModalProps.rootProps.classNames || []) ]
-					// }
 				};
 			},
 			[ propModalProps.backdropProps, propModalProps.rootProps ]
@@ -388,7 +388,7 @@ const SwipeableDrawer = ({
 
 	const handleTransitionRef = useCallback((element) => {
 		transitionRef.current = element;
-		getElementRef(transitionProps.refer, element);
+		getElementRef(propTransitionProps.refer, element);
 	}, []);
 	const transitionProps = {
 		...propTransitionProps,

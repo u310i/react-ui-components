@@ -13,6 +13,7 @@ const Dialog = ({
 	open,
 	onEscapeKeyDown,
 	onOutsideClick,
+	keepMounted = false,
 	arias: propArias,
 	enableScrollBody = false,
 	fullScreen,
@@ -29,17 +30,18 @@ const Dialog = ({
 	const modalProps = {
 		onEscapeKeyDown,
 		onOutsideClick,
+		keepMounted,
 		...propModalProps,
 		...useMemo(
 			() => {
 				return {
 					rootProps: {
 						...propModalProps.rootProps,
-						classNames: [ $names.ucDialog, ...(propModalProps.rootProps.classNames || []) ]
+						classNames: [ ...(propModalProps.rootProps.classNames || []), $names.ucDialog ]
 					},
 					contentProps: {
 						...propModalProps.contentProps,
-						classNames: [ $names.ucDialogContainer, ...(propModalProps.contentProps.classNames || []) ],
+						classNames: [ ...(propModalProps.contentProps.classNames || []), $names.ucDialogContainer ],
 						arias: {
 							modal: true,
 							...propArias,
@@ -62,7 +64,7 @@ const Dialog = ({
 						...(enableScrollBody && $transitionStyle.scrollBody.style),
 						...propTransitionProps.style
 					},
-					classNames: [ $names.ucDialogTransition, ...(propTransitionProps.classNames || []) ]
+					classNames: [ ...(propTransitionProps.classNames || []), $names.ucDialogTransition ]
 				};
 			},
 			[ propTransitionProps.style, enableScrollBody, propTransitionProps.classNames ]
@@ -84,7 +86,7 @@ const Dialog = ({
 						...(fullScreen && $innerStyle.fullScreen.style),
 						...propInnerProps.style
 					},
-					classNames: [ $names.ucDialogInner, ...(propInnerProps.classNames || []) ],
+					classNames: [ ...(propInnerProps.classNames || []), $names.ucDialogInner ],
 					refer: handleInnerRef
 				};
 			},

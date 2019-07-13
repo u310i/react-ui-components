@@ -35,7 +35,7 @@ const Backdrop = ({
 						...$styles.transition.style,
 						...propTransitionProps.style
 					},
-					classNames: [ $.names.ucBackdrop, ...(propTransitionProps.classNames || []) ]
+					classNames: [ ...(propTransitionProps.classNames || []), $.names.ucBackdrop ]
 				};
 			},
 			[ propTransitionProps.style, propTransitionProps.classNames ]

@@ -31,9 +31,9 @@ const Base = ({
 		() => {
 			return (
 				[
-					...(_className_ ? [ _className_ ] : []),
+					...(propClassName ? [ propClassName ] : []),
 					...(propClassNames || []),
-					...(propClassName ? [ propClassName ] : [])
+					...(_className_ ? [ _className_ ] : [])
 				].join(' ') || null
 			);
 		},
@@ -42,7 +42,7 @@ const Base = ({
 
 	const id = useMemo(
 		() => {
-			return [ ...(_id_ ? [ _id_ ] : []), ...(propIds || []), ...(propId ? [ propId ] : []) ].join(' ') || null;
+			return [ ...(propId ? [ propId ] : []), ...(propIds || []), ...(_id_ ? [ _id_ ] : []) ].join(' ') || null;
 		},
 		[ _id_, propIds, propId ]
 	);

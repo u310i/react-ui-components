@@ -48,7 +48,7 @@ export default ({}) => {
 	const onClose2 = () => {
 		setState2((prev) => prev && false);
 	};
-	const [ state_t, setState_t ] = useState(false);
+	const [ state_t, setState_t ] = useState(true);
 	const handler_t = () => {
 		setState_t((prev) => !prev);
 	};
@@ -61,6 +61,9 @@ export default ({}) => {
 	};
 	const onClose_drawer = () => {
 		setState_drawer((prev) => prev && false);
+	};
+	const onOpen_drawer = () => {
+		setState_drawer((prev) => !prev && true);
 	};
 	const appBarProps = {
 		style: {
@@ -115,6 +118,8 @@ export default ({}) => {
 			/>
 			<SwipeableDrawer
 				open={state_drawer}
+				onOpen={onOpen_drawer}
+				onClose={onClose_drawer}
 				anchor="left"
 				onEscapeKeyDown={onClose_drawer}
 				onOutsideClick={onClose_drawer}
@@ -157,8 +162,8 @@ export default ({}) => {
 				TransitionComponent={Fade}
 				fullScreen={false}
 				className={[ 'AAA' ]}
+				keepMounted={false}
 				modalProps={{
-					keepMounted: true,
 					id: 'test'
 				}}
 			>
@@ -230,7 +235,7 @@ export default ({}) => {
 				onClick={handler_t}
 			/>
 			<DivElement style={{}}>
-				<Slide in={state_t} direction="right">
+				<Fade in={state_t} appear={true} direction="right">
 					<Paper
 						elevation={24}
 						shape="round"
@@ -250,7 +255,7 @@ export default ({}) => {
 						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
 						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
 					</Paper>
-				</Slide>
+				</Fade>
 			</DivElement>
 
 			<DivElement style={{ height: '100px', backgroundColor: '#e6e6fa' }} />

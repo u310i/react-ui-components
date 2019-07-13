@@ -47,7 +47,11 @@ const constants = {
 				}
 			}
 		},
-		duration: $.props.transitionDuration,
+		// duration: $.props.transitionDuration,
+		duration: {
+			enter: 225,
+			exit: 195
+		},
 		easing: 'linear'
 	}
 };

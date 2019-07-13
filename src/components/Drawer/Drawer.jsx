@@ -30,6 +30,7 @@ const Drawer = ({
 	open,
 	onEscapeKeyDown,
 	onOutsideClick,
+	keepMounted = true,
 	anchor = 'left',
 	arias: propArias,
 	modalProps: propModalProps = {},
@@ -45,13 +46,14 @@ const Drawer = ({
 	const modalProps = {
 		onEscapeKeyDown,
 		onOutsideClick,
+		keepMounted,
 		...propModalProps,
 		...useMemo(
 			() => {
 				return {
 					rootProps: {
 						...propModalProps.rootProps,
-						classNames: [ $names.ucDrawer, ...(propModalProps.rootProps.classNames || []) ]
+						classNames: [ ...(propModalProps.rootProps.classNames || []), $names.ucDrawer ]
 					},
 					contentProps: {
 						...propModalProps.contentProps,
@@ -60,7 +62,7 @@ const Drawer = ({
 							...$modalContentStyle[anchor].style,
 							...propModalProps.contentProps.style
 						},
-						classNames: [ $names.ucDrawerContainer, ...(propModalProps.contentProps.classNames || []) ],
+						classNames: [ ...(propModalProps.contentProps.classNames || []), $names.ucDrawerContainer ],
 						arias: {
 							modal: true,
 							...propArias,
@@ -82,7 +84,7 @@ const Drawer = ({
 						...$transitionStyle.style,
 						...propTransitionProps.style
 					},
-					classNames: [ $names.ucDrawerTransition, ...(propTransitionProps.classNames || []) ]
+					classNames: [ ...(propTransitionProps.classNames || []), $names.ucDrawerTransition ]
 				};
 			},
 			[ propTransitionProps.style, propTransitionProps.classNames ]
@@ -103,7 +105,7 @@ const Drawer = ({
 						...(isHorizontal(anchor) ? $innerStyle.horizontal.style : $innerStyle.vertical.style),
 						...propInnerProps.style
 					},
-					classNames: [ $names.ucDrawerInner, ...(propInnerProps.classNames || []) ],
+					classNames: [ ...(propInnerProps.classNames || []), $names.ucDrawerInner ],
 					refer: handleInnerRef
 				};
 			},

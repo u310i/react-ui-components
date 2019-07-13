@@ -121,7 +121,13 @@ const Slide = ({
 		>
 			{(state, childProps) => {
 				return (
-					<DivElement _refer_={_ref_} _style_={_style_} _className_={$names.ucSlide} {...childProps}>
+					<DivElement
+						_refer_={_ref_}
+						_style_={_style_}
+						_className_={$names.ucSlide}
+						{...childProps}
+						identifier={'slide'}
+					>
 						{children}
 					</DivElement>
 				);

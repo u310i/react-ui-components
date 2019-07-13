@@ -109,10 +109,6 @@ const Modal = ({
 		}
 	}
 
-	// 'ZIndex' is counted up when newly opened
-	// The reason for not using "handleMountedChild" is
-	//  that if 'open' is changed to 'true' before the modal child is unmounted,
-	//  it will not be mounted and will not count up.
 	useEffect(
 		() => {
 			if (open && !zIndexAdded.current) {
@@ -123,24 +119,6 @@ const Modal = ({
 		},
 		[ open ]
 	);
-
-	// If you want to unmount after waiting for the transition,
-	//  use 'forceUpdate' to unmount after the transition.
-	const handleExited = useCallback(
-		(node) => {
-			const childrenOnExited = children && children.props && children.props.onExited;
-			childrenOnExited && childrenOnExited(node);
-			canMountChildRef.current = null;
-			inExitTransitionRef.current = null;
-			forceUpdate();
-		},
-		[ children.props.onExited ]
-	);
-
-	const handleClose = useCallback(() => {
-		onClose && onClose(childRef.current, closingReasonRef.current);
-		closingReasonRef.current = null;
-	}, []);
 
 	const handleEscapeKeyDown = useCallback((event) => {
 		closingReasonRef.current = 'escapeKeyDown';
@@ -164,6 +142,35 @@ const Modal = ({
 		return childRef.current;
 	}, []);
 
+	// If you want to unmount after waiting for the transition,
+	//  use 'forceUpdate' to unmount after the transition.
+	const onExitedOfChildren = children.props.onExited;
+	const handleExited = useCallback(
+		(node) => {
+			if (closeAfterTransition) {
+				inExitTransitionRef.current = null;
+				canMountChildRef.current = null;
+				onExitedOfChildren && onExitedOfChildren(node);
+				forceUpdate();
+			}
+		},
+		[ closeAfterTransition, onExitedOfChildren ]
+	);
+
+	const handleOpen = useCallback(
+		() => {
+			canMountChildRef.current = open;
+			inExitTransitionRef.current = null;
+			onOpen && onOpen();
+		},
+		[ open, onOpen ]
+	);
+
+	const handleClose = useCallback(() => {
+		onClose && onClose(childRef.current, closingReasonRef.current);
+		closingReasonRef.current = null;
+	}, []);
+
 	// when 'open' changes to false.
 	if (canMountChildRef.current && !open && !inExitTransitionRef.current) {
 		inExitTransitionRef.current = true;
@@ -176,27 +183,21 @@ const Modal = ({
 	//  the procedure is as usual when 'open' changes to true.
 	if (enableCloseAfterTransition) {
 		if (!canMountChildRef.current && open) {
-			canMountChildRef.current = open;
-			onOpen && onOpen();
+			handleOpen();
 		}
 	} else {
-		canMountChildRef.current = open;
-		onOpen && onOpen();
+		handleOpen();
 	}
 
-	const isActive = modalManagerRef.current.isActive;
-
-	const childProps = {
-		...children.props
-	};
+	const { ...childProps } = children.props;
 
 	if (enableCloseAfterTransition) childProps.onExited = handleExited;
 
-	const childComponent = <children.type {...childProps} refer={childRef} />;
-
-	const ContainerComponent = disableHideOtherAria ? DivElement : HideOtherAria;
-
-	const ContentComponent = disableEnforceFocus ? DivElement : FocusTrap;
+	const handleChildRef = useCallback((element) => {
+		childRef.current = element;
+		getElementRef(childProps.refer, element);
+	}, []);
+	const childComponent = <children.type {...childProps} refer={handleChildRef} />;
 
 	// 'useCallback' is never updated.
 	const handleRootRef = useCallback((element) => {
@@ -214,7 +215,7 @@ const Modal = ({
 						...$styles.container.style,
 						...propRootProps.style
 					},
-					classNames: [ $names.ucModal, ...(propRootProps.classNames || []) ],
+					classNames: [ ...(propRootProps.classNames || []), $names.ucModal ],
 					refer: handleRootRef
 				};
 			},
@@ -231,7 +232,7 @@ const Modal = ({
 						...$styles.content.style,
 						...propContentProps.style
 					},
-					classNames: [ $names.ucModalContent, ...(propContentProps.classNames || []) ]
+					classNames: [ ...(propContentProps.classNames || []), $names.ucModalContent ]
 				};
 			},
 			[ propContentProps.style, propContentProps.classNames ]
@@ -250,7 +251,7 @@ const Modal = ({
 							zIndex: $styles.backdropZindex,
 							...propBackdropProps.transitionProps.style
 						},
-						classNames: [ $names.ucModalBackdrop, ...(propBackdropProps.transitionProps.classNames || []) ]
+						classNames: [ ...(propBackdropProps.transitionProps.classNames || []), $names.ucModalBackdrop ]
 					}
 				};
 			},
@@ -258,6 +259,25 @@ const Modal = ({
 			[ propBackdropProps.classNames, propBackdropProps.transitionProps ]
 		)
 	};
+
+	useEffect(
+		() => {
+			if (rootRef.current) {
+				if (canMountChildRef.current) {
+					rootRef.current.style.visibility = null;
+				} else {
+					rootRef.current.style.visibility = 'hidden';
+				}
+			}
+		},
+		[ canMountChildRef.current ]
+	);
+
+	const ContainerComponent = disableHideOtherAria ? DivElement : HideOtherAria;
+
+	const ContentComponent = disableEnforceFocus ? DivElement : FocusTrap;
+
+	const isActive = modalManagerRef.current.isActive;
 
 	return (
 		(keepMounted || canMountChildRef.current) && (
