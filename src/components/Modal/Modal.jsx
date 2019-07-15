@@ -10,7 +10,7 @@ import {
 	Paper,
 	FocusTrap,
 	HotKeys,
-	ClickOrTouchOnOutside,
+	ClickOutside,
 	ScrollLock
 } from '..';
 
@@ -43,7 +43,7 @@ const Modal = ({
 	hideBackdrop = false,
 	disableScrollLock = false,
 	scrollTarget,
-	clickOrTouchOnOutsideProps = {},
+	clickOutsideProps = {},
 	fallbackFocus,
 	rootProps: propRootProps = {},
 	contentProps: propContentProps = {},
@@ -289,13 +289,7 @@ const Modal = ({
 					open && <HotKeys hotkeys={'escape'} action={handleEscapeKeyDown} />}
 					{!disableOutsideClick &&
 					isActive &&
-					open && (
-						<ClickOrTouchOnOutside
-							target={childRef}
-							action={handleOutsideClick}
-							{...clickOrTouchOnOutsideProps}
-						/>
-					)}
+					open && <ClickOutside target={childRef} action={handleOutsideClick} {...clickOutsideProps} />}
 					{!hideBackdrop && <Backdrop open={open} disablePointerEvents={!open} {...backdropProps} />}
 					{disableEnforceFocus ? (
 						<DivElement {...contentProps}>{childComponent}</DivElement>

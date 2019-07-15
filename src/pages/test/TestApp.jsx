@@ -48,7 +48,7 @@ export default ({}) => {
 	const onClose2 = () => {
 		setState2((prev) => prev && false);
 	};
-	const [ state_t, setState_t ] = useState(true);
+	const [ state_t, setState_t ] = useState(false);
 	const handler_t = () => {
 		setState_t((prev) => !prev);
 	};

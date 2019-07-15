@@ -21,7 +21,7 @@ const FocusTrap = ({
 	disableRestoreFocus = false,
 	disableEscapeKeyDown = true,
 	disableOutsideClick = true,
-	disablePointerEvents = true,
+	disablePointerEvents = false,
 	...props
 }) => {
 	const _ref_ = useRef(null);
