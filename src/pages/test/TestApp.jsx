@@ -121,6 +121,7 @@ export default ({}) => {
 				onOpen={onOpen_drawer}
 				onClose={onClose_drawer}
 				anchor="left"
+				keepMount={true}
 				onEscapeKeyDown={onClose_drawer}
 				onOutsideClick={onClose_drawer}
 				modalProps={{
@@ -162,7 +163,7 @@ export default ({}) => {
 				TransitionComponent={Fade}
 				fullScreen={false}
 				className={[ 'AAA' ]}
-				keepMounted={false}
+				keepMount={false}
 				modalProps={{
 					id: 'test'
 				}}
@@ -234,8 +235,20 @@ export default ({}) => {
 				color="rgb(255, 20, 147)"
 				onClick={handler_t}
 			/>
-			<DivElement style={{}}>
-				<Fade in={state_t} appear={true} direction="right">
+			<DivElement
+				style={{
+					position: 'fixed',
+					left: '0',
+					top: '0',
+					bottom: '0',
+					right: '0',
+					pointerEvents: 'none',
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center'
+				}}
+			>
+				<Slide in={state_t} appear={true} direction="left" duration={500}>
 					<Paper
 						elevation={24}
 						shape="round"
@@ -255,7 +268,7 @@ export default ({}) => {
 						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
 						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
 					</Paper>
-				</Fade>
+				</Slide>
 			</DivElement>
 
 			<DivElement style={{ height: '100px', backgroundColor: '#e6e6fa' }} />

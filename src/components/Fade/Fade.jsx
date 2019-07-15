@@ -8,11 +8,11 @@ const $selectors = $.selectors;
 const $styles = $.styles;
 
 const setExitedOpacity = (node) => {
-	node.style.opacity = 0;
+	node.style.opacity = $styles.exitedOpacity;
 };
 
 const setEnteredOpacity = (node) => {
-	node.style.opacity = 1;
+	node.style.opacity = $styles.enteredOpacity;
 };
 
 const Fade = ({
@@ -29,49 +29,40 @@ const Fade = ({
 }) => {
 	const _ref_ = useRef(null);
 
-	const durations = genDurations(duration);
-	const easings = genEasings(easing);
-
-	const _style_ = useMemo(() => {
-		return {
-			opacity: !appear && inProp ? $styles.enteredOpacity : $styles.exitedOpacity
-		};
-	}, []);
+	const [ durations, easings ] = useMemo(
+		() => {
+			return [ genDurations(duration), genEasings(easing) ];
+		},
+		[ duration, easing ]
+	);
 
 	useLayoutEffect(() => {
 		const node = _ref_.current;
-		if (appear || !inProp) {
+		if (!appear && inProp) {
+			setEnteredOpacity(node);
+		} else {
 			setExitedOpacity(node);
+			node.style.visibility = 'hidden';
 		}
 	}, []);
 
-	const handleEnter = useCallback(
-		(node, appearing) => {
-			if (!appearing) {
-				setExitedOpacity(node);
-			}
-			node.style.visibility = null;
-			if (onEnter) onEnter(node, appearing);
-		},
-		[ onEnter ]
-	);
-
 	const handleEntering = useCallback(
 		(node, appearing) => {
-			setTransition(node, genTransitionProp([ [ $styles.transitionProperty, durations.enter, easings.enter ] ]));
+			setTransition(node, genTransitionProp([ [ 'opacity', durations.enter, easings.enter ] ]));
 			setEnteredOpacity(node);
+			node.style.visibility = null;
 			if (onEntering) onEntering(node, appearing);
 		},
-		[ onEntering, duration, easing ]
+		[ onEntering, durations, easings ]
 	);
 
 	const handleExiting = useCallback(
 		(node) => {
-			setTransition(node, genTransitionProp([ [ $styles.transitionProperty, durations.exit, easings.exit ] ]));
+			setTransition(node, genTransitionProp([ [ 'opacity', durations.exit, easings.exit ] ]));
 			setExitedOpacity(node);
 			if (onExiting) onExiting(node);
 		},
-		[ onExiting, duration, easing ]
+		[ onExiting, durations, easings ]
 	);
 
 	const handleExited = useCallback(
@@ -85,10 +76,10 @@ const Fade = ({
 
 	return (
 		<CSSTransition
+			disableClassing={true}
 			appear={appear}
 			in={inProp}
 			timeout={durations}
-			onEnter={handleEnter}
 			onEntering={handleEntering}
 			onExiting={handleExiting}
 			onExited={handleExited}
@@ -96,7 +87,7 @@ const Fade = ({
 		>
 			{(state, childProps) => {
 				return (
-					<DivElement _style_={_style_} _className_={$names.ucFade} _refer_={_ref_} {...childProps}>
+					<DivElement _style_={$styles.style} _className_={$names.ucFade} _refer_={_ref_} {...childProps}>
 						{children}
 					</DivElement>
 				);

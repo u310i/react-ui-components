@@ -32,7 +32,7 @@ const Modal = ({
 	onOpen,
 	onEscapeKeyDown,
 	onOutsideClick,
-	keepMounted = false,
+	keepMount = false,
 	closeAfterTransition = false,
 	disableEscapeKeyDown = false,
 	disableOutsideClick = false,
@@ -280,7 +280,7 @@ const Modal = ({
 	const isActive = modalManagerRef.current.isActive;
 
 	return (
-		(keepMounted || canMountChildRef.current) && (
+		(keepMount || canMountChildRef.current) && (
 			<Portal container={container}>
 				<ContainerComponent active={isActive} {...rootProps}>
 					{!disableScrollLock && canMountChildRef.current && <ScrollLock target={scrollTarget || childRef} />}

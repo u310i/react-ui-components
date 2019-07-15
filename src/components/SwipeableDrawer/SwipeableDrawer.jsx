@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import $ from './_constants';
-import { getElementRef, setTransition, setTransform, genTransitionProp, genDurations } from 'scripts';
+import { getElementRef, setTransition, setTransform, genTransitionProp, genDurations, genEasings } from 'scripts';
 import { isHorizontal, getSlideDirections } from '../Drawer/Drawer';
 import SwipeArea from './SwipeArea';
 import { Drawer } from '..';
@@ -50,6 +50,7 @@ const SwipeableDrawer = ({
 	open,
 	onEscapeKeyDown,
 	onOutsideClick,
+	keepMount = true,
 	hysteresis = 0.55,
 	minFlingVelocity = 400,
 	anchor = 'left',
@@ -75,11 +76,16 @@ const SwipeableDrawer = ({
 	const touchDetected = useRef(false);
 	const openRef = useRef(open);
 
-	const durations = useMemo(
+	const closedLocation = useRef(null);
+
+	const [ durations, easings ] = useMemo(
 		() => {
-			return genDurations(propTransitionProps.duration || $styles.duration);
+			return [
+				genDurations(propTransitionProps.duration || $styles.duration),
+				genEasings(propTransitionProps.easing || $styles.easing)
+			];
 		},
-		[ propTransitionProps.duration ]
+		[ propTransitionProps.duration, propTransitionProps.easing ]
 	);
 
 	// Use a ref so the open value used is always up to date inside useCallback.
@@ -104,7 +110,7 @@ const SwipeableDrawer = ({
 			let transition = '';
 
 			if (mode) {
-				transition = genTransitionProp([ [ 'all', durations[mode], $styles.easing ] ]);
+				transition = genTransitionProp([ [ 'all', durations[mode], easings[mode] ] ]);
 			}
 
 			if (changeTransition) {
@@ -112,21 +118,21 @@ const SwipeableDrawer = ({
 			}
 
 			if (!disableBackdropTransition && !hideBackdrop) {
-				const backdropStyle = backdropTransitionRef.current.style;
-				backdropStyle.opacity = 1 - translate / getMaxTranslate(horizontalSwipe, transitionRef.current);
+				const backdropNode = backdropTransitionRef.current;
+				backdropNode.style.opacity = 1 - translate / getMaxTranslate(horizontalSwipe, transitionRef.current);
 
 				if (changeTransition) {
-					backdropStyle.webkitTransition = transition;
-					backdropStyle.transition = transition;
+					setTransition(backdropNode, transition);
 				}
 			}
 		},
-		[ anchor, disableBackdropTransition, hideBackdrop, propTransitionProps ]
+		[ anchor, disableBackdropTransition, hideBackdrop, propTransitionProps, durations, easings ]
 	);
 
 	const handleBodyTouchEnd = useCallback(
 		(event) => {
 			if (!touchDetected.current) {
+				closedLocation.current = null;
 				return;
 			}
 			nodeThatClaimedTheSwipe = null;
@@ -136,6 +142,7 @@ const SwipeableDrawer = ({
 			// The swipe wasn't started.
 			if (!swipeInstance.current.isSwiping) {
 				swipeInstance.current.isSwiping = null;
+				closedLocation.current = null;
 				return;
 			}
 
@@ -171,10 +178,13 @@ const SwipeableDrawer = ({
 				onOpen && onOpen();
 			} else {
 				// Reset the position, the swipe was aborted.
-				setPosition(getMaxTranslate(horizontal, transitionRef.current), {
+				const defaultClosedLocation =
+					closedLocation.current || getMaxTranslate(horizontal, transitionRef.current);
+				setPosition(defaultClosedLocation, {
 					mode: 'enter'
 				});
 			}
+			closedLocation.current = null;
 		},
 		[ anchor, hysteresis, minFlingVelocity, onClose, onOpen, setPosition ]
 	);
@@ -254,7 +264,6 @@ const SwipeableDrawer = ({
 				(translate - swipeInstance.current.lastTranslate) /
 				(performance.now() - swipeInstance.current.lastTime) *
 				1e3;
-
 			// Low Pass filter.
 			swipeInstance.current.velocity = swipeInstance.current.velocity * 0.4 + velocity * 0.6;
 
@@ -298,9 +307,16 @@ const SwipeableDrawer = ({
 			nodeThatClaimedTheSwipe = swipeInstance.current;
 			swipeInstance.current.startX = currentX;
 			swipeInstance.current.startY = currentY;
-
+			// console.log(transitionRef.current);
 			setMaybeSwiping(true);
+			// console.log(transitionRef.current);
 			if (!openRef.current && transitionRef.current) {
+				const computedStyle = window.getComputedStyle(transitionRef.current);
+				const transform =
+					computedStyle.getPropertyValue('-webkit-transform') || computedStyle.getPropertyValue('transform');
+				closedLocation.current =
+					transform && transform !== 'none' && typeof transform === 'string' ? transform : null;
+
 				// The ref may be null when a parent component updates while swiping.
 				setPosition(
 					getMaxTranslate(horizontalSwipe, transitionRef.current) + (disableDiscovery ? 20 : -swipeAreaWidth),
@@ -319,6 +335,7 @@ const SwipeableDrawer = ({
 		[ setPosition, anchor, disableDiscovery, disableSwipeToOpen, swipeAreaWidth ]
 	);
 
+	// console.log(maybeSwiping);
 	useEffect(
 		() => {
 			document.body.addEventListener('touchstart', handleBodyTouchStart);
@@ -395,8 +412,9 @@ const SwipeableDrawer = ({
 		...useMemo(
 			() => {
 				return {
-					refer: handleTransitionRef
-					// classNames: [ $.ucSwipeable_drawerTransition, ...(propTransitionProps.classNames || []) ]
+					refer: handleTransitionRef,
+					classNames: [ $.ucSwipeable_drawerTransition, ...(propTransitionProps.classNames || []) ],
+					gutter: 48
 				};
 			},
 			[ propTransitionProps.classNames ]
@@ -415,6 +433,7 @@ const SwipeableDrawer = ({
 				modalProps={modalProps}
 				transitionProps={transitionProps}
 				anchor={anchor}
+				keepMount={keepMount}
 				onEscapeKeyDown={onEscapeKeyDown}
 				onOutsideClick={onOutsideClick}
 				{...props}

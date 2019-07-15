@@ -45,7 +45,7 @@ const constants = {
 			}
 		},
 		inner: {
-			elevation: 24,
+			elevation: 16,
 			shape: 'default',
 			style: {
 				backgroundColor: 'white',

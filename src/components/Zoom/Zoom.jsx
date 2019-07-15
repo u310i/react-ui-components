@@ -1,6 +1,6 @@
-import React, { useMemo, useCallback, useRef } from 'react';
+import React, { useMemo, useCallback, useRef, useLayoutEffect } from 'react';
 import $ from './_constants';
-import { genTransitionProp, genDurations, genEasings } from 'scripts';
+import { genTransitionProp, genDurations, genEasings, setTransition, setTransform } from 'scripts';
 import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
@@ -13,43 +13,73 @@ const Zoom = ({
 	duration = $styles.duration,
 	easing = $styles.easing,
 	appear = true,
+	onEnter,
+	onEntering,
+	onExiting,
+	onExited,
 	...props
 }) => {
-	const durations = genDurations(duration);
-	const easings = genEasings(easing);
+	const _ref_ = useRef(null);
 
-	const style = useMemo(
+	const [ durations, easings ] = useMemo(
 		() => {
-			return {
-				transform: !appear && inProp ? $styles.enteredScale : $styles.exitedScale,
-				[$selectors.enters]: {
-					transition: genTransitionProp([ [ $styles.transitionProperty, durations.enter, easings.enter ] ]),
-					transform: $styles.exitedScale
-				},
-				[`${$selectors.enterings},${$selectors.entered}`]: {
-					transform: $styles.enteredScale
-				},
-				[$selectors.exit]: {
-					transition: genTransitionProp([ [ $styles.transitionProperty, durations.exit, easings.exit ] ]),
-					transform: $styles.enteredScale
-				},
-				[`${$selectors.exiting},${$selectors.exited}`]: {
-					transform: $styles.exitedScale
-				},
-				[$selectors.exited]: {
-					visibility: $styles.exitedVisibility
-				},
-				...$styles.style
-			};
+			return [ genDurations(duration), genEasings(easing) ];
 		},
 		[ duration, easing ]
 	);
 
+	useLayoutEffect(() => {
+		const node = _ref_.current;
+		if (!appear && inProp) {
+			setTransform(node, $styles.enteredScale);
+		} else {
+			setTransform(node, $styles.exitedScale);
+			node.style.visibility = 'hidden';
+		}
+	}, []);
+
+	const handleEntering = useCallback(
+		(node, appearing) => {
+			setTransition(node, genTransitionProp([ [ 'transform', durations.enter, easings.enter ] ]));
+			setTransform(node, $styles.enteredScale);
+			node.style.visibility = null;
+			if (onEntering) onEntering(node, appearing);
+		},
+		[ onEntering, durations, easings ]
+	);
+
+	const handleExiting = useCallback(
+		(node) => {
+			setTransition(node, genTransitionProp([ [ 'transform', durations.exit, easings.exit ] ]));
+			setTransform(node, $styles.exitedScale);
+			if (onExiting) onExiting(node);
+		},
+		[ onExiting, durations, easings ]
+	);
+
+	const handleExited = useCallback(
+		(node) => {
+			setTransition(node, null);
+			node.style.visibility = 'hidden';
+			if (onExited) onExited(node);
+		},
+		[ onExited ]
+	);
+
 	return (
-		<CSSTransition in={inProp} timeout={durations} appear={appear} {...props}>
+		<CSSTransition
+			disableClassing={true}
+			in={inProp}
+			timeout={durations}
+			appear={appear}
+			onEntering={handleEntering}
+			onExiting={handleExiting}
+			onExited={handleExited}
+			{...props}
+		>
 			{(state, childProps) => {
 				return (
-					<DivElement _className_={$names.ucZoom} _style_={_style_} {...childProps}>
+					<DivElement _style_={$styles.style} _className_={$names.ucZoom} _refer_={_ref_} {...childProps}>
 						{children}
 					</DivElement>
 				);

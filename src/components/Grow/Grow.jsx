@@ -1,11 +1,19 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useCallback, useLayoutEffect } from 'react';
 import $ from './_constants';
-import { roundNumber, genTransitionProp, genDurations, genEasings } from 'scripts';
+import { roundNumber, genTransitionProp, genDurations, genEasings, setTransition, setTransform } from 'scripts';
 import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
 const $selectors = $.selectors;
 const $styles = $.styles;
+
+const setExitedOpacity = (node) => {
+	node.style.opacity = $styles.exitedOpacity;
+};
+
+const setEnteredOpacity = (node) => {
+	node.style.opacity = $styles.enteredOpacity;
+};
 
 const Grow = ({
 	in: inProp,
@@ -14,68 +22,99 @@ const Grow = ({
 	easing = $styles.easing,
 	appear = true,
 	onEnter,
+	onEntering,
+	onExiting,
+	onExited,
 	...props
 }) => {
-	const durations = genDurations(duration);
-	const easings = genEasings(easing);
+	const _ref_ = useRef(null);
 
-	const _style_ = useMemo(
+	const [ durations, easings ] = useMemo(
 		() => {
-			const enteredStyle = {
-				opacity: $styles.enteredOpacity,
-				transform: $styles.enteredScale
-			};
-			const exitedStyle = {
-				opacity: $styles.exitedOpacity,
-				transform: `scale(${$styles.scaleXRatio}, ${$styles.scaleYRatio})`
-			};
+			return [ genDurations(duration), genEasings(easing) ];
+		},
+		[ duration, easing ]
+	);
 
-			const defaultTransitionalStyle = !appear && inProp ? enteredStyle : exitedStyle;
-
-			const enterTransitionProp = genTransitionProp([
-				[ $styles.transitionOpacity, durations.enter, easings.enter ],
-				[
-					$styles.transitionTransform,
-					roundNumber(durations.enter * $styles.scaleDurationRatio, 0),
-					easings.enter
-				]
+	const [ enteredTransitionProp, exitedTransitionProp ] = useMemo(
+		() => {
+			const entered = genTransitionProp([
+				[ 'opacity', durations.enter, easings.enter ],
+				[ 'transform', roundNumber(durations.enter * $styles.scaleDurationRatio, 0), easings.enter ]
 			]);
-			const exitTransitionProp = genTransitionProp([
-				[ $styles.transitionOpacity, durations.exit, easings.exit ],
+			const exited = genTransitionProp([
+				[ 'opacity', durations.exit, easings.exit ],
 				[
-					$styles.transitionTransform,
+					'transform',
 					roundNumber(durations.exit * $styles.scaleDurationRatio, 0),
 					easings.exit,
 					roundNumber(durations.exit * $styles.outScalingDelayRatioFromDuration, 0)
 				]
 			]);
-
-			return {
-				...defaultTransitionalStyle,
-				[$selectors.enters]: {
-					transition: enterTransitionProp,
-					...exitedStyle
-				},
-				[`${$selectors.enterings},${$selectors.entered}`]: enteredStyle,
-				[$selectors.exit]: {
-					transition: exitTransitionProp,
-					...enteredStyle
-				},
-				[`${$selectors.exiting},${$selectors.exited}`]: exitedStyle,
-				[$selectors.exited]: {
-					visibility: $styles.exitedVisibility
-				},
-				...$styles.style
-			};
+			return [ entered, exited ];
 		},
-		[ duration, easing ]
+		[ durations, easings ]
+	);
+
+	const enteredScale = $styles.enteredScale;
+	const exitedScale = `scale(${$styles.scaleXRatio}, ${$styles.scaleYRatio})`;
+
+	useLayoutEffect(() => {
+		const node = _ref_.current;
+		if (!appear && inProp) {
+			setTransform(node, enteredScale);
+			setEnteredOpacity(node);
+		} else {
+			setTransform(node, exitedScale);
+			setExitedOpacity(node);
+			node.style.visibility = 'hidden';
+		}
+	}, []);
+
+	const handleEntering = useCallback(
+		(node, appearing) => {
+			setTransition(node, enteredTransitionProp);
+			setTransform(node, enteredScale);
+			setEnteredOpacity(node);
+			node.style.visibility = null;
+			if (onEntering) onEntering(node, appearing);
+		},
+		[ onEntering, durations, easings ]
+	);
+
+	const handleExiting = useCallback(
+		(node) => {
+			setTransition(node, exitedTransitionProp);
+			setTransform(node, exitedScale);
+			setExitedOpacity(node);
+			if (onExiting) onExiting(node);
+		},
+		[ onExiting, durations, easings ]
+	);
+
+	const handleExited = useCallback(
+		(node) => {
+			setTransition(node, null);
+			node.style.visibility = 'hidden';
+			if (onExited) onExited(node);
+		},
+		[ onExited ]
 	);
 
 	return (
-		<CSSTransition appear={appear} in={inProp} timeout={durations} {...props}>
+		<CSSTransition
+			disableClassing={true}
+			appear={appear}
+			onEntering={handleEntering}
+			onExiting={handleExiting}
+			onExited={handleExited}
+			in={inProp}
+			timeout={durations}
+			{...props}
+		>
 			{(state, childProps) => {
 				return (
-					<DivElement _style_={_style_} _className_={$names.ucGrow} {...childProps}>
+					<DivElement _style_={$styles.style} _className_={$names.ucGrow} _refer_={_ref_} {...childProps}>
 						{children}
 					</DivElement>
 				);

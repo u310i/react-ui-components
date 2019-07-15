@@ -20,13 +20,13 @@ const constants = {
 	styles: {
 		style: {
 			// alternative to "width: fit-content"
-			display: 'table'
+			display: 'table',
+			position: 'relative'
 		},
 		duration: $.props.transitionDuration,
 		easing: $.props.transitionEasing,
 		exitedScale: 'scale(0)',
 		enteredScale: 'scale(1)',
-		transitionProperty: 'transform',
 		exitedVisibility: 'hidden'
 	}
 };

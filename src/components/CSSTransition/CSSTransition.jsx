@@ -1,108 +1,165 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef, useLayoutEffect, useReducer } from 'react';
 import { Transition } from 'react-transition-group';
 import { reflow } from 'scripts';
 
-const appear = 'appear';
-const enter = 'enter';
-const exit = 'exit';
+const _APPEAR = 'appear';
+const _ENTER = 'enter';
+const _EXIT = 'exit';
 
-const getClassNames = type => {
-  return [type, type + '-active', type + '-done'];
+const getClassNames = (type) => {
+	return [ type, type + '-active', type + '-done' ];
 };
 
 const removeClasses = (node, type) => {
-  node.classList.remove(...getClassNames(type));
+	node.classList.remove(...getClassNames(type));
 };
 
 const ReactCSSTransitionFork = ({
-  onEnter,
-  onEntering,
-  onEntered,
-  onExit,
-  onExiting,
-  onExited,
-  ...props
+	in: inProp,
+	appear = false,
+	disableClassing = false,
+	lazyAppear = false,
+	onEnter,
+	onEntering,
+	onEntered,
+	onExit,
+	onExiting,
+	onExited,
+	...props
 }) => {
-  const handleOnEnter = useCallback(
-    (node, appearing) => {
-      const classNameList = getClassNames(appearing ? appear : enter);
+	const inRef = useRef(null);
+	const shouldTransitionOnAppear = useRef(null);
+	const appearingStates = useRef({
+		enter: null,
+		entering: null,
+		entered: null
+	});
 
-      removeClasses(node, exit);
-      node.classList.add(classNameList[0]);
+	const [ , forceUpdate ] = useReducer((x) => x + 1, 0);
 
-      if (onEnter) onEnter(node, appearing);
-    },
-    [onEnter]
-  );
+	// When "appear" and "in" are true, "onEntered" occurs immediately after "onEntering", not after transition.
+	// Transition occurs because the order is kept, but you can not execute anything after transition.
+	// Therefore, at the time of the first rendering, set "in" to false, do not execute "appearing" of "Transition",
+	//  and generate as "appearing" after update.
+	if (shouldTransitionOnAppear.current === null && lazyAppear && appear && inProp) {
+		shouldTransitionOnAppear.current = true;
+		inRef.current = false;
+	} else {
+		inRef.current = inProp;
+		shouldTransitionOnAppear.current = false;
+	}
 
-  const handleOnEntering = useCallback(
-    (node, appearing) => {
-      const classNameList = getClassNames(appearing ? appear : enter);
+	useLayoutEffect(() => {
+		if (shouldTransitionOnAppear.current) {
+			appearingStates.current.enter = true;
+			appearingStates.current.entering = true;
+			appearingStates.current.entered = true;
+			forceUpdate();
+		}
+	}, []);
 
-      reflow(node);
-      node.classList.add(classNameList[1]);
+	const handleOnEnter = useCallback(
+		(node, appearing) => {
+			const isAppearing = lazyAppear ? appearingStates.current.enter : appearing;
 
-      if (onEntering) onEntering(node, appearing);
-    },
-    [onEntering]
-  );
+			if (!disableClassing) {
+				removeClasses(node, _EXIT);
+				const classNameList = getClassNames(isAppearing ? _APPEAR : _ENTER);
+				node.classList.add(classNameList[0]);
+			}
+			if (onEnter) onEnter(node, isAppearing);
 
-  const handleOnEntered = useCallback(
-    (node, appearing) => {
-      const classNameList = getClassNames(enter);
-      removeClasses(node, appearing ? appear : enter);
-      node.classList.add(classNameList[2]);
+			if (isAppearing) appearingStates.current.enter = false;
+		},
+		[ onEnter ]
+	);
 
-      if (onEntered) onEntered(node, appearing);
-    },
-    [onEntered]
-  );
+	const handleOnEntering = useCallback(
+		(node, appearing) => {
+			reflow(node);
+			const isAppearing = lazyAppear ? appearingStates.current.entering : appearing;
 
-  const handleOnExit = useCallback(
-    node => {
-      const classNameList = getClassNames(exit);
+			if (!disableClassing) {
+				const classNameList = getClassNames(isAppearing ? _APPEAR : _ENTER);
+				node.classList.add(classNameList[1]);
+			}
+			if (onEntering) onEntering(node, lazyAppear ? isAppearing : appearing);
 
-      removeClasses(node, appear);
-      removeClasses(node, enter);
-      node.classList.add(classNameList[0]);
+			if (isAppearing) appearingStates.current.entering = false;
+		},
+		[ onEntering ]
+	);
 
-      if (onExit) onExit(node);
-    },
-    [onExit]
-  );
+	const handleOnEntered = useCallback(
+		(node, appearing) => {
+			const isAppearing = lazyAppear ? appearingStates.current.entered : appearing;
 
-  const handleOnExiting = useCallback(
-    node => {
-      const classNameList = getClassNames(exit);
+			if (!disableClassing) {
+				removeClasses(node, isAppearing ? _APPEAR : _ENTER);
+				const classNameList = getClassNames(_ENTER);
+				node.classList.add(classNameList[2]);
+			}
+			if (onEntered) onEntered(node, lazyAppear ? isAppearing : appearing);
 
-      reflow(node);
-      node.classList.add(classNameList[1]);
+			if (isAppearing) appearingStates.current.entered = false;
+		},
+		[ onEntered ]
+	);
 
-      if (onExiting) onExiting(node);
-    },
-    [onExiting]
-  );
+	const handleOnExit = useCallback(
+		(node) => {
+			if (appearingStates.current.appeared) {
+				appearingStates.current.enter = false;
+				appearingStates.current.entering = false;
+				appearingStates.current.entered = false;
+			}
+			if (!disableClassing) {
+				const classNameList = getClassNames(_EXIT);
 
-  const handleOnExited = useCallback(node => {
-    const classNameList = getClassNames(exit);
+				removeClasses(node, _APPEAR);
+				removeClasses(node, _ENTER);
+				node.classList.add(classNameList[0]);
+			}
+			if (onExit) onExit(node);
+		},
+		[ onExit ]
+	);
 
-    removeClasses(node, exit);
-    node.classList.add(classNameList[2]);
+	const handleOnExiting = useCallback(
+		(node) => {
+			reflow(node);
+			if (!disableClassing) {
+				const classNameList = getClassNames(_EXIT);
 
-    if (onExited) onExited(node);
-  }, []);
+				node.classList.add(classNameList[1]);
+			}
+			if (onExiting) onExiting(node);
+		},
+		[ onExiting ]
+	);
 
-  return (
-    <Transition
-      {...props}
-      onEnter={handleOnEnter}
-      onEntering={handleOnEntering}
-      onEntered={handleOnEntered}
-      onExit={handleOnExit}
-      onExiting={handleOnExiting}
-      onExited={handleOnExited}
-    />
-  );
+	const handleOnExited = useCallback((node) => {
+		if (!disableClassing) {
+			const classNameList = getClassNames(_EXIT);
+			removeClasses(node, _EXIT);
+			node.classList.add(classNameList[2]);
+		}
+		if (onExited) onExited(node);
+	}, []);
+
+	return (
+		<Transition
+			{...props}
+			in={inRef.current}
+			appear={appear}
+			onEnter={handleOnEnter}
+			onEntering={handleOnEntering}
+			onEntered={handleOnEntered}
+			onExit={handleOnExit}
+			onExiting={handleOnExiting}
+			onExited={handleOnExited}
+		/>
+	);
 };
 
 export default ReactCSSTransitionFork;

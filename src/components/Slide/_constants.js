@@ -16,17 +16,18 @@ const constants = {
 	styles: {
 		style: {
 			// alternative to "width: fit-content"
-			display: 'table'
+			display: 'table',
+			position: 'relative'
 		},
 		duration: $.props.transitionDuration,
 		easing: {
 			enter: $easeOutCubicBeziers,
 			exit: $easeOutCubicBeziers
 		},
-		transitionProperty: 'transform',
 		direction: 'down',
 		exitedVisibility: 'hidden',
-		enteredTranslate: 'translate(0, 0)'
+		enteredTranslate: 'translate(0, 0)',
+		gutter: 24
 	}
 };
 

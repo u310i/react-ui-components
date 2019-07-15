@@ -13,7 +13,7 @@ const Dialog = ({
 	open,
 	onEscapeKeyDown,
 	onOutsideClick,
-	keepMounted = false,
+	keepMount = false,
 	arias: propArias,
 	enableScrollBody = false,
 	fullScreen,
@@ -30,7 +30,7 @@ const Dialog = ({
 	const modalProps = {
 		onEscapeKeyDown,
 		onOutsideClick,
-		keepMounted,
+		keepMount,
 		...propModalProps,
 		...useMemo(
 			() => {

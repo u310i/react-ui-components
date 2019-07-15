@@ -7,9 +7,7 @@ const $names = $.names;
 const $selectors = $.selectors;
 const $styles = $.styles;
 
-const GUTTER = 24;
-
-const getExitedTranslateValue = (node, direction) => {
+const getExitedTranslateValue = (node, direction, gutter) => {
 	const rect = node.getBoundingClientRect();
 
 	const computedStyle = window.getComputedStyle(node);
@@ -25,13 +23,13 @@ const getExitedTranslateValue = (node, direction) => {
 
 	switch (direction) {
 		case 'left':
-			return `translateX(${window.innerWidth}px) translateX(-${rect.left - offsetX}px)`;
+			return `translateX(${window.innerWidth + gutter}px) translateX(-${rect.left - offsetX}px)`;
 		case 'right':
-			return `translateX(-${rect.left + rect.width + GUTTER - offsetX}px)`;
+			return `translateX(-${rect.left + rect.width + gutter - offsetX}px)`;
 		case 'up':
-			return `translateY(${window.innerHeight}px) translateY(-${rect.top - offsetY}px)`;
+			return `translateY(${window.innerHeight + gutter}px) translateY(-${rect.top - offsetY}px)`;
 		default:
-			return `translateY(-${rect.top + rect.height + GUTTER - offsetY}px)`;
+			return `translateY(-${rect.top + rect.height + gutter - offsetY}px)`;
 	}
 };
 
@@ -42,6 +40,7 @@ const Slide = ({
 	easing = $styles.easing,
 	appear = true,
 	direction = $styles.direction,
+	gutter = $styles.gutter,
 	onEnter,
 	onEntering,
 	onExiting,
@@ -50,59 +49,48 @@ const Slide = ({
 }) => {
 	const _ref_ = useRef(null);
 
-	const durations = genDurations(duration);
-	const easings = genEasings(easing);
-
-	const _style_ = useMemo(() => {
-		return {
-			[$selectors.exited]: {
-				visibility: $styles.exitedVisibility
-			},
-			...$styles.style
-		};
-	}, []);
+	const [ durations, easings ] = useMemo(
+		() => {
+			return [ genDurations(duration), genEasings(easing) ];
+		},
+		[ duration, easing ]
+	);
 
 	useLayoutEffect(() => {
 		const node = _ref_.current;
-		if (appear || !inProp) {
-			const translate = getExitedTranslateValue(node, direction);
+		if (!appear && inProp) {
+			setTransform(node, $styles.enteredTranslate);
+		} else {
+			const translate = getExitedTranslateValue(node, direction, gutter);
 			setTransform(node, translate);
+			node.style.visibility = 'hidden';
 		}
 	}, []);
 
-	const handleEnter = useCallback(
-		(node, appearing) => {
-			if (!appearing) {
-				const translate = getExitedTranslateValue(node, direction);
-				setTransform(node, translate);
-			}
-			if (onEnter) onEnter(node, appearing);
-		},
-		[ onEnter ]
-	);
-
 	const handleEntering = useCallback(
 		(node, appearing) => {
-			setTransition(node, genTransitionProp([ [ $styles.transitionProperty, durations.enter, easings.enter ] ]));
+			setTransition(node, genTransitionProp([ [ 'transform', durations.enter, easings.enter ] ]));
 			setTransform(node, $styles.enteredTranslate);
+			node.style.visibility = null;
 			if (onEntering) onEntering(node, appearing);
 		},
-		[ onEntering, duration, easing ]
+		[ onEntering, durations, easings ]
 	);
 
 	const handleExiting = useCallback(
 		(node) => {
-			setTransition(node, genTransitionProp([ [ $styles.transitionProperty, durations.exit, easings.exit ] ]));
-			const translate = getExitedTranslateValue(node, direction);
+			setTransition(node, genTransitionProp([ [ 'transform', durations.exit, easings.exit ] ]));
+			const translate = getExitedTranslateValue(node, direction, gutter);
 			setTransform(node, translate);
 			if (onExiting) onExiting(node);
 		},
-		[ onExiting, duration, easing ]
+		[ onExiting, durations, easings, gutter ]
 	);
 
 	const handleExited = useCallback(
 		(node) => {
 			setTransition(node, null);
+			node.style.visibility = 'hidden';
 			if (onExited) onExited(node);
 		},
 		[ onExited ]
@@ -110,10 +98,10 @@ const Slide = ({
 
 	return (
 		<CSSTransition
+			disableClassing={true}
 			appear={appear}
 			in={inProp}
 			timeout={durations}
-			onEnter={handleEnter}
 			onEntering={handleEntering}
 			onExiting={handleExiting}
 			onExited={handleExited}
@@ -123,7 +111,7 @@ const Slide = ({
 				return (
 					<DivElement
 						_refer_={_ref_}
-						_style_={_style_}
+						_style_={$styles.style}
 						_className_={$names.ucSlide}
 						{...childProps}
 						identifier={'slide'}

@@ -30,7 +30,7 @@ const Drawer = ({
 	open,
 	onEscapeKeyDown,
 	onOutsideClick,
-	keepMounted = true,
+	keepMount = true,
 	anchor = 'left',
 	arias: propArias,
 	modalProps: propModalProps = {},
@@ -46,7 +46,7 @@ const Drawer = ({
 	const modalProps = {
 		onEscapeKeyDown,
 		onOutsideClick,
-		keepMounted,
+		keepMount,
 		...propModalProps,
 		...useMemo(
 			() => {
@@ -115,7 +115,7 @@ const Drawer = ({
 
 	return (
 		<Modal open={open} closeAfterTransition fallbackFocus={innerRef} {...modalProps}>
-			<TransitionComponent in={open} direction={getSlideDirections(anchor)} {...transitionProps}>
+			<TransitionComponent in={open} appear={false} direction={getSlideDirections(anchor)} {...transitionProps}>
 				<InnerComponent refer={innerRef} elevation={$styles.inner.elevation} shape="corner" {...innerProps}>
 					{children}
 				</InnerComponent>

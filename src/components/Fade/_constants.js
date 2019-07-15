@@ -18,11 +18,15 @@ const constants = {
 		exited: $tSelectors.exited
 	},
 	styles: {
+		style: {
+			// alternative to "width: fit-content"
+			display: 'table',
+			position: 'relative'
+		},
 		duration: $.props.transitionDuration,
 		easing: $.props.transitionEasing,
 		exitedOpacity: '0',
 		enteredOpacity: '1',
-		transitionProperty: 'opacity',
 		exitedVisibility: 'hidden'
 	}
 };

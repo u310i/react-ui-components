@@ -52,7 +52,7 @@ const constants = {
 			enter: 225,
 			exit: 195
 		},
-		easing: 'linear'
+		easing: $.cubicBeziers.easeInOut
 	}
 };
 
