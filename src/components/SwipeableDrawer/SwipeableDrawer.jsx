@@ -318,13 +318,12 @@ const SwipeableDrawer = ({
 				}
 			}
 
-			clearTimeout(abortedTimeoutIdRef.current);
-
 			nodeThatClaimedTheSwipe = swipeInstance.current;
 			swipeInstance.current.startX = currentX;
 			swipeInstance.current.startY = currentY;
 			// setMaybeSwiping(true);
 			if (!openRef.current) {
+				clearTimeout(abortedTimeoutIdRef.current);
 				rootRef.current.style.visibility = null;
 
 				// The ref may be null when a parent component updates while swiping.
@@ -384,6 +383,7 @@ const SwipeableDrawer = ({
 	const modalProps = {
 		onEscapeKeyDown,
 		onOutsideClick,
+		hideBackdrop,
 		...propModalProps,
 		...useMemo(
 			() => {
