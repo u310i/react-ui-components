@@ -5,10 +5,7 @@ import { Click } from '..';
 const ClickOutside = ({ children, refer, target, action, includeScrollbar = false, ...props }) => {
 	const listener = useCallback((event) => {
 		const node = getNode(target);
-		console.log(node);
-		console.log(node.contains(event.target));
 		if (node.contains(event.target)) return;
-		console.log('test');
 		if (!includeScrollbar && clickedScrollbar(event)) return;
 		action(event);
 	}, []);

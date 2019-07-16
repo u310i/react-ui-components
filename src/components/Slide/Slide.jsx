@@ -45,6 +45,7 @@ const Slide = ({
 	onEntering,
 	onExiting,
 	onExited,
+	disableHideVisibility,
 	...props
 }) => {
 	const _ref_ = useRef(null);
@@ -63,7 +64,7 @@ const Slide = ({
 		} else {
 			const translate = getExitedTranslateValue(node, direction, gutter);
 			setTransform(node, translate);
-			node.style.visibility = 'hidden';
+			if (!disableHideVisibility) node.style.visibility = 'hidden';
 		}
 	}, []);
 
@@ -71,7 +72,7 @@ const Slide = ({
 		(node, appearing) => {
 			setTransition(node, genTransitionProp([ [ 'transform', durations.enter, easings.enter ] ]));
 			setTransform(node, $styles.enteredTranslate);
-			node.style.visibility = null;
+			if (!disableHideVisibility) node.style.visibility = null;
 			if (onEntering) onEntering(node, appearing);
 		},
 		[ onEntering, durations, easings ]
@@ -90,7 +91,7 @@ const Slide = ({
 	const handleExited = useCallback(
 		(node) => {
 			setTransition(node, null);
-			node.style.visibility = 'hidden';
+			if (!disableHideVisibility) node.style.visibility = 'hidden';
 			if (onExited) onExited(node);
 		},
 		[ onExited ]

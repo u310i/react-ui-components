@@ -20,6 +20,7 @@ const Collapse = ({
 	onExiting,
 	onExited,
 	innerProps,
+	disableHideVisibility,
 	...props
 }) => {
 	const _outerRef_ = useRef(null);
@@ -40,7 +41,7 @@ const Collapse = ({
 		} else {
 			node.style.height = collapsedHeight;
 			node.style.overflow = 'hidden';
-			node.style.visibility = 'hidden';
+			if (!disableHideVisibility) node.style.visibility = 'hidden';
 		}
 	}, []);
 
@@ -49,7 +50,7 @@ const Collapse = ({
 			setTransition(node, genTransitionProp([ [ 'height', durations.enter, easings.enter ] ]));
 			node.style.height = `${_innerRef_.current.clientHeight}px`;
 			node.style.overflow = 'hidden';
-			node.style.visibility = null;
+			if (!disableHideVisibility) node.style.visibility = null;
 			if (onEntering) onEntering(node, appearing);
 		},
 		[ onEntering ]
@@ -84,7 +85,7 @@ const Collapse = ({
 
 	const handleExited = useCallback(
 		(node) => {
-			node.style.visibility = 'hidden';
+			if (!disableHideVisibility) node.style.visibility = 'hidden';
 			if (onExited) onExited(node);
 		},
 		[ onExited ]

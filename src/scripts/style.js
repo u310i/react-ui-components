@@ -140,3 +140,19 @@ export const genEasings = (easing) => {
 		exit: easing.exit || easing.enter || easing
 	};
 };
+
+export const getTranslateFromComputedStyle = (node) => {
+	const rect = node.getBoundingClientRect();
+
+	const computedStyle = window.getComputedStyle(node);
+	const transform =
+		computedStyle.getPropertyValue('-webkit-transform') || computedStyle.getPropertyValue('transform');
+	let offsetX = 0;
+	let offsetY = 0;
+	if (transform && transform !== 'none' && typeof transform === 'string') {
+		const transformValues = transform.split('(')[1].split(')')[0].split(',');
+		offsetX = parseInt(transformValues[4], 10);
+		offsetY = parseInt(transformValues[5], 10);
+		return [ offsetX, offsetY ];
+	}
+};

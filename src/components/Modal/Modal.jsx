@@ -54,7 +54,7 @@ const Modal = ({
 	const childRef = useRef(null);
 	// Becomes true if 'open' is true,
 	//  It will be false when the end transition is exited.
-	const canMountChildRef = useRef(null);
+	const shouldBeMounted = useRef(null);
 	const closingReasonRef = useRef(null);
 	// It is true until 'open' changes to false and is unmounted.
 	const inExitTransitionRef = useRef(null);
@@ -120,27 +120,36 @@ const Modal = ({
 		[ open ]
 	);
 
-	const handleEscapeKeyDown = useCallback((event) => {
-		closingReasonRef.current = 'escapeKeyDown';
-		onEscapeKeyDown && onEscapeKeyDown(event);
-	}, []);
+	const handleEscapeKeyDown = useCallback(
+		(event) => {
+			closingReasonRef.current = 'escapeKeyDown';
+			onEscapeKeyDown && onEscapeKeyDown(event);
+		},
+		[ onEscapeKeyDown ]
+	);
 
-	const handleOutsideClick = useCallback((event) => {
-		closingReasonRef.current = 'outsideClick';
-		onOutsideClick && onOutsideClick(event);
-	}, []);
+	const handleOutsideClick = useCallback(
+		(event) => {
+			closingReasonRef.current = 'outsideClick';
+			onOutsideClick && onOutsideClick(event);
+		},
+		[ onOutsideClick ]
+	);
 
 	// If you can't find tabbable elements in your children,
 	//  set the substitute element to 'tabIndex = 0' and focus
-	const handleFallbackFocus = useCallback(() => {
-		if (fallbackFocus) {
-			const element = getNode(fallbackFocus);
-			element.tabIndex = 0;
-			return element;
-		}
-		childRef.current.tabIndex = 0;
-		return childRef.current;
-	}, []);
+	const handleFallbackFocus = useCallback(
+		() => {
+			if (fallbackFocus) {
+				const element = getNode(fallbackFocus);
+				element.tabIndex = 0;
+				return element;
+			}
+			childRef.current.tabIndex = 0;
+			return childRef.current;
+		},
+		[ fallbackFocus ]
+	);
 
 	// If you want to unmount after waiting for the transition,
 	//  use 'forceUpdate' to unmount after the transition.
@@ -149,7 +158,7 @@ const Modal = ({
 		(node) => {
 			if (closeAfterTransition) {
 				inExitTransitionRef.current = null;
-				canMountChildRef.current = null;
+				shouldBeMounted.current = null;
 				onExitedOfChildren && onExitedOfChildren(node);
 				forceUpdate();
 			}
@@ -159,7 +168,7 @@ const Modal = ({
 
 	const handleOpen = useCallback(
 		() => {
-			canMountChildRef.current = open;
+			shouldBeMounted.current = open;
 			inExitTransitionRef.current = null;
 			onOpen && onOpen();
 		},
@@ -172,7 +181,7 @@ const Modal = ({
 	}, []);
 
 	// when 'open' changes to false.
-	if (canMountChildRef.current && !open && !inExitTransitionRef.current) {
+	if (shouldBeMounted.current && !open && !inExitTransitionRef.current) {
 		inExitTransitionRef.current = true;
 		handleClose();
 	}
@@ -182,7 +191,7 @@ const Modal = ({
 	// If you want to wait for the transition and then unmount,
 	//  the procedure is as usual when 'open' changes to true.
 	if (enableCloseAfterTransition) {
-		if (!canMountChildRef.current && open) {
+		if (!shouldBeMounted.current && open) {
 			handleOpen();
 		}
 	} else {
@@ -246,6 +255,7 @@ const Modal = ({
 			() => {
 				return {
 					transitionProps: {
+						disableHideVisibility: true,
 						...propBackdropProps.transitionProps,
 						style: {
 							zIndex: $styles.backdropZindex,
@@ -263,14 +273,14 @@ const Modal = ({
 	useEffect(
 		() => {
 			if (rootRef.current) {
-				if (canMountChildRef.current) {
+				if (shouldBeMounted.current) {
 					rootRef.current.style.visibility = null;
 				} else {
 					rootRef.current.style.visibility = 'hidden';
 				}
 			}
 		},
-		[ canMountChildRef.current ]
+		[ shouldBeMounted.current ]
 	);
 
 	const ContainerComponent = disableHideOtherAria ? DivElement : HideOtherAria;
@@ -280,10 +290,10 @@ const Modal = ({
 	const isActive = modalManagerRef.current.isActive;
 
 	return (
-		(keepMount || canMountChildRef.current) && (
+		(keepMount || shouldBeMounted.current) && (
 			<Portal container={container}>
 				<ContainerComponent active={isActive} {...rootProps}>
-					{!disableScrollLock && canMountChildRef.current && <ScrollLock target={scrollTarget || childRef} />}
+					{!disableScrollLock && shouldBeMounted.current && <ScrollLock target={scrollTarget || childRef} />}
 					{!disableEscapeKeyDown &&
 					isActive &&
 					open && <HotKeys hotkeys={'escape'} action={handleEscapeKeyDown} />}

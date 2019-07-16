@@ -27,7 +27,8 @@ import {
 	genSimpleTransitionStyle,
 	assignTransitionDuration,
 	genDurations,
-	genEasings
+	genEasings,
+	getTranslateFromComputedStyle
 } from './style';
 import {
 	focusTrap,
@@ -125,6 +126,7 @@ export {
 	assignTransitionDuration,
 	genEasings,
 	genDurations,
+	getTranslateFromComputedStyle,
 	// domHelpers
 	focusTrap,
 	mousetrap,

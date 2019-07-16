@@ -76,6 +76,7 @@ const Drawer = ({
 	};
 
 	const transitionProps = {
+		disableHideVisibility: true,
 		...propTransitionProps,
 		...useMemo(
 			() => {

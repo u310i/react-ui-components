@@ -17,6 +17,7 @@ const Zoom = ({
 	onEntering,
 	onExiting,
 	onExited,
+	disableHideVisibility,
 	...props
 }) => {
 	const _ref_ = useRef(null);
@@ -34,7 +35,7 @@ const Zoom = ({
 			setTransform(node, $styles.enteredScale);
 		} else {
 			setTransform(node, $styles.exitedScale);
-			node.style.visibility = 'hidden';
+			if (!disableHideVisibility) node.style.visibility = 'hidden';
 		}
 	}, []);
 
@@ -42,7 +43,7 @@ const Zoom = ({
 		(node, appearing) => {
 			setTransition(node, genTransitionProp([ [ 'transform', durations.enter, easings.enter ] ]));
 			setTransform(node, $styles.enteredScale);
-			node.style.visibility = null;
+			if (!disableHideVisibility) node.style.visibility = null;
 			if (onEntering) onEntering(node, appearing);
 		},
 		[ onEntering, durations, easings ]
@@ -60,7 +61,7 @@ const Zoom = ({
 	const handleExited = useCallback(
 		(node) => {
 			setTransition(node, null);
-			node.style.visibility = 'hidden';
+			if (!disableHideVisibility) node.style.visibility = 'hidden';
 			if (onExited) onExited(node);
 		},
 		[ onExited ]

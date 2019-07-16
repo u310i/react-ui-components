@@ -121,7 +121,7 @@ export default ({}) => {
 				onOpen={onOpen_drawer}
 				onClose={onClose_drawer}
 				anchor="left"
-				keepMount={true}
+				disableBackdropTransition={true}
 				onEscapeKeyDown={onClose_drawer}
 				onOutsideClick={onClose_drawer}
 				modalProps={{
@@ -148,7 +148,7 @@ export default ({}) => {
 				</div>
 			</SwipeableDrawer>
 
-			<Button.Coordinator
+			{/* <Button.Coordinator
 				contents={[ { icon: 'sys-envelope' }, 'Dialog1' ]}
 				style={{ margin: '0.5em' }}
 				type="fill"
@@ -173,17 +173,6 @@ export default ({}) => {
 				<div>
 					top bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba
 					bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
-					{/* bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba
-					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa
-					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb
-					bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba
-					bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba
-					bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
-					bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
-					bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba
-					bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
-					aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
-					aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb */}
 					aaaaaaaaaaaaaaaaaaaaaaaaa bottom
 				</div>
 				<Button.Coordinator
@@ -224,7 +213,7 @@ export default ({}) => {
 					toFill
 					onClick={handler1}
 				/>
-			</Dialog>
+			</Dialog> */}
 
 			<DivElement style={{ backgroundColor: '#b0c4de', height: '100px' }} />
 			<Button.Coordinator
@@ -248,7 +237,7 @@ export default ({}) => {
 					alignItems: 'center'
 				}}
 			>
-				<Slide in={state_t} appear={true} direction="left" duration={500}>
+				{/* <Slide in={state_t} appear={true} direction="left" duration={500}>
 					<Paper
 						elevation={24}
 						shape="round"
@@ -268,7 +257,7 @@ export default ({}) => {
 						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
 						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
 					</Paper>
-				</Slide>
+				</Slide> */}
 			</DivElement>
 
 			<DivElement style={{ height: '100px', backgroundColor: '#e6e6fa' }} />

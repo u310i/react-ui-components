@@ -49,8 +49,8 @@ const constants = {
 		},
 		// duration: $.props.transitionDuration,
 		duration: {
-			enter: 225,
-			exit: 195
+			enter: 195,
+			exit: 225
 		},
 		easing: $.cubicBeziers.easeInOut
 	}

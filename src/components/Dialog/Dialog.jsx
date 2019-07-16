@@ -55,6 +55,7 @@ const Dialog = ({
 	};
 
 	const transitionProps = {
+		disableHideVisibility: true,
 		...propTransitionProps,
 		...useMemo(
 			() => {

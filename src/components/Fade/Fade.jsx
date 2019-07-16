@@ -25,6 +25,7 @@ const Fade = ({
 	onEntering,
 	onExiting,
 	onExited,
+	disableHideVisibility,
 	...props
 }) => {
 	const _ref_ = useRef(null);
@@ -42,7 +43,7 @@ const Fade = ({
 			setEnteredOpacity(node);
 		} else {
 			setExitedOpacity(node);
-			node.style.visibility = 'hidden';
+			if (!disableHideVisibility) node.style.visibility = 'hidden';
 		}
 	}, []);
 
@@ -50,7 +51,7 @@ const Fade = ({
 		(node, appearing) => {
 			setTransition(node, genTransitionProp([ [ 'opacity', durations.enter, easings.enter ] ]));
 			setEnteredOpacity(node);
-			node.style.visibility = null;
+			if (!disableHideVisibility) node.style.visibility = null;
 			if (onEntering) onEntering(node, appearing);
 		},
 		[ onEntering, durations, easings ]
@@ -68,7 +69,7 @@ const Fade = ({
 	const handleExited = useCallback(
 		(node) => {
 			setTransition(node, null);
-			node.style.visibility = 'hidden';
+			if (!disableHideVisibility) node.style.visibility = 'hidden';
 			if (onExited) onExited(node);
 		},
 		[ onExited ]
