@@ -60,17 +60,17 @@ const createListenerOptions = passiveSupported
 			return options;
 		}
 	: (options) => {
-			!!options.capture;
+			return options.capture;
 		};
 
-export const addEventListener = (target, type, callback, options = {}) => {
+export const addEventListener = (target, type, listener, options = {}) => {
 	const listenerOptions = isBoolean(options) ? options : createListenerOptions(options);
-	target.addEventListener(type, callback, listenerOptions);
+	target.addEventListener(type, listener, listenerOptions);
 };
 
-export const removeEventListener = (target, type, callback, options = false) => {
-	const capture = isBoolean(options) ? options : !!options.capture;
-	target.removeEventListener(type, callback, capture);
+export const removeEventListener = (target, type, listener, options = false) => {
+	const capture = isBoolean(options) ? options : options.capture;
+	target.removeEventListener(type, listener, capture);
 };
 
 export const getTransitionEndName = (() => {

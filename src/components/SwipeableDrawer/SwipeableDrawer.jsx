@@ -7,7 +7,8 @@ import {
 	genTransitionProp,
 	genDurations,
 	genEasings,
-	getTranslateFromComputedStyle
+	addEventListener,
+	removeEventListener
 } from 'scripts';
 import { isHorizontal, getSlideDirections } from '../Drawer/Drawer';
 import SwipeArea from './SwipeArea';
@@ -45,6 +46,7 @@ const getTranslate = (currentTranslate, startLocation, open, maxTranslate) => {
 	);
 };
 
+const eventListenerOption = { passive: false };
 const disableSwipeToOpenDefault = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 const SwipeableDrawer = ({
@@ -346,14 +348,14 @@ const SwipeableDrawer = ({
 
 	useEffect(
 		() => {
-			document.body.addEventListener('touchstart', handleBodyTouchStart);
-			document.body.addEventListener('touchmove', handleBodyTouchMove, { passive: false });
-			document.body.addEventListener('touchend', handleBodyTouchEnd);
+			addEventListener(document.body, 'touchstart', handleBodyTouchStart);
+			addEventListener(document.body, 'touchmove', handleBodyTouchMove, eventListenerOption);
+			addEventListener(document.body, 'touchend', handleBodyTouchEnd);
 
 			return () => {
-				document.body.removeEventListener('touchstart', handleBodyTouchStart);
-				document.body.removeEventListener('touchmove', handleBodyTouchMove, { passive: false });
-				document.body.removeEventListener('touchend', handleBodyTouchEnd);
+				removeEventListener(document.body, 'touchstart', handleBodyTouchStart);
+				removeEventListener(document.body, 'touchmove', handleBodyTouchMove, eventListenerOption);
+				removeEventListener(document.body, 'touchend', handleBodyTouchEnd);
 			};
 		},
 		[ handleBodyTouchStart, handleBodyTouchMove, handleBodyTouchEnd ]

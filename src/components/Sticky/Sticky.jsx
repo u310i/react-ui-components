@@ -131,7 +131,13 @@ const Sticky = ({
 	);
 
 	return (
-		<EventListener target={window} type="scroll" callback={setStickingState} options={{ passive: true }}>
+		<EventListener
+			target={window}
+			type="scroll"
+			listener={setStickingState}
+			options={{ passive: true }}
+			optimized={true}
+		>
 			{enableAbsolute ? (
 				<DivElement
 					_style_={_styles_.absoluteWrapper}

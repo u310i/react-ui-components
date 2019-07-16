@@ -120,7 +120,8 @@ export default ({}) => {
 				open={state_drawer}
 				onOpen={onOpen_drawer}
 				onClose={onClose_drawer}
-				anchor="left"
+				anchor="right"
+				swipeAreaWidth={60}
 				// disableBackdropTransition={true}
 				// disableDiscovery={true}
 				// disableSwipeToOpen={true}
@@ -229,18 +230,18 @@ export default ({}) => {
 			/>
 			<DivElement
 				style={{
-					position: 'fixed',
-					left: '0',
-					top: '0',
-					bottom: '0',
-					right: '0',
-					pointerEvents: 'none',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center'
+					// position: 'fixed',
+					// left: '0',
+					// top: '0',
+					// bottom: '0',
+					// right: '0',
+					// pointerEvents: 'none',
+					// display: 'flex',
+					// justifyContent: 'center',
+					// alignItems: 'center'
 				}}
 			>
-				{/* <Slide in={state_t} appear={true} direction="left" duration={500}>
+				<Collapse in={state_t} appear={true} direction="left" duration={500}>
 					<Paper
 						elevation={24}
 						shape="round"
@@ -260,7 +261,7 @@ export default ({}) => {
 						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
 						aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
 					</Paper>
-				</Slide> */}
+				</Collapse>
 			</DivElement>
 
 			<DivElement style={{ height: '100px', backgroundColor: '#e6e6fa' }} />
