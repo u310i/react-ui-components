@@ -124,6 +124,7 @@ const Modal = ({
 		(event) => {
 			closingReasonRef.current = 'escapeKeyDown';
 			onEscapeKeyDown && onEscapeKeyDown(event);
+			event.stopPropagation();
 		},
 		[ onEscapeKeyDown ]
 	);
