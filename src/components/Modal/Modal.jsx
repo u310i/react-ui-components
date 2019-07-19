@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect, useRef, useReducer } from 'react';
+import React, { useState, useMemo, React.useCallback, useEffect, useRef, useReducer } from 'react';
 import $ from './_constants';
 import { isNumber, getTransitionEndName, addEventListener, removeEventListener, getElementRef, getNode } from 'scripts';
 import {
@@ -120,7 +120,7 @@ const Modal = ({
 		[ open ]
 	);
 
-	const handleEscapeKeyDown = useCallback(
+	const handleEscapeKeyDown = React.useCallback(
 		(event) => {
 			closingReasonRef.current = 'escapeKeyDown';
 			onEscapeKeyDown && onEscapeKeyDown(event);
@@ -129,7 +129,7 @@ const Modal = ({
 		[ onEscapeKeyDown ]
 	);
 
-	const handleOutsideClick = useCallback(
+	const handleOutsideClick = React.useCallback(
 		(event) => {
 			closingReasonRef.current = 'outsideClick';
 			onOutsideClick && onOutsideClick(event);
@@ -139,7 +139,7 @@ const Modal = ({
 
 	// If you can't find tabbable elements in your children,
 	//  set the substitute element to 'tabIndex = 0' and focus
-	const handleFallbackFocus = useCallback(
+	const handleFallbackFocus = React.useCallback(
 		() => {
 			if (fallbackFocus) {
 				const element = getNode(fallbackFocus);
@@ -155,7 +155,7 @@ const Modal = ({
 	// If you want to unmount after waiting for the transition,
 	//  use 'forceUpdate' to unmount after the transition.
 	const onExitedOfChildren = children.props.onExited;
-	const handleExited = useCallback(
+	const handleExited = React.useCallback(
 		(node) => {
 			if (closeAfterTransition) {
 				inExitTransitionRef.current = null;
@@ -167,7 +167,7 @@ const Modal = ({
 		[ closeAfterTransition, onExitedOfChildren ]
 	);
 
-	const handleOpen = useCallback(
+	const handleOpen = React.useCallback(
 		() => {
 			shouldBeMounted.current = open;
 			inExitTransitionRef.current = null;
@@ -176,7 +176,7 @@ const Modal = ({
 		[ open, onOpen ]
 	);
 
-	const handleClose = useCallback(() => {
+	const handleClose = React.useCallback(() => {
 		onClose && onClose(childRef.current, closingReasonRef.current);
 		closingReasonRef.current = null;
 	}, []);
@@ -203,14 +203,14 @@ const Modal = ({
 
 	if (enableCloseAfterTransition) childProps.onExited = handleExited;
 
-	const handleChildRef = useCallback((element) => {
+	const handleChildRef = React.useCallback((element) => {
 		childRef.current = element;
 		getElementRef(childProps.refer, element);
 	}, []);
 	const childComponent = <children.type {...childProps} refer={handleChildRef} />;
 
-	// 'useCallback' is never updated.
-	const handleRootRef = useCallback((element) => {
+	// 'React.useCallback' is never updated.
+	const handleRootRef = React.useCallback((element) => {
 		rootRef.current = element;
 		getElementRef(propRootProps.refer, element);
 	}, []);

@@ -1,64 +1,56 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import { getNode, addEventListener, removeEventListener, createOptimizedEvent } from 'scripts';
+import React, { React.useCallback, useEffect, useRef } from 'react';
+import { getNode, addEventListener, createOptimizedEvent, isObject } from 'scripts';
 
-const defaultOption = {};
+const defaultOptions = {};
 
 const EventListener = ({
 	children,
 	target: propTarget = document,
 	type,
 	listener,
-	option = defaultOption,
+	options = defaultOptions,
 	optimized = false
 }) => {
-	const prevScopeRef = useRef(null);
-	const prevTypeRef = useRef(null);
-	const prevListenerRef = useRef(null);
-	const prevOptionRef = useRef(null);
-
-	const listenerRef = useRef(null);
-
-	const rafCancelRef = useRef(null);
-	const clearOptimize = useCallback(() => {
-		rafCancelRef.current && rafCancelRef.current();
-	}, []);
+	const removeEventListenerRef = useRef(null);
+	const prevPropsRef = useRef(null);
 
 	useEffect(
 		() => {
 			const target = getNode(propTarget);
+			if (!target) return;
 
-			const changedScope = target !== prevScopeRef.current;
-			const changedType = type !== prevTypeRef.current;
-			const changedListener = listener !== prevListenerRef.current;
-			const changedOption = option !== prevOptionRef.current;
+			if (prevPropsRef.current) {
+				const changedScope = target !== prevPropsRef.current.target;
+				const changedType = type !== prevPropsRef.current.type;
+				const changedListener = listener !== prevPropsRef.current.listener;
+				const prevOptions = prevPropsRef.current.options;
+				const changedOptions =
+					options.capture !== prevOptions.capture ||
+					options.once !== prevOptions ||
+					options.passive !== prevOptions.passive;
+				const changedOptimized = optimized !== prevPropsRef.current.optimized;
 
-			const canRemoveEvent =
-				prevScopeRef.current || prevTypeRef.current || prevListenerRef.current || prevOptionRef.current;
-
-			if (changedScope || changedType || changedListener || changedOption) {
-				listenerRef.current = optimized ? createOptimizedEvent(listener, optimizeClearlRef) : listener;
-				canRemoveEvent &&
-					removeEventListener(
-						changedScope ? prevScopeRef.current || target : target,
-						changedType ? prevTypeRef.current || type : type,
-						changedListener ? prevListenerRef.current || listenerRef.current : listenerRef.current,
-						changedOption ? prevOptionRef.current || option : option
-					);
-				clearOptimize();
-				addEventListener(target, type, listenerRef.current, option);
+				if (changedScope || changedType || changedListener || changedOptions || changedOptimized) {
+					removeEventListenerRef.current && removeEventListenerRef.current();
+					removeEventListenerRef.current = addEventListener(target, type, listener, options, optimized);
+				}
+			} else {
+				removeEventListenerRef.current = addEventListener(target, type, listener, options, optimized);
 			}
 
-			prevScopeRef.current = target;
-			prevTypeRef.current = type;
-			prevListenerRef.current = listener;
-			prevOptionRef.current = option;
+			prevPropsRef.current = {
+				target,
+				type,
+				listener,
+				options,
+				optimized
+			};
 
 			return () => {
-				removeEventListener(target, type, listenerRef.current, option);
-				clearOptimize();
+				removeEventListenerRef.current && removeEventListenerRef.current();
 			};
 		},
-		[ propTarget, type, listener, option, optimized ]
+		[ propTarget, type, listener, options, optimized ]
 	);
 
 	return children || null;

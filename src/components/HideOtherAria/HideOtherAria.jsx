@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useRef } from 'react';
+import React, { React.useCallback, useMemo, useEffect, useRef } from 'react';
 import { getElementRef, getNode } from 'scripts';
 import { DivElement } from '..';
 
@@ -7,7 +7,7 @@ const HideOtherAria = ({ children, parent = document.body, active = true, ...pro
 	const hiddenNodesRef = useRef([]);
 	const prevActiveRef = useRef(null);
 
-	const activate = useCallback(
+	const activate = React.useCallback(
 		(parent) => {
 			if (_ref_.current === parent || parent.children.length === 0) return;
 			Array.from(parent.children, (childNode) => {
@@ -27,7 +27,7 @@ const HideOtherAria = ({ children, parent = document.body, active = true, ...pro
 		[ active ]
 	);
 
-	const deactivate = useCallback(() => {
+	const deactivate = React.useCallback(() => {
 		hiddenNodesRef.current.forEach((node) => {
 			node.removeAttribute('aria-hidden');
 		});

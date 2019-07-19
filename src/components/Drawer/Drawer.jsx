@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useLayoutEffect, useRef } from 'react';
+import React, { useState, useMemo, React.useCallback, useLayoutEffect, useRef } from 'react';
 import $ from './_constants';
 import { getElementRef } from 'scripts';
 import { Modal, Slide, Paper } from '..';
@@ -92,7 +92,7 @@ const Drawer = ({
 		)
 	};
 
-	const handleInnerRef = useCallback((element) => {
+	const handleInnerRef = React.useCallback((element) => {
 		innerRef.current = element;
 		getElementRef(propInnerProps.refer, element);
 	}, []);

@@ -39,7 +39,6 @@ import {
 	clickedScrollbar,
 	testPassiveEventSupport,
 	addEventListener,
-	removeEventListener,
 	getTransitionEndName,
 	getNode,
 	getElementRef
@@ -136,7 +135,6 @@ export {
 	clickedScrollbar,
 	testPassiveEventSupport,
 	addEventListener,
-	removeEventListener,
 	getTransitionEndName,
 	getNode,
 	getElementRef,

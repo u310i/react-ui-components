@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useContext } from 'react';
+import React, { React.useCallback, useMemo, useContext } from 'react';
 import $ from './_constants';
 import { getFontSize, keyframes, useLateUpdate } from 'scripts';
 import { ButtonElement, DivElement } from '..';
@@ -33,7 +33,7 @@ const Button = ({
 
 	const hasClickEffect = clickEffect && !disable && !loading;
 
-	const handleClick = useCallback(
+	const handleClick = React.useCallback(
 		() => {
 			onClick && onClick();
 			hasClickEffect && lateUpdate();

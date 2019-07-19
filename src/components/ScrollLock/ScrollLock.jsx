@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect, useRef, useReducer } from 'react';
+import React, { useState, useMemo, React.useCallback, useEffect, useRef, useReducer } from 'react';
 import {
 	isNumber,
 	getTransitionEndName,

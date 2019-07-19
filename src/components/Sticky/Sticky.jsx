@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useLayoutEffect, useRef } from 'react';
+import React, { useState, useMemo, React.useCallback, useLayoutEffect, useRef } from 'react';
 import $ from './_constants';
 import { isNumber } from 'scripts';
 import { DivElement, EventListener } from '..';
@@ -47,7 +47,7 @@ const Sticky = ({
 		];
 	}, []);
 
-	const setStickingState = useCallback(() => {
+	const setStickingState = React.useCallback(() => {
 		let topFlag = false;
 		let topPrev;
 		let bottomFlag = false;
@@ -131,13 +131,7 @@ const Sticky = ({
 	);
 
 	return (
-		<EventListener
-			target={window}
-			type="scroll"
-			listener={setStickingState}
-			options={{ passive: true }}
-			optimized={true}
-		>
+		<EventListener target={window} type="scroll" listener={setStickingState} optimized={true}>
 			{enableAbsolute ? (
 				<DivElement
 					_style_={_styles_.absoluteWrapper}

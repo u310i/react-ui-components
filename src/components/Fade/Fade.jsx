@@ -1,4 +1,4 @@
-import React, { useMemo, useLayoutEffect, useCallback, useRef } from 'react';
+import React, { useMemo, useLayoutEffect, React.useCallback, useRef } from 'react';
 import $ from './_constants';
 import { genTransitionProp, genDurations, genEasings, setTransition } from 'scripts';
 import { CSSTransition, DivElement } from '..';
@@ -47,7 +47,7 @@ const Fade = ({
 		}
 	}, []);
 
-	const handleEntering = useCallback(
+	const handleEntering = React.useCallback(
 		(node, appearing) => {
 			setTransition(node, genTransitionProp([ [ 'opacity', durations.enter, easings.enter ] ]));
 			setEnteredOpacity(node);
@@ -57,7 +57,7 @@ const Fade = ({
 		[ onEntering, durations, easings ]
 	);
 
-	const handleExiting = useCallback(
+	const handleExiting = React.useCallback(
 		(node) => {
 			setTransition(node, genTransitionProp([ [ 'opacity', durations.exit, easings.exit ] ]));
 			setExitedOpacity(node);
@@ -66,7 +66,7 @@ const Fade = ({
 		[ onExiting, durations, easings ]
 	);
 
-	const handleExited = useCallback(
+	const handleExited = React.useCallback(
 		(node) => {
 			setTransition(node, null);
 			if (!disableHideVisibility) node.style.visibility = 'hidden';

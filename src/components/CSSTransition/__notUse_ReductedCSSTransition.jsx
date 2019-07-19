@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { React.useCallback } from 'react';
 import { Transition } from 'react-transition-group';
 import { reflow } from 'scripts';
 
@@ -22,7 +22,7 @@ const CSSTransition = ({
   onExited,
   ...props
 }) => {
-  const handleOnEnter = useCallback(
+  const handleOnEnter = React.useCallback(
     (node, appearing) => {
       const classNameList = getClassNames(appearing ? appear : enter);
       reflow(node);
@@ -34,7 +34,7 @@ const CSSTransition = ({
     [onEnter]
   );
 
-  const handleOnEntered = useCallback(
+  const handleOnEntered = React.useCallback(
     (node, appearing) => {
       const classNameList = getClassNames(enter);
       removeClasses(node, appearing ? appear : enter);
@@ -45,7 +45,7 @@ const CSSTransition = ({
     [onEntered]
   );
 
-  const handleOnExit = useCallback(
+  const handleOnExit = React.useCallback(
     node => {
       const classNameList = getClassNames(exit);
 
@@ -58,7 +58,7 @@ const CSSTransition = ({
     [onExit]
   );
 
-  const handleOnExited = useCallback(node => {
+  const handleOnExited = React.useCallback(node => {
     const classNameList = getClassNames(exit);
 
     removeClasses(node, exit);

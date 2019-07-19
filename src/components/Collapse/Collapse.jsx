@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef, useLayoutEffect } from 'react';
+import React, { useMemo, React.useCallback, useRef, useLayoutEffect } from 'react';
 import $ from './_constants';
 import { reflow, genTransitionProp, genDurations, genEasings, setTransition } from 'scripts';
 import { CSSTransition, DivElement } from '..';
@@ -45,7 +45,7 @@ const Collapse = ({
 		}
 	}, []);
 
-	const handleEntering = useCallback(
+	const handleEntering = React.useCallback(
 		(node) => {
 			setTransition(node, genTransitionProp([ [ 'height', durations.enter, easings.enter ] ]));
 			node.style.height = `${_innerRef_.current.clientHeight}px`;
@@ -56,7 +56,7 @@ const Collapse = ({
 		[ onEntering ]
 	);
 
-	const handleEntered = useCallback(
+	const handleEntered = React.useCallback(
 		(node) => {
 			node.style.overflow = 'visible';
 			node.style.height = $styles.enteredHeight;
@@ -65,7 +65,7 @@ const Collapse = ({
 		[ onEntered ]
 	);
 
-	const handleExit = useCallback(
+	const handleExit = React.useCallback(
 		(node) => {
 			setTransition(node, genTransitionProp([ [ 'height', durations.exit, easings.exit ] ]));
 			node.style.height = `${_outerRef_.current.clientHeight}px`;
@@ -75,7 +75,7 @@ const Collapse = ({
 		[ onExit ]
 	);
 
-	const handleExiting = useCallback(
+	const handleExiting = React.useCallback(
 		(node) => {
 			node.style.height = collapsedHeight;
 			if (onExiting) onExiting(node);
@@ -83,7 +83,7 @@ const Collapse = ({
 		[ onExiting ]
 	);
 
-	const handleExited = useCallback(
+	const handleExited = React.useCallback(
 		(node) => {
 			if (!disableHideVisibility) node.style.visibility = 'hidden';
 			if (onExited) onExited(node);

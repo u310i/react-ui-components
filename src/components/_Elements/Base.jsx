@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, React.useCallback } from 'react';
 import { css, cx } from 'emotion';
 import baseStyle from './style';
 import { getElementRef } from 'scripts';
@@ -62,7 +62,7 @@ const Base = ({
 		[ _arias_, propArias ]
 	);
 
-	const refer = useCallback((element) => {
+	const refer = React.useCallback((element) => {
 		getElementRef(propRefer, element);
 		getElementRef(_refer_, element);
 	}, []);

@@ -1,23 +1,23 @@
-import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useMemo, React.useCallback, useEffect, useRef } from 'react';
 import { getNode, isArray, addEventListener, removeEventListener } from 'scripts';
 
 const Click = ({ children, target = document, action, types = 'click', buttonNumber = 0, listenerOptions = {} }) => {
 	const existTouchEventRef = useRef(null);
 	const touchMoveDetectedRef = useRef(null);
 
-	const resetTouchMoveDetect = useCallback(() => {
+	const resetTouchMoveDetect = React.useCallback(() => {
 		if (touchMoveDetectedRef.current) {
 			touchMoveDetectedRef.current = null;
 		}
 	}, []);
 
-	const detectTouchMove = useCallback(() => {
+	const detectTouchMove = React.useCallback(() => {
 		if (!touchMoveDetectedRef.current) {
 			touchMoveDetectedRef.current = true;
 		}
 	}, []);
 
-	const onTouch = useCallback(
+	const onTouch = React.useCallback(
 		(event) => {
 			existTouchEventRef.current = true;
 			action(event, 'touch');
@@ -25,7 +25,7 @@ const Click = ({ children, target = document, action, types = 'click', buttonNum
 		[ action ]
 	);
 
-	const onTouchEndForClick = useCallback((event) => {
+	const onTouchEndForClick = React.useCallback((event) => {
 		existTouchEventRef.current = true;
 		if (touchMoveDetectedRef.current) {
 			touchMoveDetectedRef.current = null;
@@ -34,7 +34,7 @@ const Click = ({ children, target = document, action, types = 'click', buttonNum
 		action(event, 'touch');
 	}, []);
 
-	const onClick = useCallback(
+	const onClick = React.useCallback(
 		(event) => {
 			if (existTouchEventRef.current) {
 				existTouchEventRef.current = null;
@@ -45,7 +45,7 @@ const Click = ({ children, target = document, action, types = 'click', buttonNum
 		[ action ]
 	);
 
-	const onMouse = useCallback(
+	const onMouse = React.useCallback(
 		(event) => {
 			if (existTouchEventRef.current) {
 				existTouchEventRef.current = null;

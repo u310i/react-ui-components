@@ -30,7 +30,6 @@ import Dialog from './Dialog';
 import HideOtherAria from './HideOtherAria';
 import FocusTrap from './FocusTrap';
 import Backdrop from './Backdrop';
-import Click from './Click';
 import ClickOutside from './ClickOutside';
 import ScrollLock from './ScrollLock';
 
@@ -67,7 +66,6 @@ export {
 	HideOtherAria,
 	FocusTrap,
 	Backdrop,
-	Click,
 	ClickOutside,
 	ScrollLock
 };

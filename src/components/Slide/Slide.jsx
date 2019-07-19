@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useMemo, React.useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import $ from './_constants';
 import { genTransitionProp, genDurations, genEasings, setTransition, setTransform, getElementRef } from 'scripts';
 import { CSSTransition, DivElement } from '..';
@@ -68,7 +68,7 @@ const Slide = ({
 		}
 	}, []);
 
-	const handleEntering = useCallback(
+	const handleEntering = React.useCallback(
 		(node, appearing) => {
 			setTransition(node, genTransitionProp([ [ 'transform', durations.enter, easings.enter ] ]));
 			setTransform(node, $styles.enteredTranslate);
@@ -78,7 +78,7 @@ const Slide = ({
 		[ onEntering, durations, easings ]
 	);
 
-	const handleExiting = useCallback(
+	const handleExiting = React.useCallback(
 		(node) => {
 			setTransition(node, genTransitionProp([ [ 'transform', durations.exit, easings.exit ] ]));
 			const translate = getExitedTranslateValue(node, direction, gutter);
@@ -88,7 +88,7 @@ const Slide = ({
 		[ onExiting, durations, easings, gutter ]
 	);
 
-	const handleExited = useCallback(
+	const handleExited = React.useCallback(
 		(node) => {
 			setTransition(node, null);
 			if (!disableHideVisibility) node.style.visibility = 'hidden';

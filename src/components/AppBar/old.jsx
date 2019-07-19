@@ -2,7 +2,7 @@ import React, {
   useState,
   useEffect,
   useLayoutEffect,
-  useCallback,
+  React.useCallback,
   useRef,
   useMemo
 } from 'react';

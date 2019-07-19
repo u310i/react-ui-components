@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useMemo } from 'react';
+import React, { useState, React.useCallback, useRef, useMemo } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'react-emotion';
 

@@ -15,17 +15,17 @@ export const genUniqueId = () => {
 	return Math.random().toString(36).substr(2, 9);
 };
 
-export const createOptimizedEvent = (fn, cancelRef) => {
+export const createOptimizedEvent = (fn, clearRef) => {
 	let ticking = false;
 	let handle;
 	return () => {
 		if (!ticking) {
 			handle = raf(() => {
-				fn();
-				cancelRef.current = null;
+				clearRef.current = null;
 				ticking = false;
+				fn();
 			});
-			cancelRef.current = () => raf.cancel(handle);
+			clearRef.current = () => raf.cancel(handle);
 			ticking = true;
 		}
 	};

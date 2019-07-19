@@ -71,7 +71,7 @@ module.exports = {
 		]
 	},
 	resolve: {
-		extensions: [ '.wasm', '.mjs', '.js', '.json', '.jsx' ],
+		extensions: [ '.mjs', '.js', '.json', '.jsx' ],
 		alias: {
 			src: path.resolve(__dirname, 'src/'),
 			components: path.resolve(__dirname, 'src/components/'),

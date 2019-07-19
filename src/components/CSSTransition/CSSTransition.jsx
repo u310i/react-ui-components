@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useLayoutEffect, useReducer } from 'react';
+import React, { React.useCallback, useRef, useLayoutEffect, useReducer } from 'react';
 import { Transition } from 'react-transition-group';
 import { reflow } from 'scripts';
 
@@ -58,7 +58,7 @@ const ReactCSSTransitionFork = ({
 		}
 	}, []);
 
-	const handleOnEnter = useCallback(
+	const handleOnEnter = React.useCallback(
 		(node, appearing) => {
 			const isAppearing = lazyAppear ? appearingStates.current.enter : appearing;
 
@@ -74,7 +74,7 @@ const ReactCSSTransitionFork = ({
 		[ onEnter ]
 	);
 
-	const handleOnEntering = useCallback(
+	const handleOnEntering = React.useCallback(
 		(node, appearing) => {
 			reflow(node);
 			const isAppearing = lazyAppear ? appearingStates.current.entering : appearing;
@@ -90,7 +90,7 @@ const ReactCSSTransitionFork = ({
 		[ onEntering ]
 	);
 
-	const handleOnEntered = useCallback(
+	const handleOnEntered = React.useCallback(
 		(node, appearing) => {
 			const isAppearing = lazyAppear ? appearingStates.current.entered : appearing;
 
@@ -106,7 +106,7 @@ const ReactCSSTransitionFork = ({
 		[ onEntered ]
 	);
 
-	const handleOnExit = useCallback(
+	const handleOnExit = React.useCallback(
 		(node) => {
 			if (appearingStates.current.appeared) {
 				appearingStates.current.enter = false;
@@ -125,7 +125,7 @@ const ReactCSSTransitionFork = ({
 		[ onExit ]
 	);
 
-	const handleOnExiting = useCallback(
+	const handleOnExiting = React.useCallback(
 		(node) => {
 			reflow(node);
 			if (!disableClassing) {
@@ -138,7 +138,7 @@ const ReactCSSTransitionFork = ({
 		[ onExiting ]
 	);
 
-	const handleOnExited = useCallback((node) => {
+	const handleOnExited = React.useCallback((node) => {
 		if (!disableClassing) {
 			const classNameList = getClassNames(_EXIT);
 			removeClasses(node, _EXIT);

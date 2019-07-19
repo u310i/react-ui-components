@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useCallback, useLayoutEffect } from 'react';
+import React, { useMemo, useRef, React.useCallback, useLayoutEffect } from 'react';
 import $ from './_constants';
 import { roundNumber, genTransitionProp, genDurations, genEasings, setTransition, setTransform } from 'scripts';
 import { CSSTransition, DivElement } from '..';
@@ -72,7 +72,7 @@ const Grow = ({
 		}
 	}, []);
 
-	const handleEntering = useCallback(
+	const handleEntering = React.useCallback(
 		(node, appearing) => {
 			setTransition(node, enteredTransitionProp);
 			setTransform(node, enteredScale);
@@ -83,7 +83,7 @@ const Grow = ({
 		[ onEntering, durations, easings ]
 	);
 
-	const handleExiting = useCallback(
+	const handleExiting = React.useCallback(
 		(node) => {
 			setTransition(node, exitedTransitionProp);
 			setTransform(node, exitedScale);
@@ -93,7 +93,7 @@ const Grow = ({
 		[ onExiting, durations, easings ]
 	);
 
-	const handleExited = useCallback(
+	const handleExited = React.useCallback(
 		(node) => {
 			setTransition(node, null);
 			if (!disableHideVisibility) node.style.visibility = 'hidden';

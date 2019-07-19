@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
-import { getNode, clickedScrollbar, addEventListener, removeEventListener } from 'scripts';
+import React, { React.useCallback } from 'react';
+import { getNode, clickedScrollbar } from 'scripts';
 import { EventListener } from '..';
 
-const ClickOutside = ({ children, target, action, option, scope, includeScrollbar = false }) => {
-	const listener = useCallback(
+const ClickOutside = ({ children, target, action, options, scope = document.body, includeScrollbar = false }) => {
+	const listener = React.useCallback(
 		(event) => {
 			const node = getNode(target);
 			if (node.contains(event.target)) return;
@@ -14,7 +14,7 @@ const ClickOutside = ({ children, target, action, option, scope, includeScrollba
 	);
 
 	return (
-		<EventListener target={scope} type={'click'} listener={listener} option={option}>
+		<EventListener target={scope} type={'click'} listener={listener} options={options}>
 			{children || null}
 		</EventListener>
 	);

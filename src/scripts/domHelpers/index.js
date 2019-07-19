@@ -1,8 +1,9 @@
-import { isBoolean } from 'scripts';
+import { isBoolean, createOptimizedEvent } from 'scripts';
 
 import focusTrap from './focusTrap';
 import mousetrap from 'mousetrap';
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import { testPassiveEventSupport, addEventListener } from './addEventListener';
 
 export { focusTrap };
 export { mousetrap };
@@ -11,6 +12,7 @@ export const scrollLock = {
 	restore: enableBodyScroll,
 	clearAll: clearAllBodyScrollLocks
 };
+export { testPassiveEventSupport, addEventListener };
 
 export const ownerDocument = (node) => {
 	return (node && node.ownerDocument) || document;
@@ -26,51 +28,6 @@ export const clickedScrollbar = (event) => {
 	return (
 		document.documentElement.clientWidth <= event.clientX || document.documentElement.clientHeight <= event.clientY
 	);
-};
-
-// Safely detecting option support
-// https://developer.mozilla.org/ja/docs/Web/API/EventTarget/addEventListener
-const passiveSupported = (() => {
-	if (typeof window === 'undefined' || typeof window.addEventListener !== 'function') {
-		return;
-	}
-
-	let passive = false;
-
-	const options = Object.defineProperty({}, 'passive', {
-		get() {
-			passive = true;
-		}
-	});
-
-	const noop = () => {};
-
-	window.addEventListener('testPassiveEventSupport', noop, options);
-	window.removeEventListener('testPassiveEventSupport', noop, options);
-
-	return passive;
-})();
-
-export const testPassiveEventSupport = () => passiveSupported;
-
-const createListenerOptions = passiveSupported
-	? (options) => {
-			const passive = options.passive;
-			options.passive = passive === undefined ? true : passive;
-			return options;
-		}
-	: (options) => {
-			return options.capture;
-		};
-
-export const addEventListener = (target, type, listener, options = {}) => {
-	const listenerOptions = isBoolean(options) ? options : createListenerOptions(options);
-	target.addEventListener(type, listener, listenerOptions);
-};
-
-export const removeEventListener = (target, type, listener, options = false) => {
-	const capture = isBoolean(options) ? options : options.capture;
-	target.removeEventListener(type, listener, capture);
 };
 
 export const getTransitionEndName = (() => {

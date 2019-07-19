@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useLayoutEffect, useState, useRef, useEffect, React.useCallback, useMemo } from 'react';
 import $ from './_constants';
 import {
 	getElementRef,
@@ -7,9 +7,9 @@ import {
 	genTransitionProp,
 	genDurations,
 	genEasings,
-	addEventListener,
-	removeEventListener
+	addEventListener
 } from 'scripts';
+import { EventListener } from '..';
 import { isHorizontal, getSlideDirections } from '../Drawer/Drawer';
 import SwipeArea from './SwipeArea';
 import { Drawer } from '..';
@@ -46,7 +46,7 @@ const getTranslate = (currentTranslate, startLocation, open, maxTranslate) => {
 	);
 };
 
-const eventListenerOption = { passive: false };
+const touchMoveListenerOption = { passive: false };
 const disableSwipeToOpenDefault = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 const SwipeableDrawer = ({
@@ -93,7 +93,7 @@ const SwipeableDrawer = ({
 		[ propTransitionProps.duration, propTransitionProps.easing ]
 	);
 
-	// Use a ref so the open value used is always up to date inside useCallback.
+	// Use a ref so the open value used is always up to date inside React.useCallback.
 	useLayoutEffect(
 		() => {
 			if (open && !openRef.current) clearTimeout(abortedTimeoutIdRef.current);
@@ -102,7 +102,7 @@ const SwipeableDrawer = ({
 		[ open ]
 	);
 
-	const setPosition = useCallback(
+	const setPosition = React.useCallback(
 		(translate, options = {}) => {
 			const { mode = null, changeTransition = true } = options;
 			const translateMultiplier = [ 'right', 'bottom' ].indexOf(anchor) !== -1 ? 1 : -1;
@@ -132,10 +132,10 @@ const SwipeableDrawer = ({
 				}
 			}
 		},
-		[ anchor, disableBackdropTransition, hideBackdrop, propTransitionProps, durations, easings ]
+		[ anchor, disableBackdropTransition, hideBackdrop, durations, easings ]
 	);
 
-	const setClosedPositionByAborted = useCallback(
+	const setClosedPositionByAborted = React.useCallback(
 		() => {
 			const horizontal = isHorizontal(anchor);
 
@@ -150,7 +150,7 @@ const SwipeableDrawer = ({
 		[ anchor, durations ]
 	);
 
-	const handleBodyTouchEnd = useCallback(
+	const handleBodyTouchEnd = React.useCallback(
 		(event) => {
 			if (!touchDetected.current) {
 				return;
@@ -206,7 +206,7 @@ const SwipeableDrawer = ({
 		[ anchor, hysteresis, minFlingVelocity, onClose, onOpen, setPosition ]
 	);
 
-	const handleBodyTouchMove = useCallback(
+	const handleBodyTouchMove = React.useCallback(
 		(event) => {
 			// the ref may be null when a parent component updates while swiping
 			if (!transitionRef.current || !touchDetected.current) {
@@ -294,7 +294,7 @@ const SwipeableDrawer = ({
 		[ setPosition, handleBodyTouchEnd, anchor, disableDiscovery, swipeAreaWidth ]
 	);
 
-	const handleBodyTouchStart = useCallback(
+	const handleBodyTouchStart = React.useCallback(
 		(event) => {
 			if (!transitionRef.current) return;
 
@@ -347,21 +347,6 @@ const SwipeableDrawer = ({
 	);
 
 	useEffect(
-		() => {
-			addEventListener(document.body, 'touchstart', handleBodyTouchStart);
-			addEventListener(document.body, 'touchmove', handleBodyTouchMove, eventListenerOption);
-			addEventListener(document.body, 'touchend', handleBodyTouchEnd);
-
-			return () => {
-				removeEventListener(document.body, 'touchstart', handleBodyTouchStart);
-				removeEventListener(document.body, 'touchmove', handleBodyTouchMove, eventListenerOption);
-				removeEventListener(document.body, 'touchend', handleBodyTouchEnd);
-			};
-		},
-		[ handleBodyTouchStart, handleBodyTouchMove, handleBodyTouchEnd ]
-	);
-
-	useEffect(
 		() => () => {
 			// We need to release the lock.
 			if (nodeThatClaimedTheSwipe === swipeInstance.current) {
@@ -374,11 +359,11 @@ const SwipeableDrawer = ({
 	if (!propModalProps.backdropProps) propModalProps.backdropProps = {};
 	if (!propModalProps.backdropProps.transitionProps) propModalProps.backdropProps.transitionProps = {};
 	if (!propModalProps.rootProps) propModalProps.rootProps = {};
-	const handleBackdropTransitionRef = useCallback((element) => {
+	const handleBackdropTransitionRef = React.useCallback((element) => {
 		backdropTransitionRef.current = element;
 		getElementRef(propModalProps.backdropProps.transitionProps.refer, element);
 	}, []);
-	const handleRootRef = useCallback((element) => {
+	const handleRootRef = React.useCallback((element) => {
 		rootRef.current = element;
 		getElementRef(propModalProps.rootProps.refer, element);
 	});
@@ -408,7 +393,7 @@ const SwipeableDrawer = ({
 		)
 	};
 
-	const handleTransitionRef = useCallback((element) => {
+	const handleTransitionRef = React.useCallback((element) => {
 		transitionRef.current = element;
 		getElementRef(propTransitionProps.refer, element);
 	}, []);
@@ -425,13 +410,21 @@ const SwipeableDrawer = ({
 		)
 	};
 
-	const handleSwipeAreaRef = useCallback((element) => {
+	const handleSwipeAreaRef = React.useCallback((element) => {
 		swipeAreaRef.current = element;
 		getElementRef(swipeAreaProps.refer, element);
 	}, []);
 
 	return (
 		<React.Fragment>
+			<EventListener target={document.body} type="touchstart" listener={handleBodyTouchStart} />
+			<EventListener
+				target={document.body}
+				type="touchmove"
+				listener={handleBodyTouchMove}
+				options={touchMoveListenerOption}
+			/>
+			<EventListener target={document.body} type="touchend" listener={handleBodyTouchEnd} />
 			<Drawer
 				open={open}
 				modalProps={modalProps}

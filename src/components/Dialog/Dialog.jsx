@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef } from 'react';
+import React, { useMemo, React.useCallback, useRef } from 'react';
 import $ from './_constants';
 import { getElementRef } from 'scripts';
 import { Modal, Fade, Paper } from '..';
@@ -72,7 +72,7 @@ const Dialog = ({
 		)
 	};
 
-	const handleInnerRef = useCallback((element) => {
+	const handleInnerRef = React.useCallback((element) => {
 		innerRef.current = element;
 		getElementRef(propInnerProps.refer, element);
 	}, []);

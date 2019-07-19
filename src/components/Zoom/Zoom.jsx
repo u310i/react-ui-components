@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef, useLayoutEffect } from 'react';
+import React, { useMemo, React.useCallback, useRef, useLayoutEffect } from 'react';
 import $ from './_constants';
 import { genTransitionProp, genDurations, genEasings, setTransition, setTransform } from 'scripts';
 import { CSSTransition, DivElement } from '..';
@@ -39,7 +39,7 @@ const Zoom = ({
 		}
 	}, []);
 
-	const handleEntering = useCallback(
+	const handleEntering = React.useCallback(
 		(node, appearing) => {
 			setTransition(node, genTransitionProp([ [ 'transform', durations.enter, easings.enter ] ]));
 			setTransform(node, $styles.enteredScale);
@@ -49,7 +49,7 @@ const Zoom = ({
 		[ onEntering, durations, easings ]
 	);
 
-	const handleExiting = useCallback(
+	const handleExiting = React.useCallback(
 		(node) => {
 			setTransition(node, genTransitionProp([ [ 'transform', durations.exit, easings.exit ] ]));
 			setTransform(node, $styles.exitedScale);
@@ -58,7 +58,7 @@ const Zoom = ({
 		[ onExiting, durations, easings ]
 	);
 
-	const handleExited = useCallback(
+	const handleExited = React.useCallback(
 		(node) => {
 			setTransition(node, null);
 			if (!disableHideVisibility) node.style.visibility = 'hidden';

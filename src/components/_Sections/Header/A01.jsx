@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useMemo } from 'react';
+import React, { useState, React.useCallback, useRef, useMemo } from 'react';
 import Flex from 'components/Flex';
 import AppBar from 'components/AppBar';
 import { Generator as GenerateDrawer } from 'components/Drawer';

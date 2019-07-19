@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, React.useCallback } from 'react';
 import './_constants';
 import { isString, isArray, isReact, isReactComponent, deepMergeOverrideArray } from 'scripts';
 
@@ -59,12 +59,12 @@ export default ({}) => {
 	const handler_drawer = () => {
 		setState_drawer((prev) => !prev);
 	};
-	const onClose_drawer = () => {
+	const onClose_drawer = React.useCallback(() => {
 		setState_drawer((prev) => prev && false);
-	};
-	const onOpen_drawer = () => {
+	}, []);
+	const onOpen_drawer = React.useCallback(() => {
 		setState_drawer((prev) => !prev && true);
-	};
+	}, []);
 	const appBarProps = {
 		style: {
 			backgroundColor: '#2f4f4f'
