@@ -1,4 +1,4 @@
-import React, { useState, React.useCallback, useRef, useMemo } from 'react';
+import React from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'react-emotion';
 
@@ -12,22 +12,12 @@ import Drawer from 'components/Drawer';
 import Menu from 'components/Menu';
 import AppBar from 'components/AppBar';
 
-const HeaderNav = ({
-  propRef = null,
-  parent = {},
-  breakpointState,
-  componentProps,
-  theme
-}) => {
-  return (
-    <Header
-      theme={theme}
-      breakpointState={breakpointState}
-      componentProps={componentProps}
-    >
-      {BarItemComponent}
-    </Header>
-  );
+const HeaderNav = ({ propRef = null, parent = {}, breakpointState, componentProps, theme }) => {
+	return (
+		<Header theme={theme} breakpointState={breakpointState} componentProps={componentProps}>
+			{BarItemComponent}
+		</Header>
+	);
 };
 
 export default HeaderNav;

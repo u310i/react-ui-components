@@ -1,4 +1,4 @@
-import React, { useMemo, React.useCallback, useRef } from 'react';
+import React  from 'react';
 import $ from './_constants';
 import { getElementRef } from 'scripts';
 import { Modal, Fade, Paper } from '..';
@@ -23,7 +23,7 @@ const Dialog = ({
 	InnerComponent = Paper,
 	innerProps: propInnerProps = {}
 }) => {
-	const innerRef = useRef(null);
+	const innerRef = React.useRef(null);
 
 	if (!propModalProps.rootProps) propModalProps.rootProps = {};
 	if (!propModalProps.contentProps) propModalProps.contentProps = {};
@@ -32,7 +32,7 @@ const Dialog = ({
 		onOutsideClick,
 		keepMount,
 		...propModalProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					rootProps: {
@@ -57,7 +57,7 @@ const Dialog = ({
 	const transitionProps = {
 		disableHideVisibility: true,
 		...propTransitionProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					style: {
@@ -78,7 +78,7 @@ const Dialog = ({
 	}, []);
 	const innerProps = {
 		...propInnerProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					style: {

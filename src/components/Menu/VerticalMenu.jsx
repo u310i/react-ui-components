@@ -1,4 +1,4 @@
-import React, { useState, React.useCallback, useRef, useMemo } from 'react';
+import React  from 'react';
 
 const VerticalMenu = ({}) => {
   return <div />;

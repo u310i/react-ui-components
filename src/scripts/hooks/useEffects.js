@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo } from 'react';
+import React from 'react';
 import {
 	genUniqueId,
 	createOptimizedEvent,
@@ -9,9 +9,9 @@ import {
 
 export const useAddEventListener = (target = document, type, callback, options = {}) => {
 	const { optimized = true, enable = true, dependencies = [], ...listenerOptions } = options;
-	const cancelRef = useRef(false);
+	const cancelRef = React.useRef(false);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		if (enable) {
 			const event = callback();
 			const handle = optimized ? createOptimizedEvent(event, cancelRef) : event;
@@ -27,9 +27,9 @@ export const useAddEventListener = (target = document, type, callback, options =
 };
 
 export const useDidUpdate = (fn, dependencies) => {
-	const isMount = useRef(true).current;
+	const isMount = React.useRef(true).current;
 	let cleanup;
-	useEffect(() => {
+	React.useEffect(() => {
 		if (isMount) {
 			isMount = false;
 		} else {
@@ -44,7 +44,7 @@ export const useDidUpdate = (fn, dependencies) => {
 };
 
 export const useIntersectionObserver = (elRef, callback, option, enable, dependencies) => {
-	useEffect(() => {
+	React.useEffect(() => {
 		if (enable && elRef.current) {
 			let observer = new IntersectionObserver((changes) => {
 				for (let change of changes) {
@@ -88,8 +88,8 @@ export const useAddWindowEvent = (
 	optimized = true
 ) => {
 	let handle;
-	const rafHandleRef = useRef(false);
-	useEffect(() => {
+	const rafHandleRef = React.useRef(false);
+	React.useEffect(() => {
 		if (enable) {
 			const event = callback();
 			handle = (optimized && createOptimizedEvent(event, rafHandleRef)) || event;
@@ -110,8 +110,8 @@ export const useAddWindowEvent = (
 };
 
 export const useAddCssInBody = (name, state, styleCallback) => {
-	const uniqueId = useRef(`${name}_${genUniqueId()}`);
-	useEffect(() => {
+	const uniqueId = React.useRef(`${name}_${genUniqueId()}`);
+	React.useEffect(() => {
 		const head = document.head;
 		const style = `
       body.body-${uniqueId.current} {
@@ -131,7 +131,7 @@ export const useAddCssInBody = (name, state, styleCallback) => {
 		};
 	}, []);
 
-	useEffect(
+	React.useEffect(
 		() => {
 			const body = document.body;
 			if (state) {

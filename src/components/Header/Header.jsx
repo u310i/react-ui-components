@@ -1,4 +1,4 @@
-import React, { useState, React.useCallback, useRef, useMemo } from 'react';
+import React  from 'react';
 
 import { css, cx } from 'react-emotion';
 
@@ -22,7 +22,7 @@ const Header = ({
 	theme
 }) => {
 	const options = {};
-	options['header'] = useMemo(() => extractCurrentScreenSizeProps(breakpoint, propOptions), [ breakpoint ]);
+	options['header'] = React.useMemo(() => extractCurrentScreenSizeProps(breakpoint, propOptions), [ breakpoint ]);
 
 	const {
 		style: propStyle,
@@ -35,7 +35,7 @@ const Header = ({
 	/*
   style
   */
-	const componentStyle = useMemo(
+	const componentStyle = React.useMemo(
 		() => ({
 			style: {},
 			appbar: {
@@ -59,7 +59,7 @@ const Header = ({
   component
   */
 
-	const container = useMemo(() => document.getElementById('app'), []);
+	const container = React.useMemo(() => document.getElementById('app'), []);
 
 	// const drawerContainer = GenerateDrawer({
 	//   theme: theme,
@@ -71,7 +71,7 @@ const Header = ({
 	//   container
 	// });
 
-	const MenuItem = useMemo(() => {
+	const MenuItem = React.useMemo(() => {
 		return (
 			<Menu
 				parentProps={{ style: componentStyle.appbar.menu.style }}

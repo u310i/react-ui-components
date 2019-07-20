@@ -1,4 +1,4 @@
-import React, { useState, useMemo, React.useCallback, useLayoutEffect, useRef } from 'react';
+import React  from 'react';
 import $ from './_constants';
 import { getElementRef } from 'scripts';
 import { Modal, Slide, Paper } from '..';
@@ -39,7 +39,7 @@ const Drawer = ({
 	InnerComponent = Paper,
 	innerProps: propInnerProps = {}
 }) => {
-	const innerRef = useRef(null);
+	const innerRef = React.useRef(null);
 
 	if (!propModalProps.rootProps) propModalProps.rootProps = {};
 	if (!propModalProps.contentProps) propModalProps.contentProps = {};
@@ -48,7 +48,7 @@ const Drawer = ({
 		onOutsideClick,
 		keepMount,
 		...propModalProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					rootProps: {
@@ -78,7 +78,7 @@ const Drawer = ({
 	const transitionProps = {
 		disableHideVisibility: true,
 		...propTransitionProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					style: {
@@ -98,7 +98,7 @@ const Drawer = ({
 	}, []);
 	const innerProps = {
 		...propInnerProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					style: {

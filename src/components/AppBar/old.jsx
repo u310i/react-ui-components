@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useLayoutEffect,
-  React.useCallback,
-  useRef,
-  useMemo
-} from 'react';
+import React  from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { css, cx } from 'react-emotion';
 
@@ -68,14 +61,14 @@ const AppBar = ({
 
   hooks
   */
-  const elRef = useRef(null);
+  const elRef = React.useRef(null);
   parentRef = elRef;
 
-  const isArrivedOnFirst = useRef(false);
-  const [isArrivedState, setIsArrivedState] = useState(false);
-  const isPrevArrived = useRef(null);
+  const isArrivedOnFirst = React.useRef(false);
+  const [isArrivedState, setIsArrivedState] = React.useState(false);
+  const isPrevArrived = React.useRef(null);
   isPrevArrived.current = isArrivedState;
-  const [rowState, setRowState] = useState('show');
+  const [rowState, setRowState] = React.useState('show');
 
   const setArrivedStateOnFirst = () => {
     if (!isArrivedOnFirst.current) {
@@ -91,7 +84,7 @@ const AppBar = ({
     setIsArrivedState(flag);
   };
 
-  useMemo(
+  React.useMemo(
     () => {
       if (rowState !== 'show') {
         setRowState('show');
@@ -145,7 +138,7 @@ const AppBar = ({
 
 
 
-  useEffect
+  React.useEffect
   */
   useGetDomProperty(
     elRef,
@@ -237,7 +230,7 @@ const AppBar = ({
 
   const hideOnScroll_d = hideOnScroll_duration || duration;
   const hideOnScroll_t = hideOnScroll_timingFunction || timingFunction;
-  const transitionStyleOfHideOnScroll = useMemo(
+  const transitionStyleOfHideOnScroll = React.useMemo(
     () => {
       return genReactCSSTransitionStyle(name_hide, () => {
         return {
@@ -261,7 +254,7 @@ const AppBar = ({
     [hideOnScroll_enable]
   );
 
-  const cancelHideOnScrollTransition = useMemo(
+  const cancelHideOnScrollTransition = React.useMemo(
     () => {
       return hideOnScroll_enable && rowState === 'quickly-show'
         ? {
@@ -273,7 +266,7 @@ const AppBar = ({
   );
 
   const transitionOnArrived_d = transitionOnArrived_duration || duration;
-  const transitionStyleOfArrived = useMemo(
+  const transitionStyleOfArrived = React.useMemo(
     () => {
       if (canTransitionStyle) {
         const transitionOnArrived_t =
@@ -341,7 +334,7 @@ const AppBar = ({
     (isFixed && shouldBeBottom) ||
     (isFixed && hideOnScroll_enable && hideOnScroll_keepHeight) ||
     (isStaticToFixed && isArrivedState);
-  const DummyEl = useMemo(
+  const DummyEl = React.useMemo(
     () => {
       return (
         shouldDummyElMount && (

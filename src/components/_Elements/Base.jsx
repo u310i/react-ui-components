@@ -1,4 +1,4 @@
-import React, { useMemo, React.useCallback } from 'react';
+import React from 'react';
 import { css, cx } from 'emotion';
 import baseStyle from './style';
 import { getElementRef } from 'scripts';
@@ -20,14 +20,14 @@ const Base = ({
 	refer: propRefer,
 	...props
 }) => {
-	const style = useMemo(
+	const style = React.useMemo(
 		() => {
 			return { ...baseStyle.allElementsCommonStyle, ..._style_, ...propStyle };
 		},
 		[ _style_, propStyle ]
 	);
 
-	const className = useMemo(
+	const className = React.useMemo(
 		() => {
 			return (
 				[
@@ -40,14 +40,14 @@ const Base = ({
 		[ _className_, propClassNames, propClassName ]
 	);
 
-	const id = useMemo(
+	const id = React.useMemo(
 		() => {
 			return [ ...(propId ? [ propId ] : []), ...(propIds || []), ...(_id_ ? [ _id_ ] : []) ].join(' ') || null;
 		},
 		[ _id_, propIds, propId ]
 	);
 
-	const arias = useMemo(
+	const arias = React.useMemo(
 		() => {
 			const baseArias = {
 				..._arias_,

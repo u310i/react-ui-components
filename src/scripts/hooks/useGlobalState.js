@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import React from 'react';
 import {} from 'scripts';
 
 const globalState = {};
 
 const init = (name, initialState) => {
-	const [ state, setState ] = useState(initialState);
+	const [ state, setState ] = React.useState(initialState);
 	globalState[name] = [ state, setState ];
 };
 

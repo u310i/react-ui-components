@@ -1,20 +1,20 @@
-import { useState, useRef, useCallback, useMemo, useEffect } from 'react';
+import React from 'react';
 import { useAddWindowEvent, useGetInitBreakpoint, setBreakpointOnResizeEvent } from 'scripts';
 
 export const useSetBreakpoint = (breakpoints) => {
-	const initValue = useMemo(() => {
+	const initValue = React.useMemo(() => {
 		return useGetInitBreakpoint(breakpoints);
 	}, []);
-	const [ state, setState ] = useState(initValue);
+	const [ state, setState ] = React.useState(initValue);
 	useAddWindowEvent('resize', () => setBreakpointOnResizeEvent(breakpoints, initValue, setState), true, []);
 	return state;
 };
 
 export const useLateUpdate = (timeout) => {
-	const [ lateUpdateStatus, update ] = useState(false);
-	const timeoutId = useRef(null);
+	const [ lateUpdateStatus, update ] = React.useState(false);
+	const timeoutId = React.useRef(null);
 
-	const lateUpdate = useCallback(
+	const lateUpdate = React.useCallback(
 		() => {
 			if (timeoutId.current !== null) clearTimeout(timeoutId.current);
 			timeoutId.current = setTimeout(() => {
@@ -28,7 +28,7 @@ export const useLateUpdate = (timeout) => {
 		[ timeout ]
 	);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		return () => {
 			clearTimeout(timeoutId.current);
 		};
@@ -38,7 +38,7 @@ export const useLateUpdate = (timeout) => {
 };
 
 export const didMount = () => {
-	const ref = useRef();
+	const ref = React.useRef();
 	const state = ref.current;
 
 	if (typeof state === undefined) {
@@ -51,7 +51,7 @@ export const didMount = () => {
 };
 
 export const didFirstUpdate = () => {
-	const ref = useRef();
+	const ref = React.useRef();
 	const state = ref.current;
 
 	if (typeof state === undefined) {

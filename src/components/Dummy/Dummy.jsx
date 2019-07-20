@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react';
+import React  from 'react';
 import ReactDOM from 'react-dom';
 import { css, cx } from 'emotion';
 
 const Dummy = ({ container, style: propStyle, className }) => {
-  const componentStyle = useMemo(() => {
+  const componentStyle = React.useMemo(() => {
     return {
       opacity: '0',
       width: '100%'

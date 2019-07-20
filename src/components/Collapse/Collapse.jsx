@@ -1,4 +1,4 @@
-import React, { useMemo, React.useCallback, useRef, useLayoutEffect } from 'react';
+import React  from 'react';
 import $ from './_constants';
 import { reflow, genTransitionProp, genDurations, genEasings, setTransition } from 'scripts';
 import { CSSTransition, DivElement } from '..';
@@ -23,17 +23,17 @@ const Collapse = ({
 	disableHideVisibility,
 	...props
 }) => {
-	const _outerRef_ = useRef(null);
-	const _innerRef_ = useRef(null);
+	const _outerRef_ = React.useRef(null);
+	const _innerRef_ = React.useRef(null);
 
-	const [ durations, easings ] = useMemo(
+	const [ durations, easings ] = React.useMemo(
 		() => {
 			return [ genDurations(duration), genEasings(easing) ];
 		},
 		[ duration, easing ]
 	);
 
-	useLayoutEffect(() => {
+	React.useLayoutEffect(() => {
 		const node = _outerRef_.current;
 		if (!appear && inProp) {
 			node.style.height = $styles.enteredHeight;

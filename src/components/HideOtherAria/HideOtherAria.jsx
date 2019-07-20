@@ -1,11 +1,11 @@
-import React, { React.useCallback, useMemo, useEffect, useRef } from 'react';
+import React  from 'react';
 import { getElementRef, getNode } from 'scripts';
 import { DivElement } from '..';
 
 const HideOtherAria = ({ children, parent = document.body, active = true, ...props }) => {
-	const _ref_ = useRef();
-	const hiddenNodesRef = useRef([]);
-	const prevActiveRef = useRef(null);
+	const _ref_ = React.useRef();
+	const hiddenNodesRef = React.useRef([]);
+	const prevActiveRef = React.useRef(null);
 
 	const activate = React.useCallback(
 		(parent) => {
@@ -34,7 +34,7 @@ const HideOtherAria = ({ children, parent = document.body, active = true, ...pro
 		hiddenNodesRef.current = [];
 	}, []);
 
-	useEffect(
+	React.useEffect(
 		() => {
 			if (!prevActiveRef.current && active) {
 				const parentElement = getNode(parent);

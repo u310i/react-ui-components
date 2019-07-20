@@ -1,4 +1,4 @@
-import React, { React.useCallback, useMemo, useContext } from 'react';
+import React  from 'react';
 import $ from './_constants';
 import { getFontSize, keyframes, useLateUpdate } from 'scripts';
 import { ButtonElement, DivElement } from '..';
@@ -43,7 +43,7 @@ const Button = ({
 
 	const mainStyle = $styles.main;
 
-	const clickEffectStyle = useMemo(
+	const clickEffectStyle = React.useMemo(
 		() => {
 			const waveKeyframes = keyframes(scripts.genWaveKeyframes(borderWidth));
 			const fadeKeyframes = keyframes({
@@ -57,14 +57,14 @@ const Button = ({
 		[ borderWidth, effectColor ]
 	);
 
-	const loadingMaskStyle = useMemo(
+	const loadingMaskStyle = React.useMemo(
 		() => {
 			return loading ? scripts.genLoadingMask(borderWidth) : {};
 		},
 		[ loading, borderWidth ]
 	);
 
-	const shapeStyle = useMemo(
+	const shapeStyle = React.useMemo(
 		() => {
 			const style = {
 				...scripts.genShape(shape),
@@ -81,14 +81,14 @@ const Button = ({
 		[ shape, size, borderStyle, borderWidth, fullWidth, fullHeight, loading ]
 	);
 
-	const colorStyle = useMemo(
+	const colorStyle = React.useMemo(
 		() => {
 			return scripts.genColor(type, toFill, disable, keyColor);
 		},
 		[ keyColor, type, toFill, disable ]
 	);
 
-	const style = useMemo(
+	const style = React.useMemo(
 		() => {
 			return {
 				...mainStyle,
@@ -100,14 +100,14 @@ const Button = ({
 		[ shapeStyle, colorStyle, propStyle ]
 	);
 
-	let contents = useMemo(
+	let contents = React.useMemo(
 		() => {
 			return scripts.defineContents(children, between, loading);
 		},
 		[ children, between, loading ]
 	);
 
-	const clickEffectComponent = useMemo(
+	const clickEffectComponent = React.useMemo(
 		() => {
 			return (
 				lateUpdateStatus &&
@@ -117,14 +117,14 @@ const Button = ({
 		[ lateUpdateStatus, hasClickEffect ]
 	);
 
-	const loadingMaskComponent = useMemo(
+	const loadingMaskComponent = React.useMemo(
 		() => {
 			return loading && <DivElement aria-hidden={true} style={loadingMaskStyle} />;
 		},
 		[ loading ]
 	);
 
-	const accessibilityProps = useMemo(
+	const accessibilityProps = React.useMemo(
 		() => {
 			const props = {};
 			if (disable) props['aria-disabled'] = true;

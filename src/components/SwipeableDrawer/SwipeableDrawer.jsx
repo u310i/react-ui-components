@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useRef, useEffect, React.useCallback, useMemo } from 'react';
+import React  from 'react';
 import $ from './_constants';
 import {
 	getElementRef,
@@ -70,20 +70,20 @@ const SwipeableDrawer = ({
 	swipeAreaWidth = 40,
 	...props
 }) => {
-	const swipeInstance = useRef({
+	const swipeInstance = React.useRef({
 		isSwiping: null
 	});
-	const swipeAreaRef = useRef();
-	const backdropTransitionRef = useRef();
-	const transitionRef = useRef();
-	const rootRef = useRef();
+	const swipeAreaRef = React.useRef();
+	const backdropTransitionRef = React.useRef();
+	const transitionRef = React.useRef();
+	const rootRef = React.useRef();
 
-	const touchDetected = useRef(false);
-	const openRef = useRef(open);
+	const touchDetected = React.useRef(false);
+	const openRef = React.useRef(open);
 
-	const abortedTimeoutIdRef = useRef(null);
+	const abortedTimeoutIdRef = React.useRef(null);
 
-	const [ durations, easings ] = useMemo(
+	const [ durations, easings ] = React.useMemo(
 		() => {
 			return [
 				genDurations(propTransitionProps.duration || $styles.duration),
@@ -94,7 +94,7 @@ const SwipeableDrawer = ({
 	);
 
 	// Use a ref so the open value used is always up to date inside React.useCallback.
-	useLayoutEffect(
+	React.useLayoutEffect(
 		() => {
 			if (open && !openRef.current) clearTimeout(abortedTimeoutIdRef.current);
 			openRef.current = open;
@@ -346,7 +346,7 @@ const SwipeableDrawer = ({
 		[ setPosition, anchor, disableDiscovery, disableSwipeToOpen, swipeAreaWidth ]
 	);
 
-	useEffect(
+	React.useEffect(
 		() => () => {
 			// We need to release the lock.
 			if (nodeThatClaimedTheSwipe === swipeInstance.current) {
@@ -372,7 +372,7 @@ const SwipeableDrawer = ({
 		onOutsideClick,
 		hideBackdrop,
 		...propModalProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					backdropProps: {
@@ -399,7 +399,7 @@ const SwipeableDrawer = ({
 	}, []);
 	const transitionProps = {
 		...propTransitionProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					refer: handleTransitionRef,

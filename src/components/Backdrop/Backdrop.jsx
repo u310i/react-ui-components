@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import $ from './_constants';
 import {} from 'scripts';
 import { Fade, DivElement } from '..';
@@ -15,7 +15,7 @@ const Backdrop = ({
 	transitionProps: propTransitionProps = {},
 	...props
 }) => {
-	const _style_ = useMemo(
+	const _style_ = React.useMemo(
 		() => {
 			return {
 				...$styles.style,
@@ -28,7 +28,7 @@ const Backdrop = ({
 
 	const transitionProps = {
 		...propTransitionProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					style: {

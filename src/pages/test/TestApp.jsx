@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef, React.useCallback } from 'react';
+import React from 'react';
 import './_constants';
 import { isString, isArray, isReact, isReactComponent, deepMergeOverrideArray } from 'scripts';
 
@@ -34,28 +34,28 @@ import {
 let index = 0;
 
 export default ({}) => {
-	const [ state1, setState1 ] = useState(false);
+	const [ state1, setState1 ] = React.useState(false);
 	const handler1 = () => {
 		setState1((prev) => !prev);
 	};
 	const onClose1 = () => {
 		setState1((prev) => prev && false);
 	};
-	const [ state2, setState2 ] = useState(false);
+	const [ state2, setState2 ] = React.useState(false);
 	const handler2 = () => {
 		setState2((prev) => !prev);
 	};
 	const onClose2 = () => {
 		setState2((prev) => prev && false);
 	};
-	const [ state_t, setState_t ] = useState(false);
+	const [ state_t, setState_t ] = React.useState(false);
 	const handler_t = () => {
 		setState_t((prev) => !prev);
 	};
 	const onClose_t = () => {
 		setState_t((prev) => prev && false);
 	};
-	const [ state_drawer, setState_drawer ] = useState(false);
+	const [ state_drawer, setState_drawer ] = React.useState(false);
 	const handler_drawer = () => {
 		setState_drawer((prev) => !prev);
 	};
@@ -95,7 +95,7 @@ export default ({}) => {
 	index += 1;
 	console.log('-----------------------------' + index);
 
-	// useEffect(() => {
+	// React.useEffect(() => {
 	// 	const fn = (event) => console.log(event.target);
 	// 	document.addEventListener('click', fn);
 	// 	return () => {
@@ -463,7 +463,7 @@ type="normal"
 
 // const color = '#1890ff';
 // const color2 = '#ff4500';
-// const [state, setState] = useState(color);
+// const [state, setState] = React.useState(color);
 // const onClick = () => {
 //   setState(color2);
 // };

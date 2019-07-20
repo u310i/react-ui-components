@@ -1,4 +1,4 @@
-import React, { React.useCallback, useEffect, useRef } from 'react';
+import React  from 'react';
 import { getNode, addEventListener, createOptimizedEvent, isObject } from 'scripts';
 
 const defaultOptions = {};
@@ -11,10 +11,10 @@ const EventListener = ({
 	options = defaultOptions,
 	optimized = false
 }) => {
-	const removeEventListenerRef = useRef(null);
-	const prevPropsRef = useRef(null);
+	const removeEventListenerRef = React.useRef(null);
+	const prevPropsRef = React.useRef(null);
 
-	useEffect(
+	React.useEffect(
 		() => {
 			const target = getNode(propTarget);
 			if (!target) return;

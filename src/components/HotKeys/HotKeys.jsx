@@ -1,14 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React  from 'react';
 import { getNode, mousetrap as Mousetrap } from 'scripts';
 
 // https://github.com/ccampbell/mousetrap
 
 const HotKeys = ({ children, hotkeys, action = (e) => {}, type, target, active = true }) => {
 	const whichEvent = type === 'keydown' || type === 'keyup' || type === 'keypress' ? type : undefined;
-	const mousetrapRef = useRef(null);
-	const prevActive = useRef(null);
-	const didBindRef = useRef(null);
-	useEffect(
+	const mousetrapRef = React.useRef(null);
+	const prevActive = React.useRef(null);
+	const didBindRef = React.useRef(null);
+	React.useEffect(
 		() => {
 			if (mousetrapRef.current === null) {
 				mousetrapRef.current = getNode(target) ? Mousetrap(target) : Mousetrap;

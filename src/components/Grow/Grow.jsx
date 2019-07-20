@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, React.useCallback, useLayoutEffect } from 'react';
+import React  from 'react';
 import $ from './_constants';
 import { roundNumber, genTransitionProp, genDurations, genEasings, setTransition, setTransform } from 'scripts';
 import { CSSTransition, DivElement } from '..';
@@ -28,16 +28,16 @@ const Grow = ({
 	disableHideVisibility,
 	...props
 }) => {
-	const _ref_ = useRef(null);
+	const _ref_ = React.useRef(null);
 
-	const [ durations, easings ] = useMemo(
+	const [ durations, easings ] = React.useMemo(
 		() => {
 			return [ genDurations(duration), genEasings(easing) ];
 		},
 		[ duration, easing ]
 	);
 
-	const [ enteredTransitionProp, exitedTransitionProp ] = useMemo(
+	const [ enteredTransitionProp, exitedTransitionProp ] = React.useMemo(
 		() => {
 			const entered = genTransitionProp([
 				[ 'opacity', durations.enter, easings.enter ],
@@ -60,7 +60,7 @@ const Grow = ({
 	const enteredScale = $styles.enteredScale;
 	const exitedScale = `scale(${$styles.scaleXRatio}, ${$styles.scaleYRatio})`;
 
-	useLayoutEffect(() => {
+	React.useLayoutEffect(() => {
 		const node = _ref_.current;
 		if (!appear && inProp) {
 			setTransform(node, enteredScale);

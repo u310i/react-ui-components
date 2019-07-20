@@ -1,4 +1,4 @@
-import React, { useState, useMemo, React.useCallback, useEffect, useRef, useReducer } from 'react';
+import React from 'react';
 import $ from './_constants';
 import { isNumber, getTransitionEndName, addEventListener, removeEventListener, getElementRef, getNode } from 'scripts';
 import {
@@ -50,21 +50,21 @@ const Modal = ({
 	backdropProps: propBackdropProps = {},
 	...props
 }) => {
-	const rootRef = useRef(null);
-	const childRef = useRef(null);
+	const rootRef = React.useRef(null);
+	const childRef = React.useRef(null);
 	// Becomes true if 'open' is true,
 	//  It will be false when the end transition is exited.
-	const shouldBeMounted = useRef(null);
-	const closingReasonRef = useRef(null);
+	const shouldBeMounted = React.useRef(null);
+	const closingReasonRef = React.useRef(null);
 	// It is true until 'open' changes to false and is unmounted.
-	const inExitTransitionRef = useRef(null);
-	const zIndexAdded = useRef(null);
-	const isActivatedRef = useRef(null);
+	const inExitTransitionRef = React.useRef(null);
+	const zIndexAdded = React.useRef(null);
+	const isActivatedRef = React.useRef(null);
 
-	const [ , forceUpdate ] = useReducer((x) => x + 1, 0);
+	const [ , forceUpdate ] = React.useReducer((x) => x + 1, 0);
 
 	// A session to manage multiple modals.
-	const modalManagerRef = useRef({ isActive: null, update: forceUpdate });
+	const modalManagerRef = React.useRef({ isActive: null, update: forceUpdate });
 
 	if (open && !isActivatedRef.current) {
 		isActivatedRef.current = true;
@@ -109,7 +109,7 @@ const Modal = ({
 		}
 	}
 
-	useEffect(
+	React.useEffect(
 		() => {
 			if (open && !zIndexAdded.current) {
 				rootRef.current.style.zIndex = zIndexCounter;
@@ -214,11 +214,11 @@ const Modal = ({
 		rootRef.current = element;
 		getElementRef(propRootProps.refer, element);
 	}, []);
-	// The reason for not putting 'propRootProps' in 'useMemo' is to reflect the change of 'propRootProps'.
-	// If you put it in 'useMemo', you need to add all the properties of 'propRootProps' to 'dependencies'.
+	// The reason for not putting 'propRootProps' in 'React.useMemo' is to reflect the change of 'propRootProps'.
+	// If you put it in 'React.useMemo', you need to add all the properties of 'propRootProps' to 'dependencies'.
 	const rootProps = {
 		...propRootProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					style: {
@@ -235,7 +235,7 @@ const Modal = ({
 
 	const contentProps = {
 		...propContentProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					style: {
@@ -252,7 +252,7 @@ const Modal = ({
 	if (!propBackdropProps.transitionProps) propBackdropProps.transitionProps = {};
 	const backdropProps = {
 		...propBackdropProps,
-		...useMemo(
+		...React.useMemo(
 			() => {
 				return {
 					transitionProps: {
@@ -271,7 +271,7 @@ const Modal = ({
 		)
 	};
 
-	useEffect(
+	React.useEffect(
 		() => {
 			if (rootRef.current) {
 				if (shouldBeMounted.current) {

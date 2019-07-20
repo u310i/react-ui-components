@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React from 'react';
 import { css, cx } from 'emotion';
 import List from 'components/List';
 import Link from 'components/Link';
@@ -43,7 +43,7 @@ const Menu = ({
     }
   };
 
-  const listItem = useMemo(() => {
+  const listItem = React.useMemo(() => {
     return ({ text, attribute, style }) => (
       <li className={cx('uc-menu-list-item')}>
         <Link text={text} attribute={attribute} style={style} />

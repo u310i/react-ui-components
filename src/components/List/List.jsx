@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React  from 'react';
 import $ from './_constants';
 import { isString, isReact, isArray, isReactComponent } from 'scripts';
 import { UlElement, LiElement, DivElement, SpanElement } from '..';
@@ -38,7 +38,7 @@ const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
 };
 
 const List = ({ children, width = $styles.list.width, space, levelStyle, ...props }) => {
-	const _style_ = useMemo(
+	const _style_ = React.useMemo(
 		() => {
 			return {
 				width: width,
@@ -58,7 +58,7 @@ const List = ({ children, width = $styles.list.width, space, levelStyle, ...prop
 // -------------------------------------------------------------
 
 const ListGroup = ({ children, title, titleStyle: propTitleStyle, ...props }) => {
-	const titleComponent = useMemo(
+	const titleComponent = React.useMemo(
 		() => {
 			if (title) {
 				if (isString(title)) {

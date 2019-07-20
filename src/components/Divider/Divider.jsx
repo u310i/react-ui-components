@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import React  from 'react';
 import { HrElement } from '../_Elements';
 
 const Divider = props => {
-  const mainStyle = useMemo(() => {
+  const mainStyle = React.useMemo(() => {
     return {
       flexShrink: '0',
       backgroundColor: 'rgba(0, 0, 0, 0.12);'

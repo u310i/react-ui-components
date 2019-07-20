@@ -185,13 +185,13 @@ export {
 	useLateUpdate,
 	didMount,
 	didFirstUpdate,
-	// hooks/hooks/useEffects
+	// hooks/hooks/React.useEffects
 	useAddEventListener,
 	useDidUpdate,
 	useIntersectionObserver,
 	useAddWindowEvent,
 	useAddCssInBody,
-	// hooks/useLayoutEffects
+	// hooks/React.useLayoutEffects
 	useGetDomProperty,
 	useGetDomProperties,
 	// hooks/useGlobalState

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React  from 'react';
 import { getComponentConstants } from 'scripts';
 import { isHorizontal } from '../Drawer/Drawer';
 import { DivElement } from '..';
@@ -9,7 +9,7 @@ const $swipeAreaStyles = $.styles.swipeArea;
 const $names = $.names;
 
 const SwipeArea = ({ anchor, width, ...props }) => {
-	const _style_ = useMemo(
+	const _style_ = React.useMemo(
 		() => {
 			return {
 				...$swipeAreaStyles.style,

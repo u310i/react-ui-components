@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React  from 'react';
 import { focusTrap as CreateFocusTrap, getElementRef } from 'scripts';
 import { DivElement } from '..';
 
@@ -24,7 +24,7 @@ const FocusTrap = ({
 	disablePointerEvents = false,
 	...props
 }) => {
-	const _ref_ = useRef(null);
+	const _ref_ = React.useRef(null);
 	const tailoredOptions = {
 		onActivate,
 		onDeactivate,
@@ -35,12 +35,12 @@ const FocusTrap = ({
 		clickOutsideDeactivates: !disableOutsideClick
 	};
 
-	const focusTrapRef = useRef(null);
-	const previouslyFocusedElementRef = useRef(document.activeElement);
-	const prevActiveRef = useRef(null);
-	const prevPausedRef = useRef(null);
+	const focusTrapRef = React.useRef(null);
+	const previouslyFocusedElementRef = React.useRef(document.activeElement);
+	const prevActiveRef = React.useRef(null);
+	const prevPausedRef = React.useRef(null);
 
-	useEffect(
+	React.useEffect(
 		() => {
 			if (focusTrapRef.current === null) {
 				focusTrapRef.current = CreateFocusTrap(_ref_.current, tailoredOptions);
@@ -81,7 +81,7 @@ const FocusTrap = ({
 		[ active, paused ]
 	);
 
-	const _style_ = useMemo(() => {
+	const _style_ = React.useMemo(() => {
 		return {
 			pointerEvents: disablePointerEvents ? 'none' : 'auto'
 		};

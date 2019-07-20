@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React  from 'react';
 import $ from './_constants';
 import {
 	roundNumber,
@@ -64,7 +64,7 @@ const Icon = ({
 	marginRight,
 	...props
 }) => {
-	const [ iconData, others ] = useMemo(
+	const [ iconData, others ] = React.useMemo(
 		() => {
 			const iconType = getType(icon);
 
@@ -125,7 +125,7 @@ const Icon = ({
 
 	if (!iconData) return null;
 
-	const _style_ = useMemo(
+	const _style_ = React.useMemo(
 		() => {
 			let style = {};
 

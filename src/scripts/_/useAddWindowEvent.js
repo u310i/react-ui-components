@@ -4,7 +4,7 @@ export const useAddWindowEvent = (
   disable = false,
   optimized = true
 ) => {
-  useEffect(
+  React.useEffect(
     () => {
       if (!disable) {
         addEvent(type, callback, optimized);

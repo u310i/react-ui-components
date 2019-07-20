@@ -1,4 +1,4 @@
-import React, { useState, useMemo, React.useCallback, useEffect, useRef, useReducer } from 'react';
+import React  from 'react';
 import {
 	isNumber,
 	getTransitionEndName,
@@ -13,9 +13,9 @@ import { DivElement } from '..';
 // https://github.com/willmcpo/body-scroll-lock
 
 const ScrollLock = ({ children, target, active = true, fillGap = true }) => {
-	const prevActiveRef = useRef(null);
+	const prevActiveRef = React.useRef(null);
 
-	useEffect(
+	React.useEffect(
 		() => {
 			const targetElement = getNode(target);
 			if (active && !prevActiveRef.current) {

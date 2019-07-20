@@ -1,4 +1,4 @@
-import React, { React.useCallback } from 'react';
+import React  from 'react';
 import { getNode, clickedScrollbar } from 'scripts';
 import { EventListener } from '..';
 

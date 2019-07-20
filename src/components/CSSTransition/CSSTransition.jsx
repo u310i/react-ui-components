@@ -1,4 +1,4 @@
-import React, { React.useCallback, useRef, useLayoutEffect, useReducer } from 'react';
+import React  from 'react';
 import { Transition } from 'react-transition-group';
 import { reflow } from 'scripts';
 
@@ -27,15 +27,15 @@ const ReactCSSTransitionFork = ({
 	onExited,
 	...props
 }) => {
-	const inRef = useRef(null);
-	const shouldTransitionOnAppear = useRef(null);
-	const appearingStates = useRef({
+	const inRef = React.useRef(null);
+	const shouldTransitionOnAppear = React.useRef(null);
+	const appearingStates = React.useRef({
 		enter: null,
 		entering: null,
 		entered: null
 	});
 
-	const [ , forceUpdate ] = useReducer((x) => x + 1, 0);
+	const [ , forceUpdate ] = React.useReducer((x) => x + 1, 0);
 
 	// When "appear" and "in" are true, "onEntered" occurs immediately after "onEntering", not after transition.
 	// Transition occurs because the order is kept, but you can not execute anything after transition.
@@ -49,7 +49,7 @@ const ReactCSSTransitionFork = ({
 		shouldTransitionOnAppear.current = false;
 	}
 
-	useLayoutEffect(() => {
+	React.useLayoutEffect(() => {
 		if (shouldTransitionOnAppear.current) {
 			appearingStates.current.enter = true;
 			appearingStates.current.entering = true;

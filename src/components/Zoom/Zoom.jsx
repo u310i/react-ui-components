@@ -1,4 +1,4 @@
-import React, { useMemo, React.useCallback, useRef, useLayoutEffect } from 'react';
+import React  from 'react';
 import $ from './_constants';
 import { genTransitionProp, genDurations, genEasings, setTransition, setTransform } from 'scripts';
 import { CSSTransition, DivElement } from '..';
@@ -20,16 +20,16 @@ const Zoom = ({
 	disableHideVisibility,
 	...props
 }) => {
-	const _ref_ = useRef(null);
+	const _ref_ = React.useRef(null);
 
-	const [ durations, easings ] = useMemo(
+	const [ durations, easings ] = React.useMemo(
 		() => {
 			return [ genDurations(duration), genEasings(easing) ];
 		},
 		[ duration, easing ]
 	);
 
-	useLayoutEffect(() => {
+	React.useLayoutEffect(() => {
 		const node = _ref_.current;
 		if (!appear && inProp) {
 			setTransform(node, $styles.enteredScale);

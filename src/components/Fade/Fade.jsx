@@ -1,4 +1,4 @@
-import React, { useMemo, useLayoutEffect, React.useCallback, useRef } from 'react';
+import React  from 'react';
 import $ from './_constants';
 import { genTransitionProp, genDurations, genEasings, setTransition } from 'scripts';
 import { CSSTransition, DivElement } from '..';
@@ -28,16 +28,16 @@ const Fade = ({
 	disableHideVisibility,
 	...props
 }) => {
-	const _ref_ = useRef(null);
+	const _ref_ = React.useRef(null);
 
-	const [ durations, easings ] = useMemo(
+	const [ durations, easings ] = React.useMemo(
 		() => {
 			return [ genDurations(duration), genEasings(easing) ];
 		},
 		[ duration, easing ]
 	);
 
-	useLayoutEffect(() => {
+	React.useLayoutEffect(() => {
 		const node = _ref_.current;
 		if (!appear && inProp) {
 			setEnteredOpacity(node);

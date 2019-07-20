@@ -1,9 +1,9 @@
-import React, { useState, useMemo, React.useCallback, useEffect, useRef } from 'react';
+import React from 'react';
 import { getNode, isArray, addEventListener, removeEventListener } from 'scripts';
 
 const Click = ({ children, target = document, action, types = 'click', buttonNumber = 0, listenerOptions = {} }) => {
-	const existTouchEventRef = useRef(null);
-	const touchMoveDetectedRef = useRef(null);
+	const existTouchEventRef = React.useRef(null);
+	const touchMoveDetectedRef = React.useRef(null);
 
 	const resetTouchMoveDetect = React.useCallback(() => {
 		if (touchMoveDetectedRef.current) {
@@ -56,7 +56,7 @@ const Click = ({ children, target = document, action, types = 'click', buttonNum
 		[ action, buttonNumber ]
 	);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		const node = getNode(target);
 		const names = typeof types === 'string' ? [ types ] : Array.isArray(types) ? types : 'click';
 
