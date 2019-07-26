@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = {
 	entry: {
-		main: path.resolve(__dirname, 'src/pages/index.js')
+		main: path.resolve(__dirname, 'src/pages/index.tsx')
 	},
 	output: {
 		path: path.resolve(__dirname, 'public'),
@@ -34,12 +34,11 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.(js|jsx)$/,
-				exclude: /node_modules/,
+				test: /\.(ts|tsx)$/,
 				use: {
-					loader: 'babel-loader'
+					loader: 'ts-loader'
 				},
-				exclude: /node_modules/
+				exclude: [ /node_modules/ ]
 			},
 			{
 				test: /\.(png|jpg|gif)$/i,
@@ -71,7 +70,7 @@ module.exports = {
 		]
 	},
 	resolve: {
-		extensions: [ '.mjs', '.js', '.json', '.jsx' ],
+		extensions: [ 'ts', 'tsx', '.mjs', '.js', '.json' ],
 		alias: {
 			src: path.resolve(__dirname, 'src/'),
 			components: path.resolve(__dirname, 'src/components/'),
