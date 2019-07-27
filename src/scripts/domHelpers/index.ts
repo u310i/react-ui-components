@@ -1,4 +1,4 @@
-import { isBoolean, createOptimizedEvent } from 'scripts';
+import { createOptimizedEvent } from '..';
 
 import focusTrap from './focusTrap';
 import mousetrap from 'mousetrap';
@@ -61,7 +61,7 @@ export const getNode = (value) => {
 	return node;
 };
 
-export const getElementRef = (ref, element) => {
+export const getElementRef = (ref: (element: any) => void | { current: any }, element: any) => {
 	if (ref) {
 		typeof ref === 'function' ? ref(element) : (ref.current = element);
 	}

@@ -1,5 +1,5 @@
 import raf from 'raf';
-import * as deepmerge from 'deepmerge';
+import deepmerge from 'deepmerge';
 
 const deepMerge = (target, source, options) => {
 	return deepmerge(target, source, options);
@@ -31,16 +31,16 @@ export const createOptimizedEvent = (fn, clearRef) => {
 	};
 };
 
-export const extractOverlapObjectProperty = (first, second, extractIsFirst) => {
-	const result = {};
-	const extractObj = extractIsFirst ? first : second;
-	Object.keys(first).forEach((value) => {
-		if (second[value]) {
-			result[value] = extractObj[value];
-		}
-	});
-	return result;
-};
+// export const extractOverlapObjectProperty = (first, second, extractIsFirst) => {
+// 	const result = {};
+// 	const extractObj = extractIsFirst ? first : second;
+// 	Object.keys(first).forEach((value) => {
+// 		if (second[value]) {
+// 			result[value] = extractObj[value];
+// 		}
+// 	});
+// 	return result;
+// };
 
 export const toCamelCase = (str, replace = '-') => {
 	str = str.charAt(0).toLowerCase() + str.slice(1);

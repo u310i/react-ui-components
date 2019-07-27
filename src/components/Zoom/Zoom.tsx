@@ -1,6 +1,6 @@
 import React  from 'react';
 import $ from './_constants';
-import { genTransitionProp, genDurations, genEasings, setTransition, setTransform } from 'scripts';
+import { genTransitionProperty, genDurations, genEasings, setTransition, setTransform } from 'scripts';
 import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
@@ -41,7 +41,7 @@ const Zoom = ({
 
 	const handleEntering = React.useCallback(
 		(node, appearing) => {
-			setTransition(node, genTransitionProp([ [ 'transform', durations.enter, easings.enter ] ]));
+			setTransition(node, genTransitionProperty([ [ 'transform', durations.enter, easings.enter ] ]));
 			setTransform(node, $styles.enteredScale);
 			if (!disableHideVisibility) node.style.visibility = null;
 			if (onEntering) onEntering(node, appearing);
@@ -51,7 +51,7 @@ const Zoom = ({
 
 	const handleExiting = React.useCallback(
 		(node) => {
-			setTransition(node, genTransitionProp([ [ 'transform', durations.exit, easings.exit ] ]));
+			setTransition(node, genTransitionProperty([ [ 'transform', durations.exit, easings.exit ] ]));
 			setTransform(node, $styles.exitedScale);
 			if (onExiting) onExiting(node);
 		},

@@ -55,7 +55,7 @@ const focusTrap = (element, userOptions) => {
 		paused: false
 	};
 
-	const activate = (activateOptions) => {
+	const activate = (activateOptions?) => {
 		if (state.active) return;
 
 		updateTabbableNodes();
@@ -74,7 +74,7 @@ const focusTrap = (element, userOptions) => {
 		return trap;
 	};
 
-	const deactivate = (deactivateOptions) => {
+	const deactivate = (deactivateOptions?) => {
 		if (!state.active) return;
 
 		clearTimeout(activeFocusDelay);

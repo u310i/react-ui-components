@@ -1,15 +1,6 @@
-import React  from 'react';
+import React from 'react';
 import $ from './_constants';
-import {
-	roundNumber,
-	testCssNumberRegExp,
-	getType,
-	isString,
-	isArray,
-	isObject,
-	getFontSize,
-	keyframes
-} from 'scripts';
+import { roundNumber, testCssNumberRegExp, getFontSize, keyframes } from 'scripts';
 import iconList from 'src/icons';
 import { SVG } from '..';
 
@@ -28,25 +19,24 @@ const getIcon = (name) => {
 	};
 };
 
-const getName = (type, icon) => {
+const getName = (icon) => {
 	let name = '';
 
-	if (type === 'string') {
+	if (typeof icon === 'string') {
 		name = icon;
-	} else if (type === 'array') {
+	} else if (Array.isArray(icon)) {
 		name = icon.join('-');
-	} else if (type === 'object') {
-		if (isString(icon.name)) {
+	} else if (typeof icon.name) {
+		if (typeof icon.name === 'string') {
 			name = icon.name;
-		} else if (isArray(icon.name)) {
+		} else if (Array.isArray(icon.name)) {
 			icon.name.join('-');
 		}
 	}
-
 	return name;
 };
 
-const Icon = ({
+const Icon: React.FC = ({
 	icon,
 	role = 'icon',
 	symbol,
@@ -66,12 +56,12 @@ const Icon = ({
 }) => {
 	const [ iconData, others ] = React.useMemo(
 		() => {
-			const iconType = getType(icon);
+			if (!icon) return [ null, null ];
 
-			const name = getName(iconType, icon);
+			const name = getName(icon);
 
 			const iconData =
-				iconType === 'object'
+				icon.viewBox && icon.path && icon.tag
 					? {
 							type: 'inline',
 							viewBox: icon.viewBox,
@@ -129,8 +119,8 @@ const Icon = ({
 		() => {
 			let style = {};
 
-			if (marginLeft) style.marginLeft = isString(marginLeft) ? marginLeft : $styles.marginLeft;
-			if (marginRight) style.marginRight = isString(marginRight) ? marginRight : $styles.marginRight;
+			if (marginLeft) style.marginLeft = typeof marginLeft === 'string' ? marginLeft : $styles.marginLeft;
+			if (marginRight) style.marginRight = typeof marginRight === 'string' ? marginRight : $styles.marginRight;
 
 			if (size) style.fontSize = getFontSize(size);
 
@@ -148,16 +138,11 @@ const Icon = ({
 			}
 
 			if (border) {
-				const borderIsObject = isObject(border);
-				if (borderIsObject) {
-					style = { ...style, ...border };
-				} else {
-					style = {
-						...style,
-						height: `${height}em`,
-						...$styles.border
-					};
-				}
+				style = {
+					...style,
+					height: `${height}em`,
+					...$styles.border
+				};
 				if (fixedWidth) {
 					style.width =
 						typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
@@ -204,8 +189,10 @@ const Icon = ({
 					to: $styles.roll.to
 				});
 				spin
-					? (style.animation = `${rotateAnimation} ${isString(spin) ? spin : $styles.roll.spin}`)
-					: (style.animation = `${rotateAnimation} ${isString(pulse) ? pulse : $styles.roll.pulse}`);
+					? (style.animation = `${rotateAnimation} ${typeof spin === 'string' ? spin : $styles.roll.spin}`)
+					: (style.animation = `${rotateAnimation} ${typeof pulse === 'string'
+							? pulse
+							: $styles.roll.pulse}`);
 			}
 
 			return { ...$styles.style, ...style };

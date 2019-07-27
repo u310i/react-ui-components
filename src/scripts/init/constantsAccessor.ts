@@ -1,4 +1,4 @@
-import { deepMergeOverrideArray } from 'scripts';
+import { deepMergeOverrideArray } from '..';
 
 let globalConstants = {};
 

@@ -1,5 +1,5 @@
-import React  from 'react';
-import { getNode, addEventListener, createOptimizedEvent, isObject } from 'scripts';
+import React from 'react';
+import { getNode, addEventListener, createOptimizedEvent } from 'scripts';
 
 const defaultOptions = {};
 

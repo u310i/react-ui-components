@@ -1,6 +1,6 @@
 import React  from 'react';
 import $ from './_constants';
-import { roundNumber, genTransitionProp, genDurations, genEasings, setTransition, setTransform } from 'scripts';
+import { roundNumber, genTransitionProperty, genDurations, genEasings, setTransition, setTransform } from 'scripts';
 import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
@@ -39,11 +39,11 @@ const Grow = ({
 
 	const [ enteredTransitionProp, exitedTransitionProp ] = React.useMemo(
 		() => {
-			const entered = genTransitionProp([
+			const entered = genTransitionProperty([
 				[ 'opacity', durations.enter, easings.enter ],
 				[ 'transform', roundNumber(durations.enter * $styles.scaleDurationRatio, 0), easings.enter ]
 			]);
-			const exited = genTransitionProp([
+			const exited = genTransitionProperty([
 				[ 'opacity', durations.exit, easings.exit ],
 				[
 					'transform',

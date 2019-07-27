@@ -1,29 +1,14 @@
 import React from 'react';
 import {
-  getComponentConstants,
-  isString,
-  isArray,
-  isReactComponent
+  getComponentConstants
 } from 'scripts';
-
-import { IElement, SpanElement } from 'components/_Elements';
-import Icon from 'components/Icon';
+import { IElement, SpanElement } from '..';
+import LoadingIcon from './LoadingIcon'
 
 const $ = getComponentConstants('button');
 const $names = $.contents.names;
 const $styles = $.contents.styles;
 
-const LoadingIcon = ({ style: propStyle }) => {
-  return (
-    <IElement
-      key={$names.loading}
-      style={propStyle}
-      className={$names.ucButtonLoading}
-    >
-      <Icon icon={$names.sysLoading} spin />
-    </IElement>
-  );
-};
 
 const defineContents = (children, between = true, loading) => {
   const spanStyle = $styles.span;
@@ -32,19 +17,19 @@ const defineContents = (children, between = true, loading) => {
 
   let betweenValue;
   if (between) {
-    isString(between)
+    typeof between === 'string'
       ? (betweenValue = between)
       : (betweenValue = $styles.between);
   } else {
     betweenValue = $styles.noneBetween;
   }
 
-  if (isArray(children) && React.Children.count(children) > 1) {
+  if (Array.isArray(children) && React.Children.count(children) > 1) {
     contents = React.Children.map(children, (child, index) => {
       let item;
       const marginLeft = index === 0 ? $styles.noneBetween : betweenValue;
-      if (isReactComponent(child) && child.type.name === 'Icon') {
-        if (index === 0 && loading) return <LoadingIcon />;
+      if (React.isValidElement(child) && typeof child === 'function' && child.type.name === 'Icon') {
+        if (index === 0 && loading) return <LoadingIcon />
         item = (
           <IElement
             key={index}
@@ -74,8 +59,8 @@ const defineContents = (children, between = true, loading) => {
       return item;
     });
   } else {
-    const child = isArray(children) ? children[0] : children;
-    if (isReactComponent(child) && child.type.name === 'Icon') {
+    const child = Array.isArray(children) ? children[0] : children;
+    if ( React.isValidElement(child) && typeof child === 'function' && child.type.name === 'Icon') {
       contents = loading ? (
         <LoadingIcon />
       ) : (

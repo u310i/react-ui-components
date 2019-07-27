@@ -1,6 +1,6 @@
 import React  from 'react';
 import $ from './_constants';
-import { reflow, genTransitionProp, genDurations, genEasings, setTransition } from 'scripts';
+import { reflow, genTransitionProperty, genDurations, genEasings, setTransition } from 'scripts';
 import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
@@ -47,7 +47,7 @@ const Collapse = ({
 
 	const handleEntering = React.useCallback(
 		(node) => {
-			setTransition(node, genTransitionProp([ [ 'height', durations.enter, easings.enter ] ]));
+			setTransition(node, genTransitionProperty([ [ 'height', durations.enter, easings.enter ] ]));
 			node.style.height = `${_innerRef_.current.clientHeight}px`;
 			node.style.overflow = 'hidden';
 			if (!disableHideVisibility) node.style.visibility = null;
@@ -67,7 +67,7 @@ const Collapse = ({
 
 	const handleExit = React.useCallback(
 		(node) => {
-			setTransition(node, genTransitionProp([ [ 'height', durations.exit, easings.exit ] ]));
+			setTransition(node, genTransitionProperty([ [ 'height', durations.exit, easings.exit ] ]));
 			node.style.height = `${_outerRef_.current.clientHeight}px`;
 			node.style.overflow = 'hidden';
 			if (onExit) onExit(node);

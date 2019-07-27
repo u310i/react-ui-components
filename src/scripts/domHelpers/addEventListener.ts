@@ -1,4 +1,4 @@
-import { isBoolean, isObject, createOptimizedEvent } from 'scripts';
+import { createOptimizedEvent } from '..';
 
 // Safely detecting option support
 // https://developer.mozilla.org/ja/docs/Web/API/EventTarget/addEventListener
@@ -37,7 +37,7 @@ const createListenerOptions = passiveSupported
 			return options.capture || {};
 		};
 
-export const addEventListener = (target, type, listener, options = {}, optimized) => {
+export const addEventListener = (target, type, listener, options = {}, optimized = false) => {
 	const optimizeClearlRef = {
 		clear: null
 	};

@@ -1,67 +1,45 @@
 import React from 'react';
-import {
-	genUniqueId,
-	createOptimizedEvent,
-	testPassiveEventSupport,
-	addEventListener,
-	removeEventListener
-} from 'scripts';
+import { genUniqueId, createOptimizedEvent, testPassiveEventSupport, addEventListener } from '..';
 
-export const useAddEventListener = (target = document, type, callback, options = {}) => {
-	const { optimized = true, enable = true, dependencies = [], ...listenerOptions } = options;
-	const cancelRef = React.useRef(false);
+// export const useAddEventListener = (target = document, type, callback, options = {}) => {
+// 	const { optimized = true, enable = true, dependencies = [], ...listenerOptions } = options;
+// 	const cancelRef = React.useRef(null);
 
-	React.useEffect(() => {
-		if (enable) {
-			const event = callback();
-			const handle = optimized ? createOptimizedEvent(event, cancelRef) : event;
-			addEventListener(target, type, handle, listenerOptions);
-		}
-		return () => {
-			if (enable) {
-				target && target.removeEventListener(type, handle, listenerOptions);
-				cancelRef.current && cancelRef.current();
-			}
-		};
-	}, dependencies);
-};
+// 	React.useEffect(() => {
+// 		const handleRef = React.useRef(null);
+// 		if (enable) {
+// 			const event = callback();
+// 			handleRef.current = optimized ? createOptimizedEvent(event, cancelRef) : event;
+// 			addEventListener(target, type, handleRef.current, listenerOptions);
+// 		}
+// 		return () => {
+// 			if (enable) {
+// 				target && target.removeEventListener(type, handleRef.current, listenerOptions);
+// 				cancelRef.current && cancelRef.current();
+// 			}
+// 		};
+// 	}, dependencies);
+// };
 
-export const useDidUpdate = (fn, dependencies) => {
-	const isMount = React.useRef(true).current;
-	let cleanup;
-	React.useEffect(() => {
-		if (isMount) {
-			isMount = false;
-		} else {
-			cleanup = fn();
-		}
-		return () => {
-			if (cleanup) {
-				cleanup();
-			}
-		};
-	}, dependencies);
-};
+// export const useIntersectionObserver = (elRef, callback, option, enable, dependencies) => {
+// 	React.useEffect(() => {
+// 		if (enable && elRef.current) {
+// 			let observer = new IntersectionObserver((changes) => {
+// 				for (let change of changes) {
+// 					callback(change);
+// 				}
+// 			}, option);
 
-export const useIntersectionObserver = (elRef, callback, option, enable, dependencies) => {
-	React.useEffect(() => {
-		if (enable && elRef.current) {
-			let observer = new IntersectionObserver((changes) => {
-				for (let change of changes) {
-					callback(change);
-				}
-			}, option);
+// 			if (Array.isArray(elRef)) {
+// 				elRef.forEach((el) => observer.observe(el.current));
+// 			} else {
+// 				observer.observe(elRef.current);
+// 			}
+// 		}
 
-			if (Array.isArray(elRef)) {
-				elRef.forEach((el) => observer.observe(el.current));
-			} else {
-				observer.observe(elRef.current);
-			}
-		}
-
-		return;
-	}, dependencies);
-};
+// 		return;
+// 	}, dependencies);
+// };
 
 // Safely detecting option support
 // https://developer.mozilla.org/ja/docs/Web/API/EventTarget/addEventListener
@@ -88,7 +66,7 @@ export const useAddWindowEvent = (
 	optimized = true
 ) => {
 	let handle;
-	const rafHandleRef = React.useRef(false);
+	const rafHandleRef = React.useRef(null);
 	React.useEffect(() => {
 		if (enable) {
 			const event = callback();

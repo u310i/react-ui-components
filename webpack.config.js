@@ -1,4 +1,5 @@
 const path = require('path');
+// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const _env = {};
 if (process.env.NODE_ENV !== 'production') {
@@ -19,7 +20,7 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, 'public'),
-		filename: '[name].bundle.js'
+		filename: '[name].[chunkhash].bundle.js'
 	},
 	devServer: {
 		contentBase: path.resolve(__dirname, 'public'),
@@ -29,15 +30,29 @@ module.exports = {
 		disableHostCheck: true
 		// open: true
 	},
+	watchOptions: {
+		// aggregateTimeout: 300,
+		// poll: 1000,
+		ignored: /node_modules/
+	},
 	mode: _env.mode,
 	devtool: _env.devtool,
 	module: {
 		rules: [
 			{
 				test: /\.(ts|tsx)$/,
-				use: {
-					loader: 'ts-loader'
-				},
+				use: [
+					{
+						loader: 'ts-loader',
+						options: {
+							// disable type checker - we will use it in fork plugin
+							// transpileOnly: true
+						}
+					}
+					// {
+					// 	loader: 'eslint-loader'
+					// }
+				],
 				exclude: [ /node_modules/ ]
 			},
 			{
@@ -69,10 +84,11 @@ module.exports = {
 			}
 		]
 	},
+	// plugins: [ new ForkTsCheckerWebpackPlugin() ],
 	resolve: {
-		extensions: [ 'ts', 'tsx', '.mjs', '.js', '.json' ],
+		extensions: [ 'ts', 'tsx', '.js', '.json' ],
 		alias: {
-			src: path.resolve(__dirname, 'src/'),
+			// src: path.resolve(__dirname, 'src/'),
 			components: path.resolve(__dirname, 'src/components/'),
 			scripts: path.resolve(__dirname, 'src/scripts'),
 			'react-emotion': path.resolve(__dirname, './no-prefix-emotion.js')

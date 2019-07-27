@@ -4,7 +4,7 @@ import {
 	getElementRef,
 	setTransition,
 	setTransform,
-	genTransitionProp,
+	genTransitionProperty,
 	genDurations,
 	genEasings,
 	addEventListener
@@ -116,7 +116,7 @@ const SwipeableDrawer = ({
 			let transition = '';
 
 			if (mode) {
-				transition = genTransitionProp([ [ 'all', durations[mode], easings[mode] ] ]);
+				transition = genTransitionProperty([ [ 'all', durations[mode], easings[mode] ] ]);
 			}
 
 			if (changeTransition) {

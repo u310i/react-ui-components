@@ -1,4 +1,4 @@
-import 'intersection-observer';
+// import 'intersection-observer';
 import 'classlist-polyfill';
 // import '@babel/polyfill';
 

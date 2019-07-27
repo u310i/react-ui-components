@@ -1,6 +1,5 @@
-import React  from 'react';
+import React from 'react';
 import $ from './_constants';
-import { isString, isReact, isArray, isReactComponent } from 'scripts';
 import { UlElement, LiElement, DivElement, SpanElement } from '..';
 
 const $styles = $.styles;
@@ -10,11 +9,11 @@ const $selectors = $.selectors;
 const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
 	if (!level) level = 0;
 	level += 1;
-	const inner = isArray(children) ? children : [ children ];
+	const inner = Array.isArray(children) ? children : [ children ];
 	const style = {};
 	const paddingLeftValue = `${space * level}em`;
 	inner.forEach((v, i) => {
-		if (isReactComponent(v) && v.type.name === 'ListGroup') {
+		if (React.isValidElement(v) && typeof v === 'function' && v.type.name === 'ListGroup') {
 			const innerStyle = addLeftSpace(v.props.children, space, levelStyle, level);
 			if (v.props.title) {
 				style[$selectors.nthChild(i + 1)] = {
@@ -61,14 +60,14 @@ const ListGroup = ({ children, title, titleStyle: propTitleStyle, ...props }) =>
 	const titleComponent = React.useMemo(
 		() => {
 			if (title) {
-				if (isString(title)) {
+				if (typeof title === 'string') {
 					const titleStyle = $styles.group.title;
 					return (
 						<DivElement style={{ ...titleStyle, ...propTitleStyle }}>
 							<SpanElement>{title}</SpanElement>
 						</DivElement>
 					);
-				} else if (isReact(title)) {
+				} else if (React.isValidElement(title)) {
 					return title;
 				}
 			}

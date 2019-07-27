@@ -1,5 +1,5 @@
 import React from 'react';
-import { getNode, isArray, addEventListener, removeEventListener } from 'scripts';
+import { getNode, addEventListener, removeEventListener } from 'scripts';
 
 const Click = ({ children, target = document, action, types = 'click', buttonNumber = 0, listenerOptions = {} }) => {
 	const existTouchEventRef = React.useRef(null);

@@ -1,6 +1,6 @@
 import React  from 'react';
 import $ from './_constants';
-import { genTransitionProp, genDurations, genEasings, setTransition } from 'scripts';
+import { genTransitionProperty, genDurations, genEasings, setTransition } from 'scripts';
 import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
@@ -49,7 +49,7 @@ const Fade = ({
 
 	const handleEntering = React.useCallback(
 		(node, appearing) => {
-			setTransition(node, genTransitionProp([ [ 'opacity', durations.enter, easings.enter ] ]));
+			setTransition(node, genTransitionProperty([ [ 'opacity', durations.enter, easings.enter ] ]));
 			setEnteredOpacity(node);
 			if (!disableHideVisibility) node.style.visibility = null;
 			if (onEntering) onEntering(node, appearing);
@@ -59,7 +59,7 @@ const Fade = ({
 
 	const handleExiting = React.useCallback(
 		(node) => {
-			setTransition(node, genTransitionProp([ [ 'opacity', durations.exit, easings.exit ] ]));
+			setTransition(node, genTransitionProperty([ [ 'opacity', durations.exit, easings.exit ] ]));
 			setExitedOpacity(node);
 			if (onExiting) onExiting(node);
 		},

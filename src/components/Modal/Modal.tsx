@@ -1,6 +1,6 @@
 import React from 'react';
 import $ from './_constants';
-import { isNumber, getTransitionEndName, addEventListener, removeEventListener, getElementRef, getNode } from 'scripts';
+import { getTransitionEndName, addEventListener, removeEventListener, getElementRef, getNode } from 'scripts';
 import {
 	DivElement,
 	EventListener,

@@ -1,6 +1,6 @@
 import React  from 'react';
 import $ from './_constants';
-import { genTransitionProp, genDurations, genEasings, setTransition, setTransform, getElementRef } from 'scripts';
+import { genTransitionProperty, genDurations, genEasings, setTransition, setTransform, getElementRef } from 'scripts';
 import { CSSTransition, DivElement } from '..';
 
 const $names = $.names;
@@ -70,7 +70,7 @@ const Slide = ({
 
 	const handleEntering = React.useCallback(
 		(node, appearing) => {
-			setTransition(node, genTransitionProp([ [ 'transform', durations.enter, easings.enter ] ]));
+			setTransition(node, genTransitionProperty([ [ 'transform', durations.enter, easings.enter ] ]));
 			setTransform(node, $styles.enteredTranslate);
 			if (!disableHideVisibility) node.style.visibility = null;
 			if (onEntering) onEntering(node, appearing);
@@ -80,7 +80,7 @@ const Slide = ({
 
 	const handleExiting = React.useCallback(
 		(node) => {
-			setTransition(node, genTransitionProp([ [ 'transform', durations.exit, easings.exit ] ]));
+			setTransition(node, genTransitionProperty([ [ 'transform', durations.exit, easings.exit ] ]));
 			const translate = getExitedTranslateValue(node, direction, gutter);
 			setTransform(node, translate);
 			if (onExiting) onExiting(node);

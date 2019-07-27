@@ -6,544 +6,658 @@ import style from './style';
 
 category: Sections
 */
-export const SectionElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="section" style={propStyle} {...props} />;
+export const SectionElement = ({ style, ...props }) => {
+	return <Base elementType="section" style={style} {...props} />;
 };
 
-export const NavElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="nav" style={propStyle} {...props} />;
+export const NavElement = ({ style, ...props }) => {
+	return <Base elementType="nav" style={style} {...props} />;
 };
 
-export const ArticleElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="article" style={propStyle} {...props} />;
+export const ArticleElement = ({ style, ...props }) => {
+	return <Base elementType="article" style={style} {...props} />;
 };
 
-export const AsideElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="aside" style={propStyle} {...props} />;
+export const AsideElement = ({ style, ...props }) => {
+	return <Base elementType="aside" style={style} {...props} />;
 };
 
-export const H1Element = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="h1"
-			style={{
+export const H1Element = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.h1_h2_h3_h4_h5_h6_style,
 				...style.h1_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="h1" style={style} {...props} />;
 };
 
-export const H2Element = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="h2"
-			style={{
+export const H2Element = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.h1_h2_h3_h4_h5_h6_style,
 				...style.h2_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="h2" style={style} {...props} />;
 };
 
-export const H3Element = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="h3"
-			style={{
+export const H3Element = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.h1_h2_h3_h4_h5_h6_style,
 				...style.h3_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="h3" style={style} {...props} />;
 };
 
-export const H4Element = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="h4"
-			style={{
+export const H4Element = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.h1_h2_h3_h4_h5_h6_style,
 				...style.h4_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="h4" style={style} {...props} />;
 };
 
-export const H5Element = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="h5"
-			style={{
+export const H5Element = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.h1_h2_h3_h4_h5_h6_style,
 				...style.h5_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="h5" style={style} {...props} />;
 };
 
-export const H6Element = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="h6"
-			style={{
+export const H6Element = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.h1_h2_h3_h4_h5_h6_style,
 				...style.h6_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="h6" style={style} {...props} />;
 };
 
-export const HeaderElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="header" style={propStyle} {...props} />;
+export const HeaderElement = ({ style, ...props }) => {
+	return <Base elementType="header" style={style} {...props} />;
 };
 
-export const FooterElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="footer" style={propStyle} {...props} />;
+export const FooterElement = ({ style, ...props }) => {
+	return <Base elementType="footer" style={style} {...props} />;
 };
 
-export const AddressElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="address" style={propStyle} {...props} />;
+export const AddressElement = ({ style, ...props }) => {
+	return <Base elementType="address" style={style} {...props} />;
 };
 /*
 
 
 category: Grouping content
 */
-export const PElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="p" style={{ ...style.p_style, ...propStyle }} {...props} />;
+export const PElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.p_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="p" style={style} {...props} />;
 };
 
-export const HrElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="hr" style={{ ...style.hr_style, ...propStyle }} {...props} />;
+export const HrElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.hr_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="hr" style={style} {...props} />;
 };
 
-export const PreElement = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="pre"
-			style={{
+export const PreElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.pre_code_kbd_samp_style,
 				...style.pre_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="pre" style={style} {...props} />;
 };
 
-export const BlockquoteElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="blockquote" style={propStyle} {...props} />;
+export const BlockquoteElement = ({ style, ...props }) => {
+	return <Base elementType="blockquote" style={style} {...props} />;
 };
 
-export const OlElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="ol" style={{ ...style.ul_ol_style, ...propStyle }} {...props} />;
+export const OlElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.ul_ol_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="ol" style={style} {...props} />;
 };
 
-export const UlElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="ul" style={{ ...style.ul_ol_style, ...propStyle }} {...props} />;
+export const UlElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.ul_ol_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="ul" style={style} {...props} />;
 };
 
-export const LiElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="li" style={propStyle} {...props} />;
+export const LiElement = ({ style, ...props }) => {
+	return <Base elementType="li" style={style} {...props} />;
 };
 
-export const DlElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="dl" style={propStyle} {...props} />;
+export const DlElement = ({ style, ...props }) => {
+	return <Base elementType="dl" style={style} {...props} />;
 };
 
-export const DtElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="dt" style={propStyle} {...props} />;
+export const DtElement = ({ style, ...props }) => {
+	return <Base elementType="dt" style={style} {...props} />;
 };
 
-export const DdElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="dd" style={propStyle} {...props} />;
+export const DdElement = ({ style, ...props }) => {
+	return <Base elementType="dd" style={style} {...props} />;
 };
 
-export const FigureElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="figure" style={propStyle} {...props} />;
+export const FigureElement = ({ style, ...props }) => {
+	return <Base elementType="figure" style={style} {...props} />;
 };
 
-export const FigcaptionElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="figcaption" style={propStyle} {...props} />;
+export const FigcaptionElement = ({ style, ...props }) => {
+	return <Base elementType="figcaption" style={style} {...props} />;
 };
 
-export const DivElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="div" style={propStyle} {...props} />;
+export const DivElement = ({ style, ...props }) => {
+	return <Base elementType="div" style={style} {...props} />;
 };
 
-export const MainElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="main" style={{ ...style.main_style, ...propStyle }} {...props} />;
+export const MainElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.main_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="main" style={style} {...props} />;
 };
 /*
 
 
 category: Text-level semantics
 */
-export const AElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="a" style={{ ...style.a_style, ...propStyle }} {...props} />;
+export const AElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.a_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="a" style={style} {...props} />;
 };
 
-export const EmElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="em" style={propStyle} {...props} />;
+export const EmElement = ({ style, ...props }) => {
+	return <Base elementType="em" style={style} {...props} />;
 };
 
-export const StrongElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="strong" style={{ ...style.b_strong_style, ...propStyle }} {...props} />;
+export const StrongElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.b_strong_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="strong" style={style} {...props} />;
 };
 
-export const SmallElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="small" style={{ ...style.small_style, ...propStyle }} {...props} />;
+export const SmallElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.small_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="small" style={style} {...props} />;
 };
 
-export const SElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="s" style={propStyle} {...props} />;
+export const SElement = ({ style, ...props }) => {
+	return <Base elementType="s" style={style} {...props} />;
 };
 
-export const CiteElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="cite" style={propStyle} {...props} />;
+export const CiteElement = ({ style, ...props }) => {
+	return <Base elementType="cite" style={style} {...props} />;
 };
 
-export const QElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="q" style={propStyle} {...props} />;
+export const QElement = ({ style, ...props }) => {
+	return <Base elementType="q" style={style} {...props} />;
 };
 
-export const DfnElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="dfn" style={propStyle} {...props} />;
+export const DfnElement = ({ style, ...props }) => {
+	return <Base elementType="dfn" style={style} {...props} />;
 };
 
-export const AbbrElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="abbr" style={{ ...style.abbr_style, ...propStyle }} {...props} />;
+export const AbbrElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.abbr_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="abbr" style={style} {...props} />;
 };
 
-export const TimeElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="time" style={propStyle} {...props} />;
+export const TimeElement = ({ style, ...props }) => {
+	return <Base elementType="time" style={style} {...props} />;
 };
 
-export const CodeElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="code" style={{ ...style.pre_code_kbd_samp_style, ...propStyle }} {...props} />;
+export const CodeElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.pre_code_kbd_samp_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="code" style={style} {...props} />;
 };
 
-export const VarElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="var" style={propStyle} {...props} />;
+export const VarElement = ({ style, ...props }) => {
+	return <Base elementType="var" style={style} {...props} />;
 };
 
-export const SampElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="samp" style={{ ...style.pre_code_kbd_samp_style, ...propStyle }} {...props} />;
+export const SampElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.pre_code_kbd_samp_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="samp" style={style} {...props} />;
 };
 
-export const KbdElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="kbd" style={{ ...style.pre_code_kbd_samp_style, ...propStyle }} {...props} />;
+export const KbdElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.pre_code_kbd_samp_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="kbd" style={style} {...props} />;
 };
 
-export const SubElement = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="sub"
-			style={{
+export const SubElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.sub_sup_style,
 				...style.sub_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="sub" style={style} {...props} />;
 };
 
-export const SupElement = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="sup"
-			style={{
+export const SupElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.sub_sup_style,
 				...style.sup_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="sup" style={style} {...props} />;
 };
 
-export const IElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="i" style={propStyle} {...props} />;
+export const IElement = ({ style, ...props }) => {
+	return <Base elementType="i" style={style} {...props} />;
 };
 
-export const BElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="b" style={{ ...style.b_strong_style, ...propStyle }} {...props} />;
+export const BElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.b_strong_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="b" style={style} {...props} />;
 };
 
-export const MarkElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="mark" style={propStyle} {...props} />;
+export const MarkElement = ({ style, ...props }) => {
+	return <Base elementType="mark" style={style} {...props} />;
 };
 
-export const RubyElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="ruby" style={propStyle} {...props} />;
+export const RubyElement = ({ style, ...props }) => {
+	return <Base elementType="ruby" style={style} {...props} />;
 };
 
-export const RtElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="rt" style={propStyle} {...props} />;
+export const RtElement = ({ style, ...props }) => {
+	return <Base elementType="rt" style={style} {...props} />;
 };
 
-export const RpElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="rp" style={propStyle} {...props} />;
+export const RpElement = ({ style, ...props }) => {
+	return <Base elementType="rp" style={style} {...props} />;
 };
 
-export const BdoElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="bdo" style={propStyle} {...props} />;
+export const BdoElement = ({ style, ...props }) => {
+	return <Base elementType="bdo" style={style} {...props} />;
 };
 
-export const SpanElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="span" style={propStyle} {...props} />;
+export const SpanElement = ({ style, ...props }) => {
+	return <Base elementType="span" style={style} {...props} />;
 };
 
-export const WbrElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="wbr" style={propStyle} {...props} />;
+export const WbrElement = ({ style, ...props }) => {
+	return <Base elementType="wbr" style={style} {...props} />;
 };
 /*
 
 
 category: Edits
 */
-export const InsElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="ins" style={propStyle} {...props} />;
+export const InsElement = ({ style, ...props }) => {
+	return <Base elementType="ins" style={style} {...props} />;
 };
 
-export const DelElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="del" style={propStyle} {...props} />;
+export const DelElement = ({ style, ...props }) => {
+	return <Base elementType="del" style={style} {...props} />;
 };
 /*
 
 
 category: Embedded content
 */
-export const ImgElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="img" style={{ ...style.img_style, ...propStyle }} {...props} />;
+export const ImgElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.img_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="img" style={style} {...props} />;
 };
 
-export const IframeElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="iframe" style={propStyle} {...props} />;
+export const IframeElement = ({ style, ...props }) => {
+	return <Base elementType="iframe" style={style} {...props} />;
 };
 
-export const EmbedElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="embed" style={propStyle} {...props} />;
+export const EmbedElement = ({ style, ...props }) => {
+	return <Base elementType="embed" style={style} {...props} />;
 };
 
-export const ObjectElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="object" style={propStyle} {...props} />;
+export const ObjectElement = ({ style, ...props }) => {
+	return <Base elementType="object" style={style} {...props} />;
 };
 
-export const ParamElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="param" style={propStyle} {...props} />;
+export const ParamElement = ({ style, ...props }) => {
+	return <Base elementType="param" style={style} {...props} />;
 };
 
-export const VideoElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="video" style={propStyle} {...props} />;
+export const VideoElement = ({ style, ...props }) => {
+	return <Base elementType="video" style={style} {...props} />;
 };
 
-export const AudioElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="audio" style={propStyle} {...props} />;
+export const AudioElement = ({ style, ...props }) => {
+	return <Base elementType="audio" style={style} {...props} />;
 };
 
-export const SourceElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="source" style={propStyle} {...props} />;
+export const SourceElement = ({ style, ...props }) => {
+	return <Base elementType="source" style={style} {...props} />;
 };
 
-export const CanvasElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="canvas" style={propStyle} {...props} />;
+export const CanvasElement = ({ style, ...props }) => {
+	return <Base elementType="canvas" style={style} {...props} />;
 };
 
-export const MapElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="map" style={propStyle} {...props} />;
+export const MapElement = ({ style, ...props }) => {
+	return <Base elementType="map" style={style} {...props} />;
 };
 
-export const AreaElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="area" style={propStyle} {...props} />;
+export const AreaElement = ({ style, ...props }) => {
+	return <Base elementType="area" style={style} {...props} />;
 };
 /*
 
 
 category: Tabular data
 */
-export const TableElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="table" style={propStyle} {...props} />;
+export const TableElement = ({ style, ...props }) => {
+	return <Base elementType="table" style={style} {...props} />;
 };
 
-export const CaptionElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="caption" style={propStyle} {...props} />;
+export const CaptionElement = ({ style, ...props }) => {
+	return <Base elementType="caption" style={style} {...props} />;
 };
 
-export const ColgroupElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="colgroup" style={propStyle} {...props} />;
+export const ColgroupElement = ({ style, ...props }) => {
+	return <Base elementType="colgroup" style={style} {...props} />;
 };
 
-export const ColElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="col" style={propStyle} {...props} />;
+export const ColElement = ({ style, ...props }) => {
+	return <Base elementType="col" style={style} {...props} />;
 };
 
-export const TbodyElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="tbody" style={propStyle} {...props} />;
+export const TbodyElement = ({ style, ...props }) => {
+	return <Base elementType="tbody" style={style} {...props} />;
 };
 
-export const TheadElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="thead" style={propStyle} {...props} />;
+export const TheadElement = ({ style, ...props }) => {
+	return <Base elementType="thead" style={style} {...props} />;
 };
 
-export const TfootElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="tfoot" style={propStyle} {...props} />;
+export const TfootElement = ({ style, ...props }) => {
+	return <Base elementType="tfoot" style={style} {...props} />;
 };
 
-export const TrElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="tr" style={propStyle} {...props} />;
+export const TrElement = ({ style, ...props }) => {
+	return <Base elementType="tr" style={style} {...props} />;
 };
 
-export const TdElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="td" style={propStyle} {...props} />;
+export const TdElement = ({ style, ...props }) => {
+	return <Base elementType="td" style={style} {...props} />;
 };
 
-export const ThElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="th" style={propStyle} {...props} />;
+export const ThElement = ({ style, ...props }) => {
+	return <Base elementType="th" style={style} {...props} />;
 };
 /*
 
 
 category: Forms
 */
-export const FormElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="form" style={propStyle} {...props} />;
+export const FormElement = ({ style, ...props }) => {
+	return <Base elementType="form" style={style} {...props} />;
 };
 
-export const FieldsetElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="fieldset" style={{ ...style.fieldset_style, ...propStyle }} {...props} />;
+export const FieldsetElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.fieldset_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="fieldset" style={style} {...props} />;
 };
 
-export const LegendElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="legend" style={{ ...legend_style, ...propStyle }} {...props} />;
+export const LegendElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...legend_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="legend" style={style} {...props} />;
 };
 
-export const LabelElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="label" style={propStyle} {...props} />;
+export const LabelElement = ({ style, ...props }) => {
+	return <Base elementType="label" style={style} {...props} />;
 };
 
-export const InputElement = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="input"
-			style={{
+export const InputElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.button_input_optgroup_select_textarea_style,
 				...style.button_input_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="input" style={style} {...props} />;
 };
 
-export const ButtonElement = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="button"
-			style={{
+export const ButtonElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.button_input_optgroup_select_textarea_style,
 				...style.button_input_style,
 				...style.button_select_style,
 				...style.button_inputButton_inputReset_inputSubmit_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="button" style={style} {...props} />;
 };
 
-export const SelectElement = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="select"
-			style={{
+export const SelectElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.button_input_optgroup_select_textarea_style,
 				...style.button_select_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="select" style={style} {...props} />;
 };
 
-export const DatalistElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="datalist" style={propStyle} {...props} />;
+export const DatalistElement = ({ style, ...props }) => {
+	return <Base elementType="datalist" style={style} {...props} />;
 };
 
-export const OptgroupElement = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="optgroup"
-			style={{ ...style.button_input_optgroup_select_textarea_style, ...propStyle }}
-			{...props}
-		/>
+export const OptgroupElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.button_input_optgroup_select_textarea_style, ...propStyle };
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="optgroup" style={style} {...props} />;
 };
 
-export const OptionElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="option" style={propStyle} {...props} />;
+export const OptionElement = ({ style, ...props }) => {
+	return <Base elementType="option" style={style} {...props} />;
 };
 
-export const TextareaElement = ({ style: propStyle = {}, ...props }) => {
-	return (
-		<Base
-			elementType="textarea"
-			style={{
+export const TextareaElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return {
 				...style.button_input_optgroup_select_textarea_style,
 				...style.textarea_style,
 				...propStyle
-			}}
-			{...props}
-		/>
+			};
+		},
+		[ propStyle ]
 	);
+	return <Base elementType="textarea" style={style} {...props} />;
 };
 
-export const KeygenElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="keygen" style={propStyle} {...props} />;
+export const KeygenElement = ({ style, ...props }) => {
+	return <Base elementType="keygen" style={style} {...props} />;
 };
 
-export const OutputElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="output" style={propStyle} {...props} />;
+export const OutputElement = ({ style, ...props }) => {
+	return <Base elementType="output" style={style} {...props} />;
 };
 
-export const ProgressElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="progress" style={{ ...style.progress_style, ...propStyle }} {...props} />;
+export const ProgressElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.progress_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="progress" style={style} {...props} />;
 };
 
-export const MeterElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="meter" style={propStyle} {...props} />;
+export const MeterElement = ({ style, ...props }) => {
+	return <Base elementType="meter" style={style} {...props} />;
 };
 /*
 
 
 category: Interactive elements
 */
-export const DetailsElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="details" style={{ ...style.details_style, ...propStyle }} {...props} />;
+export const DetailsElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.details_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="details" style={style} {...props} />;
 };
 
-export const SummaryElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="summary" style={{ ...style.summary_style, ...propStyle }} {...props} />;
+export const SummaryElement = ({ style: propStyle, ...props }) => {
+	const style = React.useMemo(
+		() => {
+			return { ...style.summary_style, ...propStyle };
+		},
+		[ propStyle ]
+	);
+	return <Base elementType="summary" style={style} {...props} />;
 };
 
-export const CommandElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="command" style={propStyle} {...props} />;
+export const CommandElement = ({ style, ...props }) => {
+	return <Base elementType="command" style={style} {...props} />;
 };
 
-export const MenuElement = ({ style: propStyle = {}, ...props }) => {
-	return <Base elementType="menu" style={propStyle} {...props} />;
+export const MenuElement = ({ style, ...props }) => {
+	return <Base elementType="menu" style={style} {...props} />;
 };

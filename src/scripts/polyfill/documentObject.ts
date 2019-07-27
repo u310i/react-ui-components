@@ -82,4 +82,5 @@ if (!Element.prototype.closest) {
 
 // Element.matches()
 // https://developer.mozilla.org/ja/docs/Web/API/Element/matches#Polyfill
-if (!Element.prototype.matches) Element.prototype.matches = Element.prototype.msMatchesSelector;
+if (!Element.prototype.matches && Element.prototype.msMatchesSelector)
+	Element.prototype.matches = Element.prototype.msMatchesSelector;
