@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import $ from './_constants';
 import { getTransitionEndName, addEventListener, removeEventListener, getElementRef, getNode } from 'scripts';
 import {

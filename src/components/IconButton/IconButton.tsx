@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { css, cx } from 'react-emotion';
 
 import Icon from 'components/Icon';

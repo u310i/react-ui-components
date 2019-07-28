@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import $ from './_constants';
 import { UlElement, LiElement, DivElement, SpanElement } from '..';
 

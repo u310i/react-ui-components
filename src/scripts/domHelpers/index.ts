@@ -61,7 +61,13 @@ export const getNode = (value) => {
 	return node;
 };
 
-export const getElementRef = (ref: (element: any) => void | { current: any }, element: any) => {
+type Refer<T> =
+	| {
+			current: null | T;
+		}
+	| ((element: T) => void);
+
+export const getElementRef = <T extends {}>(ref: Refer<T>, element: T) => {
 	if (ref) {
 		typeof ref === 'function' ? ref(element) : (ref.current = element);
 	}

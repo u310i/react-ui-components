@@ -1,10 +1,20 @@
-import React from 'react';
+import * as React from 'react';
 import { css, cx } from 'emotion';
 import baseStyle from './style';
 import { getElementRef } from 'scripts';
 import * as CSS from 'csstype';
 
-type props = {
+type Arias = {
+	[key: string]: string | boolean | number;
+};
+
+type Refer =
+	| {
+			current: null | any;
+		}
+	| ((element: any) => void);
+
+type props<HtmlElement> = {
 	elementType: string;
 	children;
 	_style_: CSS.Properties;
@@ -15,19 +25,13 @@ type props = {
 	_id_: string;
 	ids: string[];
 	id: string;
-	_arias_: {
-		[key: string]: string | boolean | number;
-	};
-	arias: {
-		[key: string]: string | boolean | number;
-	};
-	_refer_: {
-		current: null | ReactElement;
-	};
-	refer;
-};
+	_arias_: arias;
+	arias: arias;
+	_refer_: Refer;
+	refer: Refer;
+} & HtmlElement;
 
-const Base: React.FC<props> = (props) => {
+const Base: React.FC<props<{ [key: string]: string }>> = (props) => {
 	const {
 		elementType,
 		children,
@@ -89,7 +93,7 @@ const Base: React.FC<props> = (props) => {
 	);
 
 	const refer = React.useCallback((element) => {
-		getElementRef(propRefer, element);
+		getElementRef<string>(propRefer, element);
 		getElementRef(_refer_, element);
 	}, []);
 

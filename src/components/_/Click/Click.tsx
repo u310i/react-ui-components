@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { getNode, addEventListener, removeEventListener } from 'scripts';
 
 const Click = ({ children, target = document, action, types = 'click', buttonNumber = 0, listenerOptions = {} }) => {

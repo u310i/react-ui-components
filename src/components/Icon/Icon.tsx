@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import $ from './_constants';
 import { roundNumber, testCssNumberRegExp, getFontSize, keyframes } from 'scripts';
 import iconList from 'src/icons';

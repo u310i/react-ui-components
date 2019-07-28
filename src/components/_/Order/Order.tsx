@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 const Order = ({ children, list = [] }) => {
 	const contents = list.map((item, index) => {

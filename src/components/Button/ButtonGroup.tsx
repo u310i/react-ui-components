@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { getComponentConstants, isString } from 'scripts';
 import { DivElement } from '..';
 
