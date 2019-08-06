@@ -136,4 +136,4 @@ export default {
   summary: style.summary,
   command: null,
   menu: null,
-} as const;
+};

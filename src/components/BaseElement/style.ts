@@ -1,11 +1,12 @@
+export const common = {
+  boxSizing: 'border-box',
+  margin: '0px',
+  padding: '0px',
+  fontSize: 'inherit',
+  // verticalAlign: 'middle'
+} as const;
+
 export default {
-  common: {
-    boxSizing: 'border-box',
-    margin: '0px',
-    padding: '0px',
-    fontSize: 'inherit',
-    // verticalAlign: 'middle'
-  },
   ul_ol: {
     listStyleType: 'none',
   },

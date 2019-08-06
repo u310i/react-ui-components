@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { css, cx } from 'emotion';
-import style from './style';
+import { jsx } from '@emotion/core';
+import { common as commonStyle } from './style';
 import elementStyleMap from './elementStyleMap';
 import inputElementStyleMap from './inputElementStyleMap';
 import { getElementRef } from 'scripts';
@@ -15,6 +15,19 @@ type Refer =
       current: null | any;
     }
   | ((element: any) => void);
+
+type ToUnion<T, K extends keyof T> = K extends keyof T ? T[K] : never;
+
+type InsertPropsWithKeysForToUnion<T> = ToUnion<T, keyof T>;
+
+type ReMakeElementTagNameMap<T, U> = {
+  [P in keyof U]: Omit<U[P], keyof T> & { tagName: P };
+};
+
+type MergeProps<T, U> = InsertPropsWithKeysForToUnion<
+  ReMakeElementTagNameMap<T, U>
+> &
+  Omit<T, 'tagName'>;
 
 type Props = {
   tagName: keyof ElementTagNameMap;
@@ -32,19 +45,6 @@ type Props = {
   _refer_?: Refer;
   refer?: Refer;
 };
-
-type ToUnion<T, K extends keyof T> = K extends keyof T ? T[K] : never;
-
-type InsertPropsWithKeysForToUnion<T> = ToUnion<T, keyof T>;
-
-type ReMakeElementTagNameMap<T, U> = {
-  [P in keyof U]: Omit<U[P], keyof T> & { tagName: P };
-};
-
-type MergeProps<T, U> = InsertPropsWithKeysForToUnion<
-  ReMakeElementTagNameMap<T, U>
-> &
-  Omit<T, 'tagName'>;
 
 type BaseProps = Readonly<MergeProps<Props, ElementTagNameMap>>;
 
@@ -68,9 +68,9 @@ const BaseElement: React.FC<BaseProps> = ({
 }) => {
   const style: CSS.Properties = React.useMemo(() => {
     return {
-      ...style.common,
-      ...elementStyleMap[tagName as any],
-      ...(tagName === 'input' && type && inputElementStyleMap[type as any]),
+      ...commonStyle,
+      ...(elementStyleMap as any)[tagName],
+      ...(tagName === 'input' && type && (inputElementStyleMap as any)[type]),
       ..._style_,
       ...propStyle,
     };
@@ -100,8 +100,8 @@ const BaseElement: React.FC<BaseProps> = ({
     const baseArias = {
       ..._arias_,
       ...propArias,
-    };
-    const arias = {};
+    } as any;
+    const arias = {} as any;
     for (let key of Object.keys(baseArias)) {
       arias[`aria-${key}`] = baseArias[key];
     }
@@ -113,11 +113,12 @@ const BaseElement: React.FC<BaseProps> = ({
     getElementRef(_refer_, element);
   }, []);
 
-  return React.createElement(
+  return jsx(
     tagName,
     {
       type: type,
-      className: cx(css(style), className),
+      css: style,
+      className: className,
       id: id,
       ref: refer,
       ...arias,
