@@ -1,6 +1,6 @@
-import React  from 'react';
+import React from 'react';
 import { focusTrap as CreateFocusTrap, getElementRef } from 'scripts';
-import { DivElement } from '..';
+import { BaseElement } from '..';
 
 // https://github.com/davidtheclark/focus-trap-react
 
@@ -88,9 +88,9 @@ const FocusTrap = ({
 	});
 
 	return (
-		<DivElement _style_={_style_} _className_="uc-focusTrap" _refer_={_ref_} {...props}>
+		<BaseElement tagName="div" _style_={_style_} _className_="uc-focusTrap" _refer_={_ref_} {...props}>
 			{children}
-		</DivElement>
+		</BaseElement>
 	);
 };
 

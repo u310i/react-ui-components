@@ -7,19 +7,19 @@ import style from './style';
 category: Sections
 */
 export const SectionElement = ({ style, ...props }) => {
-	return <Base elementType="section" style={style} {...props} />;
+	return <Base tagName="section" style={style} {...props} />;
 };
 
 export const NavElement = ({ style, ...props }) => {
-	return <Base elementType="nav" style={style} {...props} />;
+	return <Base tagName="nav" style={style} {...props} />;
 };
 
 export const ArticleElement = ({ style, ...props }) => {
-	return <Base elementType="article" style={style} {...props} />;
+	return <Base tagName="article" style={style} {...props} />;
 };
 
 export const AsideElement = ({ style, ...props }) => {
-	return <Base elementType="aside" style={style} {...props} />;
+	return <Base tagName="aside" style={style} {...props} />;
 };
 
 export const H1Element = ({ style: propStyle, ...props }) => {
@@ -33,7 +33,7 @@ export const H1Element = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="h1" style={style} {...props} />;
+	return <Base tagName="h1" style={style} {...props} />;
 };
 
 export const H2Element = ({ style: propStyle, ...props }) => {
@@ -47,7 +47,7 @@ export const H2Element = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="h2" style={style} {...props} />;
+	return <Base tagName="h2" style={style} {...props} />;
 };
 
 export const H3Element = ({ style: propStyle, ...props }) => {
@@ -61,7 +61,7 @@ export const H3Element = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="h3" style={style} {...props} />;
+	return <Base tagName="h3" style={style} {...props} />;
 };
 
 export const H4Element = ({ style: propStyle, ...props }) => {
@@ -75,7 +75,7 @@ export const H4Element = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="h4" style={style} {...props} />;
+	return <Base tagName="h4" style={style} {...props} />;
 };
 
 export const H5Element = ({ style: propStyle, ...props }) => {
@@ -89,7 +89,7 @@ export const H5Element = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="h5" style={style} {...props} />;
+	return <Base tagName="h5" style={style} {...props} />;
 };
 
 export const H6Element = ({ style: propStyle, ...props }) => {
@@ -103,19 +103,19 @@ export const H6Element = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="h6" style={style} {...props} />;
+	return <Base tagName="h6" style={style} {...props} />;
 };
 
 export const HeaderElement = ({ style, ...props }) => {
-	return <Base elementType="header" style={style} {...props} />;
+	return <Base tagName="header" style={style} {...props} />;
 };
 
 export const FooterElement = ({ style, ...props }) => {
-	return <Base elementType="footer" style={style} {...props} />;
+	return <Base tagName="footer" style={style} {...props} />;
 };
 
 export const AddressElement = ({ style, ...props }) => {
-	return <Base elementType="address" style={style} {...props} />;
+	return <Base tagName="address" style={style} {...props} />;
 };
 /*
 
@@ -129,7 +129,7 @@ export const PElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="p" style={style} {...props} />;
+	return <Base tagName="p" style={style} {...props} />;
 };
 
 export const HrElement = ({ style: propStyle, ...props }) => {
@@ -139,7 +139,7 @@ export const HrElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="hr" style={style} {...props} />;
+	return <Base tagName="hr" style={style} {...props} />;
 };
 
 export const PreElement = ({ style: propStyle, ...props }) => {
@@ -153,11 +153,11 @@ export const PreElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="pre" style={style} {...props} />;
+	return <Base tagName="pre" style={style} {...props} />;
 };
 
 export const BlockquoteElement = ({ style, ...props }) => {
-	return <Base elementType="blockquote" style={style} {...props} />;
+	return <Base tagName="blockquote" style={style} {...props} />;
 };
 
 export const OlElement = ({ style: propStyle, ...props }) => {
@@ -167,7 +167,7 @@ export const OlElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="ol" style={style} {...props} />;
+	return <Base tagName="ol" style={style} {...props} />;
 };
 
 export const UlElement = ({ style: propStyle, ...props }) => {
@@ -177,35 +177,35 @@ export const UlElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="ul" style={style} {...props} />;
+	return <Base tagName="ul" style={style} {...props} />;
 };
 
 export const LiElement = ({ style, ...props }) => {
-	return <Base elementType="li" style={style} {...props} />;
+	return <Base tagName="li" style={style} {...props} />;
 };
 
 export const DlElement = ({ style, ...props }) => {
-	return <Base elementType="dl" style={style} {...props} />;
+	return <Base tagName="dl" style={style} {...props} />;
 };
 
 export const DtElement = ({ style, ...props }) => {
-	return <Base elementType="dt" style={style} {...props} />;
+	return <Base tagName="dt" style={style} {...props} />;
 };
 
 export const DdElement = ({ style, ...props }) => {
-	return <Base elementType="dd" style={style} {...props} />;
+	return <Base tagName="dd" style={style} {...props} />;
 };
 
 export const FigureElement = ({ style, ...props }) => {
-	return <Base elementType="figure" style={style} {...props} />;
+	return <Base tagName="figure" style={style} {...props} />;
 };
 
 export const FigcaptionElement = ({ style, ...props }) => {
-	return <Base elementType="figcaption" style={style} {...props} />;
+	return <Base tagName="figcaption" style={style} {...props} />;
 };
 
 export const DivElement = ({ style, ...props }) => {
-	return <Base elementType="div" style={style} {...props} />;
+	return <Base tagName="div" style={style} {...props} />;
 };
 
 export const MainElement = ({ style: propStyle, ...props }) => {
@@ -215,7 +215,7 @@ export const MainElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="main" style={style} {...props} />;
+	return <Base tagName="main" style={style} {...props} />;
 };
 /*
 
@@ -229,21 +229,21 @@ export const AElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="a" style={style} {...props} />;
+	return <Base tagName="a" style={style} {...props} />;
 };
 
 export const EmElement = ({ style, ...props }) => {
-	return <Base elementType="em" style={style} {...props} />;
+	return <Base tagName="em" style={style} {...props} />;
 };
 
 export const StrongElement = ({ style: propStyle, ...props }) => {
 	const style = React.useMemo(
 		() => {
-			return { ...style.b_strong_style, ...propStyle };
+			return { ...style.strong_style, ...propStyle };
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="strong" style={style} {...props} />;
+	return <Base tagName="strong" style={style} {...props} />;
 };
 
 export const SmallElement = ({ style: propStyle, ...props }) => {
@@ -253,23 +253,23 @@ export const SmallElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="small" style={style} {...props} />;
+	return <Base tagName="small" style={style} {...props} />;
 };
 
 export const SElement = ({ style, ...props }) => {
-	return <Base elementType="s" style={style} {...props} />;
+	return <Base tagName="s" style={style} {...props} />;
 };
 
 export const CiteElement = ({ style, ...props }) => {
-	return <Base elementType="cite" style={style} {...props} />;
+	return <Base tagName="cite" style={style} {...props} />;
 };
 
 export const QElement = ({ style, ...props }) => {
-	return <Base elementType="q" style={style} {...props} />;
+	return <Base tagName="q" style={style} {...props} />;
 };
 
 export const DfnElement = ({ style, ...props }) => {
-	return <Base elementType="dfn" style={style} {...props} />;
+	return <Base tagName="dfn" style={style} {...props} />;
 };
 
 export const AbbrElement = ({ style: propStyle, ...props }) => {
@@ -279,11 +279,11 @@ export const AbbrElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="abbr" style={style} {...props} />;
+	return <Base tagName="abbr" style={style} {...props} />;
 };
 
 export const TimeElement = ({ style, ...props }) => {
-	return <Base elementType="time" style={style} {...props} />;
+	return <Base tagName="time" style={style} {...props} />;
 };
 
 export const CodeElement = ({ style: propStyle, ...props }) => {
@@ -293,11 +293,11 @@ export const CodeElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="code" style={style} {...props} />;
+	return <Base tagName="code" style={style} {...props} />;
 };
 
 export const VarElement = ({ style, ...props }) => {
-	return <Base elementType="var" style={style} {...props} />;
+	return <Base tagName="var" style={style} {...props} />;
 };
 
 export const SampElement = ({ style: propStyle, ...props }) => {
@@ -307,7 +307,7 @@ export const SampElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="samp" style={style} {...props} />;
+	return <Base tagName="samp" style={style} {...props} />;
 };
 
 export const KbdElement = ({ style: propStyle, ...props }) => {
@@ -317,7 +317,7 @@ export const KbdElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="kbd" style={style} {...props} />;
+	return <Base tagName="kbd" style={style} {...props} />;
 };
 
 export const SubElement = ({ style: propStyle, ...props }) => {
@@ -331,7 +331,7 @@ export const SubElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="sub" style={style} {...props} />;
+	return <Base tagName="sub" style={style} {...props} />;
 };
 
 export const SupElement = ({ style: propStyle, ...props }) => {
@@ -345,11 +345,11 @@ export const SupElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="sup" style={style} {...props} />;
+	return <Base tagName="sup" style={style} {...props} />;
 };
 
 export const IElement = ({ style, ...props }) => {
-	return <Base elementType="i" style={style} {...props} />;
+	return <Base tagName="i" style={style} {...props} />;
 };
 
 export const BElement = ({ style: propStyle, ...props }) => {
@@ -359,35 +359,35 @@ export const BElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="b" style={style} {...props} />;
+	return <Base tagName="b" style={style} {...props} />;
 };
 
 export const MarkElement = ({ style, ...props }) => {
-	return <Base elementType="mark" style={style} {...props} />;
+	return <Base tagName="mark" style={style} {...props} />;
 };
 
 export const RubyElement = ({ style, ...props }) => {
-	return <Base elementType="ruby" style={style} {...props} />;
+	return <Base tagName="ruby" style={style} {...props} />;
 };
 
 export const RtElement = ({ style, ...props }) => {
-	return <Base elementType="rt" style={style} {...props} />;
+	return <Base tagName="rt" style={style} {...props} />;
 };
 
 export const RpElement = ({ style, ...props }) => {
-	return <Base elementType="rp" style={style} {...props} />;
+	return <Base tagName="rp" style={style} {...props} />;
 };
 
 export const BdoElement = ({ style, ...props }) => {
-	return <Base elementType="bdo" style={style} {...props} />;
+	return <Base tagName="bdo" style={style} {...props} />;
 };
 
 export const SpanElement = ({ style, ...props }) => {
-	return <Base elementType="span" style={style} {...props} />;
+	return <Base tagName="span" style={style} {...props} />;
 };
 
 export const WbrElement = ({ style, ...props }) => {
-	return <Base elementType="wbr" style={style} {...props} />;
+	return <Base tagName="wbr" style={style} {...props} />;
 };
 /*
 
@@ -395,11 +395,11 @@ export const WbrElement = ({ style, ...props }) => {
 category: Edits
 */
 export const InsElement = ({ style, ...props }) => {
-	return <Base elementType="ins" style={style} {...props} />;
+	return <Base tagName="ins" style={style} {...props} />;
 };
 
 export const DelElement = ({ style, ...props }) => {
-	return <Base elementType="del" style={style} {...props} />;
+	return <Base tagName="del" style={style} {...props} />;
 };
 /*
 
@@ -413,47 +413,47 @@ export const ImgElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="img" style={style} {...props} />;
+	return <Base tagName="img" style={style} {...props} />;
 };
 
 export const IframeElement = ({ style, ...props }) => {
-	return <Base elementType="iframe" style={style} {...props} />;
+	return <Base tagName="iframe" style={style} {...props} />;
 };
 
 export const EmbedElement = ({ style, ...props }) => {
-	return <Base elementType="embed" style={style} {...props} />;
+	return <Base tagName="embed" style={style} {...props} />;
 };
 
 export const ObjectElement = ({ style, ...props }) => {
-	return <Base elementType="object" style={style} {...props} />;
+	return <Base tagName="object" style={style} {...props} />;
 };
 
 export const ParamElement = ({ style, ...props }) => {
-	return <Base elementType="param" style={style} {...props} />;
+	return <Base tagName="param" style={style} {...props} />;
 };
 
 export const VideoElement = ({ style, ...props }) => {
-	return <Base elementType="video" style={style} {...props} />;
+	return <Base tagName="video" style={style} {...props} />;
 };
 
 export const AudioElement = ({ style, ...props }) => {
-	return <Base elementType="audio" style={style} {...props} />;
+	return <Base tagName="audio" style={style} {...props} />;
 };
 
 export const SourceElement = ({ style, ...props }) => {
-	return <Base elementType="source" style={style} {...props} />;
+	return <Base tagName="source" style={style} {...props} />;
 };
 
 export const CanvasElement = ({ style, ...props }) => {
-	return <Base elementType="canvas" style={style} {...props} />;
+	return <Base tagName="canvas" style={style} {...props} />;
 };
 
 export const MapElement = ({ style, ...props }) => {
-	return <Base elementType="map" style={style} {...props} />;
+	return <Base tagName="map" style={style} {...props} />;
 };
 
 export const AreaElement = ({ style, ...props }) => {
-	return <Base elementType="area" style={style} {...props} />;
+	return <Base tagName="area" style={style} {...props} />;
 };
 /*
 
@@ -461,43 +461,43 @@ export const AreaElement = ({ style, ...props }) => {
 category: Tabular data
 */
 export const TableElement = ({ style, ...props }) => {
-	return <Base elementType="table" style={style} {...props} />;
+	return <Base tagName="table" style={style} {...props} />;
 };
 
 export const CaptionElement = ({ style, ...props }) => {
-	return <Base elementType="caption" style={style} {...props} />;
+	return <Base tagName="caption" style={style} {...props} />;
 };
 
 export const ColgroupElement = ({ style, ...props }) => {
-	return <Base elementType="colgroup" style={style} {...props} />;
+	return <Base tagName="colgroup" style={style} {...props} />;
 };
 
 export const ColElement = ({ style, ...props }) => {
-	return <Base elementType="col" style={style} {...props} />;
+	return <Base tagName="col" style={style} {...props} />;
 };
 
 export const TbodyElement = ({ style, ...props }) => {
-	return <Base elementType="tbody" style={style} {...props} />;
+	return <Base tagName="tbody" style={style} {...props} />;
 };
 
 export const TheadElement = ({ style, ...props }) => {
-	return <Base elementType="thead" style={style} {...props} />;
+	return <Base tagName="thead" style={style} {...props} />;
 };
 
 export const TfootElement = ({ style, ...props }) => {
-	return <Base elementType="tfoot" style={style} {...props} />;
+	return <Base tagName="tfoot" style={style} {...props} />;
 };
 
 export const TrElement = ({ style, ...props }) => {
-	return <Base elementType="tr" style={style} {...props} />;
+	return <Base tagName="tr" style={style} {...props} />;
 };
 
 export const TdElement = ({ style, ...props }) => {
-	return <Base elementType="td" style={style} {...props} />;
+	return <Base tagName="td" style={style} {...props} />;
 };
 
 export const ThElement = ({ style, ...props }) => {
-	return <Base elementType="th" style={style} {...props} />;
+	return <Base tagName="th" style={style} {...props} />;
 };
 /*
 
@@ -505,7 +505,7 @@ export const ThElement = ({ style, ...props }) => {
 category: Forms
 */
 export const FormElement = ({ style, ...props }) => {
-	return <Base elementType="form" style={style} {...props} />;
+	return <Base tagName="form" style={style} {...props} />;
 };
 
 export const FieldsetElement = ({ style: propStyle, ...props }) => {
@@ -515,7 +515,7 @@ export const FieldsetElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="fieldset" style={style} {...props} />;
+	return <Base tagName="fieldset" style={style} {...props} />;
 };
 
 export const LegendElement = ({ style: propStyle, ...props }) => {
@@ -525,11 +525,11 @@ export const LegendElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="legend" style={style} {...props} />;
+	return <Base tagName="legend" style={style} {...props} />;
 };
 
 export const LabelElement = ({ style, ...props }) => {
-	return <Base elementType="label" style={style} {...props} />;
+	return <Base tagName="label" style={style} {...props} />;
 };
 
 export const InputElement = ({ style: propStyle, ...props }) => {
@@ -543,7 +543,7 @@ export const InputElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="input" style={style} {...props} />;
+	return <Base tagName="input" style={style} {...props} />;
 };
 
 export const ButtonElement = ({ style: propStyle, ...props }) => {
@@ -559,7 +559,7 @@ export const ButtonElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="button" style={style} {...props} />;
+	return <Base tagName="button" style={style} {...props} />;
 };
 
 export const SelectElement = ({ style: propStyle, ...props }) => {
@@ -573,11 +573,11 @@ export const SelectElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="select" style={style} {...props} />;
+	return <Base tagName="select" style={style} {...props} />;
 };
 
 export const DatalistElement = ({ style, ...props }) => {
-	return <Base elementType="datalist" style={style} {...props} />;
+	return <Base tagName="datalist" style={style} {...props} />;
 };
 
 export const OptgroupElement = ({ style: propStyle, ...props }) => {
@@ -587,11 +587,11 @@ export const OptgroupElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="optgroup" style={style} {...props} />;
+	return <Base tagName="optgroup" style={style} {...props} />;
 };
 
 export const OptionElement = ({ style, ...props }) => {
-	return <Base elementType="option" style={style} {...props} />;
+	return <Base tagName="option" style={style} {...props} />;
 };
 
 export const TextareaElement = ({ style: propStyle, ...props }) => {
@@ -605,15 +605,15 @@ export const TextareaElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="textarea" style={style} {...props} />;
+	return <Base tagName="textarea" style={style} {...props} />;
 };
 
 export const KeygenElement = ({ style, ...props }) => {
-	return <Base elementType="keygen" style={style} {...props} />;
+	return <Base tagName="keygen" style={style} {...props} />;
 };
 
 export const OutputElement = ({ style, ...props }) => {
-	return <Base elementType="output" style={style} {...props} />;
+	return <Base tagName="output" style={style} {...props} />;
 };
 
 export const ProgressElement = ({ style: propStyle, ...props }) => {
@@ -623,11 +623,11 @@ export const ProgressElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="progress" style={style} {...props} />;
+	return <Base tagName="progress" style={style} {...props} />;
 };
 
 export const MeterElement = ({ style, ...props }) => {
-	return <Base elementType="meter" style={style} {...props} />;
+	return <Base tagName="meter" style={style} {...props} />;
 };
 /*
 
@@ -641,7 +641,7 @@ export const DetailsElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="details" style={style} {...props} />;
+	return <Base tagName="details" style={style} {...props} />;
 };
 
 export const SummaryElement = ({ style: propStyle, ...props }) => {
@@ -651,13 +651,13 @@ export const SummaryElement = ({ style: propStyle, ...props }) => {
 		},
 		[ propStyle ]
 	);
-	return <Base elementType="summary" style={style} {...props} />;
+	return <Base tagName="summary" style={style} {...props} />;
 };
 
 export const CommandElement = ({ style, ...props }) => {
-	return <Base elementType="command" style={style} {...props} />;
+	return <Base tagName="command" style={style} {...props} />;
 };
 
 export const MenuElement = ({ style, ...props }) => {
-	return <Base elementType="menu" style={style} {...props} />;
+	return <Base tagName="menu" style={style} {...props} />;
 };

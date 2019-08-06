@@ -1,7 +1,7 @@
-import React  from 'react';
+import React from 'react';
 import $ from './_constants';
 import { getFontSize, keyframes, useLateUpdate } from 'scripts';
-import { ButtonElement, DivElement } from '..';
+import { BaseElement } from '..';
 import ButtonCoordinator from './ButtonCoordinator';
 import ButtonGroup from './ButtonGroup';
 import scripts from './_scripts';
@@ -68,9 +68,9 @@ const Button = ({
 		() => {
 			const style = {
 				...scripts.genShape(shape),
-				...(loading ? $styles.loading : {}),
-				...(fullWidth ? $styles.fullWidth : {}),
-				...(fullHeight ? $styles.fullHeight : {})
+				...loading ? $styles.loading : {},
+				...fullWidth ? $styles.fullWidth : {},
+				...fullHeight ? $styles.fullHeight : {}
 			};
 			style.fontSize = size ? getFontSize(size) : $styles.fontSize;
 			style.borderStyle = borderStyle || $styles.borderStyle;
@@ -111,7 +111,9 @@ const Button = ({
 		() => {
 			return (
 				lateUpdateStatus &&
-				hasClickEffect && <DivElement key={lateUpdateStatus} aria-hidden={true} style={clickEffectStyle} />
+				hasClickEffect && (
+					<BaseElement tagName="div" key={lateUpdateStatus} aria-hidden={true} style={clickEffectStyle} />
+				)
 			);
 		},
 		[ lateUpdateStatus, hasClickEffect ]
@@ -119,7 +121,7 @@ const Button = ({
 
 	const loadingMaskComponent = React.useMemo(
 		() => {
-			return loading && <DivElement aria-hidden={true} style={loadingMaskStyle} />;
+			return loading && <BaseElement tagName="div" aria-hidden={true} style={loadingMaskStyle} />;
 		},
 		[ loading ]
 	);
@@ -135,7 +137,8 @@ const Button = ({
 	);
 
 	return (
-		<ButtonElement
+		<BaseElement
+			tagName="button"
 			style={style}
 			onClick={handleClick}
 			disabled={disable || loading}
@@ -145,7 +148,7 @@ const Button = ({
 			{contents}
 			{loadingMaskComponent}
 			{clickEffectComponent}
-		</ButtonElement>
+		</BaseElement>
 	);
 };
 

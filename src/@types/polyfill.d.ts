@@ -1,3 +1,3 @@
-interface Element {
-	msMatchesSelector(selectors: string): boolean;
-}
+// interface Element {
+// 	msMatchesSelector(selectors: string): boolean;
+// }

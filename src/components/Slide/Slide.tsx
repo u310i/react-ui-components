@@ -1,7 +1,7 @@
-import React  from 'react';
+import React from 'react';
 import $ from './_constants';
 import { genTransitionProperty, genDurations, genEasings, setTransition, setTransform, getElementRef } from 'scripts';
-import { CSSTransition, DivElement } from '..';
+import { CSSTransition, BaseElement } from '..';
 
 const $names = $.names;
 const $selectors = $.selectors;
@@ -110,7 +110,8 @@ const Slide = ({
 		>
 			{(state, childProps) => {
 				return (
-					<DivElement
+					<BaseElement
+						tagName="div"
 						_refer_={_ref_}
 						_style_={$styles.style}
 						_className_={$names.ucSlide}
@@ -118,7 +119,7 @@ const Slide = ({
 						identifier={'slide'}
 					>
 						{children}
-					</DivElement>
+					</BaseElement>
 				);
 			}}
 		</CSSTransition>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import $ from './_constants';
 import { isNumber } from 'scripts';
-import { DivElement, EventListener } from '..';
+import { BaseElement, EventListener } from '..';
 
 const $names = $.names;
 const $style = $.style;
@@ -123,23 +123,36 @@ const Sticky = ({
 	);
 
 	const innerComponent = (
-		<DivElement _refer_={_outerRef_} _style_={_styles_.outer} _className_={$names.ucSlideOuter} {...outerProps}>
-			<DivElement _refer_={_innerRef_} _style_={_styles_.inner} _className_={$names.ucSlideInner} {...innerProps}>
+		<BaseElement
+			tagName="div"
+			_refer_={_outerRef_}
+			_style_={_styles_.outer}
+			_className_={$names.ucSlideOuter}
+			{...outerProps}
+		>
+			<BaseElement
+				tagName="div"
+				_refer_={_innerRef_}
+				_style_={_styles_.inner}
+				_className_={$names.ucSlideInner}
+				{...innerProps}
+			>
 				{typeof children === 'function' ? children(isTop, isBottom) : children}
-			</DivElement>
-		</DivElement>
+			</BaseElement>
+		</BaseElement>
 	);
 
 	return (
 		<EventListener target={window} type="scroll" listener={setStickingState} optimized={true}>
 			{enableAbsolute ? (
-				<DivElement
+				<BaseElement
+					tagName="div"
 					_style_={_styles_.absoluteWrapper}
 					_className_={$names.ucSlideAbsoluteWrapper}
 					{...absoluteWrapperProps}
 				>
 					{innerComponent}
-				</DivElement>
+				</BaseElement>
 			) : (
 				innerComponent
 			)}

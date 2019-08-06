@@ -1,7 +1,7 @@
-import React  from 'react';
+import React from 'react';
 import $ from './_constants';
 import { genTransitionProperty, genDurations, genEasings, setTransition, setTransform } from 'scripts';
-import { CSSTransition, DivElement } from '..';
+import { CSSTransition, BaseElement } from '..';
 
 const $names = $.names;
 const $selectors = $.selectors;
@@ -80,9 +80,15 @@ const Zoom = ({
 		>
 			{(state, childProps) => {
 				return (
-					<DivElement _style_={$styles.style} _className_={$names.ucZoom} _refer_={_ref_} {...childProps}>
+					<BaseElement
+						tagName="div"
+						_style_={$styles.style}
+						_className_={$names.ucZoom}
+						_refer_={_ref_}
+						{...childProps}
+					>
 						{children}
-					</DivElement>
+					</BaseElement>
 				);
 			}}
 		</CSSTransition>

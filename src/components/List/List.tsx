@@ -1,6 +1,6 @@
 import * as React from 'react';
 import $ from './_constants';
-import { UlElement, LiElement, DivElement, SpanElement } from '..';
+import { BaseElement } from '..';
 
 const $styles = $.styles;
 const $names = $.names;
@@ -48,9 +48,9 @@ const List = ({ children, width = $styles.list.width, space, levelStyle, ...prop
 	);
 
 	return (
-		<UlElement _style_={_style_} _className_={$names.ucList} {...props}>
+		<BaseElement _style_={_style_} _className_={$names.ucList} {...props}>
 			{children}
-		</UlElement>
+		</BaseElement>
 	);
 };
 
@@ -63,9 +63,9 @@ const ListGroup = ({ children, title, titleStyle: propTitleStyle, ...props }) =>
 				if (typeof title === 'string') {
 					const titleStyle = $styles.group.title;
 					return (
-						<DivElement style={{ ...titleStyle, ...propTitleStyle }}>
-							<SpanElement>{title}</SpanElement>
-						</DivElement>
+						<BaseElement style={{ ...titleStyle, ...propTitleStyle }}>
+							<BaseElement>{title}</BaseElement>
+						</BaseElement>
 					);
 				} else if (React.isValidElement(title)) {
 					return title;
@@ -76,10 +76,10 @@ const ListGroup = ({ children, title, titleStyle: propTitleStyle, ...props }) =>
 	);
 
 	return (
-		<LiElement _className_={$names.ucListGroup} {...props}>
+		<BaseElement tagName="li" _className_={$names.ucListGroup} {...props}>
 			{titleComponent}
-			<UlElement>{children}</UlElement>
-		</LiElement>
+			<BaseElement tagName="ul">{children}</BaseElement>
+		</BaseElement>
 	);
 };
 
@@ -87,9 +87,9 @@ const ListGroup = ({ children, title, titleStyle: propTitleStyle, ...props }) =>
 
 const ListItem = ({ children, ...props }) => {
 	return (
-		<LiElement _style_={$styles.item.main} {...props}>
-			<DivElement>{children}</DivElement>
-		</LiElement>
+		<BaseElement tagName="li" _style_={$styles.item.main} {...props}>
+			<BaseElement tagName="div">{children}</BaseElement>
+		</BaseElement>
 	);
 };
 

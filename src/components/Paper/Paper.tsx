@@ -1,7 +1,7 @@
-import React  from 'react';
+import React from 'react';
 import $ from './_constants';
 import {} from 'scripts';
-import { DivElement } from '..';
+import { BaseElement } from '..';
 
 const $names = $.names;
 const $styles = $.styles;
@@ -20,9 +20,9 @@ const Paper = ({ children, elevation = 2, shape = 'default', ...props }) => {
 	);
 
 	return (
-		<DivElement _style_={_style_} _className_={$names.ucPaper} {...props}>
+		<BaseElement tagName="div" _style_={_style_} _className_={$names.ucPaper} {...props}>
 			{children}
-		</DivElement>
+		</BaseElement>
 	);
 };
 

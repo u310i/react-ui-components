@@ -1,7 +1,7 @@
-import React  from 'react';
+import React from 'react';
 import $ from './_constants';
 import { reflow, genTransitionProperty, genDurations, genEasings, setTransition } from 'scripts';
-import { CSSTransition, DivElement } from '..';
+import { CSSTransition, BaseElement } from '..';
 
 const $names = $.names;
 const $selectors = $.selectors;
@@ -107,21 +107,23 @@ const Collapse = ({
 		>
 			{(state, childProps) => {
 				return (
-					<DivElement
+					<BaseElement
+						tagName="div"
 						_style_={$styles.outer.style}
 						_className_={$names.ucCollapse}
 						_refer_={_outerRef_}
 						{...childProps}
 					>
-						<DivElement
+						<BaseElement
+							tagName="div"
 							_style_={$styles.inner.style}
 							_className_={$names.ucCollapseInner}
 							_refer_={_innerRef_}
 							{...innerProps}
 						>
 							{children}
-						</DivElement>
-					</DivElement>
+						</BaseElement>
+					</BaseElement>
 				);
 			}}
 		</CSSTransition>

@@ -1,7 +1,7 @@
-import React  from 'react';
+import React from 'react';
 import { getComponentConstants } from 'scripts';
 import { isHorizontal } from '../Drawer/Drawer';
-import { DivElement } from '..';
+import { BaseElement } from '..';
 
 const $ = getComponentConstants('swipeable_drawer');
 
@@ -19,7 +19,7 @@ const SwipeArea = ({ anchor, width, ...props }) => {
 		},
 		[ anchor, width ]
 	);
-	return <DivElement _style_={_style_} _className_={$names.ucSwipeable_drawerArea} {...props} />;
+	return <BaseElement tagName="div" _style_={_style_} _className_={$names.ucSwipeable_drawerArea} {...props} />;
 };
 
 export default SwipeArea;

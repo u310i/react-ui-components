@@ -2,7 +2,7 @@ import * as React from 'react';
 import $ from './_constants';
 import { getTransitionEndName, addEventListener, removeEventListener, getElementRef, getNode } from 'scripts';
 import {
-	DivElement,
+	BaseElement,
 	EventListener,
 	Portal,
 	HideOtherAria,
@@ -303,7 +303,9 @@ const Modal = ({
 					open && <ClickOutside target={childRef} action={handleOutsideClick} {...clickOutsideProps} />}
 					{!hideBackdrop && <Backdrop open={open} disablePointerEvents={!open} {...backdropProps} />}
 					{disableEnforceFocus ? (
-						<DivElement {...contentProps}>{childComponent}</DivElement>
+						<BaseElement tagName="div" {...contentProps}>
+							{childComponent}
+						</BaseElement>
 					) : (
 						<FocusTrap
 							active={isActive}

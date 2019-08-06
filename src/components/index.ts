@@ -1,3 +1,4 @@
+import BaseElement from './BaseElement';
 import Collapse from './Collapse';
 import Fade from './Fade';
 import Grow from './Grow';
@@ -34,6 +35,7 @@ import ClickOutside from './ClickOutside';
 import ScrollLock from './ScrollLock';
 
 export {
+	BaseElement,
 	Collapse,
 	Fade,
 	Grow,
@@ -69,5 +71,3 @@ export {
 	ClickOutside,
 	ScrollLock
 };
-
-export * from './_Elements';

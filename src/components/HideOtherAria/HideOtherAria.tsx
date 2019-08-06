@@ -1,6 +1,6 @@
-import React  from 'react';
+import React from 'react';
 import { getElementRef, getNode } from 'scripts';
-import { DivElement } from '..';
+import { BaseElement } from '..';
 
 const HideOtherAria = ({ children, parent = document.body, active = true, ...props }) => {
 	const _ref_ = React.useRef();
@@ -52,9 +52,9 @@ const HideOtherAria = ({ children, parent = document.body, active = true, ...pro
 	);
 
 	return (
-		<DivElement _refer_={_ref_} _className_={'uc-hideOtherAria'} {...props}>
+		<BaseElement tagName="div" _refer_={_ref_} _className_={'uc-hideOtherAria'} {...props}>
 			{children}
-		</DivElement>
+		</BaseElement>
 	);
 };
 

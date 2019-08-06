@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   getComponentConstants
 } from 'scripts';
-import { IElement, SpanElement } from '..';
+import { BaseElement } from '..';
 import LoadingIcon from './LoadingIcon'
 
 const $ = getComponentConstants('button');
@@ -31,7 +31,7 @@ const defineContents = (children, between = true, loading) => {
       if (React.isValidElement(child) && typeof child === 'function' && child.type.name === 'Icon') {
         if (index === 0 && loading) return <LoadingIcon />
         item = (
-          <IElement
+          <BaseElement tagName="i"
             key={index}
             style={{ marginLeft: marginLeft }}
             className={$names.ucButtonIcon}
@@ -40,7 +40,7 @@ const defineContents = (children, between = true, loading) => {
         );
       } else {
         item = (
-          <SpanElement
+          <BaseElement tagName="span"
             key={index}
             style={{ marginLeft: marginLeft, ...spanStyle }}
             className={$names.ucButtonInner}
@@ -64,11 +64,11 @@ const defineContents = (children, between = true, loading) => {
       contents = loading ? (
         <LoadingIcon />
       ) : (
-        <IElement className={$names.ucButtonIcon} children={child} />
+        <BaseElement tagName="i" className={$names.ucButtonIcon} children={child} />
       );
     } else {
       contents = (
-        <SpanElement
+        <BaseElement tagName="span"
           style={spanStyle}
           className={$names.ucButtonInner}
           children={child}

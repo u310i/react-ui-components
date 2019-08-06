@@ -1,7 +1,7 @@
 import * as React from 'react';
 import $ from './_constants';
 import {} from 'scripts';
-import { Fade, DivElement } from '..';
+import { Fade, BaseElement } from '..';
 
 const $styles = $.styles;
 
@@ -19,8 +19,8 @@ const Backdrop = ({
 		() => {
 			return {
 				...$styles.style,
-				...(invisible && $styles.invisible.style),
-				...(disablePointerEvents && $styles.disablePointerEvents.style)
+				...invisible && $styles.invisible.style,
+				...disablePointerEvents && $styles.disablePointerEvents.style
 			};
 		},
 		[ invisible, disablePointerEvents ]
@@ -44,9 +44,9 @@ const Backdrop = ({
 
 	return (
 		<TransitionComponent in={open} duration={duration} aria-hidden={true} {...transitionProps}>
-			<DivElement _style_={_style_} _className_={$.names.ucBackdropInner} {...props}>
+			<BaseElement tagName="div" _style_={_style_} _className_={$.names.ucBackdropInner} {...props}>
 				{children}
-			</DivElement>
+			</BaseElement>
 		</TransitionComponent>
 	);
 };
