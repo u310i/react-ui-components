@@ -8,7 +8,7 @@ const $styles = $.contents.styles;
 
 const LoadingIcon = ({ style: propStyle = {} }) => {
 	return (
-		<BaseElement tagName="i" key={$names.loading} style={propStyle} className={$names.ucButtonLoading}>
+		<BaseElement elementName="i" key={$names.loading} style={propStyle} className={$names.ucButtonLoading}>
 			<Icon icon={$names.sysLoading} spin />
 		</BaseElement>
 	);

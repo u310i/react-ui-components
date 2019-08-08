@@ -303,7 +303,7 @@ const Modal = ({
 					open && <ClickOutside target={childRef} action={handleOutsideClick} {...clickOutsideProps} />}
 					{!hideBackdrop && <Backdrop open={open} disablePointerEvents={!open} {...backdropProps} />}
 					{disableEnforceFocus ? (
-						<BaseElement tagName="div" {...contentProps}>
+						<BaseElement elementName="div" {...contentProps}>
 							{childComponent}
 						</BaseElement>
 					) : (

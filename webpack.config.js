@@ -90,9 +90,8 @@ module.exports = {
     extensions: ['ts', 'tsx', '.js', '.json'],
     alias: {
       // src: path.resolve(__dirname, 'src/'),
-      components: path.resolve(__dirname, 'src/components/'),
-      scripts: path.resolve(__dirname, 'src/scripts'),
-      'react-emotion': path.resolve(__dirname, './no-prefix-emotion.js'),
+      components: path.resolve(__dirname, './src/components/'),
+      scripts: path.resolve(__dirname, './src/scripts'),
     },
   },
 };

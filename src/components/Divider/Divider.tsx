@@ -8,7 +8,7 @@ const Divider = (props) => {
 			backgroundColor: 'rgba(0, 0, 0, 0.12);'
 		};
 	}, []);
-	return <BaseElement tagName="hr" style={mainStyle} {...props} />;
+	return <BaseElement elementName="hr" style={mainStyle} {...props} />;
 };
 
 export default Divider;

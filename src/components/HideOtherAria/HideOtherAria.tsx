@@ -52,7 +52,7 @@ const HideOtherAria = ({ children, parent = document.body, active = true, ...pro
 	);
 
 	return (
-		<BaseElement tagName="div" _refer_={_ref_} _className_={'uc-hideOtherAria'} {...props}>
+		<BaseElement elementName="div" _refer_={_ref_} _className_={'uc-hideOtherAria'} {...props}>
 			{children}
 		</BaseElement>
 	);

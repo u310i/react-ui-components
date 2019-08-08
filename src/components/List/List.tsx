@@ -76,9 +76,9 @@ const ListGroup = ({ children, title, titleStyle: propTitleStyle, ...props }) =>
 	);
 
 	return (
-		<BaseElement tagName="li" _className_={$names.ucListGroup} {...props}>
+		<BaseElement elementName="li" _className_={$names.ucListGroup} {...props}>
 			{titleComponent}
-			<BaseElement tagName="ul">{children}</BaseElement>
+			<BaseElement elementName="ul">{children}</BaseElement>
 		</BaseElement>
 	);
 };
@@ -87,8 +87,8 @@ const ListGroup = ({ children, title, titleStyle: propTitleStyle, ...props }) =>
 
 const ListItem = ({ children, ...props }) => {
 	return (
-		<BaseElement tagName="li" _style_={$styles.item.main} {...props}>
-			<BaseElement tagName="div">{children}</BaseElement>
+		<BaseElement elementName="li" _style_={$styles.item.main} {...props}>
+			<BaseElement elementName="div">{children}</BaseElement>
 		</BaseElement>
 	);
 };

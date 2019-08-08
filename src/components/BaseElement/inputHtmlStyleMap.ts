@@ -23,4 +23,4 @@ export default {
   'datetime-local': style.inputTime_inputDate_inputDatetimeLocal_inputMonth,
   week: null,
   month: style.inputTime_inputDate_inputDatetimeLocal_inputMonth,
-} as const;
+} as any;

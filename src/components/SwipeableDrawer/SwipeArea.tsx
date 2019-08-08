@@ -19,7 +19,7 @@ const SwipeArea = ({ anchor, width, ...props }) => {
 		},
 		[ anchor, width ]
 	);
-	return <BaseElement tagName="div" _style_={_style_} _className_={$names.ucSwipeable_drawerArea} {...props} />;
+	return <BaseElement elementName="div" _style_={_style_} _className_={$names.ucSwipeable_drawerArea} {...props} />;
 };
 
 export default SwipeArea;

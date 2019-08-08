@@ -88,7 +88,7 @@ const FocusTrap = ({
 	});
 
 	return (
-		<BaseElement tagName="div" _style_={_style_} _className_="uc-focusTrap" _refer_={_ref_} {...props}>
+		<BaseElement elementName="div" _style_={_style_} _className_="uc-focusTrap" _refer_={_ref_} {...props}>
 			{children}
 		</BaseElement>
 	);

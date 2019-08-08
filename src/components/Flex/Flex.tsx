@@ -83,7 +83,7 @@ Flex.Item = ({ children, style: propStyle, order, flexGrow, flexShrink, flexBasi
 	if (flexBasis) style.flexBasis = flexBasis;
 	if (alignSelf) style.alignSelf = alignSelf;
 	return (
-		<BaseElement tagName="div" style={{ ...style, ...propStyle }} classNames={[ 'uc-flex-item' ]} {...props}>
+		<BaseElement elementName="div" style={{ ...style, ...propStyle }} classNames={[ 'uc-flex-item' ]} {...props}>
 			{children}
 		</BaseElement>
 	);

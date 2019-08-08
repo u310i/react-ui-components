@@ -44,7 +44,7 @@ const Backdrop = ({
 
 	return (
 		<TransitionComponent in={open} duration={duration} aria-hidden={true} {...transitionProps}>
-			<BaseElement tagName="div" _style_={_style_} _className_={$.names.ucBackdropInner} {...props}>
+			<BaseElement elementName="div" _style_={_style_} _className_={$.names.ucBackdropInner} {...props}>
 				{children}
 			</BaseElement>
 		</TransitionComponent>

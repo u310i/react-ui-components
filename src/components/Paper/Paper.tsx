@@ -20,7 +20,7 @@ const Paper = ({ children, elevation = 2, shape = 'default', ...props }) => {
 	);
 
 	return (
-		<BaseElement tagName="div" _style_={_style_} _className_={$names.ucPaper} {...props}>
+		<BaseElement elementName="div" _style_={_style_} _className_={$names.ucPaper} {...props}>
 			{children}
 		</BaseElement>
 	);

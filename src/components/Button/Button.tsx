@@ -112,7 +112,7 @@ const Button = ({
 			return (
 				lateUpdateStatus &&
 				hasClickEffect && (
-					<BaseElement tagName="div" key={lateUpdateStatus} aria-hidden={true} style={clickEffectStyle} />
+					<BaseElement elementName="div" key={lateUpdateStatus} aria-hidden={true} style={clickEffectStyle} />
 				)
 			);
 		},
@@ -121,7 +121,7 @@ const Button = ({
 
 	const loadingMaskComponent = React.useMemo(
 		() => {
-			return loading && <BaseElement tagName="div" aria-hidden={true} style={loadingMaskStyle} />;
+			return loading && <BaseElement elementName="div" aria-hidden={true} style={loadingMaskStyle} />;
 		},
 		[ loading ]
 	);
@@ -138,7 +138,7 @@ const Button = ({
 
 	return (
 		<BaseElement
-			tagName="button"
+			elementName="button"
 			style={style}
 			onClick={handleClick}
 			disabled={disable || loading}

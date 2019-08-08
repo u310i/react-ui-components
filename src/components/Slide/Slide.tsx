@@ -111,7 +111,7 @@ const Slide = ({
 			{(state, childProps) => {
 				return (
 					<BaseElement
-						tagName="div"
+						elementName="div"
 						_refer_={_ref_}
 						_style_={$styles.style}
 						_className_={$names.ucSlide}

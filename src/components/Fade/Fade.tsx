@@ -89,7 +89,7 @@ const Fade = ({
 			{(state, childProps) => {
 				return (
 					<BaseElement
-						tagName="div"
+						elementName="div"
 						_style_={$styles.style}
 						_className_={$names.ucFade}
 						_refer_={_ref_}

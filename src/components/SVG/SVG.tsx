@@ -20,8 +20,8 @@ const SVG = ({
 	style = {},
 	...props
 }) => {
-	const titleTag = title && <BaseElement tagName="title">{title}</BaseElement>;
-	const descTag = desc && <BaseElement tagName="desc">{desc}</BaseElement>;
+	const titleTag = title && <BaseElement elementName="title">{title}</BaseElement>;
+	const descTag = desc && <BaseElement elementName="desc">{desc}</BaseElement>;
 
 	props.role = role;
 	style.pointerEvents = $styles.pointerEvents;
@@ -38,8 +38,8 @@ const SVG = ({
 		innerProps = { transform: forInnerGroup, ...innerProps };
 
 		createGroupedComponent = (inner) => (
-			<BaseElement tagName="g" transform={forOuterGroup}>
-				<BaseElement tagName="g" transform={transform}>
+			<BaseElement elementName="g" transform={forOuterGroup}>
+				<BaseElement elementName="g" transform={transform}>
 					{inner}
 				</BaseElement>
 			</BaseElement>
@@ -48,19 +48,19 @@ const SVG = ({
 
 	const Path = path && <path {...innerProps} d={path} />;
 	const Tag = !path &&
-	tag && <BaseElement tagName="g" {...innerProps} dangerouslySetInnerHTML={{ __html: tag }} />;
+	tag && <BaseElement elementName="g" {...innerProps} dangerouslySetInnerHTML={{ __html: tag }} />;
 
 	const InnerComponent = transform ? createGroupedComponent(Path || Tag) : Path || Tag;
 
 	if (symbol) {
 		return (
 			<BaseElement
-				tagName="svg"
+				elementName="svg"
 				display={$styles.symbolDisplay}
 				xmlns={$styles.xmlns}
 				xmlnsXlink={$styles.xmlnsXlink}
 			>
-				<BaseElement tagName="symbol" viewBox={viewBox.join(' ')} {...props}>
+				<BaseElement elementName="symbol" viewBox={viewBox.join(' ')} {...props}>
 					{InnerComponent}
 				</BaseElement>
 			</BaseElement>
@@ -68,16 +68,16 @@ const SVG = ({
 	}
 	if (use) {
 		return (
-			<BaseElement tagName="svg" {...props} xmlns={$styles.xmlns} xmlnsXlink={$styles.xmlnsXlink}>
+			<BaseElement elementName="svg" {...props} xmlns={$styles.xmlns} xmlnsXlink={$styles.xmlnsXlink}>
 				{titleTag}
 				{descTag}
-				<BaseElement tagName="use" xlinkHref={xlinkHref} />
+				<BaseElement elementName="use" xlinkHref={xlinkHref} />
 			</BaseElement>
 		);
 	} else {
 		return (
 			<BaseElement
-				tagName="svg"
+				elementName="svg"
 				viewBox={viewBox.join(' ')}
 				{...props}
 				xmlns={$styles.xmlns}

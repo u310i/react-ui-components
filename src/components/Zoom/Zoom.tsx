@@ -81,7 +81,7 @@ const Zoom = ({
 			{(state, childProps) => {
 				return (
 					<BaseElement
-						tagName="div"
+						elementName="div"
 						_style_={$styles.style}
 						_className_={$names.ucZoom}
 						_refer_={_ref_}

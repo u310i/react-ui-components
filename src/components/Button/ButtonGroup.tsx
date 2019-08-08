@@ -54,7 +54,7 @@ const Group = ({
 	}
 	return (
 		<BaseElement
-			tagName="div"
+			elementName="div"
 			style={{ ...propStyle, ...nestedStyle }}
 			classNames={[ $.group.names.ucButtonGroup ]}
 		>

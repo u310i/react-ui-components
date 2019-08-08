@@ -108,14 +108,14 @@ const Collapse = ({
 			{(state, childProps) => {
 				return (
 					<BaseElement
-						tagName="div"
+						elementName="div"
 						_style_={$styles.outer.style}
 						_className_={$names.ucCollapse}
 						_refer_={_outerRef_}
 						{...childProps}
 					>
 						<BaseElement
-							tagName="div"
+							elementName="div"
 							_style_={$styles.inner.style}
 							_className_={$names.ucCollapseInner}
 							_refer_={_innerRef_}

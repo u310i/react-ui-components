@@ -1,14 +1,10 @@
 import * as React from 'react';
 import { jsx } from '@emotion/core';
 import { common as commonStyle } from './style';
-import elementStyleMap from './elementStyleMap';
-import inputElementStyleMap from './inputElementStyleMap';
+import htmlStyleMap from './htmlStyleMap';
+import inputHtmlStyleMap from './inputHtmlStyleMap';
 import { getElementRef } from 'scripts';
 import * as CSS from 'csstype';
-
-type Arias = {
-  [key: string]: string | boolean | number;
-};
 
 type Refer =
   | {
@@ -16,21 +12,14 @@ type Refer =
     }
   | ((element: any) => void);
 
-type ToUnion<T, K extends keyof T> = K extends keyof T ? T[K] : never;
-
-type InsertPropsWithKeysForToUnion<T> = ToUnion<T, keyof T>;
-
-type ReMakeElementTagNameMap<T, U> = {
-  [P in keyof U]: Omit<U[P], keyof T> & { tagName: P };
-};
-
-type MergeProps<T, U> = InsertPropsWithKeysForToUnion<
-  ReMakeElementTagNameMap<T, U>
-> &
-  Omit<T, 'tagName'>;
+type DefaultAttributes<U, K extends keyof U, T> = K extends keyof U
+  ? Omit<U[K], keyof T> & { elementName: K }
+  : never;
+type MergeProps<T, U> = Omit<T, 'elementName'> &
+  DefaultAttributes<U, keyof U, T>;
 
 type Props = {
-  tagName: keyof ElementTagNameMap;
+  elementName: keyof JSX.IntrinsicElements;
   type?: string;
   _style_?: CSS.Properties;
   style?: CSS.Properties;
@@ -40,16 +29,16 @@ type Props = {
   _id_?: string;
   ids?: string[];
   id?: string;
-  _arias_?: Arias;
-  arias?: Arias;
+  _arias_?: React.AriaAttributes;
+  arias?: React.AriaAttributes;
   _refer_?: Refer;
   refer?: Refer;
 };
 
-type BaseProps = Readonly<MergeProps<Props, ElementTagNameMap>>;
+type BaseProps = Readonly<MergeProps<Props, JSX.IntrinsicElements>>;
 
 const BaseElement: React.FC<BaseProps> = ({
-  tagName,
+  elementName,
   type,
   children,
   _style_,
@@ -69,12 +58,12 @@ const BaseElement: React.FC<BaseProps> = ({
   const style: CSS.Properties = React.useMemo(() => {
     return {
       ...commonStyle,
-      ...(elementStyleMap as any)[tagName],
-      ...(tagName === 'input' && type && (inputElementStyleMap as any)[type]),
+      ...htmlStyleMap[elementName],
+      ...(elementName === 'input' && type && inputHtmlStyleMap[type]),
       ..._style_,
       ...propStyle,
     };
-  }, [_style_, propStyle, tagName, type]);
+  }, [_style_, propStyle, elementName, type]);
 
   const className = React.useMemo(() => {
     return (
@@ -97,24 +86,21 @@ const BaseElement: React.FC<BaseProps> = ({
   }, [_id_, propIds, propId]);
 
   const arias = React.useMemo(() => {
-    const baseArias = {
+    return {
       ..._arias_,
       ...propArias,
-    } as any;
-    const arias = {} as any;
-    for (let key of Object.keys(baseArias)) {
-      arias[`aria-${key}`] = baseArias[key];
-    }
-    return arias;
+    } as React.AriaAttributes;
   }, [_arias_, propArias]);
 
+  // type Union<T, K> = K extends keyof T ? T[K] : never;
+  // type ToUnion<T> = Union<T, keyof T>;
   const refer = React.useCallback(element => {
     getElementRef<string>(propRefer, element);
     getElementRef(_refer_, element);
   }, []);
 
   return jsx(
-    tagName,
+    elementName,
     {
       type: type,
       css: style,

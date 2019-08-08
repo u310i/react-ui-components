@@ -124,14 +124,14 @@ const Sticky = ({
 
 	const innerComponent = (
 		<BaseElement
-			tagName="div"
+			elementName="div"
 			_refer_={_outerRef_}
 			_style_={_styles_.outer}
 			_className_={$names.ucSlideOuter}
 			{...outerProps}
 		>
 			<BaseElement
-				tagName="div"
+				elementName="div"
 				_refer_={_innerRef_}
 				_style_={_styles_.inner}
 				_className_={$names.ucSlideInner}
@@ -146,7 +146,7 @@ const Sticky = ({
 		<EventListener target={window} type="scroll" listener={setStickingState} optimized={true}>
 			{enableAbsolute ? (
 				<BaseElement
-					tagName="div"
+					elementName="div"
 					_style_={_styles_.absoluteWrapper}
 					_className_={$names.ucSlideAbsoluteWrapper}
 					{...absoluteWrapperProps}

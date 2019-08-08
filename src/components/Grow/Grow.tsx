@@ -116,7 +116,7 @@ const Grow = ({
 			{(state, childProps) => {
 				return (
 					<BaseElement
-						tagName="div"
+						elementName="div"
 						_style_={$styles.style}
 						_className_={$names.ucGrow}
 						_refer_={_ref_}

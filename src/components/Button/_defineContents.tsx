@@ -31,7 +31,7 @@ const defineContents = (children, between = true, loading) => {
       if (React.isValidElement(child) && typeof child === 'function' && child.type.name === 'Icon') {
         if (index === 0 && loading) return <LoadingIcon />
         item = (
-          <BaseElement tagName="i"
+          <BaseElement elementName="i"
             key={index}
             style={{ marginLeft: marginLeft }}
             className={$names.ucButtonIcon}
@@ -40,7 +40,7 @@ const defineContents = (children, between = true, loading) => {
         );
       } else {
         item = (
-          <BaseElement tagName="span"
+          <BaseElement elementName="span"
             key={index}
             style={{ marginLeft: marginLeft, ...spanStyle }}
             className={$names.ucButtonInner}
@@ -64,11 +64,11 @@ const defineContents = (children, between = true, loading) => {
       contents = loading ? (
         <LoadingIcon />
       ) : (
-        <BaseElement tagName="i" className={$names.ucButtonIcon} children={child} />
+        <BaseElement elementName="i" className={$names.ucButtonIcon} children={child} />
       );
     } else {
       contents = (
-        <BaseElement tagName="span"
+        <BaseElement elementName="span"
           style={spanStyle}
           className={$names.ucButtonInner}
           children={child}
