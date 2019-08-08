@@ -1,7 +1,7 @@
 import style from './style';
 import * as CSS from 'csstype';
 
-export default ({
+export default {
   section: null,
   nav: null,
   article: null,
@@ -137,6 +137,4 @@ export default ({
   summary: style.summary,
   command: null,
   menu: null,
-} as any) as {
-  [P in keyof JSX.IntrinsicElements]: CSS.Properties | null;
-};
+} as { [key: string]: CSS.Properties | null };

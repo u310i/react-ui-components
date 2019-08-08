@@ -1,4 +1,5 @@
 import style from './style';
+import * as CSS from 'csstype';
 
 export default {
   hidden: null,
@@ -23,4 +24,4 @@ export default {
   'datetime-local': style.inputTime_inputDate_inputDatetimeLocal_inputMonth,
   week: null,
   month: style.inputTime_inputDate_inputDatetimeLocal_inputMonth,
-} as any;
+} as { [key: string]: CSS.Properties | null };

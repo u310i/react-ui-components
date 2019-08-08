@@ -13,8 +13,9 @@ type Refer =
   | ((element: any) => void);
 
 type DefaultAttributes<U, K extends keyof U, T> = K extends keyof U
-  ? Omit<U[K], keyof T> & { elementName: K }
+  ? (Omit<U[K], keyof T> & { elementName: K })
   : never;
+
 type MergeProps<T, U> = Omit<T, 'elementName'> &
   DefaultAttributes<U, keyof U, T>;
 
