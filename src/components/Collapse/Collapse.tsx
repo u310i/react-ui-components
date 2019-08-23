@@ -1,133 +1,172 @@
 import React from 'react';
 import $ from './_constants';
-import { reflow, genTransitionProperty, genDurations, genEasings, setTransition } from 'scripts';
+import {
+  genTransitionProperty,
+  genDurations,
+  genEasings,
+  setTransition,
+} from 'scripts';
 import { CSSTransition, BaseElement } from '..';
 
 const $names = $.names;
-const $selectors = $.selectors;
 const $styles = $.styles;
 
-const Collapse = ({
-	in: inProp,
-	children,
-	duration = $styles.duration,
-	easing = $styles.easing,
-	collapsedHeight = $styles.collapsedHeight,
-	appear = true,
-	onEntering,
-	onEntered,
-	onExit,
-	onExiting,
-	onExited,
-	innerProps,
-	disableHideVisibility,
-	...props
+type Props = $Type.CreateProps<
+  {
+    duration?: $Type.Transition.Duration;
+    easing?: $Type.Transition.Easing;
+    collapsedHeight?: string;
+    innerProps?: $Type.IdentifiedBaseElementProps<'div'>;
+    disableHideVisibility?: boolean;
+  },
+  React.ComponentProps<typeof CSSTransition> &
+    $Type.IdentifiedBaseElementProps<'div'>
+>;
+
+const Collapse: React.FC<Props> = ({
+  in: inProp,
+  children,
+  duration = $styles.duration,
+  easing = $styles.easing,
+  collapsedHeight = $styles.collapsedHeight,
+  innerProps,
+  disableHideVisibility,
+  appear = true,
+  onEntering,
+  onEntered,
+  onExit,
+  onExiting,
+  onExited,
+  ...other
 }) => {
-	const _outerRef_ = React.useRef(null);
-	const _innerRef_ = React.useRef(null);
+  const _outerRef_ = React.useRef<null | HTMLElement>(null);
+  const _innerRef_ = React.useRef<null | HTMLElement>(null);
 
-	const [ durations, easings ] = React.useMemo(
-		() => {
-			return [ genDurations(duration), genEasings(easing) ];
-		},
-		[ duration, easing ]
-	);
+  const [durations, easings] = React.useMemo(() => {
+    return [genDurations(duration), genEasings(easing)];
+  }, [duration, easing]);
 
-	React.useLayoutEffect(() => {
-		const node = _outerRef_.current;
-		if (!appear && inProp) {
-			node.style.height = $styles.enteredHeight;
-			node.style.overflow = 'visible';
-		} else {
-			node.style.height = collapsedHeight;
-			node.style.overflow = 'hidden';
-			if (!disableHideVisibility) node.style.visibility = 'hidden';
-		}
-	}, []);
+  React.useLayoutEffect(() => {
+    const node = _outerRef_.current;
+    if (!node) return;
+    if (!appear && inProp) {
+      node.style.height = $styles.enteredHeight;
+      node.style.overflow = 'visible';
+    } else {
+      node.style.height = collapsedHeight;
+      node.style.overflow = 'hidden';
+      if (!disableHideVisibility) node.style.visibility = 'hidden';
+    }
+  }, []);
 
-	const handleEntering = React.useCallback(
-		(node) => {
-			setTransition(node, genTransitionProperty([ [ 'height', durations.enter, easings.enter ] ]));
-			node.style.height = `${_innerRef_.current.clientHeight}px`;
-			node.style.overflow = 'hidden';
-			if (!disableHideVisibility) node.style.visibility = null;
-			if (onEntering) onEntering(node, appearing);
-		},
-		[ onEntering ]
-	);
+  const handleEntering = React.useCallback(
+    (node: HTMLElement, appearing: boolean) => {
+      const [duration, easing] = appearing
+        ? [durations.appear, easings.appear]
+        : [durations.enter, easings.enter];
+      setTransition(
+        node,
+        genTransitionProperty([
+          {
+            property: 'height',
+            duration,
+            easing,
+          },
+        ])
+      );
+      if (!_innerRef_.current) return;
+      node.style.height = `${_innerRef_.current.clientHeight}px`;
+      node.style.overflow = 'hidden';
+      if (!disableHideVisibility) node.style.visibility = null;
+      if (onEntering) onEntering(node, appearing);
+    },
+    [onEntering]
+  );
 
-	const handleEntered = React.useCallback(
-		(node) => {
-			node.style.overflow = 'visible';
-			node.style.height = $styles.enteredHeight;
-			if (onEntered) onEntered(node, appearing);
-		},
-		[ onEntered ]
-	);
+  const handleEntered = React.useCallback(
+    (node: HTMLElement, appearing: boolean) => {
+      node.style.overflow = 'visible';
+      node.style.height = $styles.enteredHeight;
+      if (onEntered) onEntered(node, appearing);
+    },
+    [onEntered]
+  );
 
-	const handleExit = React.useCallback(
-		(node) => {
-			setTransition(node, genTransitionProperty([ [ 'height', durations.exit, easings.exit ] ]));
-			node.style.height = `${_outerRef_.current.clientHeight}px`;
-			node.style.overflow = 'hidden';
-			if (onExit) onExit(node);
-		},
-		[ onExit ]
-	);
+  const handleExit = React.useCallback(
+    (node: HTMLElement) => {
+      setTransition(
+        node,
+        genTransitionProperty([
+          {
+            property: 'height',
+            duration: durations.exit,
+            easing: easings.exit,
+          },
+        ])
+      );
+      node.style.height = `${node.current.clientHeight}px`;
+      node.style.overflow = 'hidden';
+      if (onExit) onExit(node);
+    },
+    [onExit]
+  );
 
-	const handleExiting = React.useCallback(
-		(node) => {
-			node.style.height = collapsedHeight;
-			if (onExiting) onExiting(node);
-		},
-		[ onExiting ]
-	);
+  const handleExiting = React.useCallback(
+    (node: HTMLElement) => {
+      node.style.height = collapsedHeight;
+      if (onExiting) onExiting(node);
+    },
+    [onExiting]
+  );
 
-	const handleExited = React.useCallback(
-		(node) => {
-			if (!disableHideVisibility) node.style.visibility = 'hidden';
-			if (onExited) onExited(node);
-		},
-		[ onExited ]
-	);
+  const handleExited = React.useCallback(
+    (node: HTMLElement) => {
+      if (!disableHideVisibility) node.style.visibility = 'hidden';
+      if (onExited) onExited(node);
+    },
+    [onExited]
+  );
 
-	return (
-		<CSSTransition
-			disableClassing={true}
-			lazyAppear={true}
-			appear={appear}
-			in={inProp}
-			timeout={durations}
-			onEntering={handleEntering}
-			onEntered={handleEntered}
-			onExit={handleExit}
-			onExiting={handleExiting}
-			onExited={handleExited}
-			{...props}
-		>
-			{(state, childProps) => {
-				return (
-					<BaseElement
-						elementName="div"
-						_style_={$styles.outer.style}
-						_className_={$names.ucCollapse}
-						_refer_={_outerRef_}
-						{...childProps}
-					>
-						<BaseElement
-							elementName="div"
-							_style_={$styles.inner.style}
-							_className_={$names.ucCollapseInner}
-							_refer_={_innerRef_}
-							{...innerProps}
-						>
-							{children}
-						</BaseElement>
-					</BaseElement>
-				);
-			}}
-		</CSSTransition>
-	);
+  return (
+    <CSSTransition
+      disableClassing={true}
+      lazyAppear={true}
+      appear={appear}
+      in={inProp}
+      timeout={durations}
+      onEntering={handleEntering}
+      onEntered={handleEntered}
+      onExit={handleExit}
+      onExiting={handleExiting}
+      onExited={handleExited}
+      {...other}
+    >
+      {(
+        state: $Type.Transition.TransitionStatus,
+        childProps: { [prop: string]: any }
+      ) => {
+        return (
+          <BaseElement
+            elementName="div"
+            _style_={$styles.outer.style}
+            _className_={$names.ucCollapse}
+            _refer_={_outerRef_}
+            {...childProps}
+          >
+            <BaseElement
+              elementName="div"
+              _style_={$styles.inner.style}
+              _className_={$names.ucCollapseInner}
+              _refer_={_innerRef_}
+              {...innerProps}
+            >
+              {children}
+            </BaseElement>
+          </BaseElement>
+        );
+      }}
+    </CSSTransition>
+  );
 };
 
 export default Collapse;

@@ -6,24 +6,26 @@ import { BaseElement } from '..';
 const $names = $.names;
 const $styles = $.styles;
 
-const Paper = ({ children, elevation = 2, shape = 'default', ...props }) => {
-	const _style_ = React.useMemo(
-		() => {
-			return {
-				...$styles.style,
-				borderRadius: $.shape[shape],
-				boxShadow: $.shadow[elevation],
-				backgroundColor: $.color
-			};
-		},
-		[ shape, elevation ]
-	);
+const Paper = ({ children, elevation = 2, shape = 'default', ...other }) => {
+  const _style_ = React.useMemo(() => {
+    return {
+      ...$styles.style,
+      borderRadius: $.shape[shape],
+      boxShadow: $.shadow[elevation],
+      backgroundColor: $.color,
+    };
+  }, [shape, elevation]);
 
-	return (
-		<BaseElement elementName="div" _style_={_style_} _className_={$names.ucPaper} {...props}>
-			{children}
-		</BaseElement>
-	);
+  return (
+    <BaseElement
+      elementName="div"
+      _style_={_style_}
+      _className_={$names.ucPaper}
+      {...other}
+    >
+      {children}
+    </BaseElement>
+  );
 };
 
 export default Paper;

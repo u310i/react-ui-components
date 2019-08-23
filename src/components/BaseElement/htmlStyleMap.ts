@@ -137,4 +137,4 @@ export default {
   summary: style.summary,
   command: null,
   menu: null,
-} as { [key: string]: CSS.Properties | null };
+} as any;

@@ -1,45 +1,3 @@
-import { fromCamelCase, isNumber } from '.';
-
-import { keyframes as emotionKeyframes } from '@emotion/core';
-
-export const keyframes = emotionKeyframes;
-
-export const reflow = node => node.scrollTop;
-
-export const getFontSize = data => {
-  if (isNumber(data)) return `${Math.round(data * 100) / 100}px`;
-  if (typeof data !== 'string') return '1em';
-  switch (data) {
-    case 'xs':
-      return '.75em';
-    case 'sm':
-      return '.875em';
-    case 'lg':
-      return '1.33333em';
-    default:
-      const match = data.match(/^([2-9]|10)x$/);
-      if (match) {
-        return `${match[1]}em`;
-      }
-      return data;
-  }
-};
-
-export const genTransitionProperty = propsList => {
-  let transitionProp = [];
-  for (let props of propsList) {
-    transitionProp.push(
-      [
-        props[0] ? props[0] : 'all',
-        props[1] ? `${props[1]}ms` : '0ms',
-        props[2] && props[2],
-        props[3] && `${props[3]}ms`,
-      ].join(' ')
-    );
-  }
-  return transitionProp.join(', ');
-};
-
 // export const genTransitionProperty = (style) => {
 // 	return Object.keys(style)
 // 		.map((value) => {
@@ -125,21 +83,6 @@ export const genTransitionProperty = propsList => {
 // 		}
 // 	};
 // };
-
-export const genDurations = duration => {
-  return {
-    enter: duration.enter || duration.exit || duration,
-    exit: duration.exit || duration.enter || duration,
-    appear: duration.appear || null,
-  };
-};
-
-export const genEasings = easing => {
-  return {
-    enter: easing.enter || easing.exit || easing,
-    exit: easing.exit || easing.enter || easing,
-  };
-};
 
 // export const getTranslateFromComputedStyle = (node) => {
 // 	const rect = node.getBoundingClientRect();

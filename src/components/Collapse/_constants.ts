@@ -1,36 +1,30 @@
-import $ from 'components/_constants';
+import $ from '../_constants';
 import { createComponentConstants, getComponentConstants } from 'scripts';
 
 const name = 'collapse';
 
-const $tSelectors = $.selectors.transition;
-
 const constants = {
-	names: {
-		ucCollapse: 'uc-collapse',
-		ucCollapseInner: 'uc-collapse-inner'
-	},
-	selectors: {
-		enters: $tSelectors.enters,
-		exit: $tSelectors.exit
-	},
-	styles: {
-		duration: $.props.transitionDuration,
-		easing: $.props.transitionEasing,
-		enteredHeight: 'auto',
-		collapsedHeight: '0px',
-		outer: {
-			style: {
-				position: 'relative'
-			}
-		},
-		inner: {
-			style: {
-				// alternative to "width: fit-content"
-				display: 'table'
-			}
-		}
-	}
+  names: {
+    ucCollapse: 'uc-collapse',
+    ucCollapseInner: 'uc-collapse-inner',
+  },
+  styles: {
+    duration: $.transition.duration,
+    easing: $.transition.easing,
+    enteredHeight: 'auto',
+    collapsedHeight: '0px',
+    outer: {
+      style: {
+        position: 'relative',
+      },
+    },
+    inner: {
+      style: {
+        // alternative to "width: fit-content"
+        display: 'table',
+      },
+    },
+  },
 };
 
 createComponentConstants(constants, name);

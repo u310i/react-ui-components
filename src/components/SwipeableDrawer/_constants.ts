@@ -1,4 +1,4 @@
-import $ from 'components/_constants';
+import $ from '../_constants';
 import { createComponentConstants, getComponentConstants } from 'scripts';
 
 const name = 'swipeable_drawer';
@@ -47,7 +47,7 @@ const constants = {
 				}
 			}
 		},
-		// duration: $.props.transitionDuration,
+		// duration: $.transition.duration,
 		duration: {
 			enter: 195,
 			exit: 225

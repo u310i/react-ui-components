@@ -10,29 +10,28 @@ import {} from '..';
 // 	return state;
 // };
 
-export const useLateUpdate = (timeout) => {
-	const [ lateUpdateStatus, update ] = React.useState(0);
-	const timeoutId = React.useRef(null);
+export const useForceUpdate = (() => React.useState()[1]) as () => () => void;
 
-	const lateUpdate = React.useCallback(
-		() => {
-			if (timeoutId.current !== null) clearTimeout(timeoutId.current);
-			timeoutId.current = setTimeout(() => {
-				update(0);
-				timeoutId.current = null;
-			}, timeout);
-			update((prev) => {
-				return !prev || prev === 2 ? 1 : 2;
-			});
-		},
-		[ timeout ]
-	);
+export const useLateUpdate = timeout => {
+  const [lateUpdateStatus, update] = React.useState(0);
+  const timeoutId = React.useRef(null);
 
-	React.useEffect(() => {
-		return () => {
-			clearTimeout(timeoutId.current);
-		};
-	});
+  const lateUpdate = React.useCallback(() => {
+    if (timeoutId.current !== null) clearTimeout(timeoutId.current);
+    timeoutId.current = setTimeout(() => {
+      update(0);
+      timeoutId.current = null;
+    }, timeout);
+    update(prev => {
+      return !prev || prev === 2 ? 1 : 2;
+    });
+  }, [timeout]);
 
-	return [ lateUpdateStatus, lateUpdate ];
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(timeoutId.current);
+    };
+  });
+
+  return [lateUpdateStatus, lateUpdate];
 };

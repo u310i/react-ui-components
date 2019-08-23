@@ -1,27 +1,36 @@
 import { deepMergeOverrideArray } from '..';
 
-let globalConstants = {};
-
-export const createAppConstants = (constants) => {
-	globalConstants = constants;
+type Constants = {
+  [key: string]: any;
 };
 
-let pageConstants = {};
+let globalConstants: Constants;
 
-export const createPageConstants = (constants) => {
-	pageConstants = deepMergeOverrideArray(constants, globalConstants);
+export const createAppConstants = (constants: Constants) => {
+  globalConstants = constants;
 };
 
-const componentConstants = {};
-
-export const createComponentConstants = (constants, type) => {
-	if (pageConstants[type]) {
-		componentConstants[type] = deepMergeOverrideArray(constants, pageConstants[type]);
-	} else {
-		componentConstants[type] = constants;
-	}
+let pageConstants: Constants;
+export const createPageConstants = (constants: Constants) => {
+  pageConstants = deepMergeOverrideArray(constants, globalConstants);
 };
 
-export const getComponentConstants = (type) => {
-	return componentConstants[type] || {};
+const componentConstants: Constants = {};
+
+export const createComponentConstants = (
+  constants: Constants,
+  type: string
+) => {
+  if (pageConstants[type]) {
+    componentConstants[type] = deepMergeOverrideArray(
+      constants,
+      pageConstants[type]
+    );
+  } else {
+    componentConstants[type] = constants;
+  }
+};
+
+export const getComponentConstants = (type: string) => {
+  return componentConstants[type] || {};
 };

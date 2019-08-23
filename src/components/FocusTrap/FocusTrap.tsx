@@ -1,5 +1,5 @@
 import React from 'react';
-import { focusTrap as CreateFocusTrap, getElementRef } from 'scripts';
+import CreateFocusTrap from './focusTrap';
 import { BaseElement } from '..';
 
 // https://github.com/davidtheclark/focus-trap-react
@@ -10,88 +10,116 @@ import { BaseElement } from '..';
 // captures the previouslyFocusedElement in componentWillMount,
 // then (optionally) returns focus to it in componentWillUnmount.
 
-const FocusTrap = ({
-	children,
-	active = true,
-	paused = false,
-	onActivate,
-	onDeactivate,
-	initialFocus,
-	fallbackFocus,
-	disableRestoreFocus = false,
-	disableEscapeKeyDown = true,
-	disableOutsideClick = true,
-	disablePointerEvents = false,
-	...props
+type Props = $Type.CreateProps<
+  {
+    active?: boolean;
+    paused?: boolean;
+    onActivate?: () => void;
+    onDeactivate?: () => void;
+    initialFocus?: $Type.Components.FocusTrap.Target;
+    fallbackFocus?: $Type.Components.FocusTrap.Target;
+    disableRestoreFocus?: boolean;
+    disableEscapeKeyDown?: boolean;
+    disableOutsideClick?: boolean;
+    disablePointerEvents?: boolean;
+  },
+  $Type.IdentifiedBaseElementProps<'div'>
+>;
+
+const FocusTrap: React.FC<Props> = ({
+  children,
+  active = true,
+  paused = false,
+  onActivate,
+  onDeactivate,
+  initialFocus,
+  fallbackFocus,
+  disableRestoreFocus = false,
+  disableEscapeKeyDown = true,
+  disableOutsideClick = true,
+  disablePointerEvents = false,
+  ...other
 }) => {
-	const _ref_ = React.useRef(null);
-	const tailoredOptions = {
-		onActivate,
-		onDeactivate,
-		initialFocus,
-		fallbackFocus,
-		returnFocusOnDeactivate: false,
-		escapeDeactivates: !disableEscapeKeyDown,
-		clickOutsideDeactivates: !disableOutsideClick
-	};
+  const _ref_ = React.useRef(null);
+  const focusTrapOptions = {
+    onActivate,
+    onDeactivate,
+    initialFocus,
+    fallbackFocus,
+    returnFocusOnDeactivate: false,
+    disableEscapeKeyDown,
+    disableOutsideClick,
+  };
 
-	const focusTrapRef = React.useRef(null);
-	const previouslyFocusedElementRef = React.useRef(document.activeElement);
-	const prevActiveRef = React.useRef(null);
-	const prevPausedRef = React.useRef(null);
+  const focusTrapRef = React.useRef<$Type.Components.FocusTrap.Instance | null>(
+    null
+  );
+  const previouslyFocusedElementRef = React.useRef<HTMLElement | null>(null);
+  const prevActiveRef = React.useRef<boolean | null>(null);
+  const prevPausedRef = React.useRef<boolean | null>(null);
 
-	React.useEffect(
-		() => {
-			if (focusTrapRef.current === null) {
-				focusTrapRef.current = CreateFocusTrap(_ref_.current, tailoredOptions);
-			}
-			const focusTrap = focusTrapRef.current;
-			if (prevActiveRef.current === null) {
-				if (active) focusTrap.activate();
-				if (paused) focusTrap.paused();
-			} else {
-				if (prevActiveRef.current && !active) {
-					const returnFocus = !disableRestoreFocus || false;
-					focusTrap.deactivate({ returnFocus });
-				} else if (!prevActiveRef.current && active) {
-					focusTrap.activate();
-				}
+  const deactivate = React.useCallback((disableRestoreFocus: boolean) => {
+    focusTrapRef.current && focusTrapRef.current.deactivate();
+    if (
+      !disableRestoreFocus &&
+      previouslyFocusedElementRef.current &&
+      previouslyFocusedElementRef.current.focus
+    ) {
+      previouslyFocusedElementRef.current.focus();
+      previouslyFocusedElementRef.current = null;
+    }
+  }, []);
 
-				if (prevPausedRef.current && !paused) {
-					focusTrap.unpause();
-				} else if (!prevPausedRef.current && paused) {
-					focusTrap.paused();
-				}
-			}
+  React.useEffect(() => {
+    if (previouslyFocusedElementRef.current === null) {
+      previouslyFocusedElementRef.current = document.activeElement as HTMLElement;
+    }
+    if (focusTrapRef.current === null) {
+      focusTrapRef.current = CreateFocusTrap(_ref_.current, focusTrapOptions);
+    }
+    const focusTrap = focusTrapRef.current;
+    if (prevActiveRef.current === null) {
+      if (active) focusTrap.activate();
+      if (paused) focusTrap.pause();
+    } else {
+      if (prevActiveRef.current && !active) {
+        deactivate(disableRestoreFocus);
+      } else if (!prevActiveRef.current && active) {
+        focusTrap.activate();
+      }
 
-			prevActiveRef.current = active;
-			prevPausedRef.current = paused;
+      if (prevPausedRef.current && !paused) {
+        focusTrap.unpause();
+      } else if (!prevPausedRef.current && paused) {
+        focusTrap.pause();
+      }
+    }
 
-			return () => {
-				focusTrap.deactivate();
-				if (
-					!disableRestoreFocus &&
-					previouslyFocusedElementRef.current &&
-					previouslyFocusedElementRef.current.focus
-				) {
-					previouslyFocusedElementRef.current.focus();
-				}
-			};
-		},
-		[ active, paused ]
-	);
+    prevActiveRef.current = active;
+    prevPausedRef.current = paused;
 
-	const _style_ = React.useMemo(() => {
-		return {
-			pointerEvents: disablePointerEvents ? 'none' : 'auto'
-		};
-	});
+    return () => {
+      deactivate(disableRestoreFocus);
+    };
+  }, [active, paused]);
 
-	return (
-		<BaseElement elementName="div" _style_={_style_} _className_="uc-focusTrap" _refer_={_ref_} {...props}>
-			{children}
-		</BaseElement>
-	);
+  const _style_ = React.useMemo(() => {
+    return {
+      pointerEvents: disablePointerEvents ? 'none' : 'auto',
+    } as const;
+  }, [disablePointerEvents]);
+
+  return (
+    <BaseElement
+      elementName="div"
+      _style_={_style_}
+      _className_="uc-focusTrap"
+      _refer_={_ref_}
+      {...other}
+    >
+      {children}
+    </BaseElement>
+  );
 };
 
 export default FocusTrap;

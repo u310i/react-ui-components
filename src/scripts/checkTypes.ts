@@ -19,24 +19,24 @@
 const posinf = Number.POSITIVE_INFINITY;
 const neginf = Number.NEGATIVE_INFINITY;
 
-export const isNumber = (data) => {
-	return typeof data === 'number' && data > neginf && data < posinf;
+export const isNumber = (data: any): data is number => {
+  return typeof data === 'number' && data > neginf && data < posinf;
 };
 
 // export const isNaN = (data) => {
 // 	return Number.isNaN(data);
 // };
 
-export const isInteger = (data) => {
-	return typeof data === 'number' && data % 1 === 0;
+export const isInteger = (data: any): boolean => {
+  return typeof data === 'number' && data % 1 === 0;
 };
 
-export const isEven = (data) => {
-	return typeof data === 'number' && data % 2 === 0;
+export const isEven = (data: any): boolean => {
+  return typeof data === 'number' && data % 2 === 0;
 };
 
-export const isOdd = (data) => {
-	return isInteger(data) && data % 2 !== 0;
+export const isOdd = (data: any): boolean => {
+  return isInteger(data) && data % 2 !== 0;
 };
 
 // export const isString = (data) => {
@@ -55,16 +55,16 @@ export const isOdd = (data) => {
 // 	return typeof data === 'function';
 // };
 
-const instanceStrict = (data, prototype) => {
-	try {
-		return data instanceof prototype;
-	} catch (error) {
-		return false;
-	}
+const instanceStrict = (data: any, prototype: any): boolean => {
+  try {
+    return data instanceof prototype;
+  } catch (error) {
+    return false;
+  }
 };
 
-export const isDate = (data) => {
-	return instanceStrict(data, Date) && isInteger(data.getTime());
+export const isDate = (data: any): data is Date => {
+  return instanceStrict(data, Date) && isInteger(data.getTime());
 };
 
 // export const isReact = (data) => {

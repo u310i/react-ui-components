@@ -6,21 +6,7 @@ import inputHtmlStyleMap from './inputHtmlStyleMap';
 import { getElementRef } from 'scripts';
 import * as CSS from 'csstype';
 
-type Refer =
-  | {
-      current: null | any;
-    }
-  | ((element: any) => void);
-
-type DefaultAttributes<U, K extends keyof U, T> = K extends keyof U
-  ? (Omit<U[K], keyof T> & { elementName: K })
-  : never;
-
-type MergeProps<T, U> = Omit<T, 'elementName'> &
-  DefaultAttributes<U, keyof U, T>;
-
-type Props = {
-  elementName: keyof JSX.IntrinsicElements;
+type ComponentProps<T = JSX.IntrinsicElements> = Readonly<{
   type?: string;
   _style_?: CSS.Properties;
   style?: CSS.Properties;
@@ -32,13 +18,35 @@ type Props = {
   id?: string;
   _arias_?: React.AriaAttributes;
   arias?: React.AriaAttributes;
-  _refer_?: Refer;
-  refer?: Refer;
-};
+  _refer_?: $Type.Refer;
+  refer?: $Type.Refer;
+  // _refer_?: $Type.Refer<T[keyof T]>;
+  // refer?: $Type.Refer<T[keyof T]>;
+}>;
 
-type BaseProps = Readonly<MergeProps<Props, JSX.IntrinsicElements>>;
+type IntrinsicElementsPropsAddElementName<
+  T,
+  U,
+  K extends keyof U
+> = K extends keyof U ? ({ elementName: K } & T & Omit<U[K], keyof T>) : never;
 
-const BaseElement: React.FC<BaseProps> = ({
+type Props = Readonly<
+  IntrinsicElementsPropsAddElementName<
+    ComponentProps,
+    JSX.IntrinsicElements,
+    keyof JSX.IntrinsicElements
+  >
+>;
+
+declare global {
+  namespace $Type {
+    type IdentifiedBaseElementProps<
+      K extends keyof JSX.IntrinsicElements
+    > = ComponentProps & Readonly<JSX.IntrinsicElements[K]>;
+  }
+}
+
+const BaseElement: React.FC<Props> = ({
   elementName,
   type,
   children,
@@ -93,10 +101,8 @@ const BaseElement: React.FC<BaseProps> = ({
     } as React.AriaAttributes;
   }, [_arias_, propArias]);
 
-  // type Union<T, K> = K extends keyof T ? T[K] : never;
-  // type ToUnion<T> = Union<T, keyof T>;
-  const refer = React.useCallback(element => {
-    getElementRef<string>(propRefer, element);
+  const refer = React.useCallback((element: Element) => {
+    getElementRef(propRefer, element);
     getElementRef(_refer_, element);
   }, []);
 

@@ -11,6 +11,13 @@ type TagPropsTest = {
   };
 };
 
+type aaa = {
+  a1: string;
+  a2?: number;
+  c1: string;
+};
+type test = aaa[keyof aaa];
+
 type PropsTest = {
   tagName: keyof TagPropsTest;
   c1: string;
@@ -26,6 +33,17 @@ type MergePropsTest<T, U> = Omit<T, 'tagName'> &
 
 // type Test1<U, K, T> = K extends keyof U ? U[K] : never;
 // type PropsType = Props & Test1<TagProps, keyof TagProps, Props>;
+type Test3<T, K> = K extends K ? (K extends { tagName: T } ? K : never) : never;
+type Test2<T extends keyof TagPropsTest, U> = Test3<T, U>;
+type Test = Test2<'tagProps1', MergePropsTest<PropsTest, TagPropsTest>>;
+
+const testProps: Test = {
+  tagName: 'tagProps1' as const,
+  a1: 'string',
+  a2: 'string',
+  c1: 'string',
+  c2: 'string',
+};
 
 const component = (obj: MergePropsTest<PropsTest, TagPropsTest>) => {
   console.log(obj.c1);
