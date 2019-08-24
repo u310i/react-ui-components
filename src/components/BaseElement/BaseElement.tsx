@@ -6,10 +6,10 @@ import inputHtmlStyleMap from './inputHtmlStyleMap';
 import { getElementRef } from 'scripts';
 import * as CSS from 'csstype';
 
-type ComponentProps<T = JSX.IntrinsicElements> = Readonly<{
+type Props = Readonly<{
   type?: string;
-  _style_?: CSS.Properties;
-  style?: CSS.Properties;
+  _style_?: React.CSSProperties;
+  style?: React.CSSProperties;
   _className_?: string;
   classNames?: string[];
   className?: string;
@@ -20,29 +20,12 @@ type ComponentProps<T = JSX.IntrinsicElements> = Readonly<{
   arias?: React.AriaAttributes;
   _refer_?: $Type.Refer;
   refer?: $Type.Refer;
-  // _refer_?: $Type.Refer<T[keyof T]>;
-  // refer?: $Type.Refer<T[keyof T]>;
+  elementName: keyof JSX.IntrinsicElements;
 }>;
-
-type IntrinsicElementsPropsAddElementName<
-  T,
-  U,
-  K extends keyof U
-> = K extends keyof U ? ({ elementName: K } & T & Omit<U[K], keyof T>) : never;
-
-type Props = Readonly<
-  IntrinsicElementsPropsAddElementName<
-    ComponentProps,
-    JSX.IntrinsicElements,
-    keyof JSX.IntrinsicElements
-  >
->;
 
 declare global {
   namespace $Type {
-    type IdentifiedBaseElementProps<
-      K extends keyof JSX.IntrinsicElements
-    > = ComponentProps & Readonly<JSX.IntrinsicElements[K]>;
+    type BaseElementProps = Partial<Props>;
   }
 }
 
@@ -71,7 +54,7 @@ const BaseElement: React.FC<Props> = ({
       ...(elementName === 'input' && type && inputHtmlStyleMap[type]),
       ..._style_,
       ...propStyle,
-    };
+    } as const;
   }, [_style_, propStyle, elementName, type]);
 
   const className = React.useMemo(() => {

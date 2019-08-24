@@ -12,7 +12,11 @@ import { CSSTransition, BaseElement } from '..';
 const $names = $.names;
 const $styles = $.styles;
 
-const getExitedTranslateValue = (node, direction, gutter) => {
+const getExitedTranslateValue = (
+  node: HTMLElement,
+  direction: Direction,
+  gutter: number
+) => {
   const rect = node.getBoundingClientRect();
 
   const computedStyle = window.getComputedStyle(node);
@@ -44,16 +48,17 @@ const getExitedTranslateValue = (node, direction, gutter) => {
   }
 };
 
+type Direction = 'left' | 'right' | 'up' | 'down';
 type Props = $Type.CreateProps<
   {
     duration?: $Type.Transition.Duration;
     easing?: $Type.Transition.Easing;
-    direction?: 'left' | 'right' | 'up' | 'down';
+    direction?: Direction;
     gutter?: number;
     disableHideVisibility?: boolean;
   },
-  React.ComponentProps<typeof CSSTransition> &
-    $Type.IdentifiedBaseElementProps<'div'>
+  typeof BaseElement,
+  $Type.Transition.TransitionProps
 >;
 
 const Slide: React.FC<Props> = ({
@@ -79,6 +84,7 @@ const Slide: React.FC<Props> = ({
 
   React.useLayoutEffect(() => {
     const node = _ref_.current;
+    if (!node) return;
     if (!appear && inProp) {
       setTransform(node, $styles.enteredTranslate);
     } else {
@@ -90,9 +96,18 @@ const Slide: React.FC<Props> = ({
 
   const handleEntering = React.useCallback(
     (node: HTMLElement, appearing: boolean) => {
+      const [duration, easing] = appearing
+        ? [durations.appear, easings.appear]
+        : [durations.enter, easings.enter];
       setTransition(
         node,
-        genTransitionProperty([['transform', durations.enter, easings.enter]])
+        genTransitionProperty([
+          {
+            property: 'transform',
+            duration,
+            easing,
+          },
+        ])
       );
       setTransform(node, $styles.enteredTranslate);
       if (!disableHideVisibility) node.style.visibility = null;
@@ -105,7 +120,13 @@ const Slide: React.FC<Props> = ({
     (node: HTMLElement) => {
       setTransition(
         node,
-        genTransitionProperty([['transform', durations.exit, easings.exit]])
+        genTransitionProperty([
+          {
+            property: 'transform',
+            duration: durations.exit,
+            easing: easings.exit,
+          },
+        ])
       );
       const translate = getExitedTranslateValue(node, direction, gutter);
       setTransform(node, translate);
@@ -135,8 +156,8 @@ const Slide: React.FC<Props> = ({
       {...other}
     >
       {(
-        state: $Type.Transition.TransitionStatus,
-        childProps: { [prop: string]: any }
+        state: $Type.Transition.childStatus,
+        childProps: $Type.BaseElementProps
       ) => {
         return (
           <BaseElement
@@ -145,7 +166,6 @@ const Slide: React.FC<Props> = ({
             _style_={$styles.style}
             _className_={$names.ucSlide}
             {...childProps}
-            identifier={'slide'}
           >
             {children}
           </BaseElement>

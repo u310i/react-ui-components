@@ -16,11 +16,11 @@ type Props = $Type.CreateProps<
     duration?: $Type.Transition.Duration;
     easing?: $Type.Transition.Easing;
     collapsedHeight?: string;
-    innerProps?: $Type.IdentifiedBaseElementProps<'div'>;
+    innerProps?: JSX.IntrinsicElements['div'];
     disableHideVisibility?: boolean;
   },
-  React.ComponentProps<typeof CSSTransition> &
-    $Type.IdentifiedBaseElementProps<'div'>
+  typeof BaseElement,
+  $Type.Transition.TransitionProps
 >;
 
 const Collapse: React.FC<Props> = ({
@@ -104,7 +104,7 @@ const Collapse: React.FC<Props> = ({
           },
         ])
       );
-      node.style.height = `${node.current.clientHeight}px`;
+      node.style.height = `${node.clientHeight}px`;
       node.style.overflow = 'hidden';
       if (onExit) onExit(node);
     },
@@ -142,8 +142,8 @@ const Collapse: React.FC<Props> = ({
       {...other}
     >
       {(
-        state: $Type.Transition.TransitionStatus,
-        childProps: { [prop: string]: any }
+        state: $Type.Transition.childStatus,
+        childProps: $Type.BaseElementProps
       ) => {
         return (
           <BaseElement

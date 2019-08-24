@@ -12,13 +12,13 @@ import {} from '..';
 
 export const useForceUpdate = (() => React.useState()[1]) as () => () => void;
 
-export const useLateUpdate = timeout => {
+export const useLateUpdate = (timeout: number) => {
   const [lateUpdateStatus, update] = React.useState(0);
-  const timeoutId = React.useRef(null);
+  const timeoutId = React.useRef<null | number>(null);
 
   const lateUpdate = React.useCallback(() => {
     if (timeoutId.current !== null) clearTimeout(timeoutId.current);
-    timeoutId.current = setTimeout(() => {
+    timeoutId.current = window.setTimeout(() => {
       update(0);
       timeoutId.current = null;
     }, timeout);
@@ -29,7 +29,7 @@ export const useLateUpdate = timeout => {
 
   React.useEffect(() => {
     return () => {
-      clearTimeout(timeoutId.current);
+      timeoutId.current && clearTimeout(timeoutId.current);
     };
   });
 

@@ -16,11 +16,11 @@ const $styles = $.styles;
 const enteredScale = $styles.enteredScale;
 const exitedScale = `scale(${$styles.scaleXRatio}, ${$styles.scaleYRatio})`;
 
-const setExitedOpacity = node => {
+const setExitedOpacity = (node: HTMLElement) => {
   node.style.opacity = $styles.exitedOpacity;
 };
 
-const setEnteredOpacity = node => {
+const setEnteredOpacity = (node: HTMLElement) => {
   node.style.opacity = $styles.enteredOpacity;
 };
 
@@ -30,8 +30,8 @@ type Props = $Type.CreateProps<
     easing?: $Type.Transition.Easing;
     disableHideVisibility?: boolean;
   },
-  React.ComponentProps<typeof CSSTransition> &
-    $Type.IdentifiedBaseElementProps<'div'>
+  typeof BaseElement,
+  $Type.Transition.TransitionProps
 >;
 
 const Grow: React.FC<Props> = ({
@@ -139,8 +139,8 @@ const Grow: React.FC<Props> = ({
       {...other}
     >
       {(
-        state: $Type.Transition.TransitionStatus,
-        childProps: { [prop: string]: any }
+        state: $Type.Transition.childStatus,
+        childProps: $Type.BaseElementProps
       ) => {
         return (
           <BaseElement

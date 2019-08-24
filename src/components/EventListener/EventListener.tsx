@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { getNode, addEventListener, createOptimizedEvent } from 'scripts';
 
-type Props = Readonly<{
+type Props = $Type.CreateProps<{
   target: Element;
   type: string;
   listener: EventListener;

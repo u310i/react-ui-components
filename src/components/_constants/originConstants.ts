@@ -26,8 +26,8 @@ const selectors = {
     lastChild: '& > :last-child',
     notFirstChild: '& > :not(:first-child)',
     notLastChild: '& > :not(:last-child)',
-    nthChild: n => `& > :nth-child(${n})`,
-    notNthChild: n => `& > :not(:nth-child(${n}))`,
+    nthChild: (n: number) => `& > :nth-child(${n})`,
+    notNthChild: (n: number) => `& > :not(:nth-child(${n}))`,
   },
   transition: {
     appear: appear,

@@ -3,22 +3,24 @@ import $ from './_constants';
 import {} from 'scripts';
 import { Fade, BaseElement } from '..';
 
-type Props<T extends React.FC<any>> = $Type.CreateProps<
+const $styles = $.styles;
+
+type Props<
+  T1 = $Type.BaseElementProps & $Type.Transition.TransitionProps
+> = $Type.CreateProps<
   {
     open: boolean;
     disablePointerEvents?: boolean;
-    duration?: $Type.Constants.Transition.Duration;
+    duration?: $Type.Transition.Duration;
     invisible?: boolean;
-    TransitionComponent?: T;
-    transitionProps?: React.ComponentProps<T>;
+    TransitionComponent?: React.FC<T1>;
+    transitionProps?: T1;
   },
-  $Type.IdentifiedBaseElementProps<'div'>
+  typeof BaseElement
 >;
 
-const $styles = $.styles;
-
 const Backdrop: React.FC<Props> = ({
-  children = null,
+  children,
   open = true,
   disablePointerEvents = false,
   duration = $styles.duration,
@@ -41,14 +43,17 @@ const Backdrop: React.FC<Props> = ({
       return {
         style: {
           ...$styles.transition.style,
-          ...propTransitionProps.style,
+          ...(propTransitionProps as any).style,
         },
         classNames: [
-          ...(propTransitionProps.classNames || []),
+          ...((propTransitionProps as any).classNames || []),
           $.names.ucBackdrop,
         ],
       };
-    }, [propTransitionProps.style, propTransitionProps.classNames]),
+    }, [
+      (propTransitionProps as any).style,
+      (propTransitionProps as any).classNames,
+    ]),
   };
 
   return (

@@ -23,7 +23,7 @@ type Props = $Type.CreateProps<
     disableOutsideClick?: boolean;
     disablePointerEvents?: boolean;
   },
-  $Type.IdentifiedBaseElementProps<'div'>
+  typeof BaseElement
 >;
 
 const FocusTrap: React.FC<Props> = ({

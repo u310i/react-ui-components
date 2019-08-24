@@ -3,14 +3,6 @@ import { getNode, mousetrap as Mousetrap } from 'scripts';
 
 // https://github.com/ccampbell/mousetrap
 
-type Props = $Type.CreateProps<{
-  hotkeys: string | string[];
-  action: (evt: KeyboardEvent) => void;
-  type?: 'keydown' | 'keyup' | 'keypress';
-  target?: Element;
-  active?: boolean;
-}>;
-
 const bindAfterUnbind = (
   mousetrap: MousetrapStatic | MousetrapInstance,
   options: {
@@ -23,6 +15,14 @@ const bindAfterUnbind = (
     mousetrap.bind(options.hotkeys, options.action, options.whichEvent);
   });
 };
+
+type Props = $Type.CreateProps<{
+  hotkeys: string | string[];
+  action: (evt: KeyboardEvent) => void;
+  type?: 'keydown' | 'keyup' | 'keypress';
+  target?: Element;
+  active?: boolean;
+}>;
 
 const HotKeys: React.FC<Props> = ({
   children,

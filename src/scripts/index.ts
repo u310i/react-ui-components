@@ -72,13 +72,21 @@ import {
 // import {} from './breakpoint';
 import { testCssNumberRegExp } from './regExp';
 // import {} from './windowEvents';
-import { useForceUpdate, useLateUpdate } from './hooks/useHooks';
-import { useAddWindowEvent, useAddCssInBody } from './hooks/useEffects';
 import {
+  useForceUpdate,
+  useLateUpdate,
+  useAddWindowEvent,
+  useAddCssInBody,
   useGetDomProperty,
   useGetDomProperties,
-} from './hooks/useLayoutEffects';
-import { useGlobalState } from './hooks/useGlobalState';
+  useGlobalState,
+} from './hooks';
+// import { useAddWindowEvent, useAddCssInBody } from './hooks/useEffects';
+// import {
+//   useGetDomProperty,
+//   useGetDomProperties,
+// } from './hooks/useLayoutEffects';
+// import { useGlobalState } from './hooks/useGlobalState';
 
 export {
   // init
@@ -142,12 +150,12 @@ export {
   // hooks/useHooks
   useForceUpdate,
   useLateUpdate,
-  // hooks/hooks/React.useEffects
   useAddWindowEvent,
   useAddCssInBody,
-  // hooks/React.useLayoutEffects
   useGetDomProperty,
   useGetDomProperties,
-  // hooks/useGlobalState
   useGlobalState,
+  // hooks/hooks/React.useEffects
+  // hooks/React.useLayoutEffects
+  // hooks/useGlobalState
 };

@@ -1,5 +1,10 @@
 import React from 'react';
 import { Transition } from 'react-transition-group';
+import {
+  TransitionProps as _TransitionProps,
+  TransitionStatus as _TransitionStatus,
+  TransitionChildren as _TransitionChildren,
+} from 'react-transition-group/Transition';
 import { reflow, useForceUpdate } from 'scripts';
 
 const APPEAR = 'appear';
@@ -57,13 +62,11 @@ type TransitionHandlerKeys =
   | 'onExiting'
   | 'onExited';
 
-type TransitionKeys =
+type TransitionPropsKeys =
   | 'in'
   | 'mountOnEnter'
   | 'unmountOnExit'
-  | 'timeout'
   | 'addEndListener'
-  | 'children'
   | TransitionHandlerKeys
   | TransitionActionKeys;
 
@@ -71,11 +74,24 @@ type Props = $Type.CreateProps<
   {
     disableClassing?: boolean;
     lazyAppear?: boolean;
-  },
-  Pick<$Type.Transition.TransitionProps, TransitionKeys>
+  } & Pick<_TransitionProps, TransitionPropsKeys>
 >;
 
-const ReactCSSTransitionFork: $Type.FunctionComponentWithoutChildren<Props> = ({
+type CharacteristicProps = Pick<_TransitionProps, 'children' | 'timeout'>;
+
+declare global {
+  namespace $Type {
+    namespace Transition {
+      type childStatus = _TransitionStatus;
+      type TransitionProps = Props;
+    }
+  }
+}
+
+const ReactCSSTransitionFork: $Type.FunctionComponentWithoutChildren<
+  Props & CharacteristicProps
+> = ({
+  children,
   in: inProp,
   appear = false,
   disableClassing = false,

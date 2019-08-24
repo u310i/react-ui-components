@@ -82,8 +82,9 @@ export const genEasings = (easing: $Type.Transition.Easing): GenEasings => {
 };
 
 export const setTransition = (node: HTMLElement, value: string | null) => {
-  node.style.webkitTransition = value;
-  node.style.transition = value;
+  const property = value === null ? 'null' : value;
+  node.style.webkitTransition = property;
+  node.style.transition = property;
 };
 
 export const setTransform = (node: HTMLElement, value: string) => {
@@ -106,9 +107,9 @@ export const genTransitionProperty = (
     transitionProp.push(
       [
         props.property || 'all',
-        props.duration ? `${props.duration}ms` : '0ms',
+        props.duration || props.duration === 0 ? `${props.duration}ms` : '0ms',
         props.easing || 'linear',
-        props.delay ? `${props.delay}ms` : 'all',
+        props.delay || props.delay === 0 ? `${props.delay}ms` : 'all',
       ].join(' ')
     );
   }

@@ -25,8 +25,8 @@ type Props = $Type.CreateProps<
     easing?: $Type.Transition.Easing;
     disableHideVisibility?: boolean;
   },
-  React.ComponentProps<typeof CSSTransition> &
-    $Type.IdentifiedBaseElementProps<'div'>
+  typeof BaseElement,
+  $Type.Transition.TransitionProps
 >;
 
 const Fade: React.FC<Props> = ({
@@ -120,8 +120,8 @@ const Fade: React.FC<Props> = ({
       {...other}
     >
       {(
-        state: $Type.Transition.TransitionStatus,
-        childProps: { [prop: string]: any }
+        state: $Type.Transition.childStatus,
+        childProps: $Type.BaseElementProps
       ): React.ReactElement => {
         return (
           <BaseElement

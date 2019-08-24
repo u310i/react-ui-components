@@ -12,20 +12,30 @@ import { CSSTransition, BaseElement } from '..';
 const $names = $.names;
 const $styles = $.styles;
 
-const Zoom = ({
+type Props = $Type.CreateProps<
+  {
+    duration?: $Type.Transition.Duration;
+    easing?: $Type.Transition.Easing;
+    disableHideVisibility?: boolean;
+  },
+  typeof BaseElement,
+  $Type.Transition.TransitionProps
+>;
+
+const Zoom: React.FC<Props> = ({
   in: inProp,
   children,
   duration = $styles.duration,
   easing = $styles.easing,
+  disableHideVisibility,
   appear = true,
   onEnter,
   onEntering,
   onExiting,
   onExited,
-  disableHideVisibility,
   ...other
 }) => {
-  const _ref_ = React.useRef(null);
+  const _ref_ = React.useRef<null | HTMLElement>(null);
 
   const [durations, easings] = React.useMemo(() => {
     return [genDurations(duration), genEasings(easing)];
@@ -33,6 +43,7 @@ const Zoom = ({
 
   React.useLayoutEffect(() => {
     const node = _ref_.current;
+    if (!node) return;
     if (!appear && inProp) {
       setTransform(node, $styles.enteredScale);
     } else {
@@ -42,10 +53,19 @@ const Zoom = ({
   }, []);
 
   const handleEntering = React.useCallback(
-    (node, appearing) => {
+    (node: HTMLElement, appearing: boolean) => {
+      const [duration, easing] = appearing
+        ? [durations.appear, easings.appear]
+        : [durations.enter, easings.enter];
       setTransition(
         node,
-        genTransitionProperty([['transform', durations.enter, easings.enter]])
+        genTransitionProperty([
+          {
+            property: 'transform',
+            duration,
+            easing,
+          },
+        ])
       );
       setTransform(node, $styles.enteredScale);
       if (!disableHideVisibility) node.style.visibility = null;
@@ -55,10 +75,16 @@ const Zoom = ({
   );
 
   const handleExiting = React.useCallback(
-    node => {
+    (node: HTMLElement) => {
       setTransition(
         node,
-        genTransitionProperty([['transform', durations.exit, easings.exit]])
+        genTransitionProperty([
+          {
+            property: 'transform',
+            duration: durations.exit,
+            easing: easings.exit,
+          },
+        ])
       );
       setTransform(node, $styles.exitedScale);
       if (onExiting) onExiting(node);
@@ -67,7 +93,7 @@ const Zoom = ({
   );
 
   const handleExited = React.useCallback(
-    node => {
+    (node: HTMLElement) => {
       setTransition(node, null);
       if (!disableHideVisibility) node.style.visibility = 'hidden';
       if (onExited) onExited(node);
@@ -87,8 +113,8 @@ const Zoom = ({
       {...other}
     >
       {(
-        state: $Type.Transition.TransitionStatus,
-        childProps: { [prop: string]: any }
+        state: $Type.Transition.childStatus,
+        childProps: $Type.BaseElementProps
       ) => {
         return (
           <BaseElement

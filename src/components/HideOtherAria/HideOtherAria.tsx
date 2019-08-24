@@ -7,7 +7,7 @@ type Props = $Type.CreateProps<
     parent: Element;
     active?: boolean;
   },
-  $Type.IdentifiedBaseElementProps<'div'>
+  typeof BaseElement
 >;
 
 const HideOtherAria: React.FC<Props> = ({
