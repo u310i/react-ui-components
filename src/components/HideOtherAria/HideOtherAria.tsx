@@ -1,10 +1,10 @@
 import React from 'react';
-import { getNode } from 'scripts';
+import { extractElement } from 'scripts';
 import { BaseElement } from '..';
 
 type Props = $Type.CreateProps<
   {
-    parent: Element;
+    parent?: Element;
     active?: boolean;
   },
   typeof BaseElement
@@ -50,7 +50,7 @@ const HideOtherAria: React.FC<Props> = ({
 
   React.useEffect(() => {
     if (!prevActiveRef.current && active) {
-      const parentElement = getNode(parent);
+      const parentElement = extractElement(parent);
       activate(parentElement);
     } else if (prevActiveRef.current && !active) {
       deactivate();

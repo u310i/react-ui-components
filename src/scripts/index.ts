@@ -34,8 +34,8 @@ import {
   ownerWindow,
   clickedScrollbar,
   getTransitionEndName,
-  getNode,
-  getElementRef,
+  extractElement,
+  injectElementToRef,
 } from './utils';
 import {
   toFullHexa,
@@ -123,8 +123,8 @@ export {
   ownerWindow,
   clickedScrollbar,
   getTransitionEndName,
-  getNode,
-  getElementRef,
+  extractElement,
+  injectElementToRef,
   // domHelpers
 
   // color

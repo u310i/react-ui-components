@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getNode, addEventListener, removeEventListener } from 'scripts';
+import { extractElement, addEventListener, removeEventListener } from 'scripts';
 
 const Click = ({ children, target = document, action, types = 'click', buttonNumber = 0, listenerOptions = {} }) => {
 	const existTouchEventRef = React.useRef(null);
@@ -57,7 +57,7 @@ const Click = ({ children, target = document, action, types = 'click', buttonNum
 	);
 
 	React.useEffect(() => {
-		const node = getNode(target);
+		const node = extractElement(target);
 		const names = typeof types === 'string' ? [ types ] : Array.isArray(types) ? types : 'click';
 
 		const listenerMap = new Map();

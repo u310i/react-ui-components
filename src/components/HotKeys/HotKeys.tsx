@@ -1,5 +1,5 @@
 import React from 'react';
-import { getNode, mousetrap as Mousetrap } from 'scripts';
+import { extractElement, mousetrap as Mousetrap } from 'scripts';
 
 // https://github.com/ccampbell/mousetrap
 
@@ -43,7 +43,7 @@ const HotKeys: React.FC<Props> = ({
   const didBindRef = React.useRef<null | boolean>(null);
   React.useEffect(() => {
     if (mousetrapRef.current === null) {
-      const node = getNode(target);
+      const node = extractElement(target);
       mousetrapRef.current = node ? Mousetrap(node) : Mousetrap;
     }
     const mousetrap = mousetrapRef.current;

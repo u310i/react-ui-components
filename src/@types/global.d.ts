@@ -1,12 +1,14 @@
 // import * as React from 'react';
 import * as CSS from 'csstype';
 
-import BaseElementProps = $Type.BaseElementProps;
-
 declare global {
   namespace $Type {
     namespace Components {}
     namespace Constants {
+      namespace Origin {
+        type Shape = 'corner' | 'default' | 'round' | 'circle';
+      }
+
       namespace Transition {}
     }
     namespace Transition {
@@ -61,14 +63,29 @@ declare global {
       displayName?: string;
     };
 
+    type PropComponentProps<
+      T extends React.JSXElementConstructor<any>,
+      K extends string = 'children'
+    > = Partial<Omit<React.ComponentProps<T>, K>>;
+
+    type PropTransitionComponentProps = BaseElementProps &
+      Transition.TransitionProps;
+
     type PartiallyPartial<T, K extends keyof T> = Partial<Pick<T, K>> &
       Omit<T, K>;
 
-    type Refer =
+    type MaybeElement = Element | null;
+    type Ref =
       | {
           current: Element | null;
         }
       | ((element: Element | null) => void);
+    type IncludeElement =
+      | { current: MaybeElement }
+      | (() => MaybeElement)
+      | string
+      | Element
+      | null;
 
     // type IntrinsicElementsKeys = JSX.IntrinsicElements[keyof JSX.IntrinsicElements];
 

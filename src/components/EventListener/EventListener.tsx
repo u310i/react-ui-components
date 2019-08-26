@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getNode, addEventListener, createOptimizedEvent } from 'scripts';
+import { extractElement, addEventListener, createOptimizedEvent } from 'scripts';
 
 type Props = $Type.CreateProps<{
   target: Element;
@@ -21,7 +21,7 @@ const EventListener: React.FC<Props> = ({
   const prevPropsRef = React.useRef<null | Props>(null);
 
   React.useEffect(() => {
-    const target = getNode(propTarget);
+    const target = extractElement(propTarget);
     if (!target) return;
 
     if (prevPropsRef.current) {

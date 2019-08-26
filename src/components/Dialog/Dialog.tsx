@@ -1,6 +1,6 @@
 import React from 'react';
 import $ from './_constants';
-import { getElementRef } from 'scripts';
+import { injectElementToRef } from 'scripts';
 import { Modal, Fade, Paper } from '..';
 
 const $names = $.names;
@@ -81,7 +81,7 @@ const Dialog = ({
 
   const handleInnerRef = React.useCallback(element => {
     innerRef.current = element;
-    getElementRef(propInnerProps.refer, element);
+    injectElementToRef(propInnerProps.refer, element);
   }, []);
   const innerProps = {
     ...propInnerProps,

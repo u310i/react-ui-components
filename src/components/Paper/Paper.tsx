@@ -6,7 +6,20 @@ import { BaseElement } from '..';
 const $names = $.names;
 const $styles = $.styles;
 
-const Paper = ({ children, elevation = 2, shape = 'default', ...other }) => {
+type Props = $Type.CreateProps<
+  {
+    elevation?: number;
+    shape?: $Type.Constants.Origin.Shape;
+  },
+  typeof BaseElement
+>;
+
+const Paper: React.FC<Props> = ({
+  children,
+  elevation = 2,
+  shape = 'default',
+  ...other
+}) => {
   const _style_ = React.useMemo(() => {
     return {
       ...$styles.style,

@@ -1,7 +1,7 @@
 import React from 'react';
 import $ from './_constants';
 import {
-  getElementRef,
+  injectElementToRef,
   setTransition,
   setTransform,
   genTransitionProperty,
@@ -394,11 +394,11 @@ const SwipeableDrawer = ({
   if (!propModalProps.rootProps) propModalProps.rootProps = {};
   const handleBackdropTransitionRef = React.useCallback(element => {
     backdropTransitionRef.current = element;
-    getElementRef(propModalProps.backdropProps.transitionProps.refer, element);
+    injectElementToRef(propModalProps.backdropProps.transitionProps.refer, element);
   }, []);
   const handleRootRef = React.useCallback(element => {
     rootRef.current = element;
-    getElementRef(propModalProps.rootProps.refer, element);
+    injectElementToRef(propModalProps.rootProps.refer, element);
   });
   const modalProps = {
     onEscapeKeyDown,
@@ -428,7 +428,7 @@ const SwipeableDrawer = ({
 
   const handleTransitionRef = React.useCallback(element => {
     transitionRef.current = element;
-    getElementRef(propTransitionProps.refer, element);
+    injectElementToRef(propTransitionProps.refer, element);
   }, []);
   const transitionProps = {
     ...propTransitionProps,
@@ -445,7 +445,7 @@ const SwipeableDrawer = ({
 
   const handleSwipeAreaRef = React.useCallback(element => {
     swipeAreaRef.current = element;
-    getElementRef(swipeAreaProps.refer, element);
+    injectElementToRef(swipeAreaProps.refer, element);
   }, []);
 
   return (

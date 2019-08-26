@@ -88,7 +88,7 @@ declare global {
   }
 }
 
-const ReactCSSTransitionFork: $Type.FunctionComponentWithoutChildren<
+const ReactCSSTransition: $Type.FunctionComponentWithoutChildren<
   Props & CharacteristicProps
 > = ({
   children,
@@ -266,4 +266,4 @@ const ReactCSSTransitionFork: $Type.FunctionComponentWithoutChildren<
   );
 };
 
-export default ReactCSSTransitionFork;
+export default ReactCSSTransition;

@@ -222,22 +222,27 @@ export const getTransitionEndName = (() => {
   return () => transitionEndName;
 })();
 
-export const getNode = (value: any): Element | null => {
+export const extractElement = (
+  value: $Type.IncludeElement
+): $Type.MaybeElement => {
   if (!value) {
     return null;
   }
-  const node =
-    ('current' in value && value.current) ||
-    (typeof value === 'function' && value()) ||
-    (typeof value === 'string' && document.querySelector(value)) ||
-    value;
+  const node: $Type.MaybeElement =
+    typeof value === 'string'
+      ? document.querySelector(value)
+      : typeof value === 'function'
+      ? value()
+      : 'current' in (value as any)
+      ? (value as { current: $Type.MaybeElement }).current
+      : (value as $Type.MaybeElement);
 
   return node;
 };
 
-export const getElementRef = (
-  ref: $Type.Refer | undefined,
-  element: Element | null
+export const injectElementToRef = (
+  ref: $Type.Ref | undefined,
+  element: $Type.MaybeElement
 ) => {
   if (ref) {
     typeof ref === 'function' ? ref(element) : (ref.current = element);

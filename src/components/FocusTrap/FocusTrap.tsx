@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateFocusTrap from './focusTrap';
+import { focusTrap as CreateFocusTrap } from './_focusTrap';
 import { BaseElement } from '..';
 
 // https://github.com/davidtheclark/focus-trap-react
@@ -16,8 +16,8 @@ type Props = $Type.CreateProps<
     paused?: boolean;
     onActivate?: () => void;
     onDeactivate?: () => void;
-    initialFocus?: $Type.Components.FocusTrap.Target;
-    fallbackFocus?: $Type.Components.FocusTrap.Target;
+    initialFocus?: $Type.IncludeElement;
+    fallbackFocus?: $Type.IncludeElement;
     disableRestoreFocus?: boolean;
     disableEscapeKeyDown?: boolean;
     disableOutsideClick?: boolean;

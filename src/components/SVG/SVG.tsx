@@ -4,62 +4,115 @@ import { roundNumber } from 'scripts';
 import { BaseElement } from '..';
 
 const $styles = $.styles;
+const $names = $.names;
 
-const SVG = ({
+type ViewBox = [number, number, number, number];
+
+type Props = ({ path?: string; tag: string } | { path: string; tag?: string }) &
+  $Type.CreateProps<
+    {
+      viewBox: ViewBox;
+      innerProps: React.SVGAttributes<Element>;
+      symbol: boolean;
+      symbolTagId: string;
+      symbolTagProps: React.SVGAttributes<Element>;
+      use: boolean;
+      useTagHref: string;
+      useTagProps: React.SVGAttributes<Element>;
+      transform?: string;
+      title?: string;
+      desc?: string;
+      role?: string;
+      style?: React.CSSProperties;
+    },
+    typeof BaseElement
+  >;
+
+const SVG: React.FC<Props> = ({
   viewBox,
   path,
   tag,
-  innerProps = {},
+  innerProps: propInnerProps,
   symbol,
+  symbolTagId,
+  symbolTagProps,
   use,
-  xlinkHref,
-  transform = false,
+  useTagHref,
+  useTagProps,
+  transform,
   title,
   desc,
   role = $styles.role,
-  style = {},
+  style: propStyle,
   ...other
 }) => {
-  const titleTag = title && (
-    <BaseElement elementName="title">{title}</BaseElement>
-  );
-  const descTag = desc && <BaseElement elementName="desc">{desc}</BaseElement>;
+  const titleTag = title && <title>{title}</title>;
+  const descTag = desc && <desc>{desc}</desc>;
 
-  props.role = role;
-  style.pointerEvents = $styles.pointerEvents;
-  props.style = style;
+  const props = {
+    style: React.useMemo(() => {
+      return { pointerEvents: $styles.pointerEvents, ...propStyle };
+    }, [propStyle]),
+    _className_: $names.ucSVG,
+    role,
+    ...other,
+  };
 
-  let createGroupedComponent;
-  if (transform) {
-    const x = roundNumber(viewBox[2] / 2, 6);
-    const y = roundNumber(viewBox[3] / 2, 6);
+  let innerProps = React.useMemo(() => {
+    return { ...propInnerProps };
+  }, [propInnerProps]);
 
-    const forInnerGroup = `translate(${x * -1}, ${y * -1})`;
-    const forOuterGroup = `translate(${x}, ${y})`;
+  let outerTransformValue: string | undefined;
+  innerProps = React.useMemo(() => {
+    if (transform === typeof 'string') {
+      const x = roundNumber(viewBox[2] / 2, 6);
+      const y = roundNumber(viewBox[3] / 2, 6);
 
-    innerProps = { transform: forInnerGroup, ...innerProps };
+      const innerTransformValue = `translate(${x * -1}, ${y * -1})`;
+      outerTransformValue = `translate(${x}, ${y})`;
+      return { ...innerProps, transform: innerTransformValue };
+    } else {
+      return innerProps;
+    }
+  }, [transform, viewBox, innerProps]);
 
-    createGroupedComponent = inner => (
-      <BaseElement elementName="g" transform={forOuterGroup}>
-        <BaseElement elementName="g" transform={transform}>
-          {inner}
-        </BaseElement>
-      </BaseElement>
+  let InnerComponent = React.useMemo(() => {
+    return (
+      (path && (
+        <BaseElement
+          elementName="path"
+          _className_={$names.ucSVGInner}
+          {...innerProps}
+          d={path}
+        />
+      )) ||
+      (tag && (
+        <BaseElement
+          elementName="g"
+          _className_={$names.ucSVGInner}
+          {...innerProps}
+          dangerouslySetInnerHTML={{ __html: tag }}
+        />
+      ))
     );
-  }
+  }, [path, tag, innerProps]);
 
-  const Path = path && <path {...innerProps} d={path} />;
-  const Tag = !path && tag && (
-    <BaseElement
-      elementName="g"
-      {...innerProps}
-      dangerouslySetInnerHTML={{ __html: tag }}
-    />
-  );
-
-  const InnerComponent = transform
-    ? createGroupedComponent(Path || Tag)
-    : Path || Tag;
+  InnerComponent = React.useMemo(() => {
+    if (transform === typeof 'string') {
+      return (
+        <g
+          transform={outerTransformValue}
+          className={$names.ucSVGTransformGroupOuter}
+        >
+          <g transform={transform} className={$names.ucSVGTransformGroupInner}>
+            {InnerComponent}
+          </g>
+        </g>
+      );
+    } else {
+      return InnerComponent;
+    }
+  }, [transform, outerTransformValue, InnerComponent]);
 
   if (symbol) {
     return (
@@ -68,11 +121,14 @@ const SVG = ({
         display={$styles.symbolDisplay}
         xmlns={$styles.xmlns}
         xmlnsXlink={$styles.xmlnsXlink}
+        {...props}
       >
         <BaseElement
           elementName="symbol"
           viewBox={viewBox.join(' ')}
-          {...other}
+          id={symbolTagId}
+          _className_={$names.ucSVGSymbol}
+          {...symbolTagProps}
         >
           {InnerComponent}
         </BaseElement>
@@ -83,13 +139,19 @@ const SVG = ({
     return (
       <BaseElement
         elementName="svg"
-        {...other}
         xmlns={$styles.xmlns}
         xmlnsXlink={$styles.xmlnsXlink}
+        {...props}
       >
         {titleTag}
         {descTag}
-        <BaseElement elementName="use" xlinkHref={xlinkHref} />
+        <BaseElement
+          elementName="use"
+          xlinkHref={useTagHref}
+          href={useTagHref}
+          _className_={$names.ucSVGUse}
+          {...useTagProps}
+        />
       </BaseElement>
     );
   } else {
@@ -97,9 +159,9 @@ const SVG = ({
       <BaseElement
         elementName="svg"
         viewBox={viewBox.join(' ')}
-        {...other}
         xmlns={$styles.xmlns}
         xmlnsXlink={$styles.xmlnsXlink}
+        {...props}
       >
         {titleTag}
         {descTag}

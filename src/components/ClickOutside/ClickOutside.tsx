@@ -1,9 +1,9 @@
 import React from 'react';
-import { getNode, clickedScrollbar } from 'scripts';
+import { extractElement, clickedScrollbar } from 'scripts';
 import { EventListener } from '..';
 
 type Props = $Type.CreateProps<{
-  target: Element;
+  target: $Type.IncludeElement;
   action: (evt: MouseEvent) => void;
   options?: AddEventListenerOptions;
   scope?: Element;
@@ -20,7 +20,7 @@ const ClickOutside: React.FC<Props> = ({
 }) => {
   const listener: EventListener = React.useCallback(
     event => {
-      const node = getNode(target);
+      const node = extractElement(target);
       if (node && node.contains(event.target as Node)) return;
       if (!includeScrollbar && clickedScrollbar(event as MouseEvent)) return;
       action(event as MouseEvent);

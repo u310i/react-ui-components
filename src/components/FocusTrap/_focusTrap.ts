@@ -1,18 +1,15 @@
 import tabbable from 'tabbable';
+import { extractElement } from 'scripts';
 
 declare global {
   namespace $Type {
     namespace Components {
       namespace FocusTrap {
-        type Element = HTMLElement | HTMLInputElement;
-
-        type Target = HTMLElement | string | { (): HTMLElement };
-
         type Options = {
           onActivate?: () => void;
           onDeactivate?: () => void;
-          initialFocus?: Target;
-          fallbackFocus?: Target;
+          initialFocus?: IncludeElement;
+          fallbackFocus?: IncludeElement;
           returnFocusOnDeactivate?: boolean;
           disableEscapeKeyDown?: boolean;
           disableOutsideClick?: boolean;
@@ -68,15 +65,15 @@ const activeFocusTraps = (() => {
 })();
 
 type State = {
-  firstTabbableNode: $FocusTrapType.Element | null;
-  lastTabbableNode: $FocusTrapType.Element | null;
-  nodeFocusedBeforeActivation: $FocusTrapType.Element | null;
-  mostRecentlyFocusedNode: $FocusTrapType.Element | null;
+  firstTabbableNode: Element | null;
+  lastTabbableNode: Element | null;
+  nodeFocusedBeforeActivation: Element | null;
+  mostRecentlyFocusedNode: Element | null;
   active: boolean;
   paused: boolean;
 };
 
-const focusTrap = (
+export const focusTrap = (
   element: any,
   userOptions: $FocusTrapType.Options
 ): $FocusTrapType.Instance => {
@@ -106,7 +103,7 @@ const focusTrap = (
 
     state.active = true;
     state.paused = false;
-    state.nodeFocusedBeforeActivation = doc.activeElement as $FocusTrapType.Element;
+    state.nodeFocusedBeforeActivation = doc.activeElement as Element;
 
     const onActivate =
       activateOptions && activateOptions.onActivate
@@ -212,36 +209,26 @@ const focusTrap = (
     return trap;
   };
 
-  const getNodeForOption = (
+  const extractElementForOption = (
     optionName: 'initialFocus' | 'fallbackFocus'
-  ): $FocusTrapType.Element | null => {
+  ): $Type.MaybeElement => {
     const optionValue = config[optionName];
     if (!optionValue) {
       return null;
     }
-    let node: any;
-    if (typeof optionValue === 'string') {
-      node = doc.querySelector(optionValue);
-      if (!node) {
-        throw new Error('`' + optionName + '` refers to no known node');
-      }
-    } else if (typeof optionValue === 'function') {
-      node = optionValue();
-      if (!node) {
-        throw new Error('`' + optionName + '` did not return a node');
-      }
-    }
-    return node || optionValue;
+    const node = extractElement(optionValue);
+    return node;
   };
 
-  const getInitialFocusNode = (): $FocusTrapType.Element => {
+  const getInitialFocusNode = (): Element => {
     let node: any;
-    if (getNodeForOption('initialFocus') !== null) {
-      node = getNodeForOption('initialFocus');
+    if (extractElementForOption('initialFocus') !== null) {
+      node = extractElementForOption('initialFocus');
     } else if (container.contains(doc.activeElement)) {
       node = doc.activeElement;
     } else {
-      node = state.firstTabbableNode || getNodeForOption('fallbackFocus');
+      node =
+        state.firstTabbableNode || extractElementForOption('fallbackFocus');
     }
 
     if (!node) {
@@ -320,14 +307,14 @@ const focusTrap = (
       tabbableNodes[tabbableNodes.length - 1] || getInitialFocusNode();
   };
 
-  const tryFocus = (node: $FocusTrapType.Element | null): void => {
+  const tryFocus = (node: Element | null): void => {
     if (node === doc.activeElement) return;
-    if (!node || !node.focus) {
+    if (!node || !(node as HTMLElement).focus) {
       tryFocus(getInitialFocusNode());
       return;
     }
 
-    node.focus();
+    (node as HTMLElement).focus();
     state.mostRecentlyFocusedNode = node;
     if (isSelectableInput(node)) {
       node.select();
@@ -344,14 +331,12 @@ const focusTrap = (
   return trap;
 };
 
-const isSelectableInput = (
-  node: $FocusTrapType.Element
-): node is HTMLInputElement => {
+const isSelectableInput = (node: Element): node is HTMLInputElement => {
   return (
     'tagName' in node &&
     node.tagName.toLowerCase() === 'input' &&
     'select' in node &&
-    typeof node.select === 'function'
+    typeof (node as HTMLInputElement).select === 'function'
   );
 };
 
@@ -366,5 +351,3 @@ const isTabEvent = (e: KeyboardEvent): boolean => {
 const delay = (fn: () => void): number => {
   return window.setTimeout(fn, 0);
 };
-
-export default focusTrap;

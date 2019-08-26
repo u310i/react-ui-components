@@ -1,37 +1,39 @@
 import * as React from 'react';
-import {
-	getTransitionEndName,
-	addEventListener,
-	removeEventListener,
-	getElementRef,
-	getNode,
-	scrollLock
-} from 'scripts';
-import { DivElement } from '..';
+import { extractElement, scrollLock } from 'scripts';
 
 // https://github.com/willmcpo/body-scroll-lock
 
-const ScrollLock = ({ children, target, active = true, fillGap = true }) => {
-	const prevActiveRef = React.useRef(null);
+type Props = $Type.CreateProps<{
+  target: $Type.IncludeElement;
+  active?: boolean;
+  fillGap?: boolean;
+}>;
 
-	React.useEffect(
-		() => {
-			const targetElement = getNode(target);
-			if (active && !prevActiveRef.current) {
-				scrollLock.lock(targetElement, { reserveScrollBarGap: fillGap });
-			}
-			if (!active && prevActiveRef.current) {
-				scrollLock.restore(targetElement);
-			}
-			prevActiveRef.current = active;
+const ScrollLock: React.FC<Props> = ({
+  children,
+  target,
+  active = true,
+  fillGap = true,
+}) => {
+  const prevActiveRef = React.useRef<null | boolean>(null);
 
-			return () => {
-				scrollLock.restore(targetElement);
-			};
-		},
-		[ active ]
-	);
-	return children || null;
+  React.useEffect(() => {
+    const targetElement = extractElement(target);
+    if (!targetElement) return;
+    if (active && !prevActiveRef.current) {
+      scrollLock.lock(targetElement, { reserveScrollBarGap: fillGap });
+    }
+    if (!active && prevActiveRef.current) {
+      scrollLock.restore(targetElement);
+    }
+    prevActiveRef.current = active;
+
+    return () => {
+      scrollLock.restore(targetElement);
+    };
+  }, [active]);
+
+  return children ? <>{children}</> : null;
 };
 
 export default ScrollLock;

@@ -3,25 +3,29 @@ import { jsx } from '@emotion/core';
 import { common as commonStyle } from './style';
 import htmlStyleMap from './htmlStyleMap';
 import inputHtmlStyleMap from './inputHtmlStyleMap';
-import { getElementRef } from 'scripts';
+import { injectElementToRef } from 'scripts';
 import * as CSS from 'csstype';
 
-type Props = Readonly<{
-  type?: string;
-  _style_?: React.CSSProperties;
-  style?: React.CSSProperties;
-  _className_?: string;
-  classNames?: string[];
-  className?: string;
-  _id_?: string;
-  ids?: string[];
-  id?: string;
-  _arias_?: React.AriaAttributes;
-  arias?: React.AriaAttributes;
-  _refer_?: $Type.Refer;
-  refer?: $Type.Refer;
-  elementName: keyof JSX.IntrinsicElements;
-}>;
+type Props<
+  T1 = {
+    type?: string;
+    _style_?: React.CSSProperties;
+    style?: React.CSSProperties;
+    _className_?: string;
+    classNames?: string[];
+    className?: string;
+    _id_?: string;
+    ids?: string[];
+    id?: string;
+    _arias_?: React.AriaAttributes;
+    arias?: React.AriaAttributes;
+    _refer_?: $Type.Ref;
+    refer?: $Type.Ref;
+    elementName: keyof JSX.IntrinsicElements;
+  },
+  T2 = React.AllHTMLAttributes<Element>,
+  T3 = React.SVGAttributes<Element>
+> = Readonly<T1 & T2 & T3>;
 
 declare global {
   namespace $Type {
@@ -85,8 +89,8 @@ const BaseElement: React.FC<Props> = ({
   }, [_arias_, propArias]);
 
   const refer = React.useCallback((element: Element) => {
-    getElementRef(propRefer, element);
-    getElementRef(_refer_, element);
+    injectElementToRef(propRefer, element);
+    injectElementToRef(_refer_, element);
   }, []);
 
   return jsx(
