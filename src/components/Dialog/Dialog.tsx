@@ -38,14 +38,14 @@ const Dialog = ({
           ...propModalProps.rootProps,
           classNames: [
             ...(propModalProps.rootProps.classNames || []),
-            $names.ucDialog,
+            $names.dialog,
           ],
         },
         contentProps: {
           ...propModalProps.contentProps,
           classNames: [
             ...(propModalProps.contentProps.classNames || []),
-            $names.ucDialogContainer,
+            $names.dialogContainer,
           ],
           arias: {
             'aria-modal': true,
@@ -69,7 +69,7 @@ const Dialog = ({
         },
         classNames: [
           ...(propTransitionProps.classNames || []),
-          $names.ucDialogTransition,
+          $names.dialogTransition,
         ],
       };
     }, [
@@ -95,7 +95,7 @@ const Dialog = ({
         },
         classNames: [
           ...(propInnerProps.classNames || []),
-          $names.ucDialogInner,
+          $names.dialogInner,
         ],
         refer: handleInnerRef,
       };

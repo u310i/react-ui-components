@@ -1,5 +1,27 @@
 // import React from 'react';
 
+export const isReactComponentChildren = <T = any>(
+  children: React.ReactNode
+): children is React.ReactElement<T, React.JSXElementConstructor<any>> => {
+  return children &&
+    Object.prototype.toString.call(children) === '[object Object]' &&
+    'type' in (children as React.ReactPortal) &&
+    'props' in (children as React.ReactPortal) &&
+    !('children' in (children as React.ReactPortal)) &&
+    typeof (children as React.ReactElement<
+      any,
+      React.JSXElementConstructor<any>
+    >).type === 'function'
+    ? true
+    : false;
+};
+
+
+export const isTransitionComponent = (
+  children: React.ReactElement<any>
+): children is React.ReactElement<$Type.Transition.CommonProps> => {
+  return children && children.props && children.props.hasOwnProperty('in');
+};
 // export const isArray = (data) => {
 // 	return Array.isArray(data);
 // };

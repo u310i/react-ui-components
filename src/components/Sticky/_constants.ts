@@ -1,19 +1,20 @@
 import $ from '../_constants';
 import { createComponentConstants, getComponentConstants } from 'scripts';
 
-const name = 'Sticky';
+const name = 'sticky';
 
-const constants = {
-	names: {
-		ucSlideAbsoluteWrapper: 'uc-sticky-absolute-wrapper',
-		ucSlideOuter: 'uc-sticky-outer',
-		ucSlideInner: 'uc-sticky-inner'
-	},
-	style: {
-		zIndex: $.zIndex.slide
-	}
-};
+export const constants = {
+  name: name as typeof name,
+  names: {
+    stickyAbsoluteWrapper: `${$.prefix}${name}-absolute-wrapper`,
+    stickyOuter: `${$.prefix}${name}-outer`,
+    stickyInner: `${$.prefix}${name}-inner`,
+  },
+  style: {
+    zIndex: $.zIndex.slide,
+  },
+} as const;
 
-createComponentConstants(constants, name);
+createComponentConstants(name, constants);
 
 export default getComponentConstants(name);

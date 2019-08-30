@@ -394,7 +394,10 @@ const SwipeableDrawer = ({
   if (!propModalProps.rootProps) propModalProps.rootProps = {};
   const handleBackdropTransitionRef = React.useCallback(element => {
     backdropTransitionRef.current = element;
-    injectElementToRef(propModalProps.backdropProps.transitionProps.refer, element);
+    injectElementToRef(
+      propModalProps.backdropProps.transitionProps.refer,
+      element
+    );
   }, []);
   const handleRootRef = React.useCallback(element => {
     rootRef.current = element;
@@ -418,7 +421,7 @@ const SwipeableDrawer = ({
           ...propModalProps.rootProps,
           refer: handleRootRef,
           classNames: [
-            $names.ucSwipeable_drawer,
+            $names.ucSwipeableDrawer,
             ...(propModalProps.rootProps.classNames || []),
           ],
         },
@@ -436,7 +439,7 @@ const SwipeableDrawer = ({
       return {
         refer: handleTransitionRef,
         classNames: [
-          $.ucSwipeable_drawerTransition,
+          $.ucSwipeableDrawerTransition,
           ...(propTransitionProps.classNames || []),
         ],
       };

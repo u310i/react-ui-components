@@ -3,9 +3,10 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 
 const name = 'fade';
 
-const constants = {
+export const constants = {
+  name: name as typeof name,
   names: {
-    ucFade: 'uc-fade',
+    fade: `${$.prefix}${name}`,
   },
   styles: {
     style: {
@@ -19,8 +20,8 @@ const constants = {
     enteredOpacity: '1',
     exitedVisibility: 'hidden',
   },
-};
+} as const;
 
-createComponentConstants(constants, name);
+createComponentConstants(name, constants);
 
 export default getComponentConstants(name);

@@ -54,7 +54,7 @@ const Drawer = ({
           ...propModalProps.rootProps,
           classNames: [
             ...(propModalProps.rootProps.classNames || []),
-            $names.ucDrawer,
+            $names.drawer,
           ],
         },
         contentProps: {
@@ -66,7 +66,7 @@ const Drawer = ({
           },
           classNames: [
             ...(propModalProps.contentProps.classNames || []),
-            $names.ucDrawerContainer,
+            $names.drawerContainer,
           ],
           arias: {
             'aria-modal': true,
@@ -89,7 +89,7 @@ const Drawer = ({
         },
         classNames: [
           ...(propTransitionProps.classNames || []),
-          $names.ucDrawerTransition,
+          $names.drawerTransition,
         ],
       };
     }, [propTransitionProps.style, propTransitionProps.classNames]),
@@ -112,7 +112,7 @@ const Drawer = ({
         },
         classNames: [
           ...(propInnerProps.classNames || []),
-          $names.ucDrawerInner,
+          $names.drawerInner,
         ],
         refer: handleInnerRef,
       };

@@ -3,10 +3,11 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 
 const name = 'collapse';
 
-const constants = {
+export const constants = {
+  name: name as typeof name,
   names: {
-    ucCollapse: 'uc-collapse',
-    ucCollapseInner: 'uc-collapse-inner',
+    collapse: `${$.prefix}${name}`,
+    collapseInner: `${$.prefix}${name}-inner`,
   },
   styles: {
     duration: $.transition.duration,
@@ -25,8 +26,8 @@ const constants = {
       },
     },
   },
-};
+} as const;
 
-createComponentConstants(constants, name);
+createComponentConstants(name, constants);
 
 export default getComponentConstants(name);

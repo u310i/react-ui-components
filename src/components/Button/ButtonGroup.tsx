@@ -56,7 +56,7 @@ const Group = ({
 		<BaseElement
 			elementName="div"
 			style={{ ...propStyle, ...nestedStyle }}
-			classNames={[ $.group.names.ucButtonGroup ]}
+			classNames={[ $.group.names.buttonGroup ]}
 		>
 			{children}
 		</BaseElement>

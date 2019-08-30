@@ -8,8 +8,8 @@ declare global {
         type Options = {
           onActivate?: () => void;
           onDeactivate?: () => void;
-          initialFocus?: IncludeElement;
-          fallbackFocus?: IncludeElement;
+          initialFocus?: IncludeNode;
+          fallbackFocus?: IncludeNode;
           returnFocusOnDeactivate?: boolean;
           disableEscapeKeyDown?: boolean;
           disableOutsideClick?: boolean;
@@ -211,7 +211,7 @@ export const focusTrap = (
 
   const extractElementForOption = (
     optionName: 'initialFocus' | 'fallbackFocus'
-  ): $Type.MaybeElement => {
+  ): $Type.MaybeNode => {
     const optionValue = config[optionName];
     if (!optionValue) {
       return null;

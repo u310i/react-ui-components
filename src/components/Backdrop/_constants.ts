@@ -3,10 +3,11 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 
 const name = 'backdrop';
 
-const constants = {
+export const constants = {
+  name: name as typeof name,
   names: {
-    ucBackdrop: 'uc-backdrop',
-    ucBackdropInner: 'uc-backdrop-inner',
+    backdrop: `${$.prefix}${name}`,
+    backdropInner: `${$.prefix}${name}-inner`,
   },
   styles: {
     style: {
@@ -39,8 +40,8 @@ const constants = {
       },
     },
   },
-};
+} as const;
 
-createComponentConstants(constants, name);
+createComponentConstants(name, constants);
 
 export default getComponentConstants(name);

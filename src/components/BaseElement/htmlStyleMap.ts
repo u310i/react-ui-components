@@ -1,5 +1,4 @@
 import style from './style';
-import * as CSS from 'csstype';
 
 export default {
   section: null,
@@ -137,4 +136,4 @@ export default {
   summary: style.summary,
   command: null,
   menu: null,
-} as any;
+} as const;

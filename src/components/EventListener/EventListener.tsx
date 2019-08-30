@@ -1,13 +1,21 @@
 import * as React from 'react';
-import { extractElement, addEventListener, createOptimizedEvent } from 'scripts';
+import { extractElement, addEventListener } from 'scripts';
 
 type Props = $Type.CreateProps<{
-  target: Element;
-  type: string;
-  listener: EventListener;
+  target?: $Type.IncludeNode;
+  type?: string;
+  listener?: EventListener;
   options?: AddEventListenerOptions;
   optimized?: boolean;
 }>;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      type EventListenerProps = Props;
+    }
+  }
+}
 
 const EventListener: React.FC<Props> = ({
   children,
@@ -17,6 +25,7 @@ const EventListener: React.FC<Props> = ({
   options = {},
   optimized = false,
 }) => {
+  if (!type || !listener) return null;
   const removeEventListenerRef = React.useRef<null | (() => void)>(null);
   const prevPropsRef = React.useRef<null | Props>(null);
 
@@ -78,7 +87,7 @@ const EventListener: React.FC<Props> = ({
     };
   }, [propTarget, type, listener, options, optimized]);
 
-  return children ? <>children</> : null;
+  return children ? <>{children}</> : null;
 };
 
 export default EventListener;

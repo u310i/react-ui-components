@@ -10,38 +10,53 @@ import iconList from 'src/icons';
 import { SVG } from '..';
 
 const $styles = $.styles;
-const $names = $.names;
 
-const getIcon = name => {
+const getRatio = (viewBox: $Type.Icon.ViewBox): number | null => {
+  if (!viewBox) return null;
+  const w = viewBox[2];
+  const h = viewBox[3];
+  if (!w || !h) null;
+  return roundNumber(w / h, 3);
+};
+
+type IconData = $Type.Icon.IconDefinition & { ratio: number };
+
+const getIcon = (name: string | null): IconData | null => {
+  if (!name) return null;
   const icon = iconList.get(name);
+
   if (!icon) return null;
-  const w = icon.viewBox[2];
-  const h = icon.viewBox[3];
-  const ratio = roundNumber(w / h, 3);
+  if (!icon.path && !icon.tag) return null;
+
+  const ratio = getRatio(icon.viewBox);
+  if (!ratio) return null;
   return {
     ...icon,
     ratio: ratio,
   };
 };
 
-const getName = icon => {
-  let name = '';
+type Icon = string | string[] | $Type.Icon.BaseIconDefinition;
 
-  if (typeof icon === 'string') {
-    name = icon;
-  } else if (Array.isArray(icon)) {
-    name = icon.join('-');
-  } else if (typeof icon.name) {
-    if (typeof icon.name === 'string') {
-      name = icon.name;
-    } else if (Array.isArray(icon.name)) {
-      icon.name.join('-');
-    }
-  }
-  return name;
-};
+type Props = $Type.CreateProps<{
+  icon: Icon;
+  role?: string;
+  symbol?: boolean;
+  use?: boolean;
+  currentColor?: string;
+  size?: number | string;
+  fixedWidth?: string;
+  pull?: 'left' | 'right';
+  border?: boolean;
+  rotation?: number;
+  flip?: 'horizontal' | 'vertical' | 'both';
+  spin?: string | boolean;
+  pulse?: string | boolean;
+  marginLeft?: string | boolean;
+  marginRight?: string | boolean;
+}>;
 
-const Icon: React.FC = ({
+const Icon: React.FC<Props> = ({
   icon,
   role = 'icon',
   symbol,
@@ -59,66 +74,92 @@ const Icon: React.FC = ({
   marginRight,
   ...other
 }) => {
-  const [iconData, others] = React.useMemo(() => {
-    if (!icon) return [null, null];
+  if (!icon) return null;
+  const [iconData, props] = React.useMemo(() => {
+    // const name = getName(icon);
 
-    const name = getName(icon);
+    let iconData: IconData | null;
+    let name: string;
+    if (typeof icon === 'string' || Array.isArray(icon)) {
+      if (typeof icon === 'string') {
+        name = icon;
+      } else {
+        name = icon.join('-');
+      }
 
-    const iconData =
-      icon.viewBox && icon.path && icon.tag
-        ? {
-            type: 'inline',
-            viewBox: icon.viewBox,
-            path: icon.path,
-            tag: icon.tag,
-            title: icon.title || '',
-          }
-        : getIcon(name);
+      iconData = getIcon(name);
+    } else if (typeof icon.name === 'string' && Array.isArray(icon.name)) {
+      if (typeof icon.name === 'string') {
+        name = icon.name;
+      } else {
+        name = icon.name.join('-');
+      }
 
-    const isPath = !!iconData.path;
+      if (icon.viewBox && (icon.path || icon.tag)) {
+        const ratio = getRatio(icon.viewBox);
+        iconData = ratio
+          ? {
+              type: 'inline',
+              viewBox: icon.viewBox,
+              path: icon.path,
+              tag: icon.tag,
+              ratio: ratio,
+            }
+          : null;
+      } else {
+        iconData = getIcon(name);
+      }
+    } else {
+      name = '';
+      iconData = null;
+    }
+
+    if (!iconData) return [null, null];
+
+    const existPath = !!iconData.path;
 
     const baseName = `uc-svg-i-${iconData.type}`;
 
-    let others = {};
+    let props: $Type.Components.SVGProps = {};
 
-    if (currentColor || isPath) others.fill = $styles.currentColor;
+    if (currentColor || existPath) props.fill = $styles.currentColor;
 
     if (use) {
-      others = {
-        ...others,
+      props = {
+        ...props,
         _className_: `${baseName}-use-${name}`,
         use: true,
         xlinkHref: `#${baseName}-symbol-${name}`,
       };
     } else {
-      others = {
-        ...others,
+      props = {
+        ...props,
         viewBox: iconData.viewBox,
         path: iconData.path,
         tag: iconData.tag,
       };
       if (symbol) {
-        others = {
-          ...others,
+        props = {
+          ...props,
           symbol: true,
           _className_: `${baseName}-symbol-${name}`,
           _id_: `${baseName}-symbol-${name}`,
         };
       } else {
-        others = {
-          ...others,
+        props = {
+          ...props,
           _className_: `${baseName}-${name}`,
         };
       }
     }
 
-    return [iconData, others];
+    return [iconData as IconData, props];
   }, [icon, use, symbol]);
 
   if (!iconData) return null;
 
   const _style_ = React.useMemo(() => {
-    let style = {};
+    let style: React.CSSProperties = {};
 
     if (marginLeft)
       style.marginLeft =
@@ -202,7 +243,7 @@ const Icon: React.FC = ({
           }`);
     }
 
-    return { ...$styles.style, ...style };
+    return { ...($styles.style as React.CSSProperties), ...style };
   }, [
     icon,
     currentColor,
@@ -218,7 +259,7 @@ const Icon: React.FC = ({
     marginRight,
   ]);
 
-  return <SVG _style_={_style_} role={role} {...others} {...other} />;
+  return <SVG _style_={_style_} role={role} {...props} {...other} />;
 };
 
 export default Icon;

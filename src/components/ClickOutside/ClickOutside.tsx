@@ -3,7 +3,7 @@ import { extractElement, clickedScrollbar } from 'scripts';
 import { EventListener } from '..';
 
 type Props = $Type.CreateProps<{
-  target: $Type.IncludeElement;
+  target: $Type.IncludeNode;
   action: (evt: MouseEvent) => void;
   options?: AddEventListenerOptions;
   scope?: Element;

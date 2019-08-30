@@ -1,5 +1,7 @@
 import shadow from './shadow';
 
+const prefix = 'uc-';
+
 const colors = {
   white: '#fff',
   main: 'rgb(24, 144, 255)',
@@ -89,6 +91,7 @@ const transition = {
 };
 
 export default {
+  prefix,
   colors,
   selectors,
   cubicBeziers,

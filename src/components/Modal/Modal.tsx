@@ -1,6 +1,12 @@
 import * as React from 'react';
 import $ from './_constants';
-import { injectElementToRef, extractElement, useForceUpdate } from 'scripts';
+import {
+  injectElementToRef,
+  extractElement,
+  useForceUpdate,
+  isReactComponentChildren,
+  isTransitionComponent,
+} from 'scripts';
 import {
   BaseElement,
   Portal,
@@ -15,19 +21,10 @@ import {
 const $names = $.names;
 const $styles = $.styles;
 
-const getHasTransition = (children: React.ReactElement): boolean => {
-  return children && children.props
-    ? children.props.hasOwnProperty('in')
-    : false;
-};
-
 type ModalQueueValue = {
   isActive: null | boolean;
   update: () => void;
 };
-const modalQueue: ModalQueueValue[] = [];
-
-let zIndexCounter: number = $styles.modalZindex;
 
 type ClosingReason = 'escapeKeyDown' | 'outsideClick';
 
@@ -56,6 +53,10 @@ type Props = $Type.CreateProps<{
   backdropProps?: $Type.PropComponentProps<typeof Backdrop>;
 }>;
 
+const modalQueue: ModalQueueValue[] = [];
+
+let zIndexCounter: number = $styles.modalZindex;
+
 const Modal: React.FC<Props> = ({
   children,
   container,
@@ -81,6 +82,14 @@ const Modal: React.FC<Props> = ({
   contentProps: propContentProps = {},
   backdropProps: propBackdropProps = {},
 }) => {
+  if (!children) return null;
+  const transitionChild =
+    isReactComponentChildren<$Type.Transition.CommonProps>(children) &&
+    isTransitionComponent(children) &&
+    children;
+
+  if (!transitionChild) return null;
+
   const rootRef = React.useRef<null | HTMLElement>(null);
   const childRef = React.useRef<null | HTMLElement>(null);
   // Becomes true if 'open' is true,
@@ -185,8 +194,8 @@ const Modal: React.FC<Props> = ({
 
   // If you want to unmount after waiting for the transition,
   //  use 'forceUpdate' to unmount after the transition.
-  if (!children) return null;
-  const onExitedOfChildren = (children as any).props.onExited;
+
+  const onExitedOfChildren = transitionChild.props.onExited;
   const handleExited = React.useCallback(
     node => {
       if (closeAfterTransition) {
@@ -216,8 +225,7 @@ const Modal: React.FC<Props> = ({
     handleClose();
   }
 
-  const enableCloseAfterTransition =
-    closeAfterTransition && getHasTransition(children as React.ReactElement);
+  const enableCloseAfterTransition = closeAfterTransition && !!transitionChild;
 
   // If you want to wait for the transition and then unmount,
   //  the procedure is as usual when 'open' changes to true.
@@ -229,7 +237,7 @@ const Modal: React.FC<Props> = ({
     handleOpen();
   }
 
-  const { ...childProps } = (children as any).props;
+  const { ...childProps } = transitionChild ? transitionChild.props : {};
 
   if (enableCloseAfterTransition) childProps.onExited = handleExited;
 
@@ -237,7 +245,7 @@ const Modal: React.FC<Props> = ({
     childRef.current = element;
     injectElementToRef(childProps.refer, element);
   }, []);
-  const ChildComponent = (children as any).type;
+  const ChildComponent = transitionChild && transitionChild.type;
   const childComponent = (
     <ChildComponent {...childProps} refer={handleChildRef} />
   );
@@ -257,7 +265,7 @@ const Modal: React.FC<Props> = ({
           ...$styles.container.style,
           ...propRootProps.style,
         },
-        classNames: [...(propRootProps.classNames || []), $names.ucModal],
+        classNames: [...(propRootProps.classNames || []), $names.modal],
         refer: handleRootRef,
       };
     }, [propRootProps.style, propRootProps.classNames]),
@@ -273,14 +281,14 @@ const Modal: React.FC<Props> = ({
         },
         classNames: [
           ...(propContentProps.classNames || []),
-          $names.ucModalContent,
+          $names.modalContent,
         ],
       };
     }, [propContentProps.style, propContentProps.classNames]),
   };
 
   const propBackdropPropsTransitionProps =
-    !propBackdropProps.transitionProps || {};
+    propBackdropProps.transitionProps || {};
   const backdropProps = {
     ...propBackdropProps,
     ...React.useMemo(() => {
@@ -290,15 +298,15 @@ const Modal: React.FC<Props> = ({
           ...propBackdropPropsTransitionProps,
           style: {
             zIndex: $styles.backdropZindex,
-            ...(propBackdropPropsTransitionProps as any).style,
+            ...propBackdropPropsTransitionProps.style,
           },
           classNames: [
-            ...((propBackdropPropsTransitionProps as any).classNames || []),
-            $names.ucModalBackdrop,
+            ...(propBackdropPropsTransitionProps.classNames || []),
+            $names.modalBackdrop,
           ],
         },
       };
-    }, [propBackdropProps.classNames, propBackdropProps.transitionProps]), // If you change the properties in 'transitionProps', you must update 'transitionProps' itself.
+    }, [propBackdropProps.classNames, propBackdropProps.transitionProps]),
   };
 
   React.useEffect(() => {
@@ -320,9 +328,7 @@ const Modal: React.FC<Props> = ({
         {...rootProps}
       >
         {!disableScrollLock && shouldBeMounted.current && (
-          <ScrollLock
-            target={(scrollTarget || childRef) as $Type.IncludeElement}
-          />
+          <ScrollLock target={scrollTarget || childRef} />
         )}
         {!disableEscapeKeyDown && isActive && open && (
           <HotKeys hotkeys={'escape'} action={handleEscapeKeyDown} />

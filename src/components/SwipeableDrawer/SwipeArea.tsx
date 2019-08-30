@@ -20,7 +20,7 @@ const SwipeArea = ({ anchor, width, ...other }) => {
     <BaseElement
       elementName="div"
       _style_={_style_}
-      _className_={$names.ucSwipeable_drawerArea}
+      _className_={$names.ucSwipeableDrawerArea}
       {...other}
     />
   );

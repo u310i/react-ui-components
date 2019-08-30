@@ -5,9 +5,9 @@ import { Fade, BaseElement } from '..';
 
 const $styles = $.styles;
 
-type Props<T = $Type.PropTransitionComponentProps> = $Type.CreateProps<
+type Props<T = $Type.Transition.CommonProps> = $Type.CreateProps<
   {
-    open: boolean;
+    open?: boolean;
     disablePointerEvents?: boolean;
     duration?: $Type.Transition.Duration;
     invisible?: boolean;
@@ -41,17 +41,14 @@ const Backdrop: React.FC<Props> = ({
       return {
         style: {
           ...$styles.transition.style,
-          ...(propTransitionProps as any).style,
+          ...propTransitionProps.style,
         },
         classNames: [
-          ...((propTransitionProps as any).classNames || []),
-          $.names.ucBackdrop,
+          ...(propTransitionProps.classNames || []),
+          $.names.backdrop,
         ],
       };
-    }, [
-      (propTransitionProps as any).style,
-      (propTransitionProps as any).classNames,
-    ]),
+    }, [propTransitionProps.style, propTransitionProps.classNames]),
   };
 
   return (
@@ -64,7 +61,7 @@ const Backdrop: React.FC<Props> = ({
       <BaseElement
         elementName="div"
         _style_={_style_}
-        _className_={$.names.ucBackdropInner}
+        _className_={$.names.backdropInner}
         {...other}
       >
         {children}

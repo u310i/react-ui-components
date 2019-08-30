@@ -34,7 +34,7 @@ const defineContents = (children, between = true, loading) => {
           <BaseElement elementName="i"
             key={index}
             style={{ marginLeft: marginLeft }}
-            className={$names.ucButtonIcon}
+            className={$names.buttonIcon}
             children={child}
           />
         );
@@ -43,7 +43,7 @@ const defineContents = (children, between = true, loading) => {
           <BaseElement elementName="span"
             key={index}
             style={{ marginLeft: marginLeft, ...spanStyle }}
-            className={$names.ucButtonInner}
+            className={$names.buttonInner}
             children={child}
           />
         );
@@ -64,13 +64,13 @@ const defineContents = (children, between = true, loading) => {
       contents = loading ? (
         <LoadingIcon />
       ) : (
-        <BaseElement elementName="i" className={$names.ucButtonIcon} children={child} />
+        <BaseElement elementName="i" className={$names.buttonIcon} children={child} />
       );
     } else {
       contents = (
         <BaseElement elementName="span"
           style={spanStyle}
-          className={$names.ucButtonInner}
+          className={$names.buttonInner}
           children={child}
         />
       );

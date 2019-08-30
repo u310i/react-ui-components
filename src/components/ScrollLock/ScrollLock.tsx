@@ -4,7 +4,7 @@ import { extractElement, scrollLock } from 'scripts';
 // https://github.com/willmcpo/body-scroll-lock
 
 type Props = $Type.CreateProps<{
-  target: $Type.IncludeElement;
+  target?: $Type.IncludeNode<Element>;
   active?: boolean;
   fillGap?: boolean;
 }>;
@@ -15,6 +15,7 @@ const ScrollLock: React.FC<Props> = ({
   active = true,
   fillGap = true,
 }) => {
+  if (!target) return null;
   const prevActiveRef = React.useRef<null | boolean>(null);
 
   React.useEffect(() => {

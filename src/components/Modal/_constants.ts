@@ -1,35 +1,36 @@
 import $ from '../_constants';
 import { createComponentConstants, getComponentConstants } from 'scripts';
 
-const name = 'Modal';
+const name = 'modal';
 
-const constants = {
-	names: {
-		ucModal: 'uc-modal',
-		ucModalContent: 'uc-modal-content',
-		ucModalBackdrop: 'uc-modal-backdrop'
-	},
-	styles: {
-		content: {
-			style: {
-				position: 'fixed',
-				top: 0,
-				left: 0,
-				right: 0,
-				bottom: 0,
-				zIndex: 1
-			}
-		},
-		container: {
-			style: {
-				position: 'relative'
-			}
-		},
-		modalZindex: $.zIndex.modal,
-		backdropZindex: 0
-	}
-};
+export const constants = {
+  name: name as typeof name,
+  names: {
+    modal: `${$.prefix}${name}`,
+    modalContent: `${$.prefix}${name}-content`,
+    modalBackdrop: `${$.prefix}${name}-backdrop`,
+  },
+  styles: {
+    content: {
+      style: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 1,
+      },
+    },
+    container: {
+      style: {
+        position: 'relative',
+      },
+    },
+    modalZindex: $.zIndex.modal,
+    backdropZindex: 0,
+  },
+} as const;
 
-createComponentConstants(constants, name);
+createComponentConstants(name, constants);
 
 export default getComponentConstants(name);

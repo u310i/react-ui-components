@@ -60,7 +60,7 @@ const List = ({
   }, [width, children, space, levelStyle]);
 
   return (
-    <BaseElement _style_={_style_} _className_={$names.ucList} {...other}>
+    <BaseElement _style_={_style_} _className_={$names.list} {...other}>
       {children}
     </BaseElement>
   );
@@ -90,7 +90,7 @@ const ListGroup = ({
   }, [title]);
 
   return (
-    <BaseElement elementName="li" _className_={$names.ucListGroup} {...other}>
+    <BaseElement elementName="li" _className_={$names.listGroup} {...other}>
       {titleComponent}
       <BaseElement elementName="ul">{children}</BaseElement>
     </BaseElement>

@@ -2,36 +2,47 @@ import * as React from 'react';
 import $ from './_constants';
 import { roundNumber } from 'scripts';
 import { BaseElement } from '..';
+import iconList from 'src/icons';
 
 const $styles = $.styles;
 const $names = $.names;
 
 type ViewBox = [number, number, number, number];
 
-type Props = ({ path?: string; tag: string } | { path: string; tag?: string }) &
-  $Type.CreateProps<
-    {
-      viewBox: ViewBox;
-      innerProps: React.SVGAttributes<Element>;
-      symbol: boolean;
-      symbolTagId: string;
-      symbolTagProps: React.SVGAttributes<Element>;
-      use: boolean;
-      useTagHref: string;
-      useTagProps: React.SVGAttributes<Element>;
-      transform?: string;
-      title?: string;
-      desc?: string;
-      role?: string;
-      style?: React.CSSProperties;
-    },
-    typeof BaseElement
-  >;
+type Props<T = $Type.Components.BaseElementSVGProps> = $Type.CreateProps<
+  {
+    path?: $Type.Icon.Path;
+    tag?: string;
+    viewBox?: ViewBox;
+    innerProps?: T;
+    symbol?: boolean;
+    symbolTagId?: string;
+    symbolTagProps?: T;
+    use?: boolean;
+    useTagHref?: string;
+    useTagProps?: T;
+    transform?: string;
+    title?: string;
+    desc?: string;
+    role?: string;
+    style?: React.CSSProperties;
+  },
+  $Type.Components.BaseElementSVGProps
+>;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      type SVGProps = Props;
+    }
+  }
+}
 
 const SVG: React.FC<Props> = ({
-  viewBox,
+  children,
   path,
   tag,
+  viewBox = [0, 0, 512, 512],
   innerProps: propInnerProps,
   symbol,
   symbolTagId,
@@ -53,7 +64,7 @@ const SVG: React.FC<Props> = ({
     style: React.useMemo(() => {
       return { pointerEvents: $styles.pointerEvents, ...propStyle };
     }, [propStyle]),
-    _className_: $names.ucSVG,
+    _className_: $names.svg,
     role,
     ...other,
   };
@@ -64,7 +75,7 @@ const SVG: React.FC<Props> = ({
 
   let outerTransformValue: string | undefined;
   innerProps = React.useMemo(() => {
-    if (transform === typeof 'string') {
+    if (transform === typeof 'string' && viewBox) {
       const x = roundNumber(viewBox[2] / 2, 6);
       const y = roundNumber(viewBox[3] / 2, 6);
 
@@ -78,18 +89,40 @@ const SVG: React.FC<Props> = ({
 
   let InnerComponent = React.useMemo(() => {
     return (
-      (path && (
+      (children && (
         <BaseElement
-          elementName="path"
-          _className_={$names.ucSVGInner}
+          elementName="g"
+          _className_={$names.svgInner}
           {...innerProps}
-          d={path}
-        />
+        >
+          {children}
+        </BaseElement>
       )) ||
+      (path &&
+        (typeof path === 'string' ? (
+          <BaseElement
+            elementName="path"
+            _className_={$names.svgInner}
+            {...innerProps}
+            d={path}
+          />
+        ) : Array.isArray(path) ? (
+          path.map(pathItem => {
+            if (typeof pathItem !== 'string') return null;
+            return (
+              <BaseElement
+                elementName="path"
+                _className_={$names.svgInner}
+                {...innerProps}
+                d={pathItem}
+              />
+            );
+          })
+        ) : null)) ||
       (tag && (
         <BaseElement
           elementName="g"
-          _className_={$names.ucSVGInner}
+          _className_={$names.svgInner}
           {...innerProps}
           dangerouslySetInnerHTML={{ __html: tag }}
         />
@@ -98,13 +131,13 @@ const SVG: React.FC<Props> = ({
   }, [path, tag, innerProps]);
 
   InnerComponent = React.useMemo(() => {
-    if (transform === typeof 'string') {
+    if (transform === typeof 'string' && viewBox) {
       return (
         <g
           transform={outerTransformValue}
-          className={$names.ucSVGTransformGroupOuter}
+          className={$names.svgTransformGroupOuter}
         >
-          <g transform={transform} className={$names.ucSVGTransformGroupInner}>
+          <g transform={transform} className={$names.svgTransformGroupInner}>
             {InnerComponent}
           </g>
         </g>
@@ -127,15 +160,14 @@ const SVG: React.FC<Props> = ({
           elementName="symbol"
           viewBox={viewBox.join(' ')}
           id={symbolTagId}
-          _className_={$names.ucSVGSymbol}
+          _className_={$names.svgSymbol}
           {...symbolTagProps}
         >
           {InnerComponent}
         </BaseElement>
       </BaseElement>
     );
-  }
-  if (use) {
+  } else if (use) {
     return (
       <BaseElement
         elementName="svg"
@@ -149,7 +181,7 @@ const SVG: React.FC<Props> = ({
           elementName="use"
           xlinkHref={useTagHref}
           href={useTagHref}
-          _className_={$names.ucSVGUse}
+          _className_={$names.svgUse}
           {...useTagProps}
         />
       </BaseElement>

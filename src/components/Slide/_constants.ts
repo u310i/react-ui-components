@@ -3,11 +3,10 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 
 const name = 'slide';
 
-const $easeOutCubicBeziers = $.cubicBeziers.easeOut;
-
-const constants = {
+export const constants = {
+  name: name as typeof name,
   names: {
-    ucSlide: 'uc-slide',
+    slide: `${$.prefix}${name}`,
   },
   styles: {
     style: {
@@ -17,16 +16,16 @@ const constants = {
     },
     duration: $.transition.duration,
     easing: {
-      enter: $easeOutCubicBeziers,
-      exit: $easeOutCubicBeziers,
+      enter: $.cubicBeziers.easeOut,
+      exit: $.cubicBeziers.easeOut,
     },
     direction: 'down',
     exitedVisibility: 'hidden',
     enteredTranslate: 'translate(0, 0)',
     gutter: 24,
   },
-};
+} as const;
 
-createComponentConstants(constants, name);
+createComponentConstants(name, constants);
 
 export default getComponentConstants(name);

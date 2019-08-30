@@ -1,56 +1,69 @@
 // import * as React from 'react';
 import * as CSS from 'csstype';
+import { Component } from 'react';
 
 declare global {
-  namespace $Type {
-    namespace Components {}
+  export namespace $Type {
+    namespace Components { }
     namespace Constants {
       namespace Origin {
         type Shape = 'corner' | 'default' | 'round' | 'circle';
       }
 
-      namespace Transition {}
+      namespace Transition { }
     }
     namespace Transition {
+      type CommonProps<
+        T1 = Components.CSSTransitionProps,
+        T2 = {
+          duration?: Duration;
+          easing?: Easing;
+          disableHideVisibility?: boolean;
+        },
+        T3 = Components.BaseElementProps
+        > = T1 & T2 & Omit<T3, keyof T1 | keyof T2>;
+
       type Duration =
         | {
-            enter: number;
-            exit?: number;
-            appear?: number;
-          }
+          enter: number;
+          exit?: number;
+          appear?: number;
+        }
         | number;
       type Easing =
         | {
-            enter: string;
-            exit?: string;
-            appear?: string;
-          }
+          enter: string;
+          exit?: string;
+          appear?: string;
+        }
         | string;
     }
 
-    // type CreateProps<
-    //   T1,
-    //   T2 extends keyof JSX.IntrinsicElements | '' = '',
-    //   T3 extends {} = {}
-    // > = Readonly<T1> &
-    //   T3 &
-    //   (T2 extends keyof JSX.IntrinsicElements
-    //     ? Omit<
-    //         Partial<BaseElementProps> &
-    //           Omit<JSX.IntrinsicElements[T2], keyof BaseElementProps>,
-    //         keyof T1
-    //       >
-    //     : {});
+    type DeepPartial<T> = {
+      [P in keyof T]?: T[P] extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T[P] extends ReadonlyArray<infer U>
+      ? ReadonlyArray<DeepPartial<U>>
+      : DeepPartial<T[P]>;
+    };
+
+    type ExtractProps<
+      T extends React.JSXElementConstructor<any> | {}
+      > = T extends React.JSXElementConstructor<infer P> ? P : {};
 
     type CreateProps<
-      T1,
+      T1 extends {} = {},
       T2 extends React.JSXElementConstructor<any> | {} = {},
       T3 extends {} = {}
-    > = Readonly<T1> &
-      (T2 extends React.JSXElementConstructor<infer P>
-        ? Omit<Partial<P>, keyof T1>
-        : {}) &
-      Omit<T3, keyof T1>;
+      > = Partial<
+        Readonly<T1> &
+        (T2 extends React.JSXElementConstructor<any>
+          ? Omit<ExtractProps<T2>, 'children' | keyof T1 | keyof T3>
+          : T2 extends {}
+          ? Omit<T2, 'children' | keyof T1 | keyof T3>
+          : {}) &
+        Omit<T3, 'children' | keyof T1>
+      >;
 
     // type SpecificPartial<T, K extends keyof T> = Partial<Pick<T, K>> &
     //   Omit<T, K>;
@@ -64,27 +77,27 @@ declare global {
     };
 
     type PropComponentProps<
-      T extends React.JSXElementConstructor<any>,
-      K extends string = 'children'
-    > = Partial<Omit<React.ComponentProps<T>, K>>;
-
-    type PropTransitionComponentProps = BaseElementProps &
-      Transition.TransitionProps;
+      T extends React.JSXElementConstructor<any>
+      > = Partial<Omit<ExtractProps<T>, 'children'>>;
 
     type PartiallyPartial<T, K extends keyof T> = Partial<Pick<T, K>> &
       Omit<T, K>;
 
-    type MaybeElement = Element | null;
-    type Ref =
+
+
+    type MaybeNode<T = Node> = T | null;
+
+    type Ref<T = Node> =
       | {
-          current: Element | null;
-        }
-      | ((element: Element | null) => void);
-    type IncludeElement =
-      | { current: MaybeElement }
-      | (() => MaybeElement)
+        current: T | null;
+      }
+      | ((element: T | null) => void);
+
+    type IncludeNode<T = Node> =
+      | { current: MaybeNode<T> }
+      | (() => MaybeNode<T>)
       | string
-      | Element
+      | T
       | null;
 
     // type IntrinsicElementsKeys = JSX.IntrinsicElements[keyof JSX.IntrinsicElements];

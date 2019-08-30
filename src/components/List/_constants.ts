@@ -3,39 +3,40 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 
 const name = 'list';
 
-const constants = {
+export const constants = {
+  name: name as typeof name,
   names: {
-    ucList: 'uc-list',
-    ucListGroup: 'uc-list-group'
+    list: `${$.prefix}${name}`,
+    listGroup: `${$.prefix}${name}-group`,
   },
   selectors: {
     divFirstChild: '& > div:first-child',
     ulSecondChild: '& > ul:nth-child(2)',
-    nthChild: $.selectors.nested.nthChild
+    nthChild: $.selectors.nested.nthChild,
   },
   styles: {
     list: {
-      width: '256px'
+      width: '256px',
     },
     group: {
       title: {
         display: 'flex',
         alignItems: 'center',
-        height: '3em'
+        height: '3em',
         // paddingLeft: '1em'
-      }
+      },
     },
     item: {
       main: {
         display: 'flex',
         alignItems: 'center',
-        height: '3em'
+        height: '3em',
         // paddingLeft: '1em'
-      }
-    }
-  }
-};
+      },
+    },
+  },
+} as const;
 
-createComponentConstants(constants, name);
+createComponentConstants(name, constants);
 
 export default getComponentConstants(name);

@@ -33,7 +33,7 @@ const Paper: React.FC<Props> = ({
     <BaseElement
       elementName="div"
       _style_={_style_}
-      _className_={$names.ucPaper}
+      _className_={$names.paper}
       {...other}
     >
       {children}

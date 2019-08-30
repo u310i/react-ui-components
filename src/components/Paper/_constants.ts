@@ -1,11 +1,12 @@
 import $ from '../_constants';
 import { createComponentConstants, getComponentConstants } from 'scripts';
 
-const name = 'Paper';
+const name = 'paper';
 
-const constants = {
+export const constants = {
+  name: name as typeof name,
   names: {
-    ucPaper: 'uc-paper',
+    paper: `${$.prefix}${name}`,
   },
   styles: {
     style: {
@@ -15,8 +16,8 @@ const constants = {
   shadow: $.shadow,
   shape: $.shape,
   color: $.colors.white,
-};
+} as const;
 
-createComponentConstants(constants, name);
+createComponentConstants(name, constants);
 
 export default getComponentConstants(name);

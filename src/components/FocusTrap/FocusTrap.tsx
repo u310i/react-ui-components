@@ -16,8 +16,8 @@ type Props = $Type.CreateProps<
     paused?: boolean;
     onActivate?: () => void;
     onDeactivate?: () => void;
-    initialFocus?: $Type.IncludeElement;
-    fallbackFocus?: $Type.IncludeElement;
+    initialFocus?: $Type.IncludeNode;
+    fallbackFocus?: $Type.IncludeNode;
     disableRestoreFocus?: boolean;
     disableEscapeKeyDown?: boolean;
     disableOutsideClick?: boolean;

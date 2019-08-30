@@ -6,7 +6,7 @@ import {
   createPageConstants,
   createComponentConstants,
   getComponentConstants,
-} from './init';
+} from './constants';
 import {
   raf,
   deepMerge,
@@ -49,6 +49,8 @@ import {
   adjustBrightnessFromCssRgb,
 } from './color';
 import {
+  isReactComponentChildren,
+  isTransitionComponent,
   // isArray,
   // isEmptyArray,
   // isObject,
@@ -89,10 +91,7 @@ import {
 // import { useGlobalState } from './hooks/useGlobalState';
 
 export {
-  // init
-  // defaultTheme,
-  // genTheme,
-  // resetGlobalStyle,
+  // constants
   createAppConstants,
   createPageConstants,
   createComponentConstants,
@@ -138,6 +137,8 @@ export {
   adjustBrightness,
   adjustBrightnessFromCssRgb,
   // checkTypes
+  isReactComponentChildren,
+  isTransitionComponent,
   isNumber,
   isInteger,
   isEven,

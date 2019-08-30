@@ -58,7 +58,7 @@ type Props = $Type.CreateProps<
     disableHideVisibility?: boolean;
   },
   typeof BaseElement,
-  $Type.Transition.TransitionProps
+  $Type.Components.CSSTransitionProps
 >;
 
 const Slide: React.FC<Props> = ({
@@ -156,15 +156,15 @@ const Slide: React.FC<Props> = ({
       {...other}
     >
       {(
-        state: $Type.Transition.childStatus,
-        childProps: $Type.BaseElementProps
+        state: $Type.Components.CSSTransitionChildStatus,
+        childProps: $Type.Components.BaseElementProps
       ) => {
         return (
           <BaseElement
             elementName="div"
             _refer_={_ref_}
             _style_={$styles.style}
-            _className_={$names.ucSlide}
+            _className_={$names.slide}
             {...childProps}
           >
             {children}

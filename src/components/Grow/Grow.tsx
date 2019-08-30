@@ -31,7 +31,7 @@ type Props = $Type.CreateProps<
     disableHideVisibility?: boolean;
   },
   typeof BaseElement,
-  $Type.Transition.TransitionProps
+  $Type.Components.CSSTransitionProps
 >;
 
 const Grow: React.FC<Props> = ({
@@ -139,14 +139,14 @@ const Grow: React.FC<Props> = ({
       {...other}
     >
       {(
-        state: $Type.Transition.childStatus,
-        childProps: $Type.BaseElementProps
+        state: $Type.Components.CSSTransitionChildStatus,
+        childProps: $Type.Components.BaseElementProps
       ) => {
         return (
           <BaseElement
             elementName="div"
             _style_={$styles.style}
-            _className_={$names.ucGrow}
+            _className_={$names.grow}
             _refer_={_ref_}
             {...childProps}
           >

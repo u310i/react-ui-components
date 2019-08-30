@@ -18,7 +18,7 @@ const passiveSupported = (() => {
     },
   });
 
-  const noop = () => {};
+  const noop = () => { };
 
   window.addEventListener('testPassiveEventSupport', noop, options);
   window.removeEventListener('testPassiveEventSupport', noop, options);
@@ -30,24 +30,28 @@ export const testPassiveEventSupport = () => passiveSupported;
 
 const createListenerOptions = passiveSupported
   ? (options: AddEventListenerOptions) => {
-      const passive =
-        typeof options.passive === 'undefined' ? true : options.passive;
-      return {
-        ...options,
-        passive: passive,
-      };
-    }
-  : (options: AddEventListenerOptions) => {
-      return options.capture || {};
+    const passive =
+      typeof options.passive === 'undefined' ? true : options.passive;
+    return {
+      ...options,
+      passive: passive,
     };
+  }
+  : (options: AddEventListenerOptions) => {
+    return options.capture || {};
+  };
 
+
+type addEventListenerArgs = $Type.Components.EventListenerProps
 export const addEventListener = (
-  target: Element,
-  type: string,
-  listener: EventListener,
-  options: AddEventListenerOptions = {},
-  optimized = false
-) => {
+  target: addEventListenerArgs['target'],
+  type: addEventListenerArgs['type'],
+  listener: addEventListenerArgs['listener'],
+  options: addEventListenerArgs['options'] = {},
+  optimized: addEventListenerArgs['optimized'] = false
+): (() => void) | null => {
+  if (!target || !type || !listener) return null
+
   const optimizeClearlRef: {
     clear: null | (() => void);
   } = {

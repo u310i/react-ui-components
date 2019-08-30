@@ -20,7 +20,7 @@ type Props = $Type.CreateProps<
     disableHideVisibility?: boolean;
   },
   typeof BaseElement,
-  $Type.Transition.TransitionProps
+  $Type.Components.CSSTransitionProps
 >;
 
 const Collapse: React.FC<Props> = ({
@@ -142,21 +142,21 @@ const Collapse: React.FC<Props> = ({
       {...other}
     >
       {(
-        state: $Type.Transition.childStatus,
-        childProps: $Type.BaseElementProps
+        state: $Type.Components.CSSTransitionChildStatus,
+        childProps: $Type.Components.BaseElementProps
       ) => {
         return (
           <BaseElement
             elementName="div"
             _style_={$styles.outer.style}
-            _className_={$names.ucCollapse}
+            _className_={$names.collapse}
             _refer_={_outerRef_}
             {...childProps}
           >
             <BaseElement
               elementName="div"
               _style_={$styles.inner.style}
-              _className_={$names.ucCollapseInner}
+              _className_={$names.collapseInner}
               _refer_={_innerRef_}
               {...innerProps}
             >

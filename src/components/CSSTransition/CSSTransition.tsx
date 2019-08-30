@@ -64,6 +64,7 @@ type TransitionHandlerKeys =
 
 type TransitionPropsKeys =
   | 'in'
+  | 'timeout'
   | 'mountOnEnter'
   | 'unmountOnExit'
   | 'addEndListener'
@@ -77,13 +78,13 @@ type Props = $Type.CreateProps<
   } & Pick<_TransitionProps, TransitionPropsKeys>
 >;
 
-type CharacteristicProps = Pick<_TransitionProps, 'children' | 'timeout'>;
+type CharacteristicProps = Pick<_TransitionProps, 'children'>;
 
 declare global {
   namespace $Type {
-    namespace Transition {
-      type childStatus = _TransitionStatus;
-      type TransitionProps = Props;
+    namespace Components {
+      type CSSTransitionProps = Partial<Props>;
+      type CSSTransitionChildStatus = _TransitionStatus;
     }
   }
 }
@@ -93,6 +94,7 @@ const ReactCSSTransition: $Type.FunctionComponentWithoutChildren<
 > = ({
   children,
   in: inProp,
+  timeout = 300,
   appear = false,
   disableClassing = false,
   lazyAppear = false,
@@ -254,6 +256,7 @@ const ReactCSSTransition: $Type.FunctionComponentWithoutChildren<
   return (
     <Transition
       in={inRef.current}
+      timeout={timeout}
       appear={appear}
       onEnter={handleOnEnter}
       onEntering={handleOnEntering}

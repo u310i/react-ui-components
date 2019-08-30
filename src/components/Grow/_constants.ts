@@ -3,9 +3,10 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 
 const name = 'grow';
 
-const constants = {
+export const constants = {
+  name: name as typeof name,
   names: {
-    ucGrow: 'uc-grow',
+    grow: `${$.prefix}${name}`,
   },
   styles: {
     style: {
@@ -24,8 +25,8 @@ const constants = {
     scaleYRatio: 0.6,
     exitedVisibility: 'hidden',
   },
-};
+} as const;
 
-createComponentConstants(constants, name);
+createComponentConstants(name, constants);
 
 export default getComponentConstants(name);
