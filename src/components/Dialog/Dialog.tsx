@@ -8,7 +8,22 @@ const $styles = $.styles;
 const $transitionStyle = $styles.transition;
 const $innerStyle = $styles.inner;
 
-const Dialog = ({
+type Props = $Type.CreateProps<{
+  open?: boolean;
+  onEscapeKeyDown?: (evt: KeyboardEvent) => void;
+  onOutsideClick?: (evt: MouseEvent) => void;
+  keepMount: boolean;
+  arias: React.AriaAttributes;
+  enableScrollBody: boolean;
+  fullScreen: boolean;
+  modalProps: Omit<$Type.ExtractProps<typeof Modal>, 'children'>;
+  TransitionComponent: React.FC<$Type.Transition.CommonProps>;
+  transitionProps: $Type.Transition.CommonProps;
+  InnerComponent: typeof Paper;
+  innerProps: Omit<$Type.ExtractProps<typeof Paper>, 'children'>;
+}>;
+
+const Dialog: React.FC<Props> = ({
   children,
   open,
   onEscapeKeyDown,
@@ -23,10 +38,10 @@ const Dialog = ({
   InnerComponent = Paper,
   innerProps: propInnerProps = {},
 }) => {
-  const innerRef = React.useRef(null);
+  const innerRef = React.useRef<null | HTMLElement>(null);
 
-  if (!propModalProps.rootProps) propModalProps.rootProps = {};
-  if (!propModalProps.contentProps) propModalProps.contentProps = {};
+  const propModalPropsRootProps = propModalProps.rootProps || {};
+  const propModalPropsContentProps = propModalProps.contentProps || {};
   const modalProps = {
     onEscapeKeyDown,
     onOutsideClick,
@@ -35,22 +50,22 @@ const Dialog = ({
     ...React.useMemo(() => {
       return {
         rootProps: {
-          ...propModalProps.rootProps,
+          ...propModalPropsRootProps,
           classNames: [
-            ...(propModalProps.rootProps.classNames || []),
+            ...(propModalPropsRootProps.classNames || []),
             $names.dialog,
           ],
         },
         contentProps: {
-          ...propModalProps.contentProps,
+          ...propModalPropsContentProps,
           classNames: [
-            ...(propModalProps.contentProps.classNames || []),
+            ...(propModalPropsContentProps.classNames || []),
             $names.dialogContainer,
           ],
           arias: {
             'aria-modal': true,
             ...propArias,
-            ...propModalProps.contentProps.arias,
+            ...propModalPropsContentProps.arias,
           },
         },
       };
@@ -79,8 +94,8 @@ const Dialog = ({
     ]),
   };
 
-  const handleInnerRef = React.useCallback(element => {
-    innerRef.current = element;
+  const handleInnerRef = React.useCallback((element: Element | null) => {
+    innerRef.current = element as HTMLElement;
     injectElementToRef(propInnerProps.refer, element);
   }, []);
   const innerProps = {
@@ -93,10 +108,7 @@ const Dialog = ({
           ...(fullScreen && $innerStyle.fullScreen.style),
           ...propInnerProps.style,
         },
-        classNames: [
-          ...(propInnerProps.classNames || []),
-          $names.dialogInner,
-        ],
+        classNames: [...(propInnerProps.classNames || []), $names.dialogInner],
         refer: handleInnerRef,
       };
     }, [

@@ -3,12 +3,24 @@ import { getComponentConstants } from 'scripts';
 import { isHorizontal } from '../Drawer/Drawer';
 import { BaseElement } from '..';
 
-const $ = getComponentConstants('swipeable_drawer');
+const $ = getComponentConstants('swipeableDrawer');
 
 const $swipeAreaStyles = $.styles.swipeArea;
 const $names = $.names;
 
-const SwipeArea = ({ anchor, width, ...other }) => {
+type Props = $Type.CreateProps<
+  {
+    anchor: $Type.Components.DrawerAnchor;
+    width: number;
+  },
+  typeof BaseElement
+>;
+
+const SwipeArea: $Type.FunctionComponentWithoutChildren<Props> = ({
+  anchor = 'left',
+  width = 40,
+  ...other
+}) => {
   const _style_ = React.useMemo(() => {
     return {
       ...$swipeAreaStyles.style,
@@ -20,7 +32,7 @@ const SwipeArea = ({ anchor, width, ...other }) => {
     <BaseElement
       elementName="div"
       _style_={_style_}
-      _className_={$names.ucSwipeableDrawerArea}
+      _className_={$names.swipeableDrawerArea}
       {...other}
     />
   );

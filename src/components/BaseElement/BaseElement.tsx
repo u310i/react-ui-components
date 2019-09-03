@@ -17,8 +17,8 @@ type ComponentProps = {
   id?: string;
   _arias_?: React.AriaAttributes;
   arias?: React.AriaAttributes;
-  _refer_?: $Type.Ref;
-  refer?: $Type.Ref;
+  _refer_?: $Type.Ref<Element>;
+  refer?: $Type.Ref<Element>;
   elementName?: keyof JSX.IntrinsicElements;
 };
 
@@ -31,12 +31,18 @@ type Props<
 declare global {
   namespace $Type {
     namespace Components {
-      type BaseElementProps = Partial<Props>;
+      type BaseElementProps = Omit<Partial<Props>, BaseElementIgnoreProps>;
       type BaseElementDefinedProps = Partial<ComponentProps>;
       type BaseElementSVGProps = Partial<
         ComponentProps &
           Omit<React.SVGAttributes<Element>, keyof ComponentProps>
       >;
+      type BaseElementIgnoreProps =
+        | '_style_'
+        | '_className'
+        | '_id_'
+        | '_arias_'
+        | '_refer_';
     }
   }
 }

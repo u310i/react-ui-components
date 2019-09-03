@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
+import { extractElement } from 'scripts';
 
 type Props = $Type.CreateProps<{
   container?: Element;
@@ -17,6 +18,9 @@ const Portal: React.FC<Props> = ({
   onMount,
   onUnmount,
 }) => {
+  const containerNode = extractElement(container);
+  if (!containerNode) return null;
+
   React.useEffect(() => {
     onMount && onMount();
     return () => {
@@ -26,7 +30,7 @@ const Portal: React.FC<Props> = ({
   return disablePortal ? (
     <>{children}</>
   ) : (
-    createPortal(children, container, key)
+    createPortal(children, containerNode, key)
   );
 };
 

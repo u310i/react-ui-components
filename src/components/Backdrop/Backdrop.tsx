@@ -5,14 +5,14 @@ import { Fade, BaseElement } from '..';
 
 const $styles = $.styles;
 
-type Props<T = $Type.Transition.CommonProps> = $Type.CreateProps<
+type Props = $Type.CreateProps<
   {
     open?: boolean;
     disablePointerEvents?: boolean;
     duration?: $Type.Transition.Duration;
     invisible?: boolean;
-    TransitionComponent?: React.FC<T>;
-    transitionProps?: T;
+    TransitionComponent?: React.FC<$Type.Transition.CommonProps>;
+    transitionProps?: $Type.Transition.CommonProps;
   },
   typeof BaseElement
 >;

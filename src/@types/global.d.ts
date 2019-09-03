@@ -53,16 +53,16 @@ declare global {
 
     type CreateProps<
       T1 extends {} = {},
-      T2 extends React.JSXElementConstructor<any> | {} = {},
+      T2 extends any = {},
       T3 extends {} = {}
       > = Partial<
         Readonly<T1> &
         (T2 extends React.JSXElementConstructor<any>
-          ? Omit<ExtractProps<T2>, 'children' | keyof T1 | keyof T3>
+          ? Omit<ExtractProps<T2>, 'children' | Components.BaseElementIgnoreProps | keyof T1 | keyof T3>
           : T2 extends {}
-          ? Omit<T2, 'children' | keyof T1 | keyof T3>
+          ? Omit<T2, 'children' | Components.BaseElementIgnoreProps | keyof T1 | keyof T3>
           : {}) &
-        Omit<T3, 'children' | keyof T1>
+        Omit<T3, 'children' | Components.BaseElementIgnoreProps | keyof T1>
       >;
 
     // type SpecificPartial<T, K extends keyof T> = Partial<Pick<T, K>> &

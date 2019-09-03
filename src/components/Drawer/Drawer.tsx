@@ -9,7 +9,17 @@ const $modalContentStyle = $styles.modal.content;
 const $transitionStyle = $styles.transition;
 const $innerStyle = $styles.inner;
 
-export const isHorizontal = anchor => {
+type Anchor = 'left' | 'right' | 'top' | 'bottom';
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      type DrawerAnchor = Anchor;
+    }
+  }
+}
+
+export const isHorizontal = (anchor: Anchor): boolean => {
   return ['left', 'right'].indexOf(anchor) !== -1;
 };
 
@@ -18,20 +28,39 @@ const slideDirections = {
   right: 'left',
   top: 'down',
   bottom: 'up',
-};
+} as const;
 
-export const getSlideDirections = anchor => {
+export const getSlideDirections = (
+  anchor: Anchor
+): $Type.Components.SlideDirection => {
   return slideDirections[anchor];
 };
 
-const Drawer = ({
+type Props = $Type.CreateProps<{
+  open?: boolean;
+  anchor: Anchor;
+  onEscapeKeyDown?: (evt: KeyboardEvent) => void;
+  onOutsideClick?: (evt: MouseEvent) => void;
+  keepMount: boolean;
+  arias: React.AriaAttributes;
+  modalProps: Omit<$Type.ExtractProps<typeof Modal>, 'children'>;
+  TransitionComponent: React.FC<
+    {
+      direction?: $Type.Components.SlideDirection;
+    } & Omit<$Type.Transition.CommonProps, 'direction'>
+  >;
+  transitionProps: Omit<$Type.Transition.CommonProps, 'direction'>;
+  InnerComponent: typeof Paper;
+  innerProps: Omit<$Type.ExtractProps<typeof Paper>, 'children'>;
+}>;
+
+const Drawer: React.FC<Props> = ({
   children,
-  refer,
   open,
+  anchor = 'left',
   onEscapeKeyDown,
   onOutsideClick,
   keepMount = true,
-  anchor = 'left',
   arias: propArias,
   modalProps: propModalProps = {},
   TransitionComponent = Slide,
@@ -41,8 +70,10 @@ const Drawer = ({
 }) => {
   const innerRef = React.useRef(null);
 
-  if (!propModalProps.rootProps) propModalProps.rootProps = {};
-  if (!propModalProps.contentProps) propModalProps.contentProps = {};
+  const direction = getSlideDirections(anchor);
+
+  const propModalPropsRootProps = propModalProps.rootProps || {};
+  const propModalPropsContentProps = propModalProps.contentProps || {};
   const modalProps = {
     onEscapeKeyDown,
     onOutsideClick,
@@ -51,27 +82,27 @@ const Drawer = ({
     ...React.useMemo(() => {
       return {
         rootProps: {
-          ...propModalProps.rootProps,
+          ...propModalPropsRootProps,
           classNames: [
-            ...(propModalProps.rootProps.classNames || []),
+            ...(propModalPropsRootProps.classNames || []),
             $names.drawer,
           ],
         },
         contentProps: {
-          ...propModalProps.contentProps,
+          ...propModalPropsContentProps,
           style: {
             ...$modalContentStyle.style,
             ...$modalContentStyle[anchor].style,
-            ...propModalProps.contentProps.style,
+            ...propModalPropsContentProps.style,
           },
           classNames: [
-            ...(propModalProps.contentProps.classNames || []),
+            ...(propModalPropsContentProps.classNames || []),
             $names.drawerContainer,
           ],
           arias: {
             'aria-modal': true,
             ...propArias,
-            ...propModalProps.contentProps.arias,
+            ...propModalPropsContentProps.arias,
           },
         },
       };
@@ -110,10 +141,7 @@ const Drawer = ({
             : $innerStyle.vertical.style),
           ...propInnerProps.style,
         },
-        classNames: [
-          ...(propInnerProps.classNames || []),
-          $names.drawerInner,
-        ],
+        classNames: [...(propInnerProps.classNames || []), $names.drawerInner],
         refer: handleInnerRef,
       };
     }, [propInnerProps.style, propInnerProps.classNames]),
@@ -129,7 +157,7 @@ const Drawer = ({
       <TransitionComponent
         in={open}
         appear={false}
-        direction={getSlideDirections(anchor)}
+        direction={direction}
         {...transitionProps}
       >
         <InnerComponent

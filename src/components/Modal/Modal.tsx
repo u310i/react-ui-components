@@ -29,6 +29,10 @@ type ModalQueueValue = {
 type ClosingReason = 'escapeKeyDown' | 'outsideClick';
 
 type Props = $Type.CreateProps<{
+  children?: React.ReactElement<
+    $Type.Transition.CommonProps,
+    React.JSXElementConstructor<any>
+  >;
   container?: Element;
   open?: boolean;
   onClose?: (node: Element | null, reason: ClosingReason | null) => void;
@@ -47,7 +51,7 @@ type Props = $Type.CreateProps<{
   disableScrollLock?: boolean;
   scrollTarget?: Element;
   clickOutsideProps?: $Type.PropComponentProps<typeof ClickOutside>;
-  fallbackFocus?: Element;
+  fallbackFocus?: $Type.IncludeNode<HTMLElement>;
   rootProps?: $Type.PropComponentProps<typeof HideOtherAria>;
   contentProps?: $Type.PropComponentProps<typeof FocusTrap>;
   backdropProps?: $Type.PropComponentProps<typeof Backdrop>;
@@ -57,7 +61,7 @@ const modalQueue: ModalQueueValue[] = [];
 
 let zIndexCounter: number = $styles.modalZindex;
 
-const Modal: React.FC<Props> = ({
+const Modal: $Type.FunctionComponentWithoutChildren<Props> = ({
   children,
   container,
   open = false,
@@ -184,7 +188,7 @@ const Modal: React.FC<Props> = ({
     if (fallbackFocus) {
       const element = extractElement(fallbackFocus);
       if (!element) return null;
-      (element as HTMLElement).tabIndex = 0;
+      element.tabIndex = 0;
       return element;
     }
     if (!childRef.current) return null;

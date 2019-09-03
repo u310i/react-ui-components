@@ -14,10 +14,12 @@ export const constants = {
     svgTransformGroupInner: `${$.prefix}${name}-transform-group-inner`,
   },
   styles: {
+    style: {
+      pointerEvents: 'none',
+    },
     xmlns: 'http://www.w3.org/2000/svg',
     xmlnsXlink: 'http://www.w3.org/1999/xlink',
     role: 'img',
-    pointerEvents: 'none',
     symbolDisplay: 'none',
   },
 } as const;

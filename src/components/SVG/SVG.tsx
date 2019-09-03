@@ -7,7 +7,7 @@ import iconList from 'src/icons';
 const $styles = $.styles;
 const $names = $.names;
 
-type ViewBox = [number, number, number, number];
+type ViewBox = $Type.Icon.ViewBox;
 
 type Props<T = $Type.Components.BaseElementSVGProps> = $Type.CreateProps<
   {
@@ -57,13 +57,11 @@ const SVG: React.FC<Props> = ({
   style: propStyle,
   ...other
 }) => {
-  const titleTag = title && <title>{title}</title>;
-  const descTag = desc && <desc>{desc}</desc>;
+  const titleTag = title ? <title>{title}</title> : null;
+  const descTag = desc ? <desc>{desc}</desc> : null;
 
   const props = {
-    style: React.useMemo(() => {
-      return { pointerEvents: $styles.pointerEvents, ...propStyle };
-    }, [propStyle]),
+    _style_: $styles.style,
     _className_: $names.svg,
     role,
     ...other,

@@ -12,11 +12,13 @@ import { CSSTransition, BaseElement } from '..';
 const $names = $.names;
 const $styles = $.styles;
 
+type Direction = 'left' | 'right' | 'up' | 'down';
+
 const getExitedTranslateValue = (
   node: HTMLElement,
   direction: Direction,
   gutter: number
-) => {
+): string => {
   const rect = node.getBoundingClientRect();
 
   const computedStyle = window.getComputedStyle(node);
@@ -48,7 +50,6 @@ const getExitedTranslateValue = (
   }
 };
 
-type Direction = 'left' | 'right' | 'up' | 'down';
 type Props = $Type.CreateProps<
   {
     duration?: $Type.Transition.Duration;
@@ -60,6 +61,14 @@ type Props = $Type.CreateProps<
   typeof BaseElement,
   $Type.Components.CSSTransitionProps
 >;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      type SlideDirection = Direction;
+    }
+  }
+}
 
 const Slide: React.FC<Props> = ({
   in: inProp,

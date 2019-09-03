@@ -3,11 +3,19 @@ import { extractElement, mousetrap as Mousetrap } from 'scripts';
 
 // https://github.com/ccampbell/mousetrap
 
+type Props = $Type.CreateProps<{
+  hotkeys?: string | string[];
+  action?: (evt: KeyboardEvent) => void;
+  type?: 'keydown' | 'keyup' | 'keypress';
+  target?: Element;
+  active?: boolean;
+}>;
+
 const bindAfterUnbind = (
   mousetrap: MousetrapStatic | MousetrapInstance,
   options: {
-    hotkeys: Props['hotkeys'];
-    action: Props['action'];
+    hotkeys: Exclude<Props['hotkeys'], undefined>;
+    action: Exclude<Props['action'], undefined>;
     whichEvent?: Props['type'];
   }
 ) => {
@@ -16,22 +24,15 @@ const bindAfterUnbind = (
   });
 };
 
-type Props = $Type.CreateProps<{
-  hotkeys: string | string[];
-  action: (evt: KeyboardEvent) => void;
-  type?: 'keydown' | 'keyup' | 'keypress';
-  target?: Element;
-  active?: boolean;
-}>;
-
 const HotKeys: React.FC<Props> = ({
   children,
   hotkeys,
-  action = e => {},
+  action,
   type,
   target,
   active = true,
 }) => {
+  if (!hotkeys || !action) return null;
   const whichEvent =
     type === 'keydown' || type === 'keyup' || type === 'keypress'
       ? type
@@ -47,6 +48,7 @@ const HotKeys: React.FC<Props> = ({
       mousetrapRef.current = node ? Mousetrap(node) : Mousetrap;
     }
     const mousetrap = mousetrapRef.current;
+    if (!mousetrap) return;
     if (!prevActive.current && active) {
       bindAfterUnbind(mousetrap, { hotkeys, action, whichEvent });
       didBindRef.current = true;
@@ -65,7 +67,7 @@ const HotKeys: React.FC<Props> = ({
     };
   }, [active]);
 
-  return children ? <>children</> : null;
+  return children ? <>{children}</> : null;
 };
 
 export default HotKeys;

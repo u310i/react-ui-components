@@ -7,13 +7,11 @@ import {
   genTransitionProperty,
   genDurations,
   genEasings,
-  addEventListener,
 } from 'scripts';
 import { EventListener } from '..';
-import { isHorizontal, getSlideDirections } from '../Drawer/Drawer';
+import { isHorizontal } from '../Drawer/Drawer';
 import SwipeArea from './SwipeArea';
 import { Drawer } from '..';
-import raf from 'raf';
 
 const $names = $.names;
 const $styles = $.styles;
@@ -25,27 +23,41 @@ const UNCERTAINTY_THRESHOLD = 3; // px
 // We can only have one node at the time claiming ownership for handling the swipe.
 // Otherwise, the UX would be confusing.
 // That's why we use a singleton here.
-let nodeThatClaimedTheSwipe = null;
+let nodeThatClaimedTheSwipe: null | number = null;
 
-const calculateCurrentX = (anchor, touches) => {
+const calculateCurrentX = (
+  anchor: $Type.Components.DrawerAnchor,
+  touches: TouchEvent['changedTouches']
+): number => {
   return anchor === 'right'
     ? document.body.offsetWidth - touches[0].pageX
     : touches[0].pageX;
 };
 
-const calculateCurrentY = (anchor, touches) => {
+const calculateCurrentY = (
+  anchor: $Type.Components.DrawerAnchor,
+  touches: TouchEvent['changedTouches']
+): number => {
   return anchor === 'bottom'
     ? window.innerHeight - touches[0].clientY
     : touches[0].clientY;
 };
 
-const getMaxTranslate = (horizontalSwipe, transitionInstance) => {
+const getMaxTranslate = (
+  horizontalSwipe: boolean,
+  transitionInstance
+): number => {
   return horizontalSwipe
     ? transitionInstance.clientWidth
     : transitionInstance.clientHeight;
 };
 
-const getTranslate = (currentTranslate, startLocation, open, maxTranslate) => {
+const getTranslate = (
+  currentTranslate: number,
+  startLocation: number,
+  open: boolean | undefined,
+  maxTranslate: number
+): number => {
   return Math.min(
     Math.max(
       open
@@ -62,16 +74,35 @@ const disableSwipeToOpenDefault =
   typeof navigator !== 'undefined' &&
   /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-const SwipeableDrawer = ({
-  onOpen,
-  onClose,
+type Props = $Type.CreateProps<
+  {
+    onOpen?: () => void;
+    onClose?: () => void;
+    hysteresis?: number;
+    minFlingVelocity?: number;
+    disableBackdropTransition?: boolean;
+    disableDiscovery?: boolean;
+    disableSwipeToOpen?: boolean;
+    hideBackdrop?: boolean;
+    swipeAreaProps?: $Type.PropComponentProps<typeof SwipeArea>;
+    swipeAreaWidth?: number;
+  } & Omit<
+    $Type.PropComponentProps<typeof Drawer>,
+    'TransitionComponent' | 'keepMount'
+  >
+>;
+
+const SwipeableDrawer: React.FC<Props> = ({
   children,
   open,
+  anchor = 'left',
   onEscapeKeyDown,
   onOutsideClick,
+  arias,
+  onOpen,
+  onClose,
   hysteresis = 0.55,
   minFlingVelocity = 400,
-  anchor = 'left',
   disableBackdropTransition = false,
   disableDiscovery = false,
   disableSwipeToOpen = disableSwipeToOpenDefault,
@@ -421,7 +452,7 @@ const SwipeableDrawer = ({
           ...propModalProps.rootProps,
           refer: handleRootRef,
           classNames: [
-            $names.ucSwipeableDrawer,
+            $names.swipeableDrawer,
             ...(propModalProps.rootProps.classNames || []),
           ],
         },
@@ -439,7 +470,7 @@ const SwipeableDrawer = ({
       return {
         refer: handleTransitionRef,
         classNames: [
-          $.ucSwipeableDrawerTransition,
+          $.swipeableDrawerTransition,
           ...(propTransitionProps.classNames || []),
         ],
       };

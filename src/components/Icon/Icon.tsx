@@ -38,23 +38,26 @@ const getIcon = (name: string | null): IconData | null => {
 
 type Icon = string | string[] | $Type.Icon.BaseIconDefinition;
 
-type Props = $Type.CreateProps<{
-  icon: Icon;
-  role?: string;
-  symbol?: boolean;
-  use?: boolean;
-  currentColor?: string;
-  size?: number | string;
-  fixedWidth?: string;
-  pull?: 'left' | 'right';
-  border?: boolean;
-  rotation?: number;
-  flip?: 'horizontal' | 'vertical' | 'both';
-  spin?: string | boolean;
-  pulse?: string | boolean;
-  marginLeft?: string | boolean;
-  marginRight?: string | boolean;
-}>;
+type Props = $Type.CreateProps<
+  {
+    icon: Icon;
+    role?: string;
+    symbol?: boolean;
+    use?: boolean;
+    currentColor?: string;
+    size?: number | string;
+    fixedWidth?: string;
+    pull?: 'left' | 'right';
+    border?: boolean;
+    rotation?: number;
+    flip?: 'horizontal' | 'vertical' | 'both';
+    spin?: string | boolean;
+    pulse?: string | boolean;
+    marginLeft?: string | boolean;
+    marginRight?: string | boolean;
+  },
+  $Type.Components.BaseElementSVGProps
+>;
 
 const Icon: React.FC<Props> = ({
   icon,
@@ -76,8 +79,6 @@ const Icon: React.FC<Props> = ({
 }) => {
   if (!icon) return null;
   const [iconData, props] = React.useMemo(() => {
-    // const name = getName(icon);
-
     let iconData: IconData | null;
     let name: string;
     if (typeof icon === 'string' || Array.isArray(icon)) {
@@ -120,45 +121,54 @@ const Icon: React.FC<Props> = ({
 
     const baseName = `uc-svg-i-${iconData.type}`;
 
-    let props: $Type.Components.SVGProps = {};
+    let fill: string | undefined,
+      className: string,
+      id: string | undefined,
+      use: boolean | undefined,
+      symbol: boolean | undefined,
+      xlinkHref: string | undefined,
+      viewBox: $Type.Icon.ViewBox | undefined,
+      path: $Type.Icon.Path | undefined,
+      tag: string | undefined;
 
-    if (currentColor || existPath) props.fill = $styles.currentColor;
+    if (currentColor || existPath) fill = $styles.currentColor;
 
     if (use) {
-      props = {
-        ...props,
-        _className_: `${baseName}-use-${name}`,
-        use: true,
-        xlinkHref: `#${baseName}-symbol-${name}`,
-      };
+      className = `${baseName}-use-${name}`;
+      use = true;
+      xlinkHref = `#${baseName}-symbol-${name}`;
     } else {
-      props = {
-        ...props,
-        viewBox: iconData.viewBox,
-        path: iconData.path,
-        tag: iconData.tag,
-      };
+      viewBox = iconData.viewBox;
+      path = iconData.path;
+      tag = iconData.tag;
       if (symbol) {
-        props = {
-          ...props,
-          symbol: true,
-          _className_: `${baseName}-symbol-${name}`,
-          _id_: `${baseName}-symbol-${name}`,
-        };
+        symbol = true;
+        className = `${baseName}-symbol-${name}`;
+        id = `${baseName}-symbol-${name}`;
       } else {
-        props = {
-          ...props,
-          _className_: `${baseName}-${name}`,
-        };
+        className = `${baseName}-${name}`;
       }
     }
+
+    const props: $Type.Components.SVGProps = {
+      ...propProps,
+      fill: propProps.fill || fill,
+      classNames: [...(propProps.classNames || []), className],
+      ids: [...(propProps.ids || []), ...(id ? [id] : [])],
+      use,
+      symbol,
+      xlinkHref,
+      viewBox,
+      path,
+      tag,
+    };
 
     return [iconData as IconData, props];
   }, [icon, use, symbol]);
 
   if (!iconData) return null;
 
-  const _style_ = React.useMemo(() => {
+  const componentStyle = React.useMemo(() => {
     let style: React.CSSProperties = {};
 
     if (marginLeft)
@@ -243,7 +253,11 @@ const Icon: React.FC<Props> = ({
           }`);
     }
 
-    return { ...($styles.style as React.CSSProperties), ...style };
+    return {
+      ...($styles.style as React.CSSProperties),
+      ...style,
+      ...other.style,
+    };
   }, [
     icon,
     currentColor,
@@ -259,7 +273,11 @@ const Icon: React.FC<Props> = ({
     marginRight,
   ]);
 
-  return <SVG _style_={_style_} role={role} {...props} {...other} />;
+  const style = React.useMemo(() => {
+    return { ...componentStyle, ...other.style };
+  }, [componentStyle, other.style]);
+
+  return <SVG style={style} role={role} {...props} />;
 };
 
 export default Icon;
