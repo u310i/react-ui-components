@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'zoom';
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   names: {
     zoom: `${$.prefix}${name}`,
   },

@@ -6,132 +6,162 @@ import { BaseElement, EventListener } from '..';
 const $names = $.names;
 const $style = $.style;
 
-const resetStyle = node => {
+const resetStyle = (node: HTMLElement) => {
   node.style.position = null;
   node.style.top = null;
   node.style.bottom = null;
   node.style.left = null;
 };
 
-const addSpaceToOuter = (outerNode, stickyNode) => {
-  const computedStyle = window.getComputedStyle(stickyNode);
+const addSpaceToOuter = (outerNode: HTMLElement, innerNode: HTMLElement) => {
+  const computedStyle = window.getComputedStyle(innerNode);
   outerNode.style.height = computedStyle.getPropertyValue('height');
   outerNode.style.width = computedStyle.getPropertyValue('width');
 };
 
-const removeSpaceFromOuter = outerNode => {
+const removeSpaceFromOuter = (outerNode: HTMLElement) => {
   outerNode.style.height = '';
   outerNode.style.width = '';
 };
 
-const Sticky = ({
+type Props = $Type.CreateProps<{
+  innerProps?: $Type.PropComponentProps<typeof BaseElement>;
+  outerProps?: $Type.PropComponentProps<typeof BaseElement>;
+  absoluteWrapperProps?: $Type.PropComponentProps<typeof BaseElement>;
+  offsetTop?: number;
+  offsetBottom?: number;
+  enableAbsolute?: boolean;
+}>;
+
+const Sticky: React.FC<Props> = ({
   children,
   innerProps = {},
   outerProps = {},
   absoluteWrapperProps = {},
   offsetTop = 0,
   offsetBottom,
-  timeout,
-  enableAbsolute = null,
+  enableAbsolute = false,
 }) => {
-  const [isTop, setIsTop] = React.useState(false);
-  const [isBottom, setIsBottom] = React.useState(false);
+  const [isTopState, setIsTop] = React.useState(false);
+  const [isBottomState, setIsBottom] = React.useState(false);
 
-  const _outerRef_ = React.useRef(null);
-  const _innerRef_ = React.useRef(null);
+  const outerRef = React.useRef<null | HTMLElement>(null);
+  const innerRef = React.useRef<null | HTMLElement>(null);
 
   const [canStickingTop, canStickingBottom] = React.useMemo(() => {
     return [
       typeof offsetTop !== 'undefined' && isNumber(offsetTop),
       typeof offsetBottom !== 'undefined' && isNumber(offsetBottom),
     ];
-  }, []);
+  }, [offsetTop, offsetBottom]);
 
-  const setStickingState = React.useCallback(() => {
-    let topFlag = false;
-    let topPrev;
-    let bottomFlag = false;
-    let bottomPrev;
-    return () => {
-      const rect = _outerRef_.current.getBoundingClientRect();
-      if (canStickingTop) {
-        topPrev = topFlag;
-        topFlag = rect.top < offsetTop;
-        if (topFlag !== topPrev) {
-          setIsTop(topFlag);
-        }
+  const managerRef = React.useRef<{
+    isTop: null | boolean;
+    prevIsTop: null | boolean;
+    isBottom: null | boolean;
+    prevIsBottom: null | boolean;
+  }>({
+    isTop: null,
+    prevIsTop: null,
+    isBottom: null,
+    prevIsBottom: null,
+  });
+
+  const stickingListener = React.useCallback(() => {
+    if (!outerRef.current) return;
+    const rect = outerRef.current.getBoundingClientRect();
+    const manager = managerRef.current;
+    if (canStickingTop) {
+      manager.prevIsTop = manager.isTop;
+      manager.isTop = rect.top < offsetTop;
+      if (manager.isTop !== manager.prevIsTop) {
+        setIsTop(manager.isTop);
       }
-      if (canStickingBottom) {
-        bottomPrev = bottomFlag;
-        bottomFlag = rect.bottom + offsetBottom > window.innerHeight;
-        if (bottomFlag !== bottomPrev) {
-          setIsBottom(bottomFlag);
-        }
+    }
+    if (canStickingBottom) {
+      manager.prevIsBottom = manager.isBottom;
+      manager.isBottom =
+        rect.bottom + (offsetBottom as number) > window.innerHeight;
+      if (manager.isBottom !== manager.prevIsBottom) {
+        setIsBottom(manager.isBottom);
       }
-    };
-  }, []);
+    }
+  }, [offsetTop, offsetBottom]);
 
   React.useLayoutEffect(() => {
-    const rect = _outerRef_.current.getBoundingClientRect();
+    if (!outerRef.current) return;
+    const manager = managerRef.current;
+    manager.isTop = null;
+    manager.prevIsTop = null;
+    manager.isBottom = null;
+    manager.prevIsBottom = null;
+    const rect = outerRef.current.getBoundingClientRect();
     if (canStickingTop) {
       if (rect.top < offsetTop) {
+        manager.isTop = true;
+        manager.prevIsTop = true;
         setIsTop(true);
       }
     }
     if (canStickingBottom) {
-      if (rect.bottom + offsetBottom > window.innerHeight) {
+      if (rect.bottom + (offsetBottom as number) > window.innerHeight) {
+        manager.isBottom = true;
+        manager.prevIsBottom = true;
         setIsBottom(true);
       }
     }
-  }, []);
+  }, [offsetTop, offsetBottom]);
 
   React.useLayoutEffect(() => {
-    if (isTop) {
-      _innerRef_.current.style.position = 'fixed';
-      _innerRef_.current.style.top = `${offsetTop}px`;
-      _innerRef_.current.style.left = '0px';
-      addSpaceToOuter(_outerRef_.current, _innerRef_.current);
-    } else if (isBottom) {
-      _innerRef_.current.style.position = 'fixed';
-      _innerRef_.current.style.bottom = `${offsetBottom}px`;
-      _innerRef_.current.style.left = '0px';
-      addSpaceToOuter(_outerRef_.current, _innerRef_.current);
+    if (!innerRef.current || !outerRef.current) return;
+    if (isTopState) {
+      innerRef.current.style.position = 'fixed';
+      innerRef.current.style.top = `${offsetTop}px`;
+      innerRef.current.style.left = '0px';
+      addSpaceToOuter(outerRef.current, innerRef.current);
+    } else if (isBottomState) {
+      innerRef.current.style.position = 'fixed';
+      innerRef.current.style.bottom = `${offsetBottom}px`;
+      innerRef.current.style.left = '0px';
+      addSpaceToOuter(outerRef.current, innerRef.current);
     } else {
-      resetStyle(_innerRef_.current);
-      removeSpaceFromOuter(_outerRef_.current);
+      resetStyle(innerRef.current);
+      removeSpaceFromOuter(outerRef.current);
     }
-  }, [isTop, isBottom]);
+  }, [isTopState, isBottomState]);
 
-  const _styles_ = React.useMemo(() => {
+  const styles = React.useMemo(() => {
     return {
       inner: {
         zIndex: $style.zIndex,
       },
       outer: {
-        position: enableAbsolute ? 'absolute' : '',
+        position: enableAbsolute ? 'absolute' : undefined,
       },
       absoluteWrapper: {
         position: 'relative',
       },
-    };
+    } as const;
   }, [enableAbsolute]);
 
   const innerComponent = (
     <BaseElement
       elementName="div"
-      _refer_={_outerRef_}
-      _style_={_styles_.outer}
+      _refer_={outerRef}
+      _style_={styles.outer}
       _className_={$names.stickyOuter}
       {...outerProps}
     >
       <BaseElement
         elementName="div"
-        _refer_={_innerRef_}
-        _style_={_styles_.inner}
+        _refer_={innerRef}
+        _style_={styles.inner}
         _className_={$names.stickyInner}
         {...innerProps}
       >
-        {typeof children === 'function' ? children(isTop, isBottom) : children}
+        {typeof children === 'function'
+          ? children(isTopState, isBottomState)
+          : children}
       </BaseElement>
     </BaseElement>
   );
@@ -140,13 +170,13 @@ const Sticky = ({
     <EventListener
       target={window}
       type="scroll"
-      listener={setStickingState}
+      listener={stickingListener}
       optimized={true}
     >
       {enableAbsolute ? (
         <BaseElement
           elementName="div"
-          _style_={_styles_.absoluteWrapper}
+          _style_={styles.absoluteWrapper}
           _className_={$names.stickyAbsoluteWrapper}
           {...absoluteWrapperProps}
         >

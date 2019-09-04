@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'drawer';
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   names: {
     drawer: `${$.prefix}${name}`,
     drawerContainer: `${$.prefix}${name}-container`,

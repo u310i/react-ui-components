@@ -23,11 +23,19 @@ const UNCERTAINTY_THRESHOLD = 3; // px
 // We can only have one node at the time claiming ownership for handling the swipe.
 // Otherwise, the UX would be confusing.
 // That's why we use a singleton here.
-let nodeThatClaimedTheSwipe: null | number = null;
+type SwipeInstance = {
+  isSwiping: null | boolean;
+  startX?: number;
+  startY?: number;
+  velocity?: number;
+  lastTranslate?: null | number;
+  lastTime?: null | number;
+};
+let nodeThatClaimedTheSwipe: null | SwipeInstance = null;
 
 const calculateCurrentX = (
   anchor: $Type.Components.DrawerAnchor,
-  touches: TouchEvent['changedTouches']
+  touches: TouchList
 ): number => {
   return anchor === 'right'
     ? document.body.offsetWidth - touches[0].pageX
@@ -36,7 +44,7 @@ const calculateCurrentX = (
 
 const calculateCurrentY = (
   anchor: $Type.Components.DrawerAnchor,
-  touches: TouchEvent['changedTouches']
+  touches: TouchList
 ): number => {
   return anchor === 'bottom'
     ? window.innerHeight - touches[0].clientY
@@ -45,7 +53,7 @@ const calculateCurrentY = (
 
 const getMaxTranslate = (
   horizontalSwipe: boolean,
-  transitionInstance
+  transitionInstance: Element
 ): number => {
   return horizontalSwipe
     ? transitionInstance.clientWidth
@@ -114,18 +122,18 @@ const SwipeableDrawer: React.FC<Props> = ({
   swipeAreaWidth = 40,
   ...other
 }) => {
-  const swipeInstance = React.useRef({
+  const swipeInstance = React.useRef<SwipeInstance>({
     isSwiping: null,
   });
-  const swipeAreaRef = React.useRef();
-  const backdropTransitionRef = React.useRef();
-  const transitionRef = React.useRef();
-  const rootRef = React.useRef();
+  const swipeAreaRef = React.useRef<null | Element>(null);
+  const backdropTransitionRef = React.useRef<null | HTMLElement>(null);
+  const transitionRef = React.useRef<null | HTMLElement>(null);
+  const rootRef = React.useRef<null | HTMLElement>(null);
 
-  const touchDetected = React.useRef(false);
+  const touchDetected = React.useRef<boolean>(false);
   const openRef = React.useRef(open);
 
-  const abortedTimeoutIdRef = React.useRef(null);
+  const abortedTimeoutIdRef = React.useRef<null | number>(null);
 
   const [durations, easings] = React.useMemo(() => {
     return [
@@ -136,12 +144,20 @@ const SwipeableDrawer: React.FC<Props> = ({
 
   // Use a ref so the open value used is always up to date inside React.useCallback.
   React.useLayoutEffect(() => {
-    if (open && !openRef.current) clearTimeout(abortedTimeoutIdRef.current);
+    if (open && !openRef.current && abortedTimeoutIdRef.current)
+      clearTimeout(abortedTimeoutIdRef.current);
     openRef.current = open;
   }, [open]);
 
   const setPosition = React.useCallback(
-    (translate, options = {}) => {
+    (
+      translate: number,
+      options: {
+        mode?: 'enter' | 'exit' | null;
+        changeTransition?: boolean;
+      } = {}
+    ): void => {
+      if (!transitionRef.current) return;
       const { mode = null, changeTransition = true } = options;
       const translateMultiplier =
         ['right', 'bottom'].indexOf(anchor) !== -1 ? 1 : -1;
@@ -156,7 +172,11 @@ const SwipeableDrawer: React.FC<Props> = ({
 
       if (mode) {
         transition = genTransitionProperty([
-          ['all', durations[mode], easings[mode]],
+          {
+            property: 'all',
+            duration: durations[mode],
+            easing: easings[mode],
+          },
         ]);
       }
 
@@ -164,37 +184,41 @@ const SwipeableDrawer: React.FC<Props> = ({
         setTransition(transitionRef.current, transition);
       }
 
-      if (!disableBackdropTransition && !hideBackdrop) {
-        const backdropNode = backdropTransitionRef.current;
-        backdropNode.style.opacity =
+      if (
+        !disableBackdropTransition &&
+        !hideBackdrop &&
+        backdropTransitionRef.current
+      ) {
+        backdropTransitionRef.current.style.opacity = (
           1 -
-          translate / getMaxTranslate(horizontalSwipe, transitionRef.current);
+          translate / getMaxTranslate(horizontalSwipe, transitionRef.current)
+        ).toString(10);
 
         if (changeTransition) {
-          setTransition(backdropNode, transition);
+          setTransition(backdropTransitionRef.current, transition);
         }
       }
     },
     [anchor, disableBackdropTransition, hideBackdrop, durations, easings]
   );
 
-  const setClosedPositionByAborted = React.useCallback(() => {
+  const setClosedPositionByAborted = React.useCallback((): void => {
+    if (!transitionRef.current) return;
     const horizontal = isHorizontal(anchor);
 
     setPosition(getMaxTranslate(horizontal, transitionRef.current) + 24, {
       mode: 'exit',
     });
 
-    abortedTimeoutIdRef.current = setTimeout(() => {
+    abortedTimeoutIdRef.current = window.setTimeout(() => {
+      if (!rootRef.current) return;
       rootRef.current.style.visibility = 'hidden';
     }, durations['exit']);
   }, [anchor, durations]);
 
   const handleBodyTouchEnd = React.useCallback(
-    event => {
-      if (!touchDetected.current) {
-        return;
-      }
+    (event: TouchEvent): void => {
+      if (!touchDetected.current || !transitionRef.current) return;
       nodeThatClaimedTheSwipe = null;
       touchDetected.current = false;
       // setMaybeSwiping(false);
@@ -221,6 +245,7 @@ const SwipeableDrawer: React.FC<Props> = ({
       const startLocation = horizontal
         ? swipeInstance.current.startX
         : swipeInstance.current.startY;
+      if (!startLocation) return;
       const maxTranslate = getMaxTranslate(horizontal, transitionRef.current);
       const currentTranslate = getTranslate(
         current,
@@ -230,6 +255,7 @@ const SwipeableDrawer: React.FC<Props> = ({
       );
       const translateRatio = currentTranslate / maxTranslate;
 
+      if (!swipeInstance.current.velocity) return;
       if (openRef.current) {
         if (
           swipeInstance.current.velocity > minFlingVelocity ||
@@ -273,6 +299,8 @@ const SwipeableDrawer: React.FC<Props> = ({
 
       // We don't know yet.
       if (swipeInstance.current.isSwiping == null) {
+        if (!swipeInstance.current.startX || !swipeInstance.current.startY)
+          return;
         const dx = Math.abs(currentX - swipeInstance.current.startX);
         const dy = Math.abs(currentY - swipeInstance.current.startY);
 
@@ -316,6 +344,7 @@ const SwipeableDrawer: React.FC<Props> = ({
       const startLocation = horizontalSwipe
         ? swipeInstance.current.startX
         : swipeInstance.current.startY;
+      if (!startLocation) return;
       const maxTranslate = getMaxTranslate(
         horizontalSwipe,
         transitionRef.current
@@ -328,7 +357,10 @@ const SwipeableDrawer: React.FC<Props> = ({
         maxTranslate
       );
 
-      if (swipeInstance.current.lastTranslate === null) {
+      if (
+        !swipeInstance.current.lastTranslate ||
+        !swipeInstance.current.lastTime
+      ) {
         swipeInstance.current.lastTranslate = translate;
         swipeInstance.current.lastTime = performance.now() + 1;
       }
@@ -338,6 +370,7 @@ const SwipeableDrawer: React.FC<Props> = ({
           (performance.now() - swipeInstance.current.lastTime)) *
         1e3;
       // Low Pass filter.
+      if (!swipeInstance.current.velocity) return;
       swipeInstance.current.velocity =
         swipeInstance.current.velocity * 0.4 + velocity * 0.6;
 
@@ -387,8 +420,9 @@ const SwipeableDrawer: React.FC<Props> = ({
       swipeInstance.current.startY = currentY;
       // setMaybeSwiping(true);
       if (!openRef.current) {
-        clearTimeout(abortedTimeoutIdRef.current);
-        rootRef.current.style.visibility = null;
+        abortedTimeoutIdRef.current &&
+          clearTimeout(abortedTimeoutIdRef.current);
+        rootRef.current && (rootRef.current.style.visibility = null);
 
         // The ref may be null when a parent component updates while swiping.
         setPosition(
@@ -419,21 +453,21 @@ const SwipeableDrawer: React.FC<Props> = ({
     []
   );
 
-  if (!propModalProps.backdropProps) propModalProps.backdropProps = {};
-  if (!propModalProps.backdropProps.transitionProps)
-    propModalProps.backdropProps.transitionProps = {};
-  if (!propModalProps.rootProps) propModalProps.rootProps = {};
+  const propModalPropsBackdropProps = propModalProps.backdropProps || {};
+  const propModalPropsBackdropPropsTransitionProps =
+    propModalPropsBackdropProps.transitionProps || {};
+  const propModalPropsRootProps = propModalProps.rootProps || {};
   const handleBackdropTransitionRef = React.useCallback(element => {
     backdropTransitionRef.current = element;
     injectElementToRef(
-      propModalProps.backdropProps.transitionProps.refer,
+      propModalPropsBackdropPropsTransitionProps.refer,
       element
     );
   }, []);
   const handleRootRef = React.useCallback(element => {
     rootRef.current = element;
-    injectElementToRef(propModalProps.rootProps.refer, element);
-  });
+    injectElementToRef(propModalPropsRootProps.refer, element);
+  }, []);
   const modalProps = {
     onEscapeKeyDown,
     onOutsideClick,
@@ -442,9 +476,9 @@ const SwipeableDrawer: React.FC<Props> = ({
     ...React.useMemo(() => {
       return {
         backdropProps: {
-          ...propModalProps.backdropProps,
+          ...propModalPropsBackdropProps,
           transitionProps: {
-            ...propModalProps.backdropProps.transitionProps,
+            ...propModalPropsBackdropPropsTransitionProps,
             refer: handleBackdropTransitionRef,
           },
         },
@@ -453,7 +487,7 @@ const SwipeableDrawer: React.FC<Props> = ({
           refer: handleRootRef,
           classNames: [
             $names.swipeableDrawer,
-            ...(propModalProps.rootProps.classNames || []),
+            ...(propModalPropsRootProps.classNames || []),
           ],
         },
       };
@@ -470,7 +504,7 @@ const SwipeableDrawer: React.FC<Props> = ({
       return {
         refer: handleTransitionRef,
         classNames: [
-          $.swipeableDrawerTransition,
+          $.names.swipeableDrawerTransition,
           ...(propTransitionProps.classNames || []),
         ],
       };

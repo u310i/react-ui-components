@@ -108,12 +108,14 @@ const ReactCSSTransition: $Type.FunctionComponentWithoutChildren<
 }) => {
   const inRef = React.useRef<null | undefined | boolean>(null);
   const shouldTransitionOnAppear = React.useRef<null | boolean>(null);
-  const appearingStates = React.useRef<{
+
+  type AppearingStates = {
     enter: null | boolean;
     entering: null | boolean;
     entered: null | boolean;
     appeared: null | boolean;
-  }>({
+  };
+  const appearingStates = React.useRef<AppearingStates>({
     enter: null,
     entering: null,
     entered: null,

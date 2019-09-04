@@ -9,7 +9,7 @@ const $cubicBeziers = $.cubicBeziers;
 const $shape = $.shape;
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   colors: {
     main: $colors.main,
     white: $colors.white,
@@ -46,7 +46,7 @@ export const constants = {
     },
     waveDuration: '.4s',
     fadeKeyframes: {
-      opacity: '0',
+      opacity: 0,
     },
     fadeDuration: '2s',
     clickEffect: {
@@ -54,20 +54,20 @@ export const constants = {
       borderRadius: 'inherit',
       borderWidth: '0px',
       borderStyle: 'solid',
-      opacity: '.25',
+      opacity: 0.25,
       animationFillMode: 'forwards',
       display: 'block',
       pointerEvents: 'none',
-      zIndex: '100',
+      zIndex: 100,
     },
     loadingMask: {
       position: 'absolute',
       pointerEvents: 'none',
       backgroundColor: '#fff',
       borderRadius: 'inherit',
-      opacity: '.35',
+      opacity: 0.35,
       transition: 'opacity .2s',
-      zIndex: '100',
+      zIndex: 100,
     },
     shape: {
       round: {

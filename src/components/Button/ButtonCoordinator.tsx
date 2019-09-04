@@ -1,49 +1,59 @@
 import * as React from 'react';
 import { Icon } from '..';
 import Button from './Button';
+import ButtonGroup from './ButtonGroup';
 
-const getChild = (item, index) => {
-	if (!item) return;
-	if (typeof item === 'string') {
-		return item;
-	} else if (item.icon) {
-		return <Icon key={index} {...item} />;
-	} else {
-		return;
-	}
+type Content = null | string | $Type.ExtractProps<typeof Icon>;
+
+type Props = {
+  contents: (Content | Content[])[];
+  group?: {
+    childPropList?: ($Type.PropComponentProps<typeof Button> | undefined)[];
+  } & $Type.Components.BaseElementProps;
+} & $Type.ExtractProps<typeof Button>;
+
+const getChild = (item: Content, index: number) => {
+  if (!item) return null;
+  if (typeof item === 'string') {
+    return item;
+  } else if (item.icon) {
+    return <Icon key={index} {...item} />;
+  } else {
+    return null;
+  }
 };
 
-const createButton = (contents, props, group = {}, index = null) => {
-	const { childPropList = [], ...groupProps } = group;
-	let isGroup = false;
-	const children = contents.map((item, i) => {
-		if (Array.isArray(item)) {
-			isGroup = true;
-			return createButton(item, { ...props, ...childPropList[i] }, {}, i);
-		}
-		return getChild(item, i);
-	});
+const createButton = (
+  contents: Props['contents'],
+  props: $Type.ExtractProps<typeof Button>,
+  group?: Props['group'],
+  index?: number
+) => {
+  const { childPropList = [], ...groupProps } = group || {};
+  let isGroup = false;
+  const children = contents.map((item, i: number) => {
+    if (Array.isArray(item)) {
+      isGroup = true;
+      return createButton(item, { ...props, ...childPropList[i] }, {}, i);
+    }
+    return getChild(item, i);
+  });
 
-	const key =
-		index || index === 0
-			? {
-					key: index
-				}
-			: {};
+  const key = index || index === 0 ? index : undefined;
 
-	return isGroup ? (
-		<Button.Group {...key} {...groupProps}>
-			{children}
-		</Button.Group>
-	) : (
-		<Button {...key} {...props}>
-			{children}
-		</Button>
-	);
+  return isGroup ? (
+    <ButtonGroup key={key} {...groupProps}>
+      {children}
+    </ButtonGroup>
+  ) : (
+    <Button key={key} {...props}>
+      {children}
+    </Button>
+  );
 };
 
-const Coordinator = ({ contents = [], group = {}, ...props }) => {
-	return createButton(contents, props, group);
+const ButtonCoordinator = ({ contents = [], group = {}, ...props }: Props) => {
+  return createButton(contents, props, group);
 };
 
-export default Coordinator;
+export default ButtonCoordinator;

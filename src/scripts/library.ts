@@ -12,7 +12,7 @@ type DeepMerge = <T1, T2>(
   target: Partial<T1>,
   source: Partial<T2>,
   options?: deepmerge.Options
-) => T1 & T2;
+) => T1;
 
 const deepMerge: DeepMerge = (target, source, options) => {
   return deepmerge(target, source, options);

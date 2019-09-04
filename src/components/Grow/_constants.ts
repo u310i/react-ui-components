@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'grow';
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   names: {
     grow: `${$.prefix}${name}`,
   },

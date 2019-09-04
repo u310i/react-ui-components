@@ -45,8 +45,8 @@ type Props = $Type.CreateProps<
     symbol?: boolean;
     use?: boolean;
     currentColor?: string;
-    size?: number | string;
-    fixedWidth?: string;
+    size?: $Type.Utils.FontSize;
+    fixedWidth?: string | boolean;
     pull?: 'left' | 'right';
     border?: boolean;
     rotation?: number;
@@ -78,6 +78,9 @@ const Icon: React.FC<Props> = ({
   ...other
 }) => {
   if (!icon) return null;
+
+  const { style: propStyle, ...propProps } = other;
+
   const [iconData, props] = React.useMemo(() => {
     let iconData: IconData | null;
     let name: string;
@@ -254,9 +257,8 @@ const Icon: React.FC<Props> = ({
     }
 
     return {
-      ...($styles.style as React.CSSProperties),
+      ...$styles.style,
       ...style,
-      ...other.style,
     };
   }, [
     icon,
@@ -274,10 +276,10 @@ const Icon: React.FC<Props> = ({
   ]);
 
   const style = React.useMemo(() => {
-    return { ...componentStyle, ...other.style };
-  }, [componentStyle, other.style]);
+    return { ...componentStyle, ...propStyle };
+  }, [componentStyle, propStyle]);
 
-  return <SVG style={style} role={role} {...props} />;
+  return <SVG role={role} {...props} style={style} />;
 };
 
 export default Icon;

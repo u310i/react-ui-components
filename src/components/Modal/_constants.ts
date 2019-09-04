@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'modal';
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   names: {
     modal: `${$.prefix}${name}`,
     modalContent: `${$.prefix}${name}-content`,

@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'sticky';
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   names: {
     stickyAbsoluteWrapper: `${$.prefix}${name}-absolute-wrapper`,
     stickyOuter: `${$.prefix}${name}-outer`,

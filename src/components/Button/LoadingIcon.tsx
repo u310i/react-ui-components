@@ -9,11 +9,11 @@ const LoadingIcon = ({ style: propStyle = {} }) => {
   return (
     <BaseElement
       elementName="i"
-      key={$names.loading}
+      key={$names.buttonLoading}
       style={propStyle}
       className={$names.buttonLoading}
     >
-      <Icon icon={$names.sysLoading} spin />
+      <Icon icon={['sys', 'loading']} spin />
     </BaseElement>
   );
 };

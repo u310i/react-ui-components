@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'svg';
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   names: {
     svg: `${$.prefix}${name}`,
     svgSymbol: `${$.prefix}${name}-symbol`,

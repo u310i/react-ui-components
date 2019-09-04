@@ -9,17 +9,17 @@ const $selectors = $.selectors;
 
 export default {
 	defineContents: defineContents,
-	genWaveKeyframes: (borderWidth) => {
+	genWaveKeyframes: (borderWidth: string) => {
 		const waveKeyframes = $styles.waveKeyframes;
 
 		const position = `calc(-${borderWidth} - ${waveKeyframes.effectRange})`;
 		const positionFallback = `-${waveKeyframes.effectRangeFallback}`;
 		return {
 			to: {
-				top: [ positionFallback, position ],
-				left: [ positionFallback, position ],
-				bottom: [ positionFallback, position ],
-				right: [ positionFallback, position ],
+				top: [positionFallback, position],
+				left: [positionFallback, position],
+				bottom: [positionFallback, position],
+				right: [positionFallback, position],
 				borderWidth: [
 					`${waveKeyframes.effectRangeFallback}`,
 					`calc(${borderWidth} + ${waveKeyframes.effectRange})`
@@ -28,10 +28,10 @@ export default {
 		};
 	},
 	genClickEffectStyle: (
-		borderWidth = $styles.borderWidth,
+		borderWidth: string,
 		effectColor = $colors.main,
-		waveKeyframes,
-		fadeKeyframes
+		waveKeyframes: $Type.Animation.Keyframes,
+		fadeKeyframes: $Type.Animation.Keyframes
 	) => {
 		const commonPosition = `-${borderWidth}`;
 		return {
@@ -44,7 +44,7 @@ export default {
 			...$styles.clickEffect
 		};
 	},
-	genLoadingMask: (borderWidth) => {
+	genLoadingMask: (borderWidth: string) => {
 		const commonPosition = `-${borderWidth}`;
 		return {
 			top: commonPosition,
@@ -54,7 +54,7 @@ export default {
 			...$styles.loadingMask
 		};
 	},
-	genShape: (shape) => {
+	genShape: (shape?: $Type.Constants.Shape) => {
 		switch (shape) {
 			case 'round':
 				return $styles.shape.round;
@@ -62,11 +62,12 @@ export default {
 				return $styles.shape.circle;
 			case 'corner':
 				return $styles.shape.corner;
+			case 'default':
 			default:
 				return $styles.shape.default;
 		}
 	},
-	genColor: (type, toFill, disable, keyColor) => {
+	genColor: (type: $Type.Components.ButtonType | undefined, toFill: boolean | undefined, disable: boolean | undefined, keyColor?: string) => {
 		keyColor = keyColor || $colors.main;
 		const activeColor = adjustBrightnessFromCssRgb(keyColor, -35);
 		const hoverColor = adjustBrightnessFromCssRgb(keyColor, 25);

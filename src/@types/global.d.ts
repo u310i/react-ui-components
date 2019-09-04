@@ -1,16 +1,19 @@
 // import * as React from 'react';
 import * as CSS from 'csstype';
+import { keyframes } from '@emotion/core';
 import { Component } from 'react';
 
 declare global {
   export namespace $Type {
     namespace Components { }
+    namespace Animation {
+      type Keyframes = ReturnType<typeof keyframes>
+    }
+    namespace Utils {
+      type FontSize = number | string
+    }
     namespace Constants {
-      namespace Origin {
-        type Shape = 'corner' | 'default' | 'round' | 'circle';
-      }
-
-      namespace Transition { }
+      type Shape = 'corner' | 'default' | 'round' | 'circle';
     }
     namespace Transition {
       type CommonProps<

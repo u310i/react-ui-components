@@ -6,7 +6,7 @@ import { constants as drawerConstants } from '../components/Drawer/_constants';
 import { constants as fadeConstants } from '../components/Fade/_constants';
 import { constants as growConstants } from '../components/Grow/_constants';
 import { constants as iconConstants } from '../components/Icon/_constants';
-import { constants as listConstants } from '../components/List/_constants';
+// import { constants as listConstants } from '../components/List/_constants';
 import { constants as modalConstants } from '../components/Modal/_constants';
 import { constants as paperConstants } from '../components/Paper/_constants';
 import { constants as slideConstants } from '../components/Slide/_constants';
@@ -27,7 +27,7 @@ declare global {
         fade: typeof fadeConstants;
         grow: typeof growConstants;
         icon: typeof iconConstants;
-        list: typeof listConstants;
+        // list: typeof listConstants;
         modal: typeof modalConstants;
         paper: typeof paperConstants;
         slide: typeof slideConstants;

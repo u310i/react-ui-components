@@ -4,9 +4,9 @@ import Fade from './Fade';
 import Grow from './Grow';
 import Slide from './Slide';
 import Zoom from './Zoom';
-// import Sticky from './Sticky';
+import Sticky from './Sticky';
 // import AppBar from './AppBar';
-import Button from './Button';
+import Button, { ButtonGroup, ButtonCoordinator } from './Button';
 import Drawer from './Drawer';
 import SwipeableDrawer from './SwipeableDrawer';
 // import Flex from './Flex';
@@ -15,7 +15,7 @@ import SwipeableDrawer from './SwipeableDrawer';
 import Icon from './Icon';
 // import Image from './Image';
 // import Link from './Link';
-import List from './List';
+// import List from './List';
 // import ListItem from './ListItem';
 // import Menu from './Menu';
 import SVG from './SVG';
@@ -41,9 +41,9 @@ export {
 	Grow,
 	Slide,
 	Zoom,
-	// Sticky,
+	Sticky,
 	// AppBar,
-	Button,
+	Button, ButtonGroup, ButtonCoordinator,
 	Drawer,
 	SwipeableDrawer,
 	// Flex,
@@ -52,7 +52,7 @@ export {
 	Icon,
 	// Image,
 	// Link,
-	List,
+	// List,
 	// ListItem,
 	// Menu,
 	SVG,

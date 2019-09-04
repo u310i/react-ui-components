@@ -9,7 +9,7 @@ const $styles = $.styles;
 type Props = $Type.CreateProps<
   {
     elevation?: number;
-    shape?: $Type.Constants.Origin.Shape;
+    shape?: $Type.Constants.Shape;
   },
   typeof BaseElement
 >;

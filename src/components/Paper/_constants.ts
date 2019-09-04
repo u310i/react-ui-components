@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'paper';
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   names: {
     paper: `${$.prefix}${name}`,
   },

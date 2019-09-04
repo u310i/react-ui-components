@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'swipeableDrawer';
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   names: {
     swipeableDrawer: `${$.prefix}${name}`,
     swipeableDrawerTransition: `${$.prefix}${name}-transition`,

@@ -44,7 +44,7 @@ const createListenerOptions = passiveSupported
 
 type addEventListenerArgs = $Type.Components.EventListenerProps
 export const addEventListener = (
-  target: addEventListenerArgs['target'],
+  target: $Type.MaybeNode<EventTarget>,
   type: addEventListenerArgs['type'],
   listener: addEventListenerArgs['listener'],
   options: addEventListenerArgs['options'] = {},

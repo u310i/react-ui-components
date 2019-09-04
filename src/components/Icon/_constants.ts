@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'icon';
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   styles: {
     style: {
       display: 'inline-block',

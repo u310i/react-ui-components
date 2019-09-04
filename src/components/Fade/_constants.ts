@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'fade';
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   names: {
     fade: `${$.prefix}${name}`,
   },

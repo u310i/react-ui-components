@@ -43,7 +43,7 @@ type Props = $Type.CreateProps<{
   onOutsideClick?: (evt: MouseEvent) => void;
   keepMount: boolean;
   arias: React.AriaAttributes;
-  modalProps: Omit<$Type.ExtractProps<typeof Modal>, 'children'>;
+  modalProps: $Type.PropComponentProps<typeof Modal>;
   TransitionComponent: React.FC<
     {
       direction?: $Type.Components.SlideDirection;
@@ -51,7 +51,7 @@ type Props = $Type.CreateProps<{
   >;
   transitionProps: Omit<$Type.Transition.CommonProps, 'direction'>;
   InnerComponent: typeof Paper;
-  innerProps: Omit<$Type.ExtractProps<typeof Paper>, 'children'>;
+  innerProps: $Type.PropComponentProps<typeof Paper>;
 }>;
 
 const Drawer: React.FC<Props> = ({

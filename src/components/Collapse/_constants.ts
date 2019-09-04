@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'collapse';
 
 export const constants = {
-  name: name as typeof name,
+  name: name,
   names: {
     collapse: `${$.prefix}${name}`,
     collapseInner: `${$.prefix}${name}-inner`,

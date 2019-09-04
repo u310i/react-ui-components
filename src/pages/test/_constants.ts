@@ -1,15 +1,18 @@
+import $ from '../../components/_constants';
 import { createPageConstants } from 'scripts';
 
 const constants = {
-	button: {
-		color: {
-			testPage: 'aaaaaaaaaaaaaaaaaa'
+	fade: {
+		styles: {
+			style: {
+				// alternative to "width: fit-content"
+				display: 'table',
+				position: 'relative',
+				test: 'test'
+			},
+			duration: $.transition.duration,
 		},
-		testPage: 'bbbbbbbbbbbbbbb'
-	},
-	testPage: {
-		testPage: 'cccccccccccccc'
 	}
-};
+} as const;
 
 createPageConstants(constants);

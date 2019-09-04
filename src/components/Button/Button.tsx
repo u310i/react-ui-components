@@ -8,25 +8,63 @@ import scripts from './_scripts';
 
 const $styles = $.styles;
 
-const Button = ({
+type Type =
+  | 'normal-outline'
+  | 'dark'
+  | 'dark-outline'
+  | 'outline'
+  | 'fill'
+  | 'normal';
+
+type Between = boolean | string;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      type ButtonType = Type;
+      type ButtonBetween = Between;
+    }
+  }
+}
+
+type Props = $Type.CreateProps<
+  {
+    color?: string;
+    type?: Type;
+    toFill?: boolean;
+    loading?: boolean;
+    disable?: boolean;
+    effectColor?: string;
+    between?: Between;
+    shape?: $Type.Constants.Shape;
+    size?: $Type.Utils.FontSize;
+    fullWidth?: boolean;
+    fullHeight?: boolean;
+    borderStyle?: string;
+    borderWidth?: string;
+    clickEffect?: boolean;
+    onClick?: () => void;
+  },
+  typeof BaseElement
+>;
+
+const Button: React.FC<Props> = ({
   children,
-  style: propStyle,
   color: keyColor,
-  type,
-  toFill,
-  loading,
-  disable,
+  type = 'normal',
+  toFill = false,
+  loading = false,
+  disable = false,
   effectColor,
-  between,
-  shape,
+  between = false,
+  shape = 'default',
   size,
-  fullWidth,
-  fullHeight,
+  fullWidth = false,
+  fullHeight = false,
   borderStyle,
-  borderWidth,
+  borderWidth = $styles.borderWidth,
   clickEffect = true,
   onClick,
-  test,
   ...other
 }) => {
   const [lateUpdateStatus, lateUpdate] = useLateUpdate(
@@ -68,11 +106,10 @@ const Button = ({
       ...(loading ? $styles.loading : {}),
       ...(fullWidth ? $styles.fullWidth : {}),
       ...(fullHeight ? $styles.fullHeight : {}),
+      fontSize: size ? getFontSize(size) : $styles.fontSize,
+      borderStyle: borderStyle || $styles.borderStyle,
+      borderWidth: borderWidth || $styles.borderWidth,
     };
-    style.fontSize = size ? getFontSize(size) : $styles.fontSize;
-    style.borderStyle = borderStyle || $styles.borderStyle;
-    style.borderWidth = borderWidth || $styles.borderWidth;
-
     return style;
   }, [shape, size, borderStyle, borderWidth, fullWidth, fullHeight, loading]);
 
@@ -85,9 +122,8 @@ const Button = ({
       ...mainStyle,
       ...shapeStyle,
       ...colorStyle,
-      ...propStyle,
     };
-  }, [shapeStyle, colorStyle, propStyle]);
+  }, [shapeStyle, colorStyle]);
 
   let contents = React.useMemo(() => {
     return scripts.defineContents(children, between, loading);
@@ -119,8 +155,8 @@ const Button = ({
     );
   }, [loading]);
 
-  const accessibilityProps = React.useMemo(() => {
-    const props = {};
+  const arias = React.useMemo(() => {
+    const props = {} as React.AriaAttributes;
     if (disable) props['aria-disabled'] = true;
     if (loading) props['aria-busy'] = true;
     return props;
@@ -129,10 +165,10 @@ const Button = ({
   return (
     <BaseElement
       elementName="button"
-      style={style}
+      _style_={style}
       onClick={handleClick}
       disabled={disable || loading}
-      {...accessibilityProps}
+      _arias_={arias}
       {...other}
     >
       {contents}
@@ -141,8 +177,5 @@ const Button = ({
     </BaseElement>
   );
 };
-
-Button.Group = ButtonGroup;
-Button.Coordinator = ButtonCoordinator;
 
 export default Button;

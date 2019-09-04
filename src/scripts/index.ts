@@ -77,11 +77,11 @@ import { testCssNumberRegExp } from './regExp';
 import {
   useForceUpdate,
   useLateUpdate,
-  useAddWindowEvent,
-  useAddCssInBody,
-  useGetDomProperty,
-  useGetDomProperties,
-  useGlobalState,
+  // useAddWindowEvent,
+  // useAddCssInBody,
+  // useGetDomProperty,
+  // useGetDomProperties,
+  // useGlobalState,
 } from './hooks';
 // import { useAddWindowEvent, useAddCssInBody } from './hooks/useEffects';
 // import {
@@ -151,11 +151,11 @@ export {
   // hooks/useHooks
   useForceUpdate,
   useLateUpdate,
-  useAddWindowEvent,
-  useAddCssInBody,
-  useGetDomProperty,
-  useGetDomProperties,
-  useGlobalState,
+  // useAddWindowEvent,
+  // useAddCssInBody,
+  // useGetDomProperty,
+  // useGetDomProperties,
+  // useGlobalState,
   // hooks/hooks/React.useEffects
   // hooks/React.useLayoutEffects
   // hooks/useGlobalState

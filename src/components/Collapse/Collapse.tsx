@@ -16,7 +16,7 @@ type Props = $Type.CreateProps<
     duration?: $Type.Transition.Duration;
     easing?: $Type.Transition.Easing;
     collapsedHeight?: string;
-    innerProps?: JSX.IntrinsicElements['div'];
+    innerProps?: $Type.PropComponentProps<typeof BaseElement>;
     disableHideVisibility?: boolean;
   },
   typeof BaseElement,

@@ -1,21 +1,22 @@
 import * as React from 'react';
-import {
-  getComponentConstants
-} from 'scripts';
+import { getComponentConstants } from 'scripts';
 import { BaseElement } from '..';
-import LoadingIcon from './LoadingIcon'
+import LoadingIcon from './LoadingIcon';
 
 const $ = getComponentConstants('button');
 const $names = $.contents.names;
 const $styles = $.contents.styles;
 
-
-const defineContents = (children, between = true, loading) => {
+const defineContents = (
+  children: React.ReactNode,
+  between: $Type.Components.ButtonBetween = true,
+  loading = false
+) => {
   const spanStyle = $styles.span;
 
   let contents;
 
-  let betweenValue;
+  let betweenValue: string;
   if (between) {
     typeof between === 'string'
       ? (betweenValue = between)
@@ -28,10 +29,15 @@ const defineContents = (children, between = true, loading) => {
     contents = React.Children.map(children, (child, index) => {
       let item;
       const marginLeft = index === 0 ? $styles.noneBetween : betweenValue;
-      if (React.isValidElement(child) && typeof child === 'function' && child.type.name === 'Icon') {
-        if (index === 0 && loading) return <LoadingIcon />
+      if (
+        React.isValidElement(child) &&
+        typeof child.type === 'function' &&
+        child.type.name === 'Icon'
+      ) {
+        if (index === 0 && loading) return <LoadingIcon />;
         item = (
-          <BaseElement elementName="i"
+          <BaseElement
+            elementName="i"
             key={index}
             style={{ marginLeft: marginLeft }}
             className={$names.buttonIcon}
@@ -40,7 +46,8 @@ const defineContents = (children, between = true, loading) => {
         );
       } else {
         item = (
-          <BaseElement elementName="span"
+          <BaseElement
+            elementName="span"
             key={index}
             style={{ marginLeft: marginLeft, ...spanStyle }}
             className={$names.buttonInner}
@@ -60,15 +67,24 @@ const defineContents = (children, between = true, loading) => {
     });
   } else {
     const child = Array.isArray(children) ? children[0] : children;
-    if ( React.isValidElement(child) && typeof child === 'function' && child.type.name === 'Icon') {
+    if (
+      React.isValidElement(child) &&
+      typeof child.type === 'function' &&
+      child.type.name === 'Icon'
+    ) {
       contents = loading ? (
         <LoadingIcon />
       ) : (
-        <BaseElement elementName="i" className={$names.buttonIcon} children={child} />
+        <BaseElement
+          elementName="i"
+          className={$names.buttonIcon}
+          children={child}
+        />
       );
     } else {
       contents = (
-        <BaseElement elementName="span"
+        <BaseElement
+          elementName="span"
           style={spanStyle}
           className={$names.buttonInner}
           children={child}

@@ -5,7 +5,7 @@ export { addEventListener, testPassiveEventSupport };
 
 export const reflow = (node: Element) => node.scrollTop;
 
-export const getFontSize = (data: number | string) => {
+export const getFontSize = (data: $Type.Utils.FontSize) => {
   if (isNumber(data)) return `${Math.round(data * 100) / 100}px`;
   if (typeof data !== 'string') return '1em';
   switch (data) {
@@ -24,7 +24,7 @@ export const getFontSize = (data: number | string) => {
   }
 };
 
-type GenDurations = {
+type GetDurations = {
   enter: number;
   exit: number;
   appear: number;
@@ -32,7 +32,7 @@ type GenDurations = {
 
 export const genDurations = (
   duration: $Type.Transition.Duration
-): GenDurations => {
+): GetDurations => {
   if (!duration)
     return {
       enter: 0,
@@ -54,12 +54,12 @@ export const genDurations = (
   }
 };
 
-type GenEasings = {
+type GetEasings = {
   enter: string;
   exit: string;
   appear: string;
 };
-export const genEasings = (easing: $Type.Transition.Easing): GenEasings => {
+export const genEasings = (easing: $Type.Transition.Easing): GetEasings => {
   if (!easing)
     return {
       enter: 'linear',
@@ -107,9 +107,9 @@ export const genTransitionProperty = (
     transitionProp.push(
       [
         props.property || 'all',
-        props.duration || props.duration === 0 ? `${props.duration}ms` : '0ms',
+        (props.duration || props.duration === 0) ? `${props.duration}ms` : '0ms',
         props.easing || 'linear',
-        props.delay || props.delay === 0 ? `${props.delay}ms` : 'all',
+        (props.delay || props.delay === 0) ? `${props.delay}ms` : 'all',
       ].join(' ')
     );
   }
@@ -123,17 +123,17 @@ export const genUniqueId = () => {
 };
 
 export const createOptimizedEvent = (
-  fn: (arg: any) => void,
+  fn: (event: any) => void,
   clearRef: { clear: null | (() => void) }
 ) => {
   let ticking = false;
   let handle: number;
-  return (arg: any): void => {
+  return (event: any): void => {
     if (!ticking) {
       handle = raf(() => {
         clearRef.clear = null;
         ticking = false;
-        fn(arg);
+        fn(event);
       });
       clearRef.clear = () => raf.cancel(handle);
       ticking = true;
