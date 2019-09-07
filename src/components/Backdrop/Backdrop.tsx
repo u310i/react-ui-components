@@ -11,8 +11,10 @@ type Props = $Type.CreateProps<
     disablePointerEvents?: boolean;
     duration?: $Type.Transition.Duration;
     invisible?: boolean;
-    TransitionComponent?: React.FC<$Type.Transition.CommonProps>;
-    transitionProps?: $Type.Transition.CommonProps;
+    TransitionComponent?: React.FC<
+      $Type.Transition.PropTransitionComponentProps
+    >;
+    transitionProps?: Omit<$Type.Transition.PropTransitionComponentProps, 'in'>;
   },
   typeof BaseElement
 >;

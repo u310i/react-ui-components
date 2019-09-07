@@ -241,7 +241,7 @@ export const extractElement = <T = Element>(
 };
 
 export const injectElementToRef = <T = Element>(
-  ref: $Type.Ref<T> | undefined,
+  ref: $Type.Ref<T> | undefined | null,
   element: $Type.MaybeNode<T>
 ) => {
   if (ref) {

@@ -25,13 +25,9 @@ const setEnteredOpacity = (node: HTMLElement) => {
 };
 
 type Props = $Type.CreateProps<
-  {
-    duration?: $Type.Transition.Duration;
-    easing?: $Type.Transition.Easing;
-    disableHideVisibility?: boolean;
-  },
+  $Type.Transition.CommonProps,
   typeof BaseElement,
-  $Type.Components.CSSTransitionProps
+  Omit<$Type.Components.CSSTransitionProps, 'timeout'>
 >;
 
 const Grow: React.FC<Props> = ({

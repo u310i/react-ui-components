@@ -63,7 +63,6 @@ type TransitionHandlerKeys =
   | 'onExited';
 
 type TransitionPropsKeys =
-  | 'in'
   | 'timeout'
   | 'mountOnEnter'
   | 'unmountOnExit'
@@ -72,7 +71,7 @@ type TransitionPropsKeys =
   | TransitionActionKeys;
 
 type Props = $Type.CreateProps<
-  {
+  { in: boolean } & {
     disableClassing?: boolean;
     lazyAppear?: boolean;
   } & Pick<_TransitionProps, TransitionPropsKeys>
@@ -83,7 +82,7 @@ type CharacteristicProps = Pick<_TransitionProps, 'children'>;
 declare global {
   namespace $Type {
     namespace Components {
-      type CSSTransitionProps = Partial<Props>;
+      type CSSTransitionProps = Props;
       type CSSTransitionChildStatus = _TransitionStatus;
     }
   }

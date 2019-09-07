@@ -17,15 +17,15 @@ type Props = $Type.CreateProps<{
   enableScrollBody: boolean;
   fullScreen: boolean;
   modalProps: Omit<$Type.ExtractProps<typeof Modal>, 'children'>;
-  TransitionComponent: React.FC<$Type.Transition.CommonProps>;
-  transitionProps: $Type.Transition.CommonProps;
+  TransitionComponent: React.FC<$Type.Transition.PropTransitionComponentProps>;
+  transitionProps: Omit<$Type.Transition.PropTransitionComponentProps, 'in'>;
   InnerComponent: typeof Paper;
   innerProps: Omit<$Type.ExtractProps<typeof Paper>, 'children'>;
 }>;
 
 const Dialog: React.FC<Props> = ({
   children,
-  open,
+  open = false,
   onEscapeKeyDown,
   onOutsideClick,
   keepMount = false,

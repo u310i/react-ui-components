@@ -51,15 +51,12 @@ const getExitedTranslateValue = (
 };
 
 type Props = $Type.CreateProps<
-  {
-    duration?: $Type.Transition.Duration;
-    easing?: $Type.Transition.Easing;
+  $Type.Transition.CommonProps & {
     direction?: Direction;
     gutter?: number;
-    disableHideVisibility?: boolean;
   },
   typeof BaseElement,
-  $Type.Components.CSSTransitionProps
+  Omit<$Type.Components.CSSTransitionProps, 'timeout'>
 >;
 
 declare global {

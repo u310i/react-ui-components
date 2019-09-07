@@ -245,20 +245,18 @@ const SwipeableDrawer: React.FC<Props> = ({
       const startLocation = horizontal
         ? swipeInstance.current.startX
         : swipeInstance.current.startY;
-      if (!startLocation) return;
       const maxTranslate = getMaxTranslate(horizontal, transitionRef.current);
       const currentTranslate = getTranslate(
         current,
-        startLocation,
+        startLocation!,
         openRef.current,
         maxTranslate
       );
       const translateRatio = currentTranslate / maxTranslate;
 
-      if (!swipeInstance.current.velocity) return;
       if (openRef.current) {
         if (
-          swipeInstance.current.velocity > minFlingVelocity ||
+          swipeInstance.current.velocity! > minFlingVelocity ||
           translateRatio > hysteresis
         ) {
           onClose && onClose();
@@ -273,7 +271,7 @@ const SwipeableDrawer: React.FC<Props> = ({
       }
 
       if (
-        swipeInstance.current.velocity < -minFlingVelocity ||
+        swipeInstance.current.velocity! < -minFlingVelocity ||
         1 - translateRatio > hysteresis
       ) {
         onOpen && onOpen();
@@ -298,11 +296,9 @@ const SwipeableDrawer: React.FC<Props> = ({
       const currentY = calculateCurrentY(anchor, event.touches);
 
       // We don't know yet.
-      if (swipeInstance.current.isSwiping == null) {
-        if (!swipeInstance.current.startX || !swipeInstance.current.startY)
-          return;
-        const dx = Math.abs(currentX - swipeInstance.current.startX);
-        const dy = Math.abs(currentY - swipeInstance.current.startY);
+      if (swipeInstance.current.isSwiping === null) {
+        const dx = Math.abs(currentX - swipeInstance.current.startX!);
+        const dy = Math.abs(currentY - swipeInstance.current.startY!);
 
         // We are likely to be swiping, let's prevent the scroll event on iOS.
         if (dx > dy) {
@@ -344,7 +340,6 @@ const SwipeableDrawer: React.FC<Props> = ({
       const startLocation = horizontalSwipe
         ? swipeInstance.current.startX
         : swipeInstance.current.startY;
-      if (!startLocation) return;
       const maxTranslate = getMaxTranslate(
         horizontalSwipe,
         transitionRef.current
@@ -352,7 +347,7 @@ const SwipeableDrawer: React.FC<Props> = ({
 
       const translate = getTranslate(
         horizontalSwipe ? currentX : currentY,
-        startLocation,
+        startLocation!,
         openRef.current,
         maxTranslate
       );
@@ -370,9 +365,8 @@ const SwipeableDrawer: React.FC<Props> = ({
           (performance.now() - swipeInstance.current.lastTime)) *
         1e3;
       // Low Pass filter.
-      if (!swipeInstance.current.velocity) return;
       swipeInstance.current.velocity =
-        swipeInstance.current.velocity * 0.4 + velocity * 0.6;
+        swipeInstance.current.velocity! * 0.4 + velocity * 0.6;
 
       swipeInstance.current.lastTranslate = translate;
       swipeInstance.current.lastTime = performance.now();

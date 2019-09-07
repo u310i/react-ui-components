@@ -13,11 +13,7 @@ const $names = $.names;
 const $styles = $.styles;
 
 type Props = $Type.CreateProps<
-  {
-    duration?: $Type.Transition.Duration;
-    easing?: $Type.Transition.Easing;
-    disableHideVisibility?: boolean;
-  },
+  $Type.Transition.CommonProps,
   typeof BaseElement,
   $Type.Components.CSSTransitionProps
 >;

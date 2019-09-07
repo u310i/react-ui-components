@@ -12,15 +12,12 @@ const $names = $.names;
 const $styles = $.styles;
 
 type Props = $Type.CreateProps<
-  {
-    duration?: $Type.Transition.Duration;
-    easing?: $Type.Transition.Easing;
+  $Type.Transition.CommonProps & {
     collapsedHeight?: string;
     innerProps?: $Type.PropComponentProps<typeof BaseElement>;
-    disableHideVisibility?: boolean;
   },
   typeof BaseElement,
-  $Type.Components.CSSTransitionProps
+  Omit<$Type.Components.CSSTransitionProps, 'timeout'>
 >;
 
 const Collapse: React.FC<Props> = ({

@@ -4,7 +4,7 @@ import {
   injectElementToRef,
   extractElement,
   useForceUpdate,
-  isReactComponentChildren,
+  isReactFunctionalComponentChildren,
   isTransitionComponent,
 } from 'scripts';
 import {
@@ -29,10 +29,6 @@ type ModalQueueValue = {
 type ClosingReason = 'escapeKeyDown' | 'outsideClick';
 
 type Props = $Type.CreateProps<{
-  children?: React.ReactElement<
-    $Type.Transition.CommonProps,
-    React.JSXElementConstructor<any>
-  >;
   container?: Element;
   open?: boolean;
   onClose?: (node: Element | null, reason: ClosingReason | null) => void;
@@ -61,7 +57,7 @@ const modalQueue: ModalQueueValue[] = [];
 
 let zIndexCounter: number = $styles.modalZindex;
 
-const Modal: $Type.FunctionComponentWithoutChildren<Props> = ({
+const Modal: React.FC<Props> = ({
   children,
   container,
   open = false,
@@ -88,11 +84,11 @@ const Modal: $Type.FunctionComponentWithoutChildren<Props> = ({
 }) => {
   if (!children) return null;
   const transitionChild =
-    isReactComponentChildren<$Type.Transition.CommonProps>(children) &&
-    isTransitionComponent(children) &&
-    children;
-
-  if (!transitionChild) return null;
+    isReactFunctionalComponentChildren<
+      $Type.Transition.PropTransitionComponentProps
+    >(children) && isTransitionComponent(children)
+      ? children
+      : null;
 
   const rootRef = React.useRef<null | HTMLElement>(null);
   const childRef = React.useRef<null | HTMLElement>(null);
@@ -199,7 +195,7 @@ const Modal: $Type.FunctionComponentWithoutChildren<Props> = ({
   // If you want to unmount after waiting for the transition,
   //  use 'forceUpdate' to unmount after the transition.
 
-  const onExitedOfChildren = transitionChild.props.onExited;
+  const onExitedOfChildren = transitionChild && transitionChild.props.onExited;
   const handleExited = React.useCallback(
     node => {
       if (closeAfterTransition) {
@@ -229,7 +225,7 @@ const Modal: $Type.FunctionComponentWithoutChildren<Props> = ({
     handleClose();
   }
 
-  const enableCloseAfterTransition = closeAfterTransition && !!transitionChild;
+  const enableCloseAfterTransition = transitionChild && closeAfterTransition;
 
   // If you want to wait for the transition and then unmount,
   //  the procedure is as usual when 'open' changes to true.
@@ -241,17 +237,24 @@ const Modal: $Type.FunctionComponentWithoutChildren<Props> = ({
     handleOpen();
   }
 
-  const { ...childProps } = transitionChild ? transitionChild.props : {};
-
-  if (enableCloseAfterTransition) childProps.onExited = handleExited;
-
   const handleChildRef = React.useCallback(element => {
     childRef.current = element;
-    injectElementToRef(childProps.refer, element);
+    injectElementToRef(transitionChild && transitionChild.props.refer, element);
   }, []);
-  const ChildComponent = transitionChild && transitionChild.type;
-  const childComponent = (
-    <ChildComponent {...childProps} refer={handleChildRef} />
+
+  const TransitionComponent = transitionChild && transitionChild.type;
+  const childComponent = TransitionComponent ? (
+    <TransitionComponent
+      {...transitionChild!.props}
+      onExited={
+        enableCloseAfterTransition
+          ? handleExited
+          : transitionChild!.props.onExited
+      }
+      refer={handleChildRef}
+    />
+  ) : (
+    children
   );
 
   // 'React.useCallback' is never updated.

@@ -47,16 +47,19 @@ type Props = $Type.CreateProps<{
   TransitionComponent: React.FC<
     {
       direction?: $Type.Components.SlideDirection;
-    } & Omit<$Type.Transition.CommonProps, 'direction'>
+    } & Omit<$Type.Transition.PropTransitionComponentProps, 'direction'>
   >;
-  transitionProps: Omit<$Type.Transition.CommonProps, 'direction'>;
+  transitionProps: Omit<
+    $Type.Transition.PropTransitionComponentProps,
+    'direction' | 'in'
+  >;
   InnerComponent: typeof Paper;
   innerProps: $Type.PropComponentProps<typeof Paper>;
 }>;
 
 const Drawer: React.FC<Props> = ({
   children,
-  open,
+  open = false,
   anchor = 'left',
   onEscapeKeyDown,
   onOutsideClick,
