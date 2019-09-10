@@ -111,7 +111,7 @@ const App: React.FC<{}> = ({}) => {
         color="rgb(255, 69, 0)"
         onClick={handler_drawer}
       />
-      <SwipeableDrawer
+      {/* <SwipeableDrawer
         open={state_drawer}
         onOpen={onOpen_drawer}
         onClose={onClose_drawer}
@@ -152,7 +152,7 @@ const App: React.FC<{}> = ({}) => {
           bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb
           bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bottom
         </div>
-      </SwipeableDrawer>
+      </SwipeableDrawer> */}
 
       {/* <ButtonCoordinator
 				contents={[ { icon: 'sys-envelope' }, 'Dialog1' ]}
@@ -249,7 +249,7 @@ const App: React.FC<{}> = ({}) => {
           }
         }
       >
-        <Collapse in={state_t} appear={true} direction="left" duration={500}>
+        {/* <Collapse in={state_t} appear={true} direction="left" duration={500}>
           <Paper
             elevation={24}
             shape="round"
@@ -272,7 +272,7 @@ const App: React.FC<{}> = ({}) => {
             aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
             aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
           </Paper>
-        </Collapse>
+        </Collapse> */}
       </BaseElement>
 
       <BaseElement

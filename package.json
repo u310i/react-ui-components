@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:slow": "NODE_ENV=development webpack-dev-server",
-    "dev:fast": "NODE_ENV=development DEV_ENV=fast webpack-dev-server",
-    "start": "NODE_ENV=development webpack-dev-server",
+    "dev": "SET NODE_ENV=development&& webpack-dev-server",
+    "dev:fast": "SET NODE_ENV=development&& SET DEV_ENV=fast&& webpack-dev-server",
+    "start": "SET NODE_ENV=development&& webpack-dev-server",
     "watch": "webpack --watch",
-    "build": "NODE_ENV=production webpack",
+    "build": "SET NODE_ENV=production&& webpack",
     "server": "node server.js",
     "lint": "eslint src",
     "storybook": "start-storybook -p 9001 -c .storybook"
@@ -50,7 +50,6 @@
     "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
-    "@emotion/core": "^10.0.15",
     "@fortawesome/fontawesome-svg-core": "^1.2.20",
     "@fortawesome/free-brands-svg-icons": "^5.10.0",
     "@fortawesome/free-solid-svg-icons": "^5.10.0",
@@ -58,6 +57,7 @@
     "body-scroll-lock": "^2.6.1",
     "classlist-polyfill": "^1.2.0",
     "core-js": "3.1.4",
+    "emotion": "^10.0.17",
     "mousetrap": "^1.6.3",
     "raf": "^3.4.1",
     "react": "^16.8.6",

@@ -1,6 +1,6 @@
 import raf from 'raf';
 import deepmerge from 'deepmerge';
-import { keyframes as emotionKeyframes } from '@emotion/core';
+import { keyframes as emotionKeyframes } from 'emotion';
 import mousetrap from 'mousetrap';
 import {
   disableBodyScroll,

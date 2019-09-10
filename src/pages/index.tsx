@@ -11,7 +11,10 @@ import '../scripts/polyfill/index.ts';
 
 // import { css, injectGlobal, sheet } from 'react-emotion';
 import { App } from './Test';
-
+// import {
+//   BaseElement,
+// } from 'components';
 // injectGlobal(resetGlobalStyle);
 
 ReactDOM.render(<App />, document.getElementById('app'));
+// ReactDOM.render(<BaseElement>, document.getElementById('app'));

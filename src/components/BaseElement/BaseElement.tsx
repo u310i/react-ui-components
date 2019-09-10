@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { jsx } from '@emotion/core';
+import { css } from 'emotion';
 import { common as commonStyle } from './style';
 import htmlStyleMap from './htmlStyleMap';
 import inputHtmlStyleMap from './inputHtmlStyleMap';
@@ -80,12 +80,13 @@ const BaseElement: React.FC<Props> = ({
   const className = React.useMemo(() => {
     return (
       [
+        css(style),
         ...(propClassName ? [propClassName] : []),
         ...(propClassNames || []),
         ...(_className_ ? [_className_] : []),
       ].join(' ') || null
     );
-  }, [_className_, propClassNames, propClassName]);
+  }, [style, _className_, propClassNames, propClassName]);
 
   const id = React.useMemo(() => {
     return (
@@ -109,11 +110,10 @@ const BaseElement: React.FC<Props> = ({
     injectElementToRef(_refer_, element);
   }, []);
 
-  return jsx(
+  return React.createElement(
     elementName,
     {
       type: type,
-      css: style,
       className: className,
       id: id,
       ref: refer,

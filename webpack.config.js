@@ -3,6 +3,7 @@ const path = require('path');
 
 const _env = {};
 if (process.env.NODE_ENV !== 'production') {
+  console.log('NODE_ENV is ' + process.env.NODE_ENV);
   _env.mode = 'development';
   if (process.env.DEV_ENV === 'fast') {
     _env.devtool = 'inline-source-map';
@@ -19,8 +20,8 @@ module.exports = {
     main: path.resolve(__dirname, 'src/pages/index.tsx'),
   },
   output: {
-    path: path.resolve(__dirname, 'public'),
-    filename: '[name].[chunkhash].bundle.js',
+    path: path.resolve(__dirname, 'build'),
+    filename: '[name].bundle.js',
   },
   plugins: [
     new webpack.EnvironmentPlugin({ NODE_ENV: 'development', DEV_ENV: '' }),

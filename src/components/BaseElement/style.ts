@@ -31,7 +31,7 @@ export default {
   },
   h1_h2_h3_h4_h5_h6: {
     fontFamily: 'inherit',
-    fontWeight: '500',
+    fontWeight: 500,
     lineHeight: '1.2',
   },
   h1: {
