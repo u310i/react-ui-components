@@ -38,23 +38,23 @@ export const getSlideDirections = (
 
 type Props = $Type.ReactUtils.CreateProps<{
   open?: boolean;
-  anchor: Anchor;
+  anchor?: Anchor;
   onEscapeKeyDown?: (evt: KeyboardEvent) => void;
   onOutsideClick?: (evt: MouseEvent) => void;
-  keepMount: boolean;
-  arias: React.AriaAttributes;
-  modalProps: $Type.ReactUtils.PropComponentProps<typeof Modal>;
-  TransitionComponent: React.FC<
+  keepMount?: boolean;
+  arias?: React.AriaAttributes;
+  modalProps?: $Type.ReactUtils.PropComponentProps<typeof Modal>;
+  TransitionComponent?: React.FC<
     {
       direction?: $Type.Components.SlideDirection;
     } & Omit<$Type.Transition.PropTransitionComponentProps, 'direction'>
   >;
-  transitionProps: Omit<
+  transitionProps?: Omit<
     $Type.Transition.PropTransitionComponentProps,
     'direction' | 'in'
   >;
-  InnerComponent: typeof Paper;
-  innerProps: $Type.ReactUtils.PropComponentProps<typeof Paper>;
+  InnerComponent?: typeof Paper;
+  innerProps?: $Type.ReactUtils.PropComponentProps<typeof Paper>;
 }>;
 
 const Drawer: React.FC<Props> = ({

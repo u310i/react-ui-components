@@ -8,13 +8,13 @@ const $gSelectors = $.group.selectors;
 
 type Props = $Type.ReactUtils.CreateProps<
   {
-    nthChildStyleList: [number, React.CSSProperties][];
-    firstChildStyle: React.CSSProperties;
-    lastChildStyle: React.CSSProperties;
-    notNthChildStyleList: [number, React.CSSProperties][];
-    notFirstChildStyle: React.CSSProperties;
-    notLastChildStyle: React.CSSProperties;
-    between: $Type.Components.ButtonBetween;
+    nthChildStyleList?: [number, React.CSSProperties][];
+    firstChildStyle?: React.CSSProperties;
+    lastChildStyle?: React.CSSProperties;
+    notNthChildStyleList?: [number, React.CSSProperties][];
+    notFirstChildStyle?: React.CSSProperties;
+    notLastChildStyle?: React.CSSProperties;
+    between?: $Type.Components.ButtonBetween;
   },
   typeof BaseElement
 >;

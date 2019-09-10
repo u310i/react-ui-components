@@ -25,13 +25,13 @@ declare global {
   }
 }
 
-const iconList: Map<string, $Type.Icon.IconDefinition> = new Map(null);
+const iconMap: Map<string, $Type.Icon.IconDefinition> = new Map(null);
 
 const iconPackageList = [defaultIcons, userIcons, fontAwesomeIcons];
 
 for (let icons of iconPackageList) {
   for (let icon of icons.list) {
-    iconList.set(`${icon.name}`, {
+    iconMap.set(`${icon.name}`, {
       type: icons.type,
       viewBox: icon.viewBox,
       path: icon.path || undefined,
@@ -40,4 +40,4 @@ for (let icons of iconPackageList) {
   }
 }
 
-export default iconList;
+export default iconMap;

@@ -6,7 +6,7 @@ import {
   getFontSize,
   keyframes,
 } from 'scripts';
-import iconList from 'src/icons';
+import iconMap from 'icons';
 import { SVG } from '..';
 
 const $styles = $.styles;
@@ -23,7 +23,7 @@ type IconData = $Type.Icon.IconDefinition & { ratio: number };
 
 const getIcon = (name: string | null): IconData | null => {
   if (!name) return null;
-  const icon = iconList.get(name);
+  const icon = iconMap.get(name);
 
   if (!icon) return null;
   if (!icon.path && !icon.tag) return null;

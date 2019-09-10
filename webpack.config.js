@@ -1,13 +1,12 @@
-// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-// const path = require('path');
-require('path');
+const webpack = require('webpack');
+const path = require('path');
 
 const _env = {};
 if (process.env.NODE_ENV !== 'production') {
   _env.mode = 'development';
-  if (process.env.DEV_ENV === 'slow') {
+  if (process.env.DEV_ENV === 'fast') {
     _env.devtool = 'inline-source-map';
-  } else if (process.env.DEV_ENV === 'fast') {
+  } else {
     _env.devtool = 'eval';
   }
 } else {
@@ -23,10 +22,13 @@ module.exports = {
     path: path.resolve(__dirname, 'public'),
     filename: '[name].[chunkhash].bundle.js',
   },
+  plugins: [
+    new webpack.EnvironmentPlugin({ NODE_ENV: 'development', DEV_ENV: '' }),
+  ],
   devServer: {
     contentBase: path.resolve(__dirname, 'public'),
-    // host: '0.0.0.0',
-    host: 'localhost',
+    host: '0.0.0.0',
+    // host: 'localhost',
     port: 8080,
     // https://obel.hatenablog.jp/entry/20180217/1518871500
     disableHostCheck: true,
@@ -88,11 +90,14 @@ module.exports = {
   },
   // plugins: [ new ForkTsCheckerWebpackPlugin() ],
   resolve: {
-    extensions: ['ts', 'tsx', '.js', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
     alias: {
       // src: path.resolve(__dirname, 'src/'),
       components: path.resolve(__dirname, './src/components/'),
       scripts: path.resolve(__dirname, './src/scripts'),
+      icons: path.resolve(__dirname, './src/icons'),
+      fonts: path.resolve(__dirname, './src/fonts'),
+      images: path.resolve(__dirname, './src/images'),
     },
   },
 };

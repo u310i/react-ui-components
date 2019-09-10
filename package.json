@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:slow": "NODE_ENV=development DEV_ENV=slow webpack-dev-server",
+    "dev:slow": "NODE_ENV=development webpack-dev-server",
     "dev:fast": "NODE_ENV=development DEV_ENV=fast webpack-dev-server",
+    "start": "NODE_ENV=development webpack-dev-server",
     "watch": "webpack --watch",
     "build": "NODE_ENV=production webpack",
     "server": "node server.js",

@@ -4,4 +4,4 @@ import 'classlist-polyfill';
 
 // Acknowledged. @babel/polyfill
 // import './standardObject';
-import './documentObject';
+import './documentObject.ts';

@@ -1,31 +1,31 @@
 import * as React from 'react';
 import './_constants';
-import {} from 'scripts';
+// import {} from 'scripts';
 
 import {
   BaseElement,
-  Button,
+  // Button,
   ButtonCoordinator,
   // List,
   Icon,
-  Fade,
+  // Fade,
   Collapse,
-  Grow,
-  Slide,
-  Zoom,
-  Sticky,
+  // Grow,
+  // Slide,
+  // Zoom,
+  // Sticky,
   Paper,
-  Modal,
-  Backdrop,
-  Dialog,
-  Drawer,
+  // Modal,
+  // Backdrop,
+  // Dialog,
+  // Drawer,
   SwipeableDrawer,
 } from 'components';
 // import { FocusOn } from 'react-focus-on';
 
 let index = 0;
 
-export default ({}) => {
+const App: React.FC<{}> = ({}) => {
   const [state1, setState1] = React.useState(false);
   const handler1 = () => {
     setState1(prev => !prev);
@@ -512,3 +512,5 @@ type="normal"
 />
 </BaseElement> */
 }
+
+export default App;

@@ -8,8 +8,8 @@ declare global {
         type Options = {
           onActivate?: () => void;
           onDeactivate?: () => void;
-          initialFocus?: IncludeNode;
-          fallbackFocus?: IncludeNode;
+          initialFocus?: ReactUtils.IncludeNode;
+          fallbackFocus?: ReactUtils.IncludeNode;
           returnFocusOnDeactivate?: boolean;
           disableEscapeKeyDown?: boolean;
           disableOutsideClick?: boolean;
