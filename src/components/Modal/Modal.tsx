@@ -28,7 +28,7 @@ type ModalQueueValue = {
 
 type ClosingReason = 'escapeKeyDown' | 'outsideClick';
 
-type Props = $Type.CreateProps<{
+type Props = $Type.ReactUtils.CreateProps<{
   container?: Element;
   open?: boolean;
   onClose?: (node: Element | null, reason: ClosingReason | null) => void;
@@ -46,11 +46,11 @@ type Props = $Type.CreateProps<{
   hideBackdrop?: boolean;
   disableScrollLock?: boolean;
   scrollTarget?: Element;
-  clickOutsideProps?: $Type.PropComponentProps<typeof ClickOutside>;
-  fallbackFocus?: $Type.IncludeNode<HTMLElement>;
-  rootProps?: $Type.PropComponentProps<typeof HideOtherAria>;
-  contentProps?: $Type.PropComponentProps<typeof FocusTrap>;
-  backdropProps?: $Type.PropComponentProps<typeof Backdrop>;
+  clickOutsideProps?: $Type.ReactUtils.PropComponentProps<typeof ClickOutside>;
+  fallbackFocus?: $Type.ReactUtils.IncludeNode<HTMLElement>;
+  rootProps?: $Type.ReactUtils.PropComponentProps<typeof HideOtherAria>;
+  contentProps?: $Type.ReactUtils.PropComponentProps<typeof FocusTrap>;
+  backdropProps?: $Type.ReactUtils.PropComponentProps<typeof Backdrop>;
 }>;
 
 const modalQueue: ModalQueueValue[] = [];

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { extractElement, addEventListener } from 'scripts';
 
-type Props = $Type.CreateProps<{
-  target?: $Type.IncludeNode<EventTarget>;
+type Props = $Type.ReactUtils.CreateProps<{
+  target?: $Type.ReactUtils.IncludeNode<EventTarget>;
   type?: string;
   listener?: (evt: any) => void;
   options?: AddEventListenerOptions;

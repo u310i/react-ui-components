@@ -38,7 +38,7 @@ const getIcon = (name: string | null): IconData | null => {
 
 type Icon = string | string[] | $Type.Icon.BaseIconDefinition;
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   {
     icon: Icon;
     role?: string;

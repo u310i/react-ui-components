@@ -70,7 +70,7 @@ type TransitionPropsKeys =
   | TransitionHandlerKeys
   | TransitionActionKeys;
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   { in: boolean } & {
     disableClassing?: boolean;
     lazyAppear?: boolean;
@@ -88,7 +88,7 @@ declare global {
   }
 }
 
-const ReactCSSTransition: $Type.FunctionComponentWithoutChildren<
+const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
   Props & CharacteristicProps
 > = ({
   children,

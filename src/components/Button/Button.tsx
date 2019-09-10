@@ -27,7 +27,7 @@ declare global {
   }
 }
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   {
     color?: string;
     type?: Type;

@@ -3,7 +3,7 @@ import { extractElement, mousetrap as Mousetrap } from 'scripts';
 
 // https://github.com/ccampbell/mousetrap
 
-type Props = $Type.CreateProps<{
+type Props = $Type.ReactUtils.CreateProps<{
   hotkeys?: string | string[];
   action?: (evt: KeyboardEvent) => void;
   type?: 'keydown' | 'keyup' | 'keypress';

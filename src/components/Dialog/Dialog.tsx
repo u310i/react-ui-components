@@ -8,7 +8,7 @@ const $styles = $.styles;
 const $transitionStyle = $styles.transition;
 const $innerStyle = $styles.inner;
 
-type Props = $Type.CreateProps<{
+type Props = $Type.ReactUtils.CreateProps<{
   open?: boolean;
   onEscapeKeyDown?: (evt: KeyboardEvent) => void;
   onOutsideClick?: (evt: MouseEvent) => void;
@@ -16,11 +16,11 @@ type Props = $Type.CreateProps<{
   arias: React.AriaAttributes;
   enableScrollBody: boolean;
   fullScreen: boolean;
-  modalProps: Omit<$Type.ExtractProps<typeof Modal>, 'children'>;
+  modalProps: Omit<$Type.ReactUtils.ExtractProps<typeof Modal>, 'children'>;
   TransitionComponent: React.FC<$Type.Transition.PropTransitionComponentProps>;
   transitionProps: Omit<$Type.Transition.PropTransitionComponentProps, 'in'>;
   InnerComponent: typeof Paper;
-  innerProps: Omit<$Type.ExtractProps<typeof Paper>, 'children'>;
+  innerProps: Omit<$Type.ReactUtils.ExtractProps<typeof Paper>, 'children'>;
 }>;
 
 const Dialog: React.FC<Props> = ({

@@ -211,7 +211,7 @@ export const focusTrap = (
 
   const extractElementForOption = (
     optionName: 'initialFocus' | 'fallbackFocus'
-  ): $Type.MaybeNode => {
+  ): $Type.ReactUtils.MaybeNode => {
     const optionValue = config[optionName];
     if (!optionValue) {
       return null;

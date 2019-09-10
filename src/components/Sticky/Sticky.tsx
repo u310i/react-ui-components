@@ -24,10 +24,10 @@ const removeSpaceFromOuter = (outerNode: HTMLElement) => {
   outerNode.style.width = '';
 };
 
-type Props = $Type.CreateProps<{
-  innerProps?: $Type.PropComponentProps<typeof BaseElement>;
-  outerProps?: $Type.PropComponentProps<typeof BaseElement>;
-  absoluteWrapperProps?: $Type.PropComponentProps<typeof BaseElement>;
+type Props = $Type.ReactUtils.CreateProps<{
+  innerProps?: $Type.ReactUtils.PropComponentProps<typeof BaseElement>;
+  outerProps?: $Type.ReactUtils.PropComponentProps<typeof BaseElement>;
+  absoluteWrapperProps?: $Type.ReactUtils.PropComponentProps<typeof BaseElement>;
   offsetTop?: number;
   offsetBottom?: number;
   enableAbsolute?: boolean;

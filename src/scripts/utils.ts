@@ -223,8 +223,8 @@ export const getTransitionEndName = (() => {
 })();
 
 export const extractElement = <T = Element>(
-  value: $Type.IncludeNode<T>
-): $Type.MaybeNode<T> => {
+  value: $Type.ReactUtils.IncludeNode<T>
+): $Type.ReactUtils.MaybeNode<T> => {
   if (!value) {
     return null;
   }
@@ -232,7 +232,7 @@ export const extractElement = <T = Element>(
     typeof value === 'string'
       ? document.querySelector(value)
       : typeof value === 'function'
-        ? (value as () => $Type.MaybeNode<T>)() as any
+        ? (value as () => $Type.ReactUtils.MaybeNode<T>)() as any
         : 'current' in value
           ? value.current
           : value;
@@ -241,8 +241,8 @@ export const extractElement = <T = Element>(
 };
 
 export const injectElementToRef = <T = Element>(
-  ref: $Type.Ref<T> | undefined | null,
-  element: $Type.MaybeNode<T>
+  ref: $Type.ReactUtils.Ref<T> | undefined | null,
+  element: $Type.ReactUtils.MaybeNode<T>
 ) => {
   if (ref) {
     typeof ref === 'function' ? ref(element) : (ref.current = element);

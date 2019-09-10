@@ -8,7 +8,7 @@ const $ = getComponentConstants('swipeableDrawer');
 const $swipeAreaStyles = $.styles.swipeArea;
 const $names = $.names;
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   {
     anchor: $Type.Components.DrawerAnchor;
     width: number;
@@ -16,7 +16,7 @@ type Props = $Type.CreateProps<
   typeof BaseElement
 >;
 
-const SwipeArea: $Type.FunctionComponentWithoutChildren<Props> = ({
+const SwipeArea: $Type.ReactUtils.FunctionComponentWithoutChildren<Props> = ({
   anchor = 'left',
   width = 40,
   ...other

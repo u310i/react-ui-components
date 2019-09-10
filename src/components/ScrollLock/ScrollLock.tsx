@@ -3,8 +3,8 @@ import { extractElement, scrollLock } from 'scripts';
 
 // https://github.com/willmcpo/body-scroll-lock
 
-type Props = $Type.CreateProps<{
-  target?: $Type.IncludeNode<Element>;
+type Props = $Type.ReactUtils.CreateProps<{
+  target?: $Type.ReactUtils.IncludeNode<Element>;
   active?: boolean;
   fillGap?: boolean;
 }>;

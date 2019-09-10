@@ -2,8 +2,8 @@ import React from 'react';
 import { extractElement, clickedScrollbar } from 'scripts';
 import { EventListener } from '..';
 
-type Props = $Type.CreateProps<{
-  target?: $Type.IncludeNode;
+type Props = $Type.ReactUtils.CreateProps<{
+  target?: $Type.ReactUtils.IncludeNode;
   action?: (evt: MouseEvent) => void;
   options?: AddEventListenerOptions;
   scope?: Element;

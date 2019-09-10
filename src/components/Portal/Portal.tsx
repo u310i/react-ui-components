@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { extractElement } from 'scripts';
 
-type Props = $Type.CreateProps<{
+type Props = $Type.ReactUtils.CreateProps<{
   container?: Element;
   key?: any;
   disablePortal?: boolean;

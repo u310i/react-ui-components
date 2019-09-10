@@ -2,7 +2,7 @@ import React from 'react';
 import { extractElement } from 'scripts';
 import { BaseElement } from '..';
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   {
     parent?: Element;
     active?: boolean;

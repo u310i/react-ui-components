@@ -12,7 +12,7 @@ import { CSSTransition, BaseElement } from '..';
 const $names = $.names;
 const $styles = $.styles;
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   $Type.Transition.CommonProps,
   typeof BaseElement,
   $Type.Components.CSSTransitionProps

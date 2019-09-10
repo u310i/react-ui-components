@@ -82,7 +82,7 @@ const disableSwipeToOpenDefault =
   typeof navigator !== 'undefined' &&
   /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   {
     onOpen?: () => void;
     onClose?: () => void;
@@ -92,10 +92,10 @@ type Props = $Type.CreateProps<
     disableDiscovery?: boolean;
     disableSwipeToOpen?: boolean;
     hideBackdrop?: boolean;
-    swipeAreaProps?: $Type.PropComponentProps<typeof SwipeArea>;
+    swipeAreaProps?: $Type.ReactUtils.PropComponentProps<typeof SwipeArea>;
     swipeAreaWidth?: number;
   } & Omit<
-    $Type.PropComponentProps<typeof Drawer>,
+    $Type.ReactUtils.PropComponentProps<typeof Drawer>,
     'TransitionComponent' | 'keepMount'
   >
 >;

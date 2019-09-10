@@ -2,7 +2,7 @@
 
 export const isReactFunctionalComponentChildren = <T = any>(
   children: React.ReactNode
-): children is React.ReactElement<T, React.JSXElementConstructor<T>> => {
+): children is React.ReactElement<T, (props: T) => React.ReactElement | null> => {
   return !!children && typeof children === 'object' && !Array.isArray(children)
     && !('children' in children) && 'type' in children && 'props' in children && typeof children.type === 'function'
     && !(children.type.prototype && children.type.prototype.isReactComponent)
@@ -23,7 +23,7 @@ export const isTransitionComponent = (
 // };
 
 export const isObject = (data: any) => {
-	return Object.prototype.toString.call(data) === '[object Object]';
+  return Object.prototype.toString.call(data) === '[object Object]';
 };
 
 // export const isEmptyObject = (data) => {

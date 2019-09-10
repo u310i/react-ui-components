@@ -10,14 +10,14 @@ import { BaseElement } from '..';
 // captures the previouslyFocusedElement in componentWillMount,
 // then (optionally) returns focus to it in componentWillUnmount.
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   {
     active?: boolean;
     paused?: boolean;
     onActivate?: () => void;
     onDeactivate?: () => void;
-    initialFocus?: $Type.IncludeNode;
-    fallbackFocus?: $Type.IncludeNode;
+    initialFocus?: $Type.ReactUtils.IncludeNode;
+    fallbackFocus?: $Type.ReactUtils.IncludeNode;
     disableRestoreFocus?: boolean;
     disableEscapeKeyDown?: boolean;
     disableOutsideClick?: boolean;

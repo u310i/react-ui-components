@@ -9,7 +9,7 @@ const $names = $.names;
 
 type ViewBox = $Type.Icon.ViewBox;
 
-type Props<T = $Type.Components.BaseElementSVGProps> = $Type.CreateProps<
+type Props<T = $Type.Components.BaseElementSVGProps> = $Type.ReactUtils.CreateProps<
   {
     path?: $Type.Icon.Path;
     tag?: string;

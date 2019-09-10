@@ -11,10 +11,10 @@ import { CSSTransition, BaseElement } from '..';
 const $names = $.names;
 const $styles = $.styles;
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   $Type.Transition.CommonProps & {
     collapsedHeight?: string;
-    innerProps?: $Type.PropComponentProps<typeof BaseElement>;
+    innerProps?: $Type.ReactUtils.PropComponentProps<typeof BaseElement>;
   },
   typeof BaseElement,
   Omit<$Type.Components.CSSTransitionProps, 'timeout'>

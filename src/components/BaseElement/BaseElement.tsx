@@ -17,8 +17,8 @@ type ComponentProps = {
   id?: string;
   _arias_?: React.AriaAttributes;
   arias?: React.AriaAttributes;
-  _refer_?: $Type.Ref<Element>;
-  refer?: $Type.Ref<Element>;
+  _refer_?: $Type.ReactUtils.Ref<Element>;
+  refer?: $Type.ReactUtils.Ref<Element>;
   elementName?: keyof JSX.IntrinsicElements;
 };
 

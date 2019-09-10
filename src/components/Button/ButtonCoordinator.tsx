@@ -3,14 +3,14 @@ import { Icon } from '..';
 import Button from './Button';
 import ButtonGroup from './ButtonGroup';
 
-type Content = null | string | $Type.ExtractProps<typeof Icon>;
+type Content = null | string | $Type.ReactUtils.ExtractProps<typeof Icon>;
 
 type Props = {
   contents: (Content | Content[])[];
   group?: {
-    childPropList?: ($Type.PropComponentProps<typeof Button> | undefined)[];
+    childPropList?: ($Type.ReactUtils.PropComponentProps<typeof Button> | undefined)[];
   } & $Type.Components.BaseElementProps;
-} & $Type.ExtractProps<typeof Button>;
+} & $Type.ReactUtils.ExtractProps<typeof Button>;
 
 const getChild = (item: Content, index: number) => {
   if (!item) return null;
@@ -25,7 +25,7 @@ const getChild = (item: Content, index: number) => {
 
 const createButton = (
   contents: Props['contents'],
-  props: $Type.ExtractProps<typeof Button>,
+  props: $Type.ReactUtils.ExtractProps<typeof Button>,
   group?: Props['group'],
   index?: number
 ) => {

@@ -24,7 +24,7 @@ const setEnteredOpacity = (node: HTMLElement) => {
   node.style.opacity = $styles.enteredOpacity;
 };
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   $Type.Transition.CommonProps,
   typeof BaseElement,
   Omit<$Type.Components.CSSTransitionProps, 'timeout'>

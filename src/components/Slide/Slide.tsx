@@ -50,7 +50,7 @@ const getExitedTranslateValue = (
   }
 };
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   $Type.Transition.CommonProps & {
     direction?: Direction;
     gutter?: number;

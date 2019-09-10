@@ -5,7 +5,7 @@ import { Fade, BaseElement } from '..';
 
 const $styles = $.styles;
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   {
     open?: boolean;
     disablePointerEvents?: boolean;

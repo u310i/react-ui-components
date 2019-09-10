@@ -6,7 +6,7 @@ const $ = getComponentConstants('button');
 const $gStyles = $.group.styles;
 const $gSelectors = $.group.selectors;
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   {
     nthChildStyleList: [number, React.CSSProperties][];
     firstChildStyle: React.CSSProperties;

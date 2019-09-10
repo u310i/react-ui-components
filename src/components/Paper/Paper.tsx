@@ -6,7 +6,7 @@ import { BaseElement } from '..';
 const $names = $.names;
 const $styles = $.styles;
 
-type Props = $Type.CreateProps<
+type Props = $Type.ReactUtils.CreateProps<
   {
     elevation?: number;
     shape?: $Type.Constants.Shape;

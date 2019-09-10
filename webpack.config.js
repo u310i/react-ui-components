@@ -25,7 +25,8 @@ module.exports = {
   },
   devServer: {
     contentBase: path.resolve(__dirname, 'public'),
-    host: '0.0.0.0',
+    // host: '0.0.0.0',
+    host: 'localhost',
     port: 8080,
     // https://obel.hatenablog.jp/entry/20180217/1518871500
     disableHostCheck: true,
