@@ -92,10 +92,14 @@ type Props = $Type.ReactUtils.CreateProps<
     disableDiscovery?: boolean;
     disableSwipeToOpen?: boolean;
     hideBackdrop?: boolean;
-    swipeAreaProps?: $Type.ReactUtils.PropComponentProps<typeof SwipeArea>;
+    swipeAreaProps?: Omit<
+      $Type.ReactUtils.CreatePropComponentProps<typeof SwipeArea>,
+      'anchor' | 'width'
+    >;
     swipeAreaWidth?: number;
-  } & Omit<
-    $Type.ReactUtils.PropComponentProps<typeof Drawer>,
+  },
+  Omit<
+    $Type.ReactUtils.CreatePropComponentProps<typeof Drawer>,
     'TransitionComponent' | 'keepMount'
   >
 >;
@@ -104,9 +108,6 @@ const SwipeableDrawer: React.FC<Props> = ({
   children,
   open,
   anchor = 'left',
-  onEscapeKeyDown,
-  onOutsideClick,
-  arias,
   onOpen,
   onClose,
   hysteresis = 0.55,
@@ -115,20 +116,18 @@ const SwipeableDrawer: React.FC<Props> = ({
   disableDiscovery = false,
   disableSwipeToOpen = disableSwipeToOpenDefault,
   hideBackdrop,
-  modalProps: propModalProps = {},
-  transitionProps: propTransitionProps = {},
-  innerProps: propInnerProps = {},
   swipeAreaProps = {},
   swipeAreaWidth = 40,
+  transitionProps: propTransitionProps = {},
   ...other
 }) => {
   const swipeInstance = React.useRef<SwipeInstance>({
     isSwiping: null,
   });
   const swipeAreaRef = React.useRef<null | Element>(null);
-  const backdropTransitionRef = React.useRef<null | HTMLElement>(null);
+  const backdropRef = React.useRef<null | HTMLElement>(null);
   const transitionRef = React.useRef<null | HTMLElement>(null);
-  const rootRef = React.useRef<null | HTMLElement>(null);
+  const drawerRef = React.useRef<null | HTMLElement>(null);
 
   const touchDetected = React.useRef<boolean>(false);
   const openRef = React.useRef(open);
@@ -184,18 +183,14 @@ const SwipeableDrawer: React.FC<Props> = ({
         setTransition(transitionRef.current, transition);
       }
 
-      if (
-        !disableBackdropTransition &&
-        !hideBackdrop &&
-        backdropTransitionRef.current
-      ) {
-        backdropTransitionRef.current.style.opacity = (
+      if (!disableBackdropTransition && !hideBackdrop && backdropRef.current) {
+        backdropRef.current.style.opacity = (
           1 -
           translate / getMaxTranslate(horizontalSwipe, transitionRef.current)
         ).toString(10);
 
         if (changeTransition) {
-          setTransition(backdropTransitionRef.current, transition);
+          setTransition(backdropRef.current, transition);
         }
       }
     },
@@ -211,13 +206,14 @@ const SwipeableDrawer: React.FC<Props> = ({
     });
 
     abortedTimeoutIdRef.current = window.setTimeout(() => {
-      if (!rootRef.current) return;
-      rootRef.current.style.visibility = 'hidden';
+      if (!drawerRef.current) return;
+      drawerRef.current.style.visibility = 'hidden';
     }, durations['exit']);
   }, [anchor, durations]);
 
   const handleBodyTouchEnd = React.useCallback(
     (event: TouchEvent): void => {
+      console.log('end');
       if (!touchDetected.current || !transitionRef.current) return;
       nodeThatClaimedTheSwipe = null;
       touchDetected.current = false;
@@ -285,6 +281,7 @@ const SwipeableDrawer: React.FC<Props> = ({
 
   const handleBodyTouchMove = React.useCallback(
     event => {
+      console.log('move');
       // the ref may be null when a parent component updates while swiping
       if (!transitionRef.current || !touchDetected.current) {
         return;
@@ -382,8 +379,8 @@ const SwipeableDrawer: React.FC<Props> = ({
 
   const handleBodyTouchStart = React.useCallback(
     event => {
+      console.log('start');
       if (!transitionRef.current) return;
-
       // We are not supposed to handle this touch move.
       if (
         nodeThatClaimedTheSwipe !== null &&
@@ -416,7 +413,7 @@ const SwipeableDrawer: React.FC<Props> = ({
       if (!openRef.current) {
         abortedTimeoutIdRef.current &&
           clearTimeout(abortedTimeoutIdRef.current);
-        rootRef.current && (rootRef.current.style.visibility = null);
+        drawerRef.current && (drawerRef.current.style.visibility = null);
 
         // The ref may be null when a parent component updates while swiping.
         setPosition(
@@ -447,45 +444,27 @@ const SwipeableDrawer: React.FC<Props> = ({
     []
   );
 
-  const propModalPropsBackdropProps = propModalProps.backdropProps || {};
-  const propModalPropsBackdropPropsTransitionProps =
-    propModalPropsBackdropProps.transitionProps || {};
-  const propModalPropsRootProps = propModalProps.rootProps || {};
-  const handleBackdropTransitionRef = React.useCallback(element => {
-    backdropTransitionRef.current = element;
-    injectElementToRef(
-      propModalPropsBackdropPropsTransitionProps.refer,
-      element
-    );
+  const handleBackdropRef = React.useCallback(element => {
+    backdropRef.current = element;
+    injectElementToRef((other.backdropProps || {}).refer, element);
   }, []);
-  const handleRootRef = React.useCallback(element => {
-    rootRef.current = element;
-    injectElementToRef(propModalPropsRootProps.refer, element);
+  const handleDrawerRef = React.useCallback(element => {
+    drawerRef.current = element;
+    injectElementToRef(other.refer, element);
   }, []);
-  const modalProps = {
-    onEscapeKeyDown,
-    onOutsideClick,
+  const props = {
     hideBackdrop,
-    ...propModalProps,
+    ...other,
     ...React.useMemo(() => {
       return {
+        refer: handleDrawerRef,
+        classNames: [$names.swipeableDrawer, ...(other.classNames || [])],
         backdropProps: {
-          ...propModalPropsBackdropProps,
-          transitionProps: {
-            ...propModalPropsBackdropPropsTransitionProps,
-            refer: handleBackdropTransitionRef,
-          },
-        },
-        rootProps: {
-          ...propModalProps.rootProps,
-          refer: handleRootRef,
-          classNames: [
-            $names.swipeableDrawer,
-            ...(propModalPropsRootProps.classNames || []),
-          ],
+          ...other.backdropProps,
+          refer: handleBackdropRef,
         },
       };
-    }, [propModalProps.backdropProps, propModalProps.rootProps]),
+    }, [other.classNames, other.backdropProps]),
   };
 
   const handleTransitionRef = React.useCallback(element => {
@@ -530,22 +509,20 @@ const SwipeableDrawer: React.FC<Props> = ({
       />
       <Drawer
         open={open}
-        modalProps={modalProps}
         transitionProps={transitionProps}
         anchor={anchor}
-        onEscapeKeyDown={onEscapeKeyDown}
-        onOutsideClick={onOutsideClick}
-        {...other}
+        {...props}
         keepMount={true}
+        TransitionComponent={undefined}
       >
         {children}
       </Drawer>
       {!disableSwipeToOpen && (
         <SwipeArea
+          {...swipeAreaProps}
           anchor={anchor}
           refer={handleSwipeAreaRef}
           width={swipeAreaWidth}
-          {...swipeAreaProps}
         />
       )}
     </React.Fragment>

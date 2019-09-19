@@ -5,22 +5,23 @@ export { addEventListener, testPassiveEventSupport };
 
 export const reflow = (node: Element) => node.scrollTop;
 
-export const getFontSize = (data: $Type.Utils.FontSize) => {
-  if (isNumber(data)) return `${Math.round(data * 100) / 100}px`;
-  if (typeof data !== 'string') return '1em';
-  switch (data) {
-    case 'xs':
-      return '.75em';
-    case 'sm':
-      return '.875em';
-    case 'lg':
-      return '1.33333em';
-    default:
-      const match = data.match(/^([2-9]|10)x$/);
-      if (match) {
-        return `${match[1]}em`;
-      }
-      return data;
+export const getFontSize = (data?: $Type.Utils.FontSize) => {
+  if (!data) {
+    return '1em'
+  } else if (isNumber(data)) {
+    return `${Math.round(data * 100) / 100}em`;
+  } else {
+    if (typeof data !== 'string') return '1em';
+    switch (data) {
+      case 'xs':
+        return '0.75em';
+      case 'sm':
+        return '0.875em';
+      case 'lg':
+        return '1.33em';
+      default:
+        return data;
+    }
   }
 };
 
@@ -81,8 +82,8 @@ export const genEasings = (easing: $Type.Transition.Easing): GetEasings => {
   }
 };
 
-export const setTransition = (node: HTMLElement, value: string | null) => {
-  const property = value === null ? 'null' : value;
+export const setTransition = (node: HTMLElement, value?: string | null) => {
+  const property = value === null ? 'null' : typeof value === 'undefined' ? '' : value;
   node.style.webkitTransition = property;
   node.style.transition = property;
 };
@@ -109,7 +110,7 @@ export const genTransitionProperty = (
         props.property || 'all',
         (props.duration || props.duration === 0) ? `${props.duration}ms` : '0ms',
         props.easing || 'linear',
-        (props.delay || props.delay === 0) ? `${props.delay}ms` : 'all',
+        (props.delay || props.delay === 0) ? `${props.delay}ms` : '0ms',
       ].join(' ')
     );
   }
@@ -223,7 +224,7 @@ export const getTransitionEndName = (() => {
 })();
 
 export const extractElement = <T = Element>(
-  value: $Type.ReactUtils.IncludeNode<T>
+  value: $Type.ReactUtils.IncludeNode<T> | undefined
 ): $Type.ReactUtils.MaybeNode<T> => {
   if (!value) {
     return null;

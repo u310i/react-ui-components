@@ -4,6 +4,8 @@ import {
   TransitionProps as _TransitionProps,
   TransitionStatus as _TransitionStatus,
   TransitionChildren as _TransitionChildren,
+  EnterHandler,
+  ExitHandler,
 } from 'react-transition-group/Transition';
 import { reflow, useForceUpdate } from 'scripts';
 
@@ -161,7 +163,7 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
     return (appearingStates.current[enterType] = false);
   }, []);
 
-  const handleOnEnter = React.useCallback(
+  const handleOnEnter = React.useCallback<EnterHandler>(
     (node, appearing) => {
       const isAppearing = isLazyAppear('enter') || appearing;
 
@@ -177,7 +179,7 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
     [onEnter]
   );
 
-  const handleOnEntering = React.useCallback(
+  const handleOnEntering = React.useCallback<EnterHandler>(
     (node, appearing) => {
       reflow(node);
       const isAppearing = isLazyAppear('entering') || appearing;
@@ -193,7 +195,7 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
     [onEntering]
   );
 
-  const handleOnEntered = React.useCallback(
+  const handleOnEntered = React.useCallback<EnterHandler>(
     (node, appearing) => {
       const isAppearing = isLazyAppear('entered') || appearing;
 
@@ -212,7 +214,7 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
     [onEntered]
   );
 
-  const handleOnExit = React.useCallback(
+  const handleOnExit = React.useCallback<ExitHandler>(
     node => {
       if (isLazyAppear('appeared')) {
         lazyAppearDone('enter');
@@ -232,7 +234,7 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
     [onExit]
   );
 
-  const handleOnExiting = React.useCallback(
+  const handleOnExiting = React.useCallback<ExitHandler>(
     node => {
       reflow(node);
       if (!disableClassing) {
@@ -245,7 +247,7 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
     [onExiting]
   );
 
-  const handleOnExited = React.useCallback(node => {
+  const handleOnExited = React.useCallback<ExitHandler>(node => {
     if (!disableClassing) {
       const classNameList = getClassNames(EXIT);
       removeClasses(node, EXIT);
@@ -266,7 +268,9 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
       onExiting={handleOnExiting}
       onExited={handleOnExited}
       {...other}
-    />
+    >
+      {children}
+    </Transition>
   );
 };
 

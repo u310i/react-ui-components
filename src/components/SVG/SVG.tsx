@@ -9,7 +9,9 @@ const $names = $.names;
 
 type ViewBox = $Type.Icon.ViewBox;
 
-type Props<T = $Type.Components.BaseElementSVGProps> = $Type.ReactUtils.CreateProps<
+type Props<
+  T = $Type.Components.BaseElementSVGProps
+> = $Type.ReactUtils.CreateProps<
   {
     path?: $Type.Icon.Path;
     tag?: string;
@@ -24,8 +26,6 @@ type Props<T = $Type.Components.BaseElementSVGProps> = $Type.ReactUtils.CreatePr
     transform?: string;
     title?: string;
     desc?: string;
-    role?: string;
-    style?: React.CSSProperties;
   },
   $Type.Components.BaseElementSVGProps
 >;
@@ -53,17 +53,20 @@ const SVG: React.FC<Props> = ({
   transform,
   title,
   desc,
-  role = $styles.role,
-  style: propStyle,
   ...other
 }) => {
-  const titleTag = title ? <title>{title}</title> : null;
-  const descTag = desc ? <desc>{desc}</desc> : null;
+  const [titleTag, descTag] = React.useMemo(() => {
+    let titleTag: null | JSX.Element = title ? <title>{title}</title> : null;
+    let descTag: null | JSX.Element = desc ? <desc>{desc}</desc> : null;
+    return [titleTag, descTag];
+  }, [title, desc]);
 
   const props = {
     _style_: $styles.style,
     _className_: $names.svg,
-    role,
+    role: $styles.role,
+    xmlns: $styles.xmlns,
+    xmlnsXlink: $styles.xmlnsXlink,
     ...other,
   };
 
@@ -147,13 +150,7 @@ const SVG: React.FC<Props> = ({
 
   if (symbol) {
     return (
-      <BaseElement
-        elementName="svg"
-        display={$styles.symbolDisplay}
-        xmlns={$styles.xmlns}
-        xmlnsXlink={$styles.xmlnsXlink}
-        {...props}
-      >
+      <BaseElement elementName="svg" display={$styles.symbolDisplay} {...props}>
         <BaseElement
           elementName="symbol"
           viewBox={viewBox.join(' ')}
@@ -161,18 +158,15 @@ const SVG: React.FC<Props> = ({
           _className_={$names.svgSymbol}
           {...symbolTagProps}
         >
+          {titleTag}
+          {descTag}
           {InnerComponent}
         </BaseElement>
       </BaseElement>
     );
   } else if (use) {
     return (
-      <BaseElement
-        elementName="svg"
-        xmlns={$styles.xmlns}
-        xmlnsXlink={$styles.xmlnsXlink}
-        {...props}
-      >
+      <BaseElement elementName="svg" {...props}>
         {titleTag}
         {descTag}
         <BaseElement
@@ -186,13 +180,7 @@ const SVG: React.FC<Props> = ({
     );
   } else {
     return (
-      <BaseElement
-        elementName="svg"
-        viewBox={viewBox.join(' ')}
-        xmlns={$styles.xmlns}
-        xmlnsXlink={$styles.xmlnsXlink}
-        {...props}
-      >
+      <BaseElement elementName="svg" viewBox={viewBox.join(' ')} {...props}>
         {titleTag}
         {descTag}
         {InnerComponent}

@@ -6,6 +6,7 @@ const name = 'icon';
 export const constants = {
   name: name,
   styles: {
+    prefix: $.prefix,
     style: {
       display: 'inline-block',
       overflow: 'visible',

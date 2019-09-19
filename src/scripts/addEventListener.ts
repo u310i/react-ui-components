@@ -38,7 +38,7 @@ const createListenerOptions = passiveSupported
     };
   }
   : (options: AddEventListenerOptions) => {
-    return options.capture || {};
+    return options.capture;
   };
 
 

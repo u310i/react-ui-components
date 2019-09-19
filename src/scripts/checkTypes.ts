@@ -1,18 +1,17 @@
 // import React from 'react';
 
-export const isReactFunctionalComponentChildren = <T = any>(
+export const isReactComponentChildren = <P = any>(
   children: React.ReactNode
-): children is React.ReactElement<T, (props: T) => React.ReactElement | null> => {
+): children is React.ReactElement<P, React.JSXElementConstructor<P>> => {
   return !!children && typeof children === 'object' && !Array.isArray(children)
-    && !('children' in children) && 'type' in children && 'props' in children && typeof children.type === 'function'
-    && !(children.type.prototype && children.type.prototype.isReactComponent)
+    && !('children' in children) && 'type' in children && 'props' in children
 };
 
 
 export const isTransitionComponent = (
   children: React.ReactElement<any>
-): children is React.ReactElement<$Type.Transition.PropTransitionComponentProps> => {
-  return children && children.props && children.props.hasOwnProperty('in');
+): children is React.ReactElement<$Type.Transition.PropTransitionComponentCommonProps> => {
+  return !!children && !!children.props && children.props.hasOwnProperty('in');
 };
 // export const isArray = (data) => {
 // 	return Array.isArray(data);

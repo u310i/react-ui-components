@@ -6,6 +6,7 @@ import inputHtmlStyleMap from './inputHtmlStyleMap';
 import { injectElementToRef } from 'scripts';
 
 type ComponentProps = {
+  elementName?: keyof JSX.IntrinsicElements;
   type?: string;
   _style_?: React.CSSProperties;
   style?: React.CSSProperties;
@@ -19,7 +20,6 @@ type ComponentProps = {
   arias?: React.AriaAttributes;
   _refer_?: $Type.ReactUtils.Ref<Element>;
   refer?: $Type.ReactUtils.Ref<Element>;
-  elementName?: keyof JSX.IntrinsicElements;
 };
 
 type Props<
@@ -39,7 +39,7 @@ declare global {
       >;
       type BaseElementIgnoreProps =
         | '_style_'
-        | '_className'
+        | '_className_'
         | '_id_'
         | '_arias_'
         | '_refer_';
@@ -78,14 +78,14 @@ const BaseElement: React.FC<Props> = ({
   }, [_style_, propStyle, elementName, type]);
 
   const className = React.useMemo(() => {
-    return (
+    const mergedClassName =
       [
         css(style),
         ...(propClassName ? [propClassName] : []),
         ...(propClassNames || []),
         ...(_className_ ? [_className_] : []),
-      ].join(' ') || null
-    );
+      ].join(' ') || '';
+    return mergedClassName;
   }, [style, _className_, propClassNames, propClassName]);
 
   const id = React.useMemo(() => {

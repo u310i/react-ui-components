@@ -12,11 +12,12 @@ type Props = $Type.ReactUtils.CreateProps<
     duration?: $Type.Transition.Duration;
     invisible?: boolean;
     TransitionComponent?: React.FC<
-      $Type.Transition.PropTransitionComponentProps
+      $Type.Transition.PropTransitionComponentCommonProps
     >;
-    transitionProps?: Omit<$Type.Transition.PropTransitionComponentProps, 'in'>;
+
+    innerProps?: $Type.ReactUtils.CreatePropComponentProps<typeof BaseElement>;
   },
-  typeof BaseElement
+  Omit<$Type.Transition.PropTransitionComponentCommonProps, 'in'>
 >;
 
 const Backdrop: React.FC<Props> = ({
@@ -26,7 +27,7 @@ const Backdrop: React.FC<Props> = ({
   duration = $styles.duration,
   invisible = false,
   TransitionComponent = Fade,
-  transitionProps: propTransitionProps = {},
+  innerProps = {},
   ...other
 }) => {
   const _style_ = React.useMemo(() => {
@@ -37,34 +38,26 @@ const Backdrop: React.FC<Props> = ({
     };
   }, [invisible, disablePointerEvents]);
 
-  const transitionProps = {
-    ...propTransitionProps,
+  const props = {
+    ...other,
     ...React.useMemo(() => {
       return {
         style: {
           ...$styles.transition.style,
-          ...propTransitionProps.style,
+          ...other.style,
         },
-        classNames: [
-          ...(propTransitionProps.classNames || []),
-          $.names.backdrop,
-        ],
+        classNames: [...(other.classNames || []), $.names.backdrop],
       };
-    }, [propTransitionProps.style, propTransitionProps.classNames]),
+    }, [other.style, other.classNames]),
   };
 
   return (
-    <TransitionComponent
-      in={open}
-      duration={duration}
-      aria-hidden={true}
-      {...transitionProps}
-    >
+    <TransitionComponent in={open} duration={duration} {...props}>
       <BaseElement
         elementName="div"
         _style_={_style_}
         _className_={$.names.backdropInner}
-        {...other}
+        {...innerProps}
       >
         {children}
       </BaseElement>

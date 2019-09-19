@@ -14,7 +14,7 @@ const $styles = $.styles;
 type Props = $Type.ReactUtils.CreateProps<
   $Type.Transition.CommonProps & {
     collapsedHeight?: string;
-    innerProps?: $Type.ReactUtils.PropComponentProps<typeof BaseElement>;
+    innerProps?: $Type.ReactUtils.CreatePropComponentProps<typeof BaseElement>;
   },
   typeof BaseElement,
   Omit<$Type.Components.CSSTransitionProps, 'timeout'>
@@ -126,7 +126,6 @@ const Collapse: React.FC<Props> = ({
 
   return (
     <CSSTransition
-      disableClassing={true}
       lazyAppear={true}
       appear={appear}
       in={inProp}

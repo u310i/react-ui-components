@@ -41,7 +41,8 @@ type Icon = string | string[] | $Type.Icon.BaseIconDefinition;
 type Props = $Type.ReactUtils.CreateProps<
   {
     icon: Icon;
-    role?: string;
+    suffix?: string;
+    ariaHidden?: boolean;
     symbol?: boolean;
     use?: boolean;
     currentColor?: string;
@@ -61,7 +62,8 @@ type Props = $Type.ReactUtils.CreateProps<
 
 const Icon: React.FC<Props> = ({
   icon,
-  role = 'icon',
+  suffix,
+  ariaHidden = true,
   symbol,
   use,
   currentColor,
@@ -75,11 +77,10 @@ const Icon: React.FC<Props> = ({
   pulse,
   marginLeft,
   marginRight,
+  style: propStyle,
   ...other
 }) => {
   if (!icon) return null;
-
-  const { style: propStyle, ...propProps } = other;
 
   const [iconData, props] = React.useMemo(() => {
     let iconData: IconData | null;
@@ -122,7 +123,7 @@ const Icon: React.FC<Props> = ({
 
     const existPath = !!iconData.path;
 
-    const baseName = `uc-svg-i-${iconData.type}`;
+    const baseName = `${$styles.prefix}-svg-i-${iconData.type}`;
 
     let fill: string | undefined,
       className: string,
@@ -135,6 +136,8 @@ const Icon: React.FC<Props> = ({
       tag: string | undefined;
 
     if (currentColor || existPath) fill = $styles.currentColor;
+
+    if (suffix && typeof suffix === 'string') name = `${name}-${suffix}`;
 
     if (use) {
       className = `${baseName}-use-${name}`;
@@ -154,10 +157,14 @@ const Icon: React.FC<Props> = ({
     }
 
     const props: $Type.Components.SVGProps = {
-      ...propProps,
-      fill: propProps.fill || fill,
-      classNames: [...(propProps.classNames || []), className],
-      ids: [...(propProps.ids || []), ...(id ? [id] : [])],
+      ...other,
+      fill: other.fill || fill,
+      classNames: [...(other.classNames || []), className],
+      ids: [...(other.ids || []), ...(id ? [id] : [])],
+      arias: {
+        'aria-hidden': ariaHidden,
+        ...other.arias,
+      },
       use,
       symbol,
       xlinkHref,
@@ -167,11 +174,11 @@ const Icon: React.FC<Props> = ({
     };
 
     return [iconData as IconData, props];
-  }, [icon, use, symbol]);
+  }, [icon, use, symbol, other.fill, other.classNames, other.ids, other.arias]);
 
   if (!iconData) return null;
 
-  const componentStyle = React.useMemo(() => {
+  const style = React.useMemo(() => {
     let style: React.CSSProperties = {};
 
     if (marginLeft)
@@ -256,10 +263,7 @@ const Icon: React.FC<Props> = ({
           }`);
     }
 
-    return {
-      ...$styles.style,
-      ...style,
-    };
+    return { ...$styles.style, ...style, ...propStyle };
   }, [
     icon,
     currentColor,
@@ -273,13 +277,10 @@ const Icon: React.FC<Props> = ({
     pulse,
     marginLeft,
     marginRight,
+    propStyle,
   ]);
 
-  const style = React.useMemo(() => {
-    return { ...componentStyle, ...propStyle };
-  }, [componentStyle, propStyle]);
-
-  return <SVG role={role} {...props} style={style} />;
+  return <SVG {...props} style={style} />;
 };
 
 export default Icon;

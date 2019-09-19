@@ -4,21 +4,21 @@ import './_constants';
 
 import {
   BaseElement,
-  // Button,
+  Button,
   ButtonCoordinator,
   // List,
   Icon,
-  // Fade,
+  Fade,
   Collapse,
-  // Grow,
-  // Slide,
-  // Zoom,
-  // Sticky,
+  Grow,
+  Slide,
+  Zoom,
+  Sticky,
   Paper,
-  // Modal,
-  // Backdrop,
-  // Dialog,
-  // Drawer,
+  Modal,
+  Backdrop,
+  Dialog,
+  Drawer,
   SwipeableDrawer,
 } from 'components';
 // import { FocusOn } from 'react-focus-on';
@@ -97,8 +97,17 @@ const App: React.FC<{}> = ({}) => {
 
   return (
     <BaseElement elementName="div" style={{ backgroundColor: '#fff' }}>
+      <Button
+        style={{ margin: '0.5em' }}
+        type="fill"
+        toFill
+        color="rgb(255, 69, 0)"
+        onClick={handler_drawer}
+      >
+        Button
+      </Button>
       {/* {state ? <Backdrop open={state} /> : null} */}
-      <BaseElement
+      {/* <BaseElement
         elementName="div"
         style={{ height: '1000px', backgroundColor: '#e6e6fa' }}
       />
@@ -111,7 +120,7 @@ const App: React.FC<{}> = ({}) => {
         color="rgb(255, 69, 0)"
         onClick={handler_drawer}
       />
-      {/* <SwipeableDrawer
+      <SwipeableDrawer
         open={state_drawer}
         onOpen={onOpen_drawer}
         onClose={onClose_drawer}
@@ -123,9 +132,6 @@ const App: React.FC<{}> = ({}) => {
         // hideBackdrop={true}
         onEscapeKeyDown={onClose_drawer}
         onOutsideClick={onClose_drawer}
-        modalProps={{
-          backdropProps: {},
-        }}
       >
         <a href="#">Another focusable thing</a>
         <input type="text" />
@@ -152,74 +158,73 @@ const App: React.FC<{}> = ({}) => {
           bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb
           bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bottom
         </div>
-      </SwipeableDrawer> */}
+      </SwipeableDrawer>
 
-      {/* <ButtonCoordinator
-				contents={[ { icon: 'sys-envelope' }, 'Dialog1' ]}
-				style={{ margin: '0.5em' }}
-				type="fill"
-				toFill
-				onClick={handler1}
-			/>
-			<Dialog
-				open={state1}
-				onEscapeKeyDown={onClose1}
-				onOutsideClick={onClose1}
-				enableScrollBody={false}
-				TransitionComponent={Fade}
-				fullScreen={false}
-				className={[ 'AAA' ]}
-				keepMount={false}
-				modalProps={{
-					id: 'test'
-				}}
-			>
-				<a href="#">Another focusable thing</a>
-				<input type="text" />
-				<div>
-					top bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba
-					bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
-					aaaaaaaaaaaaaaaaaaaaaaaaa bottom
-				</div>
-				<ButtonCoordinator
-					contents={[ { icon: 'sys-envelope' }, 'Dialog2' ]}
-					style={{ margin: '0.5em' }}
-					type="fill"
-					toFill
-					onClick={handler2}
-				/>
-			</Dialog>
-			<ButtonCoordinator
-				contents={[ { icon: 'sys-envelope' }, 'Dialog2' ]}
-				style={{ margin: '0.5em' }}
-				type="fill"
-				toFill
-				color="rgb(255, 20, 147)"
-				onClick={handler2}
-			/>
-			<Dialog
-				open={state2}
-				onEscapeKeyDown={onClose2}
-				onOutsideClick={onClose2}
-				enableScrollBody={false}
-				TransitionComponent={Slide}
-				fullScreen={false}
-				classNames={[ 'BBB' ]}
-			>
-				<a href="#">Another focusable thing</a>
-				<input type="text" />
-				<div>
-					top aabbbbbb aaabbba aaabbba aaabbbaa aabbb aabbb aabbba abbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa
-					bottom
-				</div>
-				<ButtonCoordinator
-					contents={[ { icon: 'sys-envelope' }, 'Dialog1' ]}
-					style={{ margin: '0.5em' }}
-					type="fill"
-					toFill
-					onClick={handler1}
-				/>
-			</Dialog> */}
+      <ButtonCoordinator
+        contents={[{ icon: 'sys-envelope' }, 'Dialog1']}
+        style={{ margin: '0.5em' }}
+        type="fill"
+        toFill
+        onClick={handler1}
+      />
+      <Drawer
+        open={state1}
+        onEscapeKeyDown={onClose1}
+        onOutsideClick={onClose1}
+        // enableScrollBody={false}
+        // TransitionComponent={Fade}
+        // fullScreen={false}
+        className={'AAA'}
+        keepMount={false}
+        id={'test'}
+      >
+        <a href="#">Another focusable thing</a>
+        <input type="text" />
+        <div>
+          top bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba
+          bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb
+          bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
+          aaaaaaaaaaaaaaaaaaaaaaaaa bottom
+        </div>
+        <ButtonCoordinator
+          contents={[{ icon: 'sys-envelope' }, 'Dialog2']}
+          style={{ margin: '0.5em' }}
+          type="fill"
+          toFill
+          onClick={handler2}
+        />
+      </Drawer>
+      <ButtonCoordinator
+        contents={[{ icon: 'sys-envelope' }, 'Dialog2']}
+        style={{ margin: '0.5em' }}
+        type="fill"
+        toFill
+        color="rgb(255, 20, 147)"
+        onClick={handler2}
+      />
+      <Dialog
+        open={state2}
+        onEscapeKeyDown={onClose2}
+        onOutsideClick={onClose2}
+        enableScrollBody={false}
+        TransitionComponent={Slide}
+        fullScreen={false}
+        classNames={['BBB']}
+      >
+        <a href="#">Another focusable thing</a>
+        <input type="text" />
+        <div>
+          top aabbbbbb aaabbba aaabbba aaabbbaa aabbb aabbb aabbba abbbbbbbbbb
+          aaaaaaaaaaaaaaaaaaaaaaaaa bottom
+        </div>
+        <ButtonCoordinator
+          contents={[{ icon: 'sys-envelope' }, 'Dialog1']}
+          style={{ margin: '0.5em' }}
+          type="fill"
+          toFill
+          onClick={handler1}
+        />
+      </Dialog>
 
       <BaseElement
         elementName="div"
@@ -249,7 +254,7 @@ const App: React.FC<{}> = ({}) => {
           }
         }
       >
-        {/* <Collapse in={state_t} appear={true} direction="left" duration={500}>
+        <Collapse in={state_t} appear={true} direction="left" duration={500}>
           <Paper
             elevation={24}
             shape="round"
@@ -272,8 +277,8 @@ const App: React.FC<{}> = ({}) => {
             aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
             aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
           </Paper>
-        </Collapse> */}
-      </BaseElement>
+        </Collapse>
+      </BaseElement> */}
 
       <BaseElement
         elementName="div"
@@ -333,7 +338,7 @@ const App: React.FC<{}> = ({}) => {
 				<div>div</div>
 				text
 			</List> */}
-      <ButtonCoordinator
+      {/* <ButtonCoordinator
         contents={[
           [{ icon: 'sys-envelope' }, 'Aaaa'],
           [{ icon: 'sys-envelope' }, 'Bbbb'],
@@ -356,12 +361,13 @@ const App: React.FC<{}> = ({}) => {
         shape="round"
         size=""
         type="normal"
-      />
-      <BaseElement elementName="div" style={{ height: '512px' }} />
+      /> */}
+      {/* <BaseElement elementName="div" style={{ height: '512px' }} />
       <Icon
         type="fa"
         icon={['fab', 'apple']}
-        size="2x"
+        size="2em"
+        color={'#b0e0e6'}
         // flip="both"
         // border
         // rotation={90}
@@ -372,14 +378,14 @@ const App: React.FC<{}> = ({}) => {
       <Icon
         type="fa"
         icon={['fab', 'apple']}
-        size="2x"
+        size="2em"
         // flip="both"
         // pull="right"
       />
       <Icon
         type="fa"
         icon={['fas', 'angle-double-left']}
-        size="2x"
+        size="2em"
         // flip="both"
         // border
         // pull="right"
@@ -387,18 +393,18 @@ const App: React.FC<{}> = ({}) => {
       <Icon
         type="fa"
         icon={['fab', 'apple']}
-        size="2x"
+        size="2em"
         // flip="both"
         border
       />
       <Icon
         type="fa"
         icon={['fab', 'apple']}
-        size="2x"
+        size="2em"
         // flip="both"
         border={true}
         fixedWidth
-      />
+      />*/}
     </BaseElement>
   );
 };

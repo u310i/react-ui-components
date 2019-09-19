@@ -25,9 +25,11 @@ const removeSpaceFromOuter = (outerNode: HTMLElement) => {
 };
 
 type Props = $Type.ReactUtils.CreateProps<{
-  innerProps?: $Type.ReactUtils.PropComponentProps<typeof BaseElement>;
-  outerProps?: $Type.ReactUtils.PropComponentProps<typeof BaseElement>;
-  absoluteWrapperProps?: $Type.ReactUtils.PropComponentProps<typeof BaseElement>;
+  innerProps?: $Type.ReactUtils.CreatePropComponentProps<typeof BaseElement>;
+  outerProps?: $Type.ReactUtils.CreatePropComponentProps<typeof BaseElement>;
+  absoluteWrapperProps?: $Type.ReactUtils.CreatePropComponentProps<
+    typeof BaseElement
+  >;
   offsetTop?: number;
   offsetBottom?: number;
   enableAbsolute?: boolean;
@@ -167,12 +169,13 @@ const Sticky: React.FC<Props> = ({
   );
 
   return (
-    <EventListener
-      target={window}
-      type="scroll"
-      listener={stickingListener}
-      optimized={true}
-    >
+    <>
+      <EventListener
+        target={window}
+        type="scroll"
+        listener={stickingListener}
+        optimized={true}
+      />
       {enableAbsolute ? (
         <BaseElement
           elementName="div"
@@ -185,7 +188,7 @@ const Sticky: React.FC<Props> = ({
       ) : (
         innerComponent
       )}
-    </EventListener>
+    </>
   );
 };
 

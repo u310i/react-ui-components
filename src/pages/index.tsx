@@ -10,7 +10,7 @@ import '../scripts/polyfill/index.ts';
 // ReactDOM.render(<App />, document.getElementById('app'));
 
 // import { css, injectGlobal, sheet } from 'react-emotion';
-import { App } from './Test';
+import App from './Test';
 // import {
 //   BaseElement,
 // } from 'components';

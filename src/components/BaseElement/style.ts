@@ -101,7 +101,7 @@ export default {
     margin: '0px',
   },
   button_inputButton_inputReset_inputSubmit: {
-    '-webkit-appearance': 'button',
+    WebkitAppearance: 'button',
     '&::-moz-focus-inner': {
       borderStyle: 'none',
       padding: '0px',
@@ -146,7 +146,7 @@ export default {
 
   // only input
   inputTime_inputDate_inputDatetimeLocal_inputMonth: {
-    '-webkit-appearance': 'listbox',
+    WebkitAppearance: 'listbox',
   },
   inputCheckbox_inputRadio: {
     padding: '0',
@@ -160,15 +160,15 @@ export default {
     },
   },
   inputSearch: {
-    '-webkit-appearance': 'textfield',
+    WebkitAppearance: 'textfield',
     outlineOffset: '-2px',
     '&::-webkit-search-decoration': {
-      '-webkit-appearance': 'none',
+      WebkitAppearance: 'none',
     },
   },
   inputFile: {
     '&::-webkit-file-upload-button': {
-      '-webkit-appearance': 'button',
+      WebkitAppearance: 'button',
       font: 'inherit',
     },
   },

@@ -1,28 +1,28 @@
 // import * as React from 'react';
 import * as CSS from 'csstype';
-import { keyframes } from '@emotion/core';
+import { keyframes } from 'emotion';
 import { Component } from 'react';
 
 declare global {
   export namespace $Type {
     namespace ReactUtils {
       type ExtractProps<
-        T extends React.JSXElementConstructor<any> | {}
-        > = T extends React.JSXElementConstructor<infer P> ? P : {};
+        P extends React.JSXElementConstructor<any> | {}
+        > = P extends React.JSXElementConstructor<infer P> ? P : {};
 
 
       type CreateProps<
-        T1 extends object = {},
-        T2 extends React.JSXElementConstructor<any> | object = {},
-        T3 extends object = {}
+        P1 extends object = {},
+        P2 extends React.JSXElementConstructor<any> | object = {},
+        P3 extends object = {}
         > =
-        Readonly<T1> &
-        (T2 extends React.JSXElementConstructor<any>
-          ? Omit<ExtractProps<T2>, 'children' | Components.BaseElementIgnoreProps | keyof T1 | keyof T3>
-          : T2 extends object
-          ? Omit<T2, 'children' | Components.BaseElementIgnoreProps | keyof T1 | keyof T3>
+        Readonly<P1> &
+        (P2 extends React.JSXElementConstructor<any>
+          ? Omit<ExtractProps<P2>, 'children' | Components.BaseElementIgnoreProps | keyof P1 | keyof P3>
+          : P2 extends object
+          ? Omit<P2, 'children' | Components.BaseElementIgnoreProps | keyof P1 | keyof P3>
           : {}) &
-        Omit<T3, 'children' | Components.BaseElementIgnoreProps | keyof T1>
+        Omit<P3, 'children' | Components.BaseElementIgnoreProps | keyof P1>
         ;
 
       // type SpecificPartial<T, K extends keyof T> = Partial<Pick<T, K>> &
@@ -36,9 +36,9 @@ declare global {
         displayName?: string;
       };
 
-      type PropComponentProps<
-        T extends React.JSXElementConstructor<any>
-        > = Partial<Omit<ExtractProps<T>, 'children'>>;
+      type CreatePropComponentProps<
+        C extends React.JSXElementConstructor<any>
+        > = Omit<ExtractProps<C>, 'children' | Components.BaseElementIgnoreProps>;
 
 
 
@@ -91,11 +91,11 @@ declare global {
         }
         | string;
 
-      type PropTransitionComponentProps<
-        T1 = Omit<Components.CSSTransitionProps, 'timeout'>,
-        T2 = CommonProps,
-        T3 = Components.BaseElementProps
-        > = T1 & T2 & Omit<T3, keyof T1 | keyof T2>;
+      type PropTransitionComponentCommonProps<
+        P1 = Omit<Components.CSSTransitionProps, 'timeout'>,
+        P2 = CommonProps,
+        P3 = Components.BaseElementProps
+        > = P1 & P2 & Omit<P3, keyof P1 | keyof P2>;
     }
 
     type PartiallyPartial<T, K extends keyof T> = Partial<Pick<T, K>> &

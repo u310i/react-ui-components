@@ -9,7 +9,7 @@ import React from 'react';
 // 	return state;
 // };
 
-export const useForceUpdate = (() => React.useState()[1]) as () => () => void;
+export const useForceUpdate = () => React.useReducer(x => x + 1, 0)[1] as () => void;
 
 export const useLateUpdate = (timeout: number): [number, () => void] => {
   const [lateUpdateStatus, update] = React.useState(0);

@@ -119,7 +119,6 @@ export const focusTrap = (
 
   const deactivate = (deactivateOptions?: $FocusTrapType.Options) => {
     if (!state.active) return;
-
     window.clearTimeout(activeFocusDelay);
 
     removeListeners();
@@ -130,7 +129,7 @@ export const focusTrap = (
 
     if (deactivateOptions) {
       const onDeactivate =
-        deactivateOptions.onDeactivate !== undefined
+        !deactivateOptions.onDeactivate
           ? deactivateOptions.onDeactivate
           : config.onDeactivate;
       if (onDeactivate) {
@@ -138,7 +137,7 @@ export const focusTrap = (
       }
 
       const returnFocus =
-        deactivateOptions.returnFocusOnDeactivate !== undefined
+        !deactivateOptions.returnFocusOnDeactivate
           ? deactivateOptions.returnFocusOnDeactivate
           : config.returnFocusOnDeactivate;
       if (returnFocus) {

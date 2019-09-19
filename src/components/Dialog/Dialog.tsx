@@ -8,68 +8,51 @@ const $styles = $.styles;
 const $transitionStyle = $styles.transition;
 const $innerStyle = $styles.inner;
 
-type Props = $Type.ReactUtils.CreateProps<{
-  open?: boolean;
-  onEscapeKeyDown?: (evt: KeyboardEvent) => void;
-  onOutsideClick?: (evt: MouseEvent) => void;
-  keepMount: boolean;
-  arias: React.AriaAttributes;
-  enableScrollBody: boolean;
-  fullScreen: boolean;
-  modalProps: Omit<$Type.ReactUtils.ExtractProps<typeof Modal>, 'children'>;
-  TransitionComponent: React.FC<$Type.Transition.PropTransitionComponentProps>;
-  transitionProps: Omit<$Type.Transition.PropTransitionComponentProps, 'in'>;
-  InnerComponent: typeof Paper;
-  innerProps: Omit<$Type.ReactUtils.ExtractProps<typeof Paper>, 'children'>;
-}>;
+type Props = $Type.ReactUtils.CreateProps<
+  {
+    open?: boolean;
+    enableScrollBody?: boolean;
+    fullScreen?: boolean;
+    TransitionComponent?: React.FC<
+      $Type.Transition.PropTransitionComponentCommonProps
+    >;
+    transitionProps?: Omit<
+      $Type.Transition.PropTransitionComponentCommonProps,
+      'in'
+    >;
+    InnerComponent?: typeof Paper;
+    innerProps?: $Type.ReactUtils.CreatePropComponentProps<typeof Paper>;
+  },
+  typeof Modal
+>;
 
 const Dialog: React.FC<Props> = ({
   children,
   open = false,
-  onEscapeKeyDown,
-  onOutsideClick,
-  keepMount = false,
-  arias: propArias,
   enableScrollBody = false,
   fullScreen,
-  modalProps: propModalProps = {},
   TransitionComponent = Fade,
   transitionProps: propTransitionProps = {},
   InnerComponent = Paper,
   innerProps: propInnerProps = {},
+  ...other
 }) => {
   const innerRef = React.useRef<null | HTMLElement>(null);
 
-  const propModalPropsRootProps = propModalProps.rootProps || {};
-  const propModalPropsContentProps = propModalProps.contentProps || {};
-  const modalProps = {
-    onEscapeKeyDown,
-    onOutsideClick,
-    keepMount,
-    ...propModalProps,
+  const props = {
+    ...other,
     ...React.useMemo(() => {
       return {
-        rootProps: {
-          ...propModalPropsRootProps,
-          classNames: [
-            ...(propModalPropsRootProps.classNames || []),
-            $names.dialog,
-          ],
-        },
+        classNames: [...(other.classNames || []), $names.dialog],
         contentProps: {
-          ...propModalPropsContentProps,
+          ...other.contentProps,
           classNames: [
-            ...(propModalPropsContentProps.classNames || []),
+            ...((other.contentProps || {}).classNames || []),
             $names.dialogContainer,
           ],
-          arias: {
-            'aria-modal': true,
-            ...propArias,
-            ...propModalPropsContentProps.arias,
-          },
         },
       };
-    }, [propModalProps.rootProps, propModalProps.contentProps]),
+    }, [other.classNames, other.contentProps]),
   };
 
   const transitionProps = {
@@ -120,12 +103,7 @@ const Dialog: React.FC<Props> = ({
   };
 
   return (
-    <Modal
-      open={open}
-      closeAfterTransition
-      fallbackFocus={innerRef}
-      {...modalProps}
-    >
+    <Modal open={open} closeAfterTransition fallbackFocus={innerRef} {...props}>
       <TransitionComponent in={open} {...transitionProps}>
         <InnerComponent
           elevation={$innerStyle.elevation}

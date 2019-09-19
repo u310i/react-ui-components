@@ -20,11 +20,11 @@ export const createComponentConstants = <K extends keyof $Type.Constants.All>(
   type: K,
   constants: $Type.Constants.All[K]
 ): void => {
-  componentConstants[type] = (pageConstants[type] ? (overrideConstant(constants, pageConstants[type]) || {}) : constants) as $Type.Constants.All[K]
+  componentConstants[type] = (pageConstants[type] ? (overrideConstant(constants, pageConstants[type]) || {}) : constants) as any
 };
 
 export const getComponentConstants = <K extends keyof $Type.Constants.All, T = $Type.Constants.All[K]>(
   type: K
-): T => {
-  return (componentConstants[type] || {}) as any;
+): any => {
+  return (componentConstants[type] as any || {});
 };

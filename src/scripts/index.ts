@@ -49,7 +49,7 @@ import {
   adjustBrightnessFromCssRgb,
 } from './color';
 import {
-  isReactFunctionalComponentChildren,
+  isReactComponentChildren,
   isTransitionComponent,
   // isArray,
   // isEmptyArray,
@@ -137,7 +137,7 @@ export {
   adjustBrightness,
   adjustBrightnessFromCssRgb,
   // checkTypes
-  isReactFunctionalComponentChildren,
+  isReactComponentChildren,
   isTransitionComponent,
   isObject,
   isNumber,

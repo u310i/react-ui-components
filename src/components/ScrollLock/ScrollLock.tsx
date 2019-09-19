@@ -9,14 +9,13 @@ type Props = $Type.ReactUtils.CreateProps<{
   fillGap?: boolean;
 }>;
 
-const ScrollLock: React.FC<Props> = ({
-  children,
+const ScrollLock: $Type.ReactUtils.FunctionComponentWithoutChildren<Props> = ({
   target,
   active = true,
   fillGap = true,
 }) => {
   if (!target) return null;
-  const prevActiveRef = React.useRef<null | boolean>(null);
+  const prevActiveRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
     const targetElement = extractElement(target);
@@ -32,9 +31,9 @@ const ScrollLock: React.FC<Props> = ({
     return () => {
       scrollLock.restore(targetElement);
     };
-  }, [active]);
+  }, [active, fillGap]);
 
-  return children ? <>{children}</> : null;
+  return null;
 };
 
 export default ScrollLock;

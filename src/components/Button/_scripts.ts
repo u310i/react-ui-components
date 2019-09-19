@@ -67,8 +67,7 @@ export default {
 				return $styles.shape.default;
 		}
 	},
-	genColor: (type: $Type.Components.ButtonType | undefined, toFill: boolean | undefined, disable: boolean | undefined, keyColor?: string) => {
-		keyColor = keyColor || $colors.main;
+	genColor: (type: $Type.Components.ButtonType | undefined, toFill: boolean | undefined, disable: boolean | undefined, keyColor: string = $colors.main) => {
 		const activeColor = adjustBrightnessFromCssRgb(keyColor, -35);
 		const hoverColor = adjustBrightnessFromCssRgb(keyColor, 25);
 
@@ -177,6 +176,7 @@ export default {
 						borderColor: activeColor
 					}
 				};
+				console.log(style)
 		}
 
 		if (!disable) {
@@ -201,6 +201,7 @@ export default {
 		}
 
 		if (disable) {
+			console.log('disable')
 			if (type === 'outline' || type === 'normal-outline' || type === 'dark-outline') {
 				const outlineDisableStyle = {
 					color: $colors.disableTextColor,

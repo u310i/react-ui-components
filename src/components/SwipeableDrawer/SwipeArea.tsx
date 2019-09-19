@@ -10,8 +10,8 @@ const $names = $.names;
 
 type Props = $Type.ReactUtils.CreateProps<
   {
-    anchor: $Type.Components.DrawerAnchor;
-    width: number;
+    anchor?: $Type.Components.DrawerAnchor;
+    width?: number;
   },
   typeof BaseElement
 >;

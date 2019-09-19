@@ -2,8 +2,6 @@ import React from 'react';
 import $ from './_constants';
 import { getFontSize, keyframes, useLateUpdate } from 'scripts';
 import { BaseElement } from '..';
-import ButtonCoordinator from './ButtonCoordinator';
-import ButtonGroup from './ButtonGroup';
 import scripts from './_scripts';
 
 const $styles = $.styles;
@@ -116,7 +114,7 @@ const Button: React.FC<Props> = ({
   const colorStyle = React.useMemo(() => {
     return scripts.genColor(type, toFill, disable, keyColor);
   }, [keyColor, type, toFill, disable]);
-
+  console.log(colorStyle);
   const style = React.useMemo(() => {
     return {
       ...mainStyle,
@@ -129,31 +127,31 @@ const Button: React.FC<Props> = ({
     return scripts.defineContents(children, between, loading);
   }, [children, between, loading]);
 
-  const clickEffectComponent = React.useMemo(() => {
-    return (
-      lateUpdateStatus &&
-      hasClickEffect && (
-        <BaseElement
-          elementName="div"
-          key={lateUpdateStatus}
-          aria-hidden={true}
-          style={clickEffectStyle}
-        />
-      )
-    );
-  }, [lateUpdateStatus, hasClickEffect]);
+  // const clickEffectComponent = React.useMemo(() => {
+  //   return (
+  //     lateUpdateStatus &&
+  //     hasClickEffect && (
+  //       <BaseElement
+  //         elementName="div"
+  //         key={lateUpdateStatus}
+  //         aria-hidden={true}
+  //         style={clickEffectStyle}
+  //       />
+  //     )
+  //   );
+  // }, [lateUpdateStatus, hasClickEffect]);
 
-  const loadingMaskComponent = React.useMemo(() => {
-    return (
-      loading && (
-        <BaseElement
-          elementName="div"
-          aria-hidden={true}
-          style={loadingMaskStyle}
-        />
-      )
-    );
-  }, [loading]);
+  // const loadingMaskComponent = React.useMemo(() => {
+  //   return (
+  //     loading && (
+  //       <BaseElement
+  //         elementName="div"
+  //         aria-hidden={true}
+  //         style={loadingMaskStyle}
+  //       />
+  //     )
+  //   );
+  // }, [loading]);
 
   const arias = React.useMemo(() => {
     const props = {} as React.AriaAttributes;
@@ -172,8 +170,8 @@ const Button: React.FC<Props> = ({
       {...other}
     >
       {contents}
-      {loadingMaskComponent}
-      {clickEffectComponent}
+      {/* {loadingMaskComponent}
+      {clickEffectComponent} */}
     </BaseElement>
   );
 };

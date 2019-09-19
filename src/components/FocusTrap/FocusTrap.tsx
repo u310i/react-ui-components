@@ -76,22 +76,19 @@ const FocusTrap: React.FC<Props> = ({
     }
     if (focusTrapRef.current === null) {
       focusTrapRef.current = CreateFocusTrap(_ref_.current, focusTrapOptions);
-    }
-    const focusTrap = focusTrapRef.current;
-    if (prevActiveRef.current === null) {
-      if (active) focusTrap.activate();
-      if (paused) focusTrap.pause();
+      if (active) focusTrapRef.current.activate();
+      if (paused) focusTrapRef.current.pause();
     } else {
       if (prevActiveRef.current && !active) {
         deactivate(disableRestoreFocus);
       } else if (!prevActiveRef.current && active) {
-        focusTrap.activate();
+        focusTrapRef.current.activate();
       }
 
       if (prevPausedRef.current && !paused) {
-        focusTrap.unpause();
+        focusTrapRef.current.unpause();
       } else if (!prevPausedRef.current && paused) {
-        focusTrap.pause();
+        focusTrapRef.current.pause();
       }
     }
 
