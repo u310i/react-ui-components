@@ -3,7 +3,7 @@ import $ from './_constants';
 import { injectElementToRef } from 'scripts';
 import { Modal, Fade, Paper } from '..';
 
-const $names = $.names;
+const $classNames = $.classNames
 const $styles = $.styles;
 const $transitionStyle = $styles.transition;
 const $innerStyle = $styles.inner;
@@ -43,12 +43,12 @@ const Dialog: React.FC<Props> = ({
     ...other,
     ...React.useMemo(() => {
       return {
-        classNames: [...(other.classNames || []), $names.dialog],
+        classNames: [...(other.classNames || []), $classNames.dialog],
         contentProps: {
           ...other.contentProps,
           classNames: [
             ...((other.contentProps || {}).classNames || []),
-            $names.dialogContainer,
+            $classNames.dialogContainer,
           ],
         },
       };
@@ -67,7 +67,7 @@ const Dialog: React.FC<Props> = ({
         },
         classNames: [
           ...(propTransitionProps.classNames || []),
-          $names.dialogTransition,
+          $classNames.dialogTransition,
         ],
       };
     }, [
@@ -91,7 +91,7 @@ const Dialog: React.FC<Props> = ({
           ...(fullScreen && $innerStyle.fullScreen.style),
           ...propInnerProps.style,
         },
-        classNames: [...(propInnerProps.classNames || []), $names.dialogInner],
+        classNames: [...(propInnerProps.classNames || []), $classNames.dialogInner],
         refer: handleInnerRef,
       };
     }, [

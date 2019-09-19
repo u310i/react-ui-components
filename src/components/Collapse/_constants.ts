@@ -5,7 +5,7 @@ const name = 'collapse';
 
 export const constants = {
   name: name,
-  names: {
+  classNames: {
     collapse: `${$.prefix}${name}`,
     collapseInner: `${$.prefix}${name}-inner`,
   },

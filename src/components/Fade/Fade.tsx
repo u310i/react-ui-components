@@ -8,7 +8,7 @@ import {
 } from 'scripts';
 import { CSSTransition, BaseElement } from '..';
 
-const $names = $.names;
+const $classNames = $.classNames
 const $styles = $.styles;
 
 const setExitedOpacity = (node: HTMLElement) => {
@@ -123,7 +123,7 @@ const Fade: React.FC<Props> = ({
           <BaseElement
             elementName="div"
             _style_={$styles.style}
-            _className_={$names.fade}
+            _className_={$classNames.fade}
             _refer_={_ref_}
             {...childProps}
           >

@@ -13,7 +13,7 @@ import { isHorizontal } from '../Drawer/Drawer';
 import SwipeArea from './SwipeArea';
 import { Drawer } from '..';
 
-const $names = $.names;
+const $classNames = $.classNames
 const $styles = $.styles;
 
 // This value is closed to what browsers are using internally to
@@ -458,7 +458,7 @@ const SwipeableDrawer: React.FC<Props> = ({
     ...React.useMemo(() => {
       return {
         refer: handleDrawerRef,
-        classNames: [$names.swipeableDrawer, ...(other.classNames || [])],
+        classNames: [$classNames.swipeableDrawer, ...(other.classNames || [])],
         backdropProps: {
           ...other.backdropProps,
           refer: handleBackdropRef,
@@ -477,7 +477,7 @@ const SwipeableDrawer: React.FC<Props> = ({
       return {
         refer: handleTransitionRef,
         classNames: [
-          $.names.swipeableDrawerTransition,
+          $.classNames.swipeableDrawerTransition,
           ...(propTransitionProps.classNames || []),
         ],
       };

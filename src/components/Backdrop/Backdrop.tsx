@@ -46,7 +46,7 @@ const Backdrop: React.FC<Props> = ({
           ...$styles.transition.style,
           ...other.style,
         },
-        classNames: [...(other.classNames || []), $.names.backdrop],
+        classNames: [...(other.classNames || []), $.classNames.backdrop],
       };
     }, [other.style, other.classNames]),
   };
@@ -56,7 +56,7 @@ const Backdrop: React.FC<Props> = ({
       <BaseElement
         elementName="div"
         _style_={_style_}
-        _className_={$.names.backdropInner}
+        _className_={$.classNames.backdropInner}
         {...innerProps}
       >
         {children}

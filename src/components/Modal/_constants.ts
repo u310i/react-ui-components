@@ -5,7 +5,7 @@ const name = 'modal';
 
 export const constants = {
   name: name,
-  names: {
+  classNames: {
     modal: `${$.prefix}${name}`,
     modalContent: `${$.prefix}${name}-content`,
     modalBackdrop: `${$.prefix}${name}-backdrop`,

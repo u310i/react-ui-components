@@ -4,7 +4,7 @@ import { BaseElement } from '..';
 import LoadingIcon from './LoadingIcon';
 
 const $ = getComponentConstants('button');
-const $names = $.contents.names;
+const $classNames = $.contents.names;
 const $styles = $.contents.styles;
 
 const defineContents = (
@@ -40,7 +40,7 @@ const defineContents = (
             elementName="i"
             key={index}
             style={{ marginLeft: marginLeft }}
-            className={$names.buttonIcon}
+            className={$classNames.buttonIcon}
             children={child}
           />
         );
@@ -50,7 +50,7 @@ const defineContents = (
             elementName="span"
             key={index}
             style={{ marginLeft: marginLeft, ...spanStyle }}
-            className={$names.buttonInner}
+            className={$classNames.buttonInner}
             children={child}
           />
         );
@@ -77,7 +77,7 @@ const defineContents = (
       ) : (
         <BaseElement
           elementName="i"
-          className={$names.buttonIcon}
+          className={$classNames.buttonIcon}
           children={child}
         />
       );
@@ -86,7 +86,7 @@ const defineContents = (
         <BaseElement
           elementName="span"
           style={spanStyle}
-          className={$names.buttonInner}
+          className={$classNames.buttonInner}
           children={child}
         />
       );

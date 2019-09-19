@@ -24,7 +24,7 @@ const Button2: React.FC<Props> = ({
     <BaseElement
       elementName="button"
       _style_={style}
-      _className_={$.names.button2}
+      _className_={$.classNames.button2}
       disabled={disabled}
       {...other}
     >

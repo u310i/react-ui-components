@@ -102,7 +102,7 @@ export const constants = {
     },
   },
   contents: {
-    names: {
+    classNames: {
       buttonLoading: `${$.prefix}${name}-loading`,
       buttonIcon: `${$.prefix}${name}-icon`,
       buttonInner: `${$.prefix}${name}-inner`,
@@ -117,7 +117,7 @@ export const constants = {
     },
   },
   group: {
-    names: {
+    classNames: {
       buttonGroup: `${$.prefix}${name}-group`,
     },
     selectors: {

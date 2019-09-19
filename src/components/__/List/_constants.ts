@@ -5,7 +5,7 @@ const name = 'list';
 
 export const constants = {
   name: name as typeof name,
-  names: {
+  classNames: {
     list: `${$.prefix}${name}`,
     listGroup: `${$.prefix}${name}-group`,
   },

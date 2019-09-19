@@ -5,7 +5,7 @@ const name = 'sticky';
 
 export const constants = {
   name: name,
-  names: {
+  classNames: {
     stickyAbsoluteWrapper: `${$.prefix}${name}-absolute-wrapper`,
     stickyOuter: `${$.prefix}${name}-outer`,
     stickyInner: `${$.prefix}${name}-inner`,

@@ -5,7 +5,7 @@ const name = 'svg';
 
 export const constants = {
   name: name,
-  names: {
+  classNames: {
     svg: `${$.prefix}${name}`,
     svgSymbol: `${$.prefix}${name}-symbol`,
     svgUse: `${$.prefix}${name}-use`,

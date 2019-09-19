@@ -5,7 +5,7 @@ const name = 'backdrop';
 
 export const constants = {
   name: name as typeof name,
-  names: {
+  classNames: {
     backdrop: `${$.prefix}${name}`,
     backdropInner: `${$.prefix}${name}-inner`,
   },

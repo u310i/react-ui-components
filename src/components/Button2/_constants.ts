@@ -5,7 +5,7 @@ const name = 'button2';
 
 export const constants = {
   name: name,
-  names: {
+  classNames: {
     button2: `${$.prefix}${name}`,
   },
 } as const;

@@ -5,7 +5,7 @@ const name = 'swipeableDrawer';
 
 export const constants = {
   name: name,
-  names: {
+  classNames: {
     swipeableDrawer: `${$.prefix}${name}`,
     swipeableDrawerTransition: `${$.prefix}${name}-transition`,
     swipeableDrawerArea: `${$.prefix}${name}-area`,

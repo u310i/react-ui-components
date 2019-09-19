@@ -6,7 +6,7 @@ import { BaseElement } from '..';
 const $ = getComponentConstants('swipeableDrawer');
 
 const $swipeAreaStyles = $.styles.swipeArea;
-const $names = $.names;
+const $classNames = $.classNames
 
 type Props = $Type.ReactUtils.CreateProps<
   {
@@ -32,7 +32,7 @@ const SwipeArea: $Type.ReactUtils.FunctionComponentWithoutChildren<Props> = ({
     <BaseElement
       elementName="div"
       _style_={_style_}
-      _className_={$names.swipeableDrawerArea}
+      _className_={$classNames.swipeableDrawerArea}
       {...other}
     />
   );

@@ -5,7 +5,7 @@ const name = 'dialog';
 
 export const constants = {
   name: name,
-  names: {
+  classNames: {
     dialog: `${$.prefix}${name}`,
     dialogContainer: `${$.prefix}${name}-container`,
     dialogTransition: `${$.prefix}${name}-transition`,

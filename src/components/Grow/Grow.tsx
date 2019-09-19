@@ -10,7 +10,7 @@ import {
 } from 'scripts';
 import { CSSTransition, BaseElement } from '..';
 
-const $names = $.names;
+const $classNames = $.classNames
 const $styles = $.styles;
 
 const enteredScale = $styles.enteredScale;
@@ -142,7 +142,7 @@ const Grow: React.FC<Props> = ({
           <BaseElement
             elementName="div"
             _style_={$styles.style}
-            _className_={$names.grow}
+            _className_={$classNames.grow}
             _refer_={_ref_}
             {...childProps}
           >

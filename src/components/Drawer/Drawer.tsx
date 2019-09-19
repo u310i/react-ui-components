@@ -3,7 +3,7 @@ import $ from './_constants';
 import { injectElementToRef } from 'scripts';
 import { Modal, Slide, Paper } from '..';
 
-const $names = $.names;
+const $classNames = $.classNames
 const $styles = $.styles;
 const $modalContentStyle = $styles.modal.content;
 const $transitionStyle = $styles.transition;
@@ -73,7 +73,7 @@ const Drawer: React.FC<Props> = ({
     ...other,
     ...React.useMemo(() => {
       return {
-        classNames: [...(other.classNames || []), $names.drawer],
+        classNames: [...(other.classNames || []), $classNames.drawer],
         contentProps: {
           ...other.contentProps,
           style: {
@@ -83,7 +83,7 @@ const Drawer: React.FC<Props> = ({
           },
           classNames: [
             ...((other.contentProps || {}).classNames || []),
-            $names.drawerContainer,
+            $classNames.drawerContainer,
           ],
         },
       };
@@ -101,7 +101,7 @@ const Drawer: React.FC<Props> = ({
         },
         classNames: [
           ...(propTransitionProps.classNames || []),
-          $names.drawerTransition,
+          $classNames.drawerTransition,
         ],
       };
     }, [propTransitionProps.style, propTransitionProps.classNames]),
@@ -122,7 +122,7 @@ const Drawer: React.FC<Props> = ({
             : $innerStyle.vertical.style),
           ...propInnerProps.style,
         },
-        classNames: [...(propInnerProps.classNames || []), $names.drawerInner],
+        classNames: [...(propInnerProps.classNames || []), $classNames.drawerInner],
         refer: handleInnerRef,
       };
     }, [propInnerProps.style, propInnerProps.classNames]),

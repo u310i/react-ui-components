@@ -5,7 +5,7 @@ const name = 'slide';
 
 export const constants = {
   name: name,
-  names: {
+  classNames: {
     slide: `${$.prefix}${name}`,
   },
   styles: {

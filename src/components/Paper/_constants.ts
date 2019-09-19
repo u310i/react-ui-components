@@ -5,7 +5,7 @@ const name = 'paper';
 
 export const constants = {
   name: name,
-  names: {
+  classNames: {
     paper: `${$.prefix}${name}`,
   },
   styles: {

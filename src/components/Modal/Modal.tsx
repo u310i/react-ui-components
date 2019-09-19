@@ -17,7 +17,7 @@ import {
   ScrollLock,
 } from '..';
 
-const $names = $.names;
+const $classNames = $.classNames
 const $styles = $.styles;
 
 type ModalQueueValue = {
@@ -280,7 +280,7 @@ const Modal: React.FC<Props> = ({
           ...$styles.container.style,
           ...other.style,
         },
-        classNames: [...(other.classNames || []), $names.modal],
+        classNames: [...(other.classNames || []), $classNames.modal],
         arias: {
           'aria-modal': true,
           ...other.arias,
@@ -300,7 +300,7 @@ const Modal: React.FC<Props> = ({
         },
         classNames: [
           ...(propContentProps.classNames || []),
-          $names.modalContent,
+          $classNames.modalContent,
         ],
       };
     }, [propContentProps.style, propContentProps.classNames]),
@@ -317,7 +317,7 @@ const Modal: React.FC<Props> = ({
         },
         classNames: [
           ...(propBackdropProps.classNames || []),
-          $names.modalBackdrop,
+          $classNames.modalBackdrop,
         ],
       };
     }, [propBackdropProps.style, propBackdropProps.classNames]),

@@ -8,7 +8,7 @@ import {
 } from 'scripts';
 import { CSSTransition, BaseElement } from '..';
 
-const $names = $.names;
+const $classNames = $.classNames
 const $styles = $.styles;
 
 type Props = $Type.ReactUtils.CreateProps<
@@ -145,14 +145,14 @@ const Collapse: React.FC<Props> = ({
           <BaseElement
             elementName="div"
             _style_={$styles.outer.style}
-            _className_={$names.collapse}
+            _className_={$classNames.collapse}
             _refer_={_outerRef_}
             {...childProps}
           >
             <BaseElement
               elementName="div"
               _style_={$styles.inner.style}
-              _className_={$names.collapseInner}
+              _className_={$classNames.collapseInner}
               _refer_={_innerRef_}
               {...innerProps}
             >

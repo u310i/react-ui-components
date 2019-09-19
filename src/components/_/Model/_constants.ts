@@ -4,7 +4,7 @@ import { createComponentConstants, getComponentConstants } from 'scripts';
 const name = 'Drawer';
 
 const constants = {
-  names: {
+  classNames: {
     drawerOuter: 'uc-drawer-outer',
     drawerInner: 'uc-drawer-inner'
   }

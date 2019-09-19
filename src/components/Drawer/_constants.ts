@@ -5,7 +5,7 @@ const name = 'drawer';
 
 export const constants = {
   name: name,
-  names: {
+  classNames: {
     drawer: `${$.prefix}${name}`,
     drawerContainer: `${$.prefix}${name}-container`,
     drawerTransition: `${$.prefix}${name}-transition`,

@@ -8,7 +8,7 @@ const OnlyScreenReader: React.FC<Props> = props => {
   return (
     <BaseElement
       elementName="a"
-      _className_={$.names.onlyScreenReader}
+      _className_={$.classNames.onlyScreenReader}
       _style_={$.styles.style}
       {...props}
     />

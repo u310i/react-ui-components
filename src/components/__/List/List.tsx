@@ -3,7 +3,7 @@ import $ from './_constants';
 import { BaseElement } from '..';
 
 const $styles = $.styles;
-const $names = $.names;
+const $classNames = $.classNames
 const $selectors = $.selectors;
 
 const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
@@ -60,7 +60,7 @@ const List = ({
   }, [width, children, space, levelStyle]);
 
   return (
-    <BaseElement _style_={_style_} _className_={$names.list} {...other}>
+    <BaseElement _style_={_style_} _className_={$classNames.list} {...other}>
       {children}
     </BaseElement>
   );
@@ -90,7 +90,7 @@ const ListGroup = ({
   }, [title]);
 
   return (
-    <BaseElement elementName="li" _className_={$names.listGroup} {...other}>
+    <BaseElement elementName="li" _className_={$classNames.listGroup} {...other}>
       {titleComponent}
       <BaseElement elementName="ul">{children}</BaseElement>
     </BaseElement>

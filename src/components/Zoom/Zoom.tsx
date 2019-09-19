@@ -9,7 +9,7 @@ import {
 } from 'scripts';
 import { CSSTransition, BaseElement } from '..';
 
-const $names = $.names;
+const $classNames = $.classNames
 const $styles = $.styles;
 
 type Props = $Type.ReactUtils.CreateProps<
@@ -116,7 +116,7 @@ const Zoom: React.FC<Props> = ({
           <BaseElement
             elementName="div"
             _style_={$styles.style}
-            _className_={$names.zoom}
+            _className_={$classNames.zoom}
             _refer_={_ref_}
             {...childProps}
           >

@@ -3,7 +3,7 @@ import $ from './_constants';
 import {} from 'scripts';
 import { BaseElement } from '..';
 
-const $names = $.names;
+const $classNames = $.classNames
 const $styles = $.styles;
 
 type Props = $Type.ReactUtils.CreateProps<
@@ -33,7 +33,7 @@ const Paper: React.FC<Props> = ({
     <BaseElement
       elementName="div"
       _style_={_style_}
-      _className_={$names.paper}
+      _className_={$classNames.paper}
       {...other}
     >
       {children}

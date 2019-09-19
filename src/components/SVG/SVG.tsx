@@ -5,7 +5,7 @@ import { BaseElement } from '..';
 import iconList from 'src/icons';
 
 const $styles = $.styles;
-const $names = $.names;
+const $classNames = $.classNames
 
 type ViewBox = $Type.Icon.ViewBox;
 
@@ -63,7 +63,7 @@ const SVG: React.FC<Props> = ({
 
   const props = {
     _style_: $styles.style,
-    _className_: $names.svg,
+    _className_: $classNames.svg,
     role: $styles.role,
     xmlns: $styles.xmlns,
     xmlnsXlink: $styles.xmlnsXlink,
@@ -93,7 +93,7 @@ const SVG: React.FC<Props> = ({
       (children && (
         <BaseElement
           elementName="g"
-          _className_={$names.svgInner}
+          _className_={$classNames.svgInner}
           {...innerProps}
         >
           {children}
@@ -103,7 +103,7 @@ const SVG: React.FC<Props> = ({
         (typeof path === 'string' ? (
           <BaseElement
             elementName="path"
-            _className_={$names.svgInner}
+            _className_={$classNames.svgInner}
             {...innerProps}
             d={path}
           />
@@ -113,7 +113,7 @@ const SVG: React.FC<Props> = ({
             return (
               <BaseElement
                 elementName="path"
-                _className_={$names.svgInner}
+                _className_={$classNames.svgInner}
                 {...innerProps}
                 d={pathItem}
               />
@@ -123,7 +123,7 @@ const SVG: React.FC<Props> = ({
       (tag && (
         <BaseElement
           elementName="g"
-          _className_={$names.svgInner}
+          _className_={$classNames.svgInner}
           {...innerProps}
           dangerouslySetInnerHTML={{ __html: tag }}
         />
@@ -136,9 +136,9 @@ const SVG: React.FC<Props> = ({
       return (
         <g
           transform={outerTransformValue}
-          className={$names.svgTransformGroupOuter}
+          className={$classNames.svgTransformGroupOuter}
         >
-          <g transform={transform} className={$names.svgTransformGroupInner}>
+          <g transform={transform} className={$classNames.svgTransformGroupInner}>
             {InnerComponent}
           </g>
         </g>
@@ -155,7 +155,7 @@ const SVG: React.FC<Props> = ({
           elementName="symbol"
           viewBox={viewBox.join(' ')}
           id={symbolTagId}
-          _className_={$names.svgSymbol}
+          _className_={$classNames.svgSymbol}
           {...symbolTagProps}
         >
           {titleTag}
@@ -173,7 +173,7 @@ const SVG: React.FC<Props> = ({
           elementName="use"
           xlinkHref={useTagHref}
           href={useTagHref}
-          _className_={$names.svgUse}
+          _className_={$classNames.svgUse}
           {...useTagProps}
         />
       </BaseElement>

@@ -9,7 +9,7 @@ import {
 } from 'scripts';
 import { CSSTransition, BaseElement } from '..';
 
-const $names = $.names;
+const $classNames = $.classNames
 const $styles = $.styles;
 
 type Direction = 'left' | 'right' | 'up' | 'down';
@@ -170,7 +170,7 @@ const Slide: React.FC<Props> = ({
             elementName="div"
             _refer_={_ref_}
             _style_={$styles.style}
-            _className_={$names.slide}
+            _className_={$classNames.slide}
             {...childProps}
           >
             {children}

@@ -3,7 +3,7 @@ import $ from './_constants';
 import { isNumber } from 'scripts';
 import { BaseElement, EventListener } from '..';
 
-const $names = $.names;
+const $classNames = $.classNames
 const $style = $.style;
 
 const resetStyle = (node: HTMLElement) => {
@@ -151,14 +151,14 @@ const Sticky: React.FC<Props> = ({
       elementName="div"
       _refer_={outerRef}
       _style_={styles.outer}
-      _className_={$names.stickyOuter}
+      _className_={$classNames.stickyOuter}
       {...outerProps}
     >
       <BaseElement
         elementName="div"
         _refer_={innerRef}
         _style_={styles.inner}
-        _className_={$names.stickyInner}
+        _className_={$classNames.stickyInner}
         {...innerProps}
       >
         {typeof children === 'function'
@@ -180,7 +180,7 @@ const Sticky: React.FC<Props> = ({
         <BaseElement
           elementName="div"
           _style_={styles.absoluteWrapper}
-          _className_={$names.stickyAbsoluteWrapper}
+          _className_={$classNames.stickyAbsoluteWrapper}
           {...absoluteWrapperProps}
         >
           {innerComponent}

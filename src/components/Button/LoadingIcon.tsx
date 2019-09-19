@@ -3,15 +3,15 @@ import { Icon, BaseElement } from '..';
 import { getComponentConstants } from 'scripts';
 
 const $ = getComponentConstants('button');
-const $names = $.contents.names;
+const $classNames = $.contents.names;
 
 const LoadingIcon = ({ style: propStyle = {} }) => {
   return (
     <BaseElement
       elementName="i"
-      key={$names.buttonLoading}
+      key={$classNames.buttonLoading}
       style={propStyle}
-      className={$names.buttonLoading}
+      className={$classNames.buttonLoading}
     >
       <Icon icon={['sys', 'loading']} spin />
     </BaseElement>
