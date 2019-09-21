@@ -8,7 +8,7 @@ import {
 } from 'scripts';
 import { CSSTransition, BaseElement } from '..';
 
-const $classNames = $.classNames
+const $classNames = $.classNames;
 const $styles = $.styles;
 
 const setExitedOpacity = (node: HTMLElement) => {
@@ -35,7 +35,7 @@ const Fade: React.FC<Props> = ({
   onEntering,
   onExiting,
   onExited,
-  disableHideVisibility = false,
+  hideVisibility = false,
   ...other
 }) => {
   const _ref_ = React.useRef<null | HTMLElement>(null);
@@ -51,7 +51,7 @@ const Fade: React.FC<Props> = ({
       setEnteredOpacity(node);
     } else {
       setExitedOpacity(node);
-      if (!disableHideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = 'hidden';
     }
   }, []);
 
@@ -71,7 +71,7 @@ const Fade: React.FC<Props> = ({
         ])
       );
       setEnteredOpacity(node);
-      if (!disableHideVisibility) node.style.visibility = null;
+      if (hideVisibility) node.style.visibility = null;
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering, durations, easings]
@@ -98,7 +98,7 @@ const Fade: React.FC<Props> = ({
   const handleExited = React.useCallback(
     (node: HTMLElement) => {
       setTransition(node, null);
-      if (!disableHideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = 'hidden';
       if (onExited) onExited(node);
     },
     [onExited]

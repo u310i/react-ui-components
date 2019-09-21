@@ -9,7 +9,7 @@ import {
 } from 'scripts';
 import { CSSTransition, BaseElement } from '..';
 
-const $classNames = $.classNames
+const $classNames = $.classNames;
 const $styles = $.styles;
 
 type Direction = 'left' | 'right' | 'up' | 'down';
@@ -74,7 +74,7 @@ const Slide: React.FC<Props> = ({
   easing = $styles.easing,
   direction = $styles.direction,
   gutter = $styles.gutter,
-  disableHideVisibility,
+  hideVisibility,
   appear = true,
   onEnter,
   onEntering,
@@ -96,7 +96,7 @@ const Slide: React.FC<Props> = ({
     } else {
       const translate = getExitedTranslateValue(node, direction, gutter);
       setTransform(node, translate);
-      if (!disableHideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = 'hidden';
     }
   }, []);
 
@@ -116,7 +116,7 @@ const Slide: React.FC<Props> = ({
         ])
       );
       setTransform(node, $styles.enteredTranslate);
-      if (!disableHideVisibility) node.style.visibility = null;
+      if (hideVisibility) node.style.visibility = null;
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering, durations, easings]
@@ -144,7 +144,7 @@ const Slide: React.FC<Props> = ({
   const handleExited = React.useCallback(
     (node: HTMLElement) => {
       setTransition(node, null);
-      if (!disableHideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = 'hidden';
       if (onExited) onExited(node);
     },
     [onExited]

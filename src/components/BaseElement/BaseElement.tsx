@@ -20,6 +20,7 @@ type ComponentProps = {
   arias?: React.AriaAttributes;
   _refer_?: $Type.ReactUtils.Ref<Element>;
   refer?: $Type.ReactUtils.Ref<Element>;
+  testId?: string;
 };
 
 type Props<

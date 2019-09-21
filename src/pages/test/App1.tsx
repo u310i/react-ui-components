@@ -40,7 +40,7 @@ const App: React.FC<{}> = ({}) => {
   const onClose2 = () => {
     setState2(prev => prev && false);
   };
-  const [state_t, setState_t] = React.useState(false);
+  const [state_t, setState_t] = React.useState(true);
   const handler_t = () => {
     setState_t(prev => !prev);
   };
@@ -107,7 +107,7 @@ const App: React.FC<{}> = ({}) => {
         Button
       </Button>
       {/* {state ? <Backdrop open={state} /> : null} */}
-      {/* <BaseElement
+      <BaseElement
         elementName="div"
         style={{ height: '1000px', backgroundColor: '#e6e6fa' }}
       />
@@ -124,7 +124,7 @@ const App: React.FC<{}> = ({}) => {
         open={state_drawer}
         onOpen={onOpen_drawer}
         onClose={onClose_drawer}
-        anchor="right"
+        anchor="left"
         swipeAreaWidth={60}
         // disableBackdropTransition={true}
         // disableDiscovery={true}
@@ -208,6 +208,7 @@ const App: React.FC<{}> = ({}) => {
         onOutsideClick={onClose2}
         enableScrollBody={false}
         TransitionComponent={Slide}
+        keepMount={true}
         fullScreen={false}
         classNames={['BBB']}
       >
@@ -254,7 +255,13 @@ const App: React.FC<{}> = ({}) => {
           }
         }
       >
-        <Collapse in={state_t} appear={true} direction="left" duration={500}>
+        <Collapse
+          in={state_t}
+          appear={true}
+          // direction="left"
+          duration={1000}
+          testId={'slide'}
+        >
           <Paper
             elevation={24}
             shape="round"
@@ -278,7 +285,7 @@ const App: React.FC<{}> = ({}) => {
             aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
           </Paper>
         </Collapse>
-      </BaseElement> */}
+      </BaseElement>
 
       <BaseElement
         elementName="div"

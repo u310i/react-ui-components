@@ -3,7 +3,7 @@ import $ from './_constants';
 import { injectElementToRef } from 'scripts';
 import { Modal, Slide, Paper } from '..';
 
-const $classNames = $.classNames
+const $classNames = $.classNames;
 const $styles = $.styles;
 const $modalContentStyle = $styles.modal.content;
 const $transitionStyle = $styles.transition;
@@ -65,7 +65,7 @@ const Drawer: React.FC<Props> = ({
   innerProps: propInnerProps = {},
   ...other
 }) => {
-  const innerRef = React.useRef(null);
+  const innerRef = React.useRef<null | HTMLElement>(null);
 
   const direction = getSlideDirections(anchor);
 
@@ -90,8 +90,16 @@ const Drawer: React.FC<Props> = ({
     }, [other.classNames, other.style, other.contentProps]),
   };
 
+  const handleTransitionEntering = React.useCallback((node, appearing) => {
+    innerRef.current!.style.boxShadow = null;
+    if (propTransitionProps.onEntering)
+      propTransitionProps.onEntering(node, appearing);
+  }, []);
+  const handleTransitionExited = React.useCallback(node => {
+    innerRef.current!.style.boxShadow = 'none';
+    if (propTransitionProps.onExited) propTransitionProps.onExited(node);
+  }, []);
   const transitionProps = {
-    disableHideVisibility: true,
     ...propTransitionProps,
     ...React.useMemo(() => {
       return {
@@ -103,6 +111,8 @@ const Drawer: React.FC<Props> = ({
           ...(propTransitionProps.classNames || []),
           $classNames.drawerTransition,
         ],
+        onExited: handleTransitionExited,
+        onEntering: handleTransitionEntering,
       };
     }, [propTransitionProps.style, propTransitionProps.classNames]),
   };
@@ -122,7 +132,10 @@ const Drawer: React.FC<Props> = ({
             : $innerStyle.vertical.style),
           ...propInnerProps.style,
         },
-        classNames: [...(propInnerProps.classNames || []), $classNames.drawerInner],
+        classNames: [
+          ...(propInnerProps.classNames || []),
+          $classNames.drawerInner,
+        ],
         refer: handleInnerRef,
       };
     }, [propInnerProps.style, propInnerProps.classNames]),

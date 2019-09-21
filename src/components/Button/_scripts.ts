@@ -176,7 +176,6 @@ export default {
 						borderColor: activeColor
 					}
 				};
-				console.log(style)
 		}
 
 		if (!disable) {
@@ -201,7 +200,6 @@ export default {
 		}
 
 		if (disable) {
-			console.log('disable')
 			if (type === 'outline' || type === 'normal-outline' || type === 'dark-outline') {
 				const outlineDisableStyle = {
 					color: $colors.disableTextColor,

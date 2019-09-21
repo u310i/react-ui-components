@@ -8,7 +8,7 @@ import {
 } from 'scripts';
 import { CSSTransition, BaseElement } from '..';
 
-const $classNames = $.classNames
+const $classNames = $.classNames;
 const $styles = $.styles;
 
 type Props = $Type.ReactUtils.CreateProps<
@@ -27,7 +27,7 @@ const Collapse: React.FC<Props> = ({
   easing = $styles.easing,
   collapsedHeight = $styles.collapsedHeight,
   innerProps,
-  disableHideVisibility,
+  hideVisibility,
   appear = true,
   onEntering,
   onEntered,
@@ -52,7 +52,7 @@ const Collapse: React.FC<Props> = ({
     } else {
       node.style.height = collapsedHeight;
       node.style.overflow = 'hidden';
-      if (!disableHideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = 'hidden';
     }
   }, []);
 
@@ -74,7 +74,7 @@ const Collapse: React.FC<Props> = ({
       if (!_innerRef_.current) return;
       node.style.height = `${_innerRef_.current.clientHeight}px`;
       node.style.overflow = 'hidden';
-      if (!disableHideVisibility) node.style.visibility = null;
+      if (hideVisibility) node.style.visibility = null;
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering]
@@ -118,7 +118,7 @@ const Collapse: React.FC<Props> = ({
 
   const handleExited = React.useCallback(
     (node: HTMLElement) => {
-      if (!disableHideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = 'hidden';
       if (onExited) onExited(node);
     },
     [onExited]
@@ -126,7 +126,7 @@ const Collapse: React.FC<Props> = ({
 
   return (
     <CSSTransition
-      lazyAppear={true}
+      // lazyAppear={true}
       appear={appear}
       in={inProp}
       timeout={durations}

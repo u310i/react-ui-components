@@ -17,7 +17,7 @@ import {
   ScrollLock,
 } from '..';
 
-const $classNames = $.classNames
+const $classNames = $.classNames;
 const $styles = $.styles;
 
 type ModalQueueValue = {
@@ -234,7 +234,7 @@ const Modal: React.FC<Props> = ({
   const onExitedOfTransitionChild =
     transitionChild && transitionChild.props.onExited;
 
-  const handleExited = React.useCallback(
+  const handleTransitionExited = React.useCallback(
     node => {
       betweenFalseToExitedRef.current = false;
       shouldBeMounted.current = false;
@@ -254,7 +254,7 @@ const Modal: React.FC<Props> = ({
     childComponent = (
       <transitionChild.type
         {...transitionChild.props}
-        onExited={handleExited}
+        onExited={handleTransitionExited}
         refer={handleChildRef}
       />
     ) as React.ReactElement<
@@ -310,7 +310,6 @@ const Modal: React.FC<Props> = ({
     ...propBackdropProps,
     ...React.useMemo(() => {
       return {
-        disableHideVisibility: true,
         style: {
           zIndex: $styles.backdropZindex,
           ...propBackdropProps.style,

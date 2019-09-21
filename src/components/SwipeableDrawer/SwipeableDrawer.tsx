@@ -13,7 +13,7 @@ import { isHorizontal } from '../Drawer/Drawer';
 import SwipeArea from './SwipeArea';
 import { Drawer } from '..';
 
-const $classNames = $.classNames
+const $classNames = $.classNames;
 const $styles = $.styles;
 
 // This value is closed to what browsers are using internally to
@@ -213,7 +213,6 @@ const SwipeableDrawer: React.FC<Props> = ({
 
   const handleBodyTouchEnd = React.useCallback(
     (event: TouchEvent): void => {
-      console.log('end');
       if (!touchDetected.current || !transitionRef.current) return;
       nodeThatClaimedTheSwipe = null;
       touchDetected.current = false;
@@ -281,7 +280,6 @@ const SwipeableDrawer: React.FC<Props> = ({
 
   const handleBodyTouchMove = React.useCallback(
     event => {
-      console.log('move');
       // the ref may be null when a parent component updates while swiping
       if (!transitionRef.current || !touchDetected.current) {
         return;
@@ -379,7 +377,6 @@ const SwipeableDrawer: React.FC<Props> = ({
 
   const handleBodyTouchStart = React.useCallback(
     event => {
-      console.log('start');
       if (!transitionRef.current) return;
       // We are not supposed to handle this touch move.
       if (

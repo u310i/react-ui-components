@@ -12,26 +12,26 @@ import { reflow, useForceUpdate } from 'scripts';
 const APPEAR = 'appear';
 const ENTER = 'enter';
 const EXIT = 'exit';
-const PREFIX_ACTIVE = '-active';
-const PREFIX_DONE = '-done';
+const SUFFIX_ACTIVE = '-active';
+const SUFFIX_DONE = '-done';
 
 type TransitionType = 'appear' | 'enter' | 'exit';
 
 const ALL_CLASS_NAMES = {
   appear: {
     start: APPEAR,
-    active: APPEAR + PREFIX_ACTIVE,
-    done: APPEAR + PREFIX_DONE,
+    active: APPEAR + SUFFIX_ACTIVE,
+    done: APPEAR + SUFFIX_DONE,
   },
   enter: {
     start: ENTER,
-    active: ENTER + PREFIX_ACTIVE,
-    done: ENTER + PREFIX_DONE,
+    active: ENTER + SUFFIX_ACTIVE,
+    done: ENTER + SUFFIX_DONE,
   },
   exit: {
     start: EXIT,
-    active: EXIT + PREFIX_ACTIVE,
-    done: EXIT + PREFIX_DONE,
+    active: EXIT + SUFFIX_ACTIVE,
+    done: EXIT + SUFFIX_DONE,
   },
 };
 
@@ -91,7 +91,7 @@ declare global {
 }
 
 const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
-  Props & CharacteristicProps
+  Props & CharacteristicProps & { testId?: string }
 > = ({
   children,
   in: inProp,
@@ -105,6 +105,7 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
   onExit,
   onExiting,
   onExited,
+  testId,
   ...other
 }) => {
   const inRef = React.useRef<null | undefined | boolean>(null);
@@ -114,13 +115,11 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
     enter: null | boolean;
     entering: null | boolean;
     entered: null | boolean;
-    appeared: null | boolean;
   };
   const appearingStates = React.useRef<AppearingStates>({
     enter: null,
     entering: null,
     entered: null,
-    appeared: null,
   });
 
   const forceUpdate = useForceUpdate();
@@ -130,6 +129,9 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
   // If "lazyAppear", "appear", and "inProp" are true, set "in" to false during the first rendering,
   //  do not execute "appearing" of "Transition", and generate as "appearing" after update The
   //  This is useful for "Collapse" using "Entered".
+
+  // Order and timing of execution
+  // enter => layout => painted => entering => entered(after transition)
   if (
     shouldTransitionOnAppear.current === null &&
     lazyAppear &&
@@ -144,16 +146,19 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
   }
 
   React.useLayoutEffect(() => {
+    testId === 'slide' && console.log('layout');
     if (shouldTransitionOnAppear.current) {
       appearingStates.current.enter = true;
       appearingStates.current.entering = true;
       appearingStates.current.entered = true;
-      appearingStates.current.appeared = true;
       forceUpdate();
     }
   }, []);
+  React.useEffect(() => {
+    testId === 'slide' && console.log('painted');
+  }, []);
 
-  type EnterType = 'enter' | 'entering' | 'entered' | 'appeared';
+  type EnterType = keyof AppearingStates;
 
   const isLazyAppear = React.useCallback((enterType: EnterType) => {
     return lazyAppear && appearingStates.current[enterType];
@@ -165,6 +170,7 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
 
   const handleOnEnter = React.useCallback<EnterHandler>(
     (node, appearing) => {
+      testId === 'slide' && console.log('enter');
       const isAppearing = isLazyAppear('enter') || appearing;
 
       if (!disableClassing) {
@@ -181,6 +187,7 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
 
   const handleOnEntering = React.useCallback<EnterHandler>(
     (node, appearing) => {
+      testId === 'slide' && console.log('entering');
       reflow(node);
       const isAppearing = isLazyAppear('entering') || appearing;
 
@@ -197,6 +204,7 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
 
   const handleOnEntered = React.useCallback<EnterHandler>(
     (node, appearing) => {
+      testId === 'slide' && console.log('entered');
       const isAppearing = isLazyAppear('entered') || appearing;
 
       if (!disableClassing) {
@@ -208,7 +216,6 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
 
       if (isAppearing) {
         lazyAppearDone('entered');
-        lazyAppearDone('appeared');
       }
     },
     [onEntered]
@@ -216,11 +223,10 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
 
   const handleOnExit = React.useCallback<ExitHandler>(
     node => {
-      if (isLazyAppear('appeared')) {
+      if (isLazyAppear('entered')) {
         lazyAppearDone('enter');
         lazyAppearDone('entering');
         lazyAppearDone('entered');
-        lazyAppearDone('appeared');
       }
       if (!disableClassing) {
         const classNameList = getClassNames(EXIT);

@@ -69,7 +69,7 @@ const ButtonGroup: React.FC<Props> = ({
     <BaseElement
       elementName="div"
       _style_={nestedStyle}
-      _className_={$.group.names.buttonGroup}
+      _className_={$.group.classNames.buttonGroup}
     >
       {children}
     </BaseElement>

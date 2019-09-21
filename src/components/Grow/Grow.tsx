@@ -10,7 +10,7 @@ import {
 } from 'scripts';
 import { CSSTransition, BaseElement } from '..';
 
-const $classNames = $.classNames
+const $classNames = $.classNames;
 const $styles = $.styles;
 
 const enteredScale = $styles.enteredScale;
@@ -35,7 +35,7 @@ const Grow: React.FC<Props> = ({
   children,
   duration = $styles.duration,
   easing = $styles.easing,
-  disableHideVisibility,
+  hideVisibility,
   appear = true,
   onEnter,
   onEntering,
@@ -58,7 +58,7 @@ const Grow: React.FC<Props> = ({
     } else {
       setTransform(node, exitedScale);
       setExitedOpacity(node);
-      if (!disableHideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = 'hidden';
     }
   }, []);
 
@@ -82,7 +82,7 @@ const Grow: React.FC<Props> = ({
       setTransition(node, transitionProperty);
       setTransform(node, enteredScale);
       setEnteredOpacity(node);
-      if (!disableHideVisibility) node.style.visibility = null;
+      if (hideVisibility) node.style.visibility = null;
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering, durations, easings]
@@ -117,7 +117,7 @@ const Grow: React.FC<Props> = ({
   const handleExited = React.useCallback(
     (node: HTMLElement) => {
       setTransition(node, null);
-      if (!disableHideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = 'hidden';
       if (onExited) onExited(node);
     },
     [onExited]

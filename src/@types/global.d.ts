@@ -73,7 +73,7 @@ declare global {
       type CommonProps = {
         duration?: Duration;
         easing?: Easing;
-        disableHideVisibility?: boolean;
+        hideVisibility?: boolean;
       }
 
       type Duration =

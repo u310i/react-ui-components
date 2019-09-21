@@ -4,7 +4,7 @@ import { BaseElement } from '..';
 import LoadingIcon from './LoadingIcon';
 
 const $ = getComponentConstants('button');
-const $classNames = $.contents.names;
+const $classNames = $.contents.classNames;
 const $styles = $.contents.styles;
 
 const defineContents = (

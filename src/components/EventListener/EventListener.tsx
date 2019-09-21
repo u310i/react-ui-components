@@ -31,7 +31,6 @@ const EventListener: $Type.ReactUtils.FunctionComponentWithoutChildren<
   const initedRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
-    type === 'touchstart' && console.log('EventListener effect');
     const target = extractElement(propTarget);
     if (!target) return;
 
@@ -56,7 +55,6 @@ const EventListener: $Type.ReactUtils.FunctionComponentWithoutChildren<
     }
 
     return () => {
-      type === 'touchstart' && console.log('EventListener remove');
       removeEventListenerRef.current && removeEventListenerRef.current();
     };
   }, [

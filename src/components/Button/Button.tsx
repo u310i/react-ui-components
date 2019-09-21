@@ -114,7 +114,7 @@ const Button: React.FC<Props> = ({
   const colorStyle = React.useMemo(() => {
     return scripts.genColor(type, toFill, disable, keyColor);
   }, [keyColor, type, toFill, disable]);
-  console.log(colorStyle);
+
   const style = React.useMemo(() => {
     return {
       ...mainStyle,

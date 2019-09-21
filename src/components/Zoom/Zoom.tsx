@@ -9,7 +9,7 @@ import {
 } from 'scripts';
 import { CSSTransition, BaseElement } from '..';
 
-const $classNames = $.classNames
+const $classNames = $.classNames;
 const $styles = $.styles;
 
 type Props = $Type.ReactUtils.CreateProps<
@@ -23,7 +23,7 @@ const Zoom: React.FC<Props> = ({
   children,
   duration = $styles.duration,
   easing = $styles.easing,
-  disableHideVisibility,
+  hideVisibility,
   appear = true,
   onEnter,
   onEntering,
@@ -44,7 +44,7 @@ const Zoom: React.FC<Props> = ({
       setTransform(node, $styles.enteredScale);
     } else {
       setTransform(node, $styles.exitedScale);
-      if (!disableHideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = 'hidden';
     }
   }, []);
 
@@ -64,7 +64,7 @@ const Zoom: React.FC<Props> = ({
         ])
       );
       setTransform(node, $styles.enteredScale);
-      if (!disableHideVisibility) node.style.visibility = null;
+      if (hideVisibility) node.style.visibility = null;
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering, durations, easings]
@@ -91,7 +91,7 @@ const Zoom: React.FC<Props> = ({
   const handleExited = React.useCallback(
     (node: HTMLElement) => {
       setTransition(node, null);
-      if (!disableHideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = 'hidden';
       if (onExited) onExited(node);
     },
     [onExited]

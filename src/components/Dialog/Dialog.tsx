@@ -3,7 +3,7 @@ import $ from './_constants';
 import { injectElementToRef } from 'scripts';
 import { Modal, Fade, Paper } from '..';
 
-const $classNames = $.classNames
+const $classNames = $.classNames;
 const $styles = $.styles;
 const $transitionStyle = $styles.transition;
 const $innerStyle = $styles.inner;
@@ -55,8 +55,16 @@ const Dialog: React.FC<Props> = ({
     }, [other.classNames, other.contentProps]),
   };
 
+  const handleTransitionEntering = React.useCallback((node, appearing) => {
+    innerRef.current!.style.boxShadow = null;
+    if (propTransitionProps.onEntering)
+      propTransitionProps.onEntering(node, appearing);
+  }, []);
+  const handleTransitionExited = React.useCallback(node => {
+    innerRef.current!.style.boxShadow = 'none';
+    if (propTransitionProps.onExited) propTransitionProps.onExited(node);
+  }, []);
   const transitionProps = {
-    disableHideVisibility: true,
     ...propTransitionProps,
     ...React.useMemo(() => {
       return {
@@ -69,6 +77,8 @@ const Dialog: React.FC<Props> = ({
           ...(propTransitionProps.classNames || []),
           $classNames.dialogTransition,
         ],
+        onExited: handleTransitionExited,
+        onEntering: handleTransitionEntering,
       };
     }, [
       propTransitionProps.style,
@@ -91,7 +101,10 @@ const Dialog: React.FC<Props> = ({
           ...(fullScreen && $innerStyle.fullScreen.style),
           ...propInnerProps.style,
         },
-        classNames: [...(propInnerProps.classNames || []), $classNames.dialogInner],
+        classNames: [
+          ...(propInnerProps.classNames || []),
+          $classNames.dialogInner,
+        ],
         refer: handleInnerRef,
       };
     }, [
