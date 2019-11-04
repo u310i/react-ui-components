@@ -1,13 +1,13 @@
 // import * as React from 'react';
 import * as CSS from 'csstype';
 import { keyframes } from 'emotion';
-import { Component } from 'react';
+import { Component, ComponentSpec } from 'react';
 
 declare global {
   export namespace $Type {
     namespace ReactUtils {
       type ExtractProps<
-        P extends React.JSXElementConstructor<any> | {}
+        P extends React.JSXElementConstructor<any>
         > = P extends React.JSXElementConstructor<infer P> ? P : {};
 
 
@@ -74,7 +74,8 @@ declare global {
         duration?: Duration;
         easing?: Easing;
         hideVisibility?: boolean;
-      }
+        disableEnter?: boolean;
+      } & Components.SlideCharacteristicProps
 
       type Duration =
         | {
@@ -91,8 +92,10 @@ declare global {
         }
         | string;
 
+      type CSSTransitionIgnoreProps = 'timeout' | 'mountOnEnter' | 'unmountOnExit'
+
       type PropTransitionComponentCommonProps<
-        P1 = Omit<Components.CSSTransitionProps, 'timeout'>,
+        P1 = Omit<Components.CSSTransitionProps, CSSTransitionIgnoreProps>,
         P2 = CommonProps,
         P3 = Components.BaseElementProps
         > = P1 & P2 & Omit<P3, keyof P1 | keyof P2>;
@@ -162,11 +165,11 @@ declare global {
       [P in keyof T]+?: DeepRequired<T[P]>;
     };
 
-    type ObjectIfObject<T> = T extends object ? (T extends readonly any[] ? never : (T extends Function ? never : (T extends ReadonlyMap<any, any> ? never : T))) : never
+    type IsObject<T> = T extends object ? (T extends readonly any[] ? false : (T extends Function ? false : (T extends ReadonlyMap<any, any> ? false : true))) : false
 
-    type BranchIfObject<T, Posi, Nega> = ObjectIfObject<T> extends never ? Nega : Posi;
+    type BranchIfObject<T, Posi, Nega> = IsObject<T> extends false ? Nega : Posi;
 
-    type KeyofObjectIfObject<T> = ObjectIfObject<T> extends never ? never : keyof T;
+    type KeyOfObject<T> = IsObject<T> extends false ? never : keyof T;
 
 
 

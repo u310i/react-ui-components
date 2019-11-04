@@ -17,7 +17,10 @@ type Props = $Type.ReactUtils.CreateProps<
     innerProps?: $Type.ReactUtils.CreatePropComponentProps<typeof BaseElement>;
   },
   typeof BaseElement,
-  Omit<$Type.Components.CSSTransitionProps, 'timeout'>
+  Omit<
+    $Type.Components.CSSTransitionProps,
+    $Type.Transition.CSSTransitionIgnoreProps
+  >
 >;
 
 const Collapse: React.FC<Props> = ({
@@ -25,10 +28,12 @@ const Collapse: React.FC<Props> = ({
   children,
   duration = $styles.duration,
   easing = $styles.easing,
+  hideVisibility = true,
+  disableEnter,
   collapsedHeight = $styles.collapsedHeight,
   innerProps,
-  hideVisibility,
   appear = true,
+  onEnter,
   onEntering,
   onEntered,
   onExit,
@@ -36,25 +41,38 @@ const Collapse: React.FC<Props> = ({
   onExited,
   ...other
 }) => {
-  const _outerRef_ = React.useRef<null | HTMLElement>(null);
-  const _innerRef_ = React.useRef<null | HTMLElement>(null);
+  const outerNodeRef = React.useRef<null | HTMLElement>(null);
+  const innerNodeRef = React.useRef<null | HTMLElement>(null);
 
   const [durations, easings] = React.useMemo(() => {
     return [genDurations(duration), genEasings(easing)];
   }, [duration, easing]);
 
   React.useLayoutEffect(() => {
-    const node = _outerRef_.current;
+    const node = outerNodeRef.current;
     if (!node) return;
     if (!appear && inProp) {
       node.style.height = $styles.enteredHeight;
       node.style.overflow = 'visible';
     } else {
-      node.style.height = collapsedHeight;
-      node.style.overflow = 'hidden';
+      if (!(appear && inProp)) {
+        node.style.height = collapsedHeight;
+        node.style.overflow = 'hidden';
+      }
       if (hideVisibility) node.style.visibility = 'hidden';
     }
   }, []);
+
+  const handleEnter = React.useCallback(
+    (node: HTMLElement, appearing: boolean) => {
+      if (!disableEnter) {
+        node.style.height = collapsedHeight;
+        node.style.overflow = 'hidden';
+      }
+      if (onEnter) onEnter(node, appearing);
+    },
+    []
+  );
 
   const handleEntering = React.useCallback(
     (node: HTMLElement, appearing: boolean) => {
@@ -71,10 +89,10 @@ const Collapse: React.FC<Props> = ({
           },
         ])
       );
-      if (!_innerRef_.current) return;
-      node.style.height = `${_innerRef_.current.clientHeight}px`;
+      if (!innerNodeRef.current) return;
+      node.style.height = `${innerNodeRef.current.clientHeight}px`;
       node.style.overflow = 'hidden';
-      if (hideVisibility) node.style.visibility = null;
+      if (hideVisibility) node.style.visibility = '';
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering]
@@ -118,6 +136,7 @@ const Collapse: React.FC<Props> = ({
 
   const handleExited = React.useCallback(
     (node: HTMLElement) => {
+      setTransition(node, null);
       if (hideVisibility) node.style.visibility = 'hidden';
       if (onExited) onExited(node);
     },
@@ -130,6 +149,7 @@ const Collapse: React.FC<Props> = ({
       appear={appear}
       in={inProp}
       timeout={durations}
+      onEnter={handleEnter}
       onEntering={handleEntering}
       onEntered={handleEntered}
       onExit={handleExit}
@@ -146,14 +166,14 @@ const Collapse: React.FC<Props> = ({
             elementName="div"
             _style_={$styles.outer.style}
             _className_={$classNames.collapse}
-            _refer_={_outerRef_}
+            _refer_={outerNodeRef}
             {...childProps}
           >
             <BaseElement
               elementName="div"
               _style_={$styles.inner.style}
               _className_={$classNames.collapseInner}
-              _refer_={_innerRef_}
+              _refer_={innerNodeRef}
               {...innerProps}
             >
               {children}

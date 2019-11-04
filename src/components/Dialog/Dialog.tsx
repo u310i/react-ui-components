@@ -1,17 +1,17 @@
 import React from 'react';
 import $ from './_constants';
-import { injectElementToRef } from 'scripts';
 import { Modal, Fade, Paper } from '..';
 
 const $classNames = $.classNames;
 const $styles = $.styles;
+const $modalContentStyle = $styles.modal.contents;
 const $transitionStyle = $styles.transition;
 const $innerStyle = $styles.inner;
 
 type Props = $Type.ReactUtils.CreateProps<
   {
     open?: boolean;
-    enableScrollBody?: boolean;
+    scrollBody?: boolean;
     fullScreen?: boolean;
     TransitionComponent?: React.FC<
       $Type.Transition.PropTransitionComponentCommonProps
@@ -29,7 +29,7 @@ type Props = $Type.ReactUtils.CreateProps<
 const Dialog: React.FC<Props> = ({
   children,
   open = false,
-  enableScrollBody = false,
+  scrollBody,
   fullScreen,
   TransitionComponent = Fade,
   transitionProps: propTransitionProps = {},
@@ -37,67 +37,51 @@ const Dialog: React.FC<Props> = ({
   innerProps: propInnerProps = {},
   ...other
 }) => {
-  const innerRef = React.useRef<null | HTMLElement>(null);
-
   const props = {
     ...other,
     ...React.useMemo(() => {
       return {
         classNames: [...(other.classNames || []), $classNames.dialog],
-        contentProps: {
-          ...other.contentProps,
+        contentsProps: {
+          ...other.contentsProps,
+          style: {
+            ...$modalContentStyle.style,
+            ...(scrollBody && $modalContentStyle.scrollBody.style),
+            ...(other.contentsProps || {}).style,
+          },
           classNames: [
-            ...((other.contentProps || {}).classNames || []),
+            ...((other.contentsProps || {}).classNames || []),
             $classNames.dialogContainer,
           ],
         },
       };
-    }, [other.classNames, other.contentProps]),
+    }, [other.classNames, other.contentsProps]),
   };
 
-  const handleTransitionEntering = React.useCallback((node, appearing) => {
-    innerRef.current!.style.boxShadow = null;
-    if (propTransitionProps.onEntering)
-      propTransitionProps.onEntering(node, appearing);
-  }, []);
-  const handleTransitionExited = React.useCallback(node => {
-    innerRef.current!.style.boxShadow = 'none';
-    if (propTransitionProps.onExited) propTransitionProps.onExited(node);
-  }, []);
   const transitionProps = {
     ...propTransitionProps,
     ...React.useMemo(() => {
       return {
         style: {
           ...$transitionStyle.style,
-          ...(enableScrollBody && $transitionStyle.scrollBody.style),
+          ...(scrollBody && $transitionStyle.scrollBody.style),
           ...propTransitionProps.style,
         },
         classNames: [
           ...(propTransitionProps.classNames || []),
           $classNames.dialogTransition,
         ],
-        onExited: handleTransitionExited,
-        onEntering: handleTransitionEntering,
       };
-    }, [
-      propTransitionProps.style,
-      enableScrollBody,
-      propTransitionProps.classNames,
-    ]),
+    }, [propTransitionProps.style, scrollBody, propTransitionProps.classNames]),
   };
 
-  const handleInnerRef = React.useCallback((element: Element | null) => {
-    innerRef.current = element as HTMLElement;
-    injectElementToRef(propInnerProps.refer, element);
-  }, []);
   const innerProps = {
     ...propInnerProps,
     ...React.useMemo(() => {
       return {
         style: {
           ...$innerStyle.style,
-          ...(enableScrollBody && $innerStyle.scrollBody.style),
+          ...(scrollBody && $innerStyle.scrollBody.style),
           ...(fullScreen && $innerStyle.fullScreen.style),
           ...propInnerProps.style,
         },
@@ -105,19 +89,26 @@ const Dialog: React.FC<Props> = ({
           ...(propInnerProps.classNames || []),
           $classNames.dialogInner,
         ],
-        refer: handleInnerRef,
       };
     }, [
       propInnerProps.style,
-      enableScrollBody,
+      scrollBody,
       fullScreen,
       propInnerProps.classNames,
     ]),
   };
 
+  // React.useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, [open]);
+
   return (
-    <Modal open={open} closeAfterTransition fallbackFocus={innerRef} {...props}>
-      <TransitionComponent in={open} {...transitionProps}>
+    <Modal role="dialog" open={open} {...props}>
+      <TransitionComponent
+        in={open}
+        hideVisibility={false}
+        {...transitionProps}
+      >
         <InnerComponent
           elevation={$innerStyle.elevation}
           shape={fullScreen ? $innerStyle.fullScreen.shape : $innerStyle.shape}

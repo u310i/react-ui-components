@@ -6,28 +6,40 @@ type Props = $Type.ReactUtils.CreateProps<{
   target: $Type.ReactUtils.IncludeNode;
   action: (evt: MouseEvent) => void;
   options?: AddEventListenerOptions;
-  scope?: Element;
+  scope?: $Type.ReactUtils.IncludeNode;
   includeScrollbar?: boolean;
+  ignoreTarget?: boolean;
 }>;
 
 const ClickOutside: $Type.ReactUtils.FunctionComponentWithoutChildren<
   Props
 > = ({
-  target: propTarget,
+  target,
   action,
   options,
   scope = document.body,
-  includeScrollbar = false,
+  includeScrollbar,
+  ignoreTarget,
 }) => {
   if (!action) return null;
-  const listener: EventListener = React.useCallback(
-    event => {
-      const target = extractElement(propTarget);
-      if (!target || (target && target.contains(event.target as Node))) return;
-      if (!includeScrollbar && clickedScrollbar(event as MouseEvent)) return;
-      action(event as MouseEvent);
+  const targetNodeRef = React.useRef<null | Node>(null);
+
+  React.useEffect(() => {
+    targetNodeRef.current = extractElement<Node>(target);
+  }, [target]);
+
+  const listener = React.useCallback(
+    (event: MouseEvent): void => {
+      if (!targetNodeRef.current) return;
+      if (targetNodeRef.current.contains(event.target as Node)) {
+        if (ignoreTarget) {
+          if (targetNodeRef.current !== event.target) return;
+        } else return;
+      }
+      if (!includeScrollbar && clickedScrollbar(event)) return;
+      action(event);
     },
-    [action, includeScrollbar, propTarget]
+    [action, includeScrollbar, target]
   );
 
   return (

@@ -27,7 +27,10 @@ const setEnteredOpacity = (node: HTMLElement) => {
 type Props = $Type.ReactUtils.CreateProps<
   $Type.Transition.CommonProps,
   typeof BaseElement,
-  Omit<$Type.Components.CSSTransitionProps, 'timeout'>
+  Omit<
+    $Type.Components.CSSTransitionProps,
+    $Type.Transition.CSSTransitionIgnoreProps
+  >
 >;
 
 const Grow: React.FC<Props> = ({
@@ -35,7 +38,8 @@ const Grow: React.FC<Props> = ({
   children,
   duration = $styles.duration,
   easing = $styles.easing,
-  hideVisibility,
+  hideVisibility = true,
+  disableEnter,
   appear = true,
   onEnter,
   onEntering,
@@ -43,24 +47,37 @@ const Grow: React.FC<Props> = ({
   onExited,
   ...other
 }) => {
-  const _ref_ = React.useRef<null | HTMLElement>(null);
+  const nodeRef = React.useRef<null | HTMLElement>(null);
 
   const [durations, easings] = React.useMemo(() => {
     return [genDurations(duration), genEasings(easing)];
   }, [duration, easing]);
 
   React.useLayoutEffect(() => {
-    const node = _ref_.current;
+    const node = nodeRef.current;
     if (!node) return;
     if (!appear && inProp) {
       setTransform(node, enteredScale);
       setEnteredOpacity(node);
     } else {
-      setTransform(node, exitedScale);
-      setExitedOpacity(node);
+      if (!(appear && inProp)) {
+        setTransform(node, exitedScale);
+        setExitedOpacity(node);
+      }
       if (hideVisibility) node.style.visibility = 'hidden';
     }
   }, []);
+
+  const handleEnter = React.useCallback(
+    (node: HTMLElement, appearing: boolean) => {
+      if (!disableEnter) {
+        setTransform(node, exitedScale);
+        setExitedOpacity(node);
+      }
+      if (onEnter) onEnter(node, appearing);
+    },
+    []
+  );
 
   const handleEntering = React.useCallback(
     (node: HTMLElement, appearing: boolean) => {
@@ -82,7 +99,7 @@ const Grow: React.FC<Props> = ({
       setTransition(node, transitionProperty);
       setTransform(node, enteredScale);
       setEnteredOpacity(node);
-      if (hideVisibility) node.style.visibility = null;
+      if (hideVisibility) node.style.visibility = '';
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering, durations, easings]
@@ -127,6 +144,7 @@ const Grow: React.FC<Props> = ({
     <CSSTransition
       disableClassing={true}
       appear={appear}
+      onEnter={handleEnter}
       onEntering={handleEntering}
       onExiting={handleExiting}
       onExited={handleExited}
@@ -143,7 +161,7 @@ const Grow: React.FC<Props> = ({
             elementName="div"
             _style_={$styles.style}
             _className_={$classNames.grow}
-            _refer_={_ref_}
+            _refer_={nodeRef}
             {...childProps}
           >
             {children}

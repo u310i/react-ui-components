@@ -7,23 +7,24 @@ export const constants = {
   name: name,
   classNames: {
     modal: `${$.prefix}${name}`,
-    modalContent: `${$.prefix}${name}-content`,
+    modalContent: `${$.prefix}${name}-contents`,
     modalBackdrop: `${$.prefix}${name}-backdrop`,
   },
   styles: {
-    content: {
+    container: {
       style: {
         position: 'fixed',
         top: 0,
+        bottom: 0,
         left: 0,
         right: 0,
-        bottom: 0,
-        zIndex: 1,
       },
     },
-    container: {
+    contents: {
       style: {
-        position: 'relative',
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
       },
     },
     modalZindex: $.zIndex.modal,

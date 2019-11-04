@@ -83,7 +83,7 @@ export const genEasings = (easing: $Type.Transition.Easing): GetEasings => {
 };
 
 export const setTransition = (node: HTMLElement, value?: string | null) => {
-  const property = value === null ? 'null' : typeof value === 'undefined' ? '' : value;
+  const property = !value ? '' : value;
   node.style.webkitTransition = property;
   node.style.transition = property;
 };
@@ -124,7 +124,7 @@ export const genUniqueId = () => {
 };
 
 export const createOptimizedEvent = (
-  fn: (event: any) => void,
+  callback: (event: any) => void,
   clearRef: { clear: null | (() => void) }
 ) => {
   let ticking = false;
@@ -134,13 +134,24 @@ export const createOptimizedEvent = (
       handle = raf(() => {
         clearRef.clear = null;
         ticking = false;
-        fn(event);
+        callback(event);
       });
       clearRef.clear = () => raf.cancel(handle);
       ticking = true;
     }
   };
 };
+
+export const lazyEvent = (callback: any): () => void => {
+  let nextHandle: number
+  const handle = raf(() => {
+    nextHandle = raf(callback)
+  })
+  return () => {
+    raf.cancel(handle);
+    raf.cancel(nextHandle)
+  }
+}
 
 // export const extractOverlapObjectProperty = (first, second, extractIsFirst) => {
 // 	const result = {};

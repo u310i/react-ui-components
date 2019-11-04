@@ -28,7 +28,7 @@ const Button2: React.FC<Props> = ({
     const ariaDisabledStyle = ariaDisabled ? propAriaDisabledStyle : {};
     return { ...$styles.style, ...ariaDisabledStyle, ...disabledStyle };
   }, []);
-  disabled && console.log(style);
+
   return (
     <BaseElement
       elementName="button"

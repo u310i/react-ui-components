@@ -13,7 +13,7 @@ export const constants = {
   },
   styles: {
     modal: {
-      content: {
+      contents: {
         style: {
           display: 'flex',
         },
@@ -41,8 +41,7 @@ export const constants = {
     },
     transition: {
       style: {
-        pointerEvents: 'none',
-        display: 'flex',
+        // display: 'flex',
       },
     },
     inner: {
@@ -54,17 +53,16 @@ export const constants = {
         flexDirection: 'column',
         overflowX: 'hidden',
         overflowY: 'auto',
-        pointerEvents: 'auto',
       },
       horizontal: {
         style: {
           width: '256px',
-          height: '100%',
+          height: '100vh',
         },
       },
       vertical: {
         style: {
-          width: '100%',
+          width: '100vw',
           height: '256px',
         },
       },

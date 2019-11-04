@@ -15,9 +15,9 @@ type Equals<A, B> = (<C>() => C extends Compact<A> ? 'T' : 'F') extends (<C>() =
 type ff = Equals<null, undefined>
 type FFF<A> = <C>() => C extends Compact<A> ? 'T' : 'F'
 // let fff: FFF<string> = 'T'
-type GGG = <C>() => C
-const ggg: GGG = () => undefined
-const g2: string = ggg<string>()
+// type GGG = <C>() => C
+// const ggg: GGG = () => undefined
+// const g2: string = ggg<string>()
 
 type A = { tag: 'A'; a: string }
 type B = { tag: 'B'; b: number }
@@ -90,15 +90,15 @@ type Wide<T, U> = T extends U ? U : T;
 
 type ToWidening<T> = Wide<Wide<Wide<Wide<Wide<Wide<T, string>, number>, boolean>, readonly any[]>, Function>, ReadonlyMap<any, any>>
 
-type ObjectIfObject<T> = T extends object ? (T extends readonly any[] ? never : (T extends Function ? never : (T extends ReadonlyMap<any, any> ? never : T))) : never
+type IsObject<T> = T extends object ? (T extends readonly any[] ? never : (T extends Function ? never : (T extends ReadonlyMap<any, any> ? never : T))) : never
 
-type BranchIfObject<T, Posi, Nega> = ObjectIfObject<T> extends never ? Nega : Posi;
+type BranchIfObject<T, Posi, Nega> = IsObject<T> extends never ? Nega : Posi;
 
-type KeyofObjectIfObject<T> = ObjectIfObject<T> extends never ? never : keyof T;
+type KeyOfObject<T> = IsObject<T> extends never ? never : keyof T;
 
 
 type DeepOverrideObject<T, U> = {
-  [P in keyof T]: P extends KeyofObjectIfObject<U> ? BranchIfObject<T[P], DeepOverrideObject<T[P], U[P]>, U[P] extends DeepWiden<T[P]> ? U[P] : T[P]> : T[P];
+  [P in keyof T]: P extends KeyOfObject<U> ? BranchIfObject<T[P], DeepOverrideObject<T[P], U[P]>, U[P] extends DeepWiden<T[P]> ? U[P] : T[P]> : T[P];
 }
 
 type L = 'foo' | 'bar'

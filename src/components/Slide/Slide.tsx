@@ -35,33 +35,54 @@ const getExitedTranslateValue = (
     offsetX = parseInt(transformValues[4], 10);
     offsetY = parseInt(transformValues[5], 10);
   }
-
   switch (direction) {
     case 'left':
-      return `translateX(${window.innerWidth +
-        gutter}px) translateX(-${rect.left - offsetX}px)`;
+      return `translateX(${window.innerWidth}px) translateX(${(Math.ceil(
+        rect.left
+      ) -
+        offsetX -
+        gutter) *
+        -1}px)`;
     case 'right':
-      return `translateX(-${rect.left + rect.width + gutter - offsetX}px)`;
+      return `translateX(${(Math.ceil(rect.left) +
+        rect.width +
+        gutter -
+        offsetX) *
+        -1}px)`;
     case 'up':
-      return `translateY(${window.innerHeight +
-        gutter}px) translateY(-${rect.top - offsetY}px)`;
+      return `translateY(${window.innerHeight}px) translateY(${(Math.ceil(
+        rect.top
+      ) -
+        offsetY -
+        gutter) *
+        -1}px)`;
     default:
-      return `translateY(-${rect.top + rect.height + gutter - offsetY}px)`;
+      return `translateY(${(Math.ceil(rect.top) +
+        rect.height +
+        gutter -
+        offsetY) *
+        -1}px)`;
   }
 };
 
+type CharacteristicProps = {
+  direction?: Direction;
+  gutter?: number;
+};
+
 type Props = $Type.ReactUtils.CreateProps<
-  $Type.Transition.CommonProps & {
-    direction?: Direction;
-    gutter?: number;
-  },
+  $Type.Transition.CommonProps & CharacteristicProps,
   typeof BaseElement,
-  Omit<$Type.Components.CSSTransitionProps, 'timeout'>
+  Omit<
+    $Type.Components.CSSTransitionProps,
+    $Type.Transition.CSSTransitionIgnoreProps
+  >
 >;
 
 declare global {
   namespace $Type {
     namespace Components {
+      type SlideCharacteristicProps = CharacteristicProps;
       type SlideDirection = Direction;
     }
   }
@@ -72,9 +93,10 @@ const Slide: React.FC<Props> = ({
   children,
   duration = $styles.duration,
   easing = $styles.easing,
+  hideVisibility = true,
+  disableEnter,
   direction = $styles.direction,
   gutter = $styles.gutter,
-  hideVisibility,
   appear = true,
   onEnter,
   onEntering,
@@ -82,23 +104,36 @@ const Slide: React.FC<Props> = ({
   onExited,
   ...other
 }) => {
-  const _ref_ = React.useRef<null | HTMLElement>(null);
+  const nodeRef = React.useRef<null | HTMLElement>(null);
 
   const [durations, easings] = React.useMemo(() => {
     return [genDurations(duration), genEasings(easing)];
   }, [duration, easing]);
 
   React.useLayoutEffect(() => {
-    const node = _ref_.current;
+    const node = nodeRef.current;
     if (!node) return;
     if (!appear && inProp) {
       setTransform(node, $styles.enteredTranslate);
     } else {
-      const translate = getExitedTranslateValue(node, direction, gutter);
-      setTransform(node, translate);
+      if (!(appear && inProp)) {
+        const translate = getExitedTranslateValue(node, direction, gutter);
+        setTransform(node, translate);
+      }
       if (hideVisibility) node.style.visibility = 'hidden';
     }
   }, []);
+
+  const handleEnter = React.useCallback(
+    (node: HTMLElement, appearing: boolean) => {
+      if (!disableEnter) {
+        const translate = getExitedTranslateValue(node, direction, gutter);
+        setTransform(node, translate);
+      }
+      if (onEnter) onEnter(node, appearing);
+    },
+    [onEnter, durations, easings, direction, gutter]
+  );
 
   const handleEntering = React.useCallback(
     (node: HTMLElement, appearing: boolean) => {
@@ -116,7 +151,8 @@ const Slide: React.FC<Props> = ({
         ])
       );
       setTransform(node, $styles.enteredTranslate);
-      if (hideVisibility) node.style.visibility = null;
+
+      if (hideVisibility) node.style.visibility = '';
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering, durations, easings]
@@ -138,7 +174,7 @@ const Slide: React.FC<Props> = ({
       setTransform(node, translate);
       if (onExiting) onExiting(node);
     },
-    [onExiting, durations, easings, gutter]
+    [onExiting, durations, easings, direction, gutter]
   );
 
   const handleExited = React.useCallback(
@@ -156,10 +192,13 @@ const Slide: React.FC<Props> = ({
       appear={appear}
       in={inProp}
       timeout={durations}
+      onEnter={handleEnter}
       onEntering={handleEntering}
       onExiting={handleExiting}
       onExited={handleExited}
       {...other}
+      mountOnEnter={false}
+      unmountOnExit={false}
     >
       {(
         state: $Type.Components.CSSTransitionChildStatus,
@@ -168,7 +207,7 @@ const Slide: React.FC<Props> = ({
         return (
           <BaseElement
             elementName="div"
-            _refer_={_ref_}
+            _refer_={nodeRef}
             _style_={$styles.style}
             _className_={$classNames.slide}
             {...childProps}

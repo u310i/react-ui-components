@@ -4,7 +4,7 @@ import { BaseElement } from '..';
 
 type Props = $Type.ReactUtils.CreateProps<
   {
-    parent?: Element;
+    parent?: $Type.ReactUtils.IncludeNode<Element>;
     active?: boolean;
   },
   typeof BaseElement
@@ -16,16 +16,16 @@ const HideOtherAria: React.FC<Props> = ({
   active = true,
   ...other
 }) => {
-  const _ref_ = React.useRef<null | Element>(null);
+  const nodeRef = React.useRef<null | Element>(null);
   const hiddenNodesRef = React.useRef<Element[]>([]);
   const prevActiveRef = React.useRef<null | boolean>(null);
 
   const activate = React.useCallback(
     parent => {
-      if (_ref_.current === parent || parent.children.length === 0) return;
+      if (nodeRef.current === parent || parent.children.length === 0) return;
 
       Array.from(parent.children, (childNode: Element) => {
-        if (childNode.contains(_ref_.current)) {
+        if (childNode.contains(nodeRef.current)) {
           activate(childNode);
         } else {
           const attr = childNode.getAttribute('aria-hidden');
@@ -65,7 +65,7 @@ const HideOtherAria: React.FC<Props> = ({
   return (
     <BaseElement
       elementName="div"
-      _refer_={_ref_}
+      _refer_={nodeRef}
       _className_={'uc-hideOtherAria'}
       {...other}
     >

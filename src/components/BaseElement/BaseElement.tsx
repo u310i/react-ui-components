@@ -20,7 +20,7 @@ type ComponentProps = {
   arias?: React.AriaAttributes;
   _refer_?: $Type.ReactUtils.Ref<Element>;
   refer?: $Type.ReactUtils.Ref<Element>;
-  testId?: string;
+  testid?: string;
 };
 
 type Props<
@@ -106,10 +106,13 @@ const BaseElement: React.FC<Props> = ({
     } as React.AriaAttributes;
   }, [_arias_, propArias]);
 
-  const refer = React.useCallback((element: Element) => {
-    injectElementToRef(propRefer, element);
-    injectElementToRef(_refer_, element);
-  }, []);
+  const refer = React.useCallback(
+    (element: Element) => {
+      injectElementToRef(propRefer, element);
+      injectElementToRef(_refer_, element);
+    },
+    [propRefer, _refer_]
+  );
 
   return React.createElement(
     elementName,

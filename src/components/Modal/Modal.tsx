@@ -2,7 +2,6 @@ import * as React from 'react';
 import $ from './_constants';
 import {
   injectElementToRef,
-  extractElement,
   useForceUpdate,
   isReactComponentChildren,
   isTransitionComponent,
@@ -25,32 +24,26 @@ type ModalQueueValue = {
   update: () => void;
 };
 
-type ClosingReason = 'escapeKeyDown' | 'outsideClick';
-
 type Props = $Type.ReactUtils.CreateProps<
   {
     container?: Element;
     open?: boolean;
-    onClose?: (node: Element | null, reason: ClosingReason | null) => void;
-    onOpen?: () => void;
+    onChanged?: (willExist: boolean, node: HTMLElement | null) => void;
     onEscapeKeyDown?: (evt: KeyboardEvent) => void;
     onOutsideClick?: (evt: MouseEvent) => void;
     keepMount?: boolean;
-    closeAfterTransition?: boolean;
+    ignoreTransition?: boolean;
     disableEscapeKeyDown?: boolean;
     disableOutsideClick?: boolean;
     disableHideOtherAria?: boolean;
-    disableEnforceFocus?: boolean;
-    disableRestoreFocus?: boolean;
-    disableFallbackFocus?: boolean;
     hideBackdrop?: boolean;
+    disableResetScroll?: boolean;
     disableScrollLock?: boolean;
     scrollTarget?: $Type.ReactUtils.IncludeNode<Element>;
     clickOutsideProps?: $Type.ReactUtils.CreatePropComponentProps<
       typeof ClickOutside
     >;
-    fallbackFocus?: $Type.ReactUtils.IncludeNode<HTMLElement>;
-    contentProps?: $Type.ReactUtils.CreatePropComponentProps<typeof FocusTrap>;
+    contentsProps?: $Type.ReactUtils.CreatePropComponentProps<typeof FocusTrap>;
     backdropProps?: $Type.ReactUtils.CreatePropComponentProps<typeof Backdrop>;
   },
   typeof HideOtherAria
@@ -62,26 +55,22 @@ let zIndexCounter: number = $styles.modalZindex;
 
 const Modal: React.FC<Props> = ({
   children,
-  container,
+  container = document.body,
   open = false,
-  onClose,
-  onOpen,
+  onChanged,
   onEscapeKeyDown,
   onOutsideClick,
   keepMount = false,
-  closeAfterTransition = true,
+  ignoreTransition = false,
   disableEscapeKeyDown = false,
   disableOutsideClick = false,
   disableHideOtherAria = false,
-  disableEnforceFocus = false,
-  disableRestoreFocus = false,
-  disableFallbackFocus = false,
   hideBackdrop = false,
+  disableResetScroll = false,
   disableScrollLock = false,
   scrollTarget,
   clickOutsideProps,
-  fallbackFocus,
-  contentProps: propContentProps = {},
+  contentsProps: propContentProps = {},
   backdropProps: propBackdropProps = {},
   ...other
 }) => {
@@ -96,23 +85,22 @@ const Modal: React.FC<Props> = ({
   if (!componentChild) return null;
 
   const transitionChild =
-    closeAfterTransition &&
+    !ignoreTransition &&
     componentChild &&
     isTransitionComponent(componentChild!)
       ? componentChild
       : null;
 
-  const rootRef = React.useRef<null | HTMLElement>(null);
-  const childRef = React.useRef<null | HTMLElement>(null);
+  const rootNodeRef = React.useRef<null | HTMLElement>(null);
+  const childNodeRef = React.useRef<null | HTMLElement>(null);
+
   const prevOpenRef = React.useRef<null | boolean>(null);
   // Use when 'transitionChild' exists.
-  const shouldBeMounted = React.useRef<null | boolean>(null);
+  const willExistOnTransitionRef = React.useRef<null | boolean>(null);
   // Use when 'transitionChild' exists.
   // It is true until 'open' changes to false and is unmounted.
-  const betweenFalseToExitedRef = React.useRef<null | boolean>(null);
-  const closingReasonRef = React.useRef<null | ClosingReason>(null);
+  const untilClosingRef = React.useRef<null | boolean>(null);
 
-  const zIndexAdded = React.useRef<null | boolean>(null);
   const activatedRef = React.useRef<boolean>(false);
 
   const forceUpdate = useForceUpdate();
@@ -166,18 +154,47 @@ const Modal: React.FC<Props> = ({
     }
   }
 
-  React.useEffect(() => {
-    if (!rootRef.current) return;
-    if (open && !zIndexAdded.current) {
-      rootRef.current.style.zIndex = zIndexCounter.toString(10);
-      zIndexCounter += 1;
+  if (open && !prevOpenRef.current) {
+    prevOpenRef.current = true;
+    if (transitionChild) {
+      willExistOnTransitionRef.current = true;
+      untilClosingRef.current = false;
     }
-    zIndexAdded.current = open;
+  } else if (!open && prevOpenRef.current) {
+    prevOpenRef.current = false;
+    if (transitionChild) {
+      untilClosingRef.current = true;
+    }
+  }
+
+  const isActive = !!modalManagerRef.current.isActive;
+
+  const willExist = !transitionChild
+    ? open
+    : !!willExistOnTransitionRef.current;
+
+  React.useEffect(() => {
+    const isExist = willExist;
+    if (rootNodeRef.current) {
+      rootNodeRef.current.style.visibility = isExist ? '' : 'hidden';
+    }
+    if (!disableResetScroll) {
+      if (childNodeRef.current!.children[0])
+        childNodeRef.current!.children[0].scrollTop = 0;
+      childNodeRef.current!.parentElement!.scrollTop = 0;
+    }
+    onChanged && onChanged(isExist, rootNodeRef.current || null);
+  }, [willExist]);
+
+  React.useEffect(() => {
+    if (open) {
+      rootNodeRef.current!.style.zIndex = zIndexCounter.toString(10);
+      ++zIndexCounter;
+    }
   }, [open]);
 
   const handleEscapeKeyDown = React.useCallback(
     event => {
-      closingReasonRef.current = 'escapeKeyDown';
       onEscapeKeyDown && onEscapeKeyDown(event);
       event.stopPropagation();
     },
@@ -186,68 +203,34 @@ const Modal: React.FC<Props> = ({
 
   const handleOutsideClick = React.useCallback(
     event => {
-      closingReasonRef.current = 'outsideClick';
       onOutsideClick && onOutsideClick(event);
+      event.stopPropagation();
     },
     [onOutsideClick]
   );
 
-  // Make the root element of 'children' or the element of 'fallbackFocus' tabbable.
-  const handleFallbackFocus = React.useCallback(() => {
-    const fallbackFocusElement = extractElement(fallbackFocus);
-    if (fallbackFocusElement) {
-      fallbackFocusElement.tabIndex = 0;
-      return fallbackFocusElement;
-    }
-    if (!childRef.current) return null;
-    childRef.current.tabIndex = 0;
-    return childRef.current;
-  }, [fallbackFocus]);
-
-  const handleOpen = React.useCallback(() => {
-    onOpen && onOpen();
-  }, [open, onOpen]);
-
-  const handleClose = React.useCallback(() => {
-    onClose && onClose(childRef.current, closingReasonRef.current);
-    closingReasonRef.current = null;
-  }, []);
-
-  if (open && !prevOpenRef.current) {
-    handleOpen();
-    prevOpenRef.current = true;
-    if (transitionChild) {
-      shouldBeMounted.current = true;
-      betweenFalseToExitedRef.current = false;
-    }
-  } else if (!open && prevOpenRef.current) {
-    handleClose();
-    prevOpenRef.current = false;
-    if (transitionChild) {
-      betweenFalseToExitedRef.current = true;
-    }
-  }
-
   // Use when 'transitionChild' exists.
   // If you want to unmount after waiting for the transition,
   //  use 'forceUpdate' to unmount after the transition.
-  const onExitedOfTransitionChild =
-    transitionChild && transitionChild.props.onExited;
-
   const handleTransitionExited = React.useCallback(
     node => {
-      betweenFalseToExitedRef.current = false;
-      shouldBeMounted.current = false;
-      onExitedOfTransitionChild && onExitedOfTransitionChild(node);
+      untilClosingRef.current = false;
+      willExistOnTransitionRef.current = false;
+      transitionChild &&
+        transitionChild.props.onExited &&
+        transitionChild.props.onExited(node);
       forceUpdate();
     },
-    [closeAfterTransition, onExitedOfTransitionChild]
+    [ignoreTransition, transitionChild]
   );
 
-  const handleChildRef = React.useCallback(element => {
-    childRef.current = element;
-    injectElementToRef(((children as any).props || {}).refer, element);
-  }, []);
+  const handleChildNodeRef = React.useCallback(
+    element => {
+      childNodeRef.current = element;
+      injectElementToRef(((children as any).props || {}).refer, element);
+    },
+    [((children as any).props || {}).refer]
+  );
 
   let childComponent: React.ReactNode;
   if (transitionChild) {
@@ -255,22 +238,28 @@ const Modal: React.FC<Props> = ({
       <transitionChild.type
         {...transitionChild.props}
         onExited={handleTransitionExited}
-        refer={handleChildRef}
+        refer={handleChildNodeRef}
       />
     ) as React.ReactElement<
       $Type.Transition.PropTransitionComponentCommonProps
     >;
   } else {
     childComponent = (
-      <componentChild.type {...componentChild.props} refer={handleChildRef} />
+      <componentChild.type
+        {...componentChild.props}
+        refer={handleChildNodeRef}
+      />
     ) as React.ReactElement<any>;
   }
 
   // 'React.useCallback' is never updated.
-  const handleRootRef = React.useCallback(element => {
-    rootRef.current = element;
-    injectElementToRef(other.refer, element);
-  }, []);
+  const handleRootNodeRef = React.useCallback(
+    element => {
+      rootNodeRef.current = element;
+      injectElementToRef(other.refer, element);
+    },
+    [other.refer]
+  );
 
   const props = {
     ...other,
@@ -285,17 +274,17 @@ const Modal: React.FC<Props> = ({
           'aria-modal': true,
           ...other.arias,
         },
-        refer: handleRootRef,
+        refer: handleRootNodeRef,
       };
     }, [other.style, other.classNames, other.arias]),
   };
 
-  const contentProps = {
+  const contentsProps = {
     ...propContentProps,
     ...React.useMemo(() => {
       return {
         style: {
-          ...$styles.content.style,
+          ...$styles.contents.style,
           ...propContentProps.style,
         },
         classNames: [
@@ -322,48 +311,38 @@ const Modal: React.FC<Props> = ({
     }, [propBackdropProps.style, propBackdropProps.classNames]),
   };
 
-  const isActive = !!modalManagerRef.current.isActive;
-
-  const isOpen = !transitionChild ? open : !!shouldBeMounted.current;
-
-  React.useEffect(() => {
-    if (rootRef.current) {
-      rootRef.current.style.visibility = isOpen ? null : 'hidden';
-    }
-  }, [isOpen]);
-
-  const isMount = keepMount ? true : isOpen;
+  const isMount = keepMount ? true : willExist;
 
   return isMount ? (
     <Portal container={container}>
-      <HideOtherAria active={!disableHideOtherAria && isActive} {...props}>
-        {!disableScrollLock && isOpen && (
-          <ScrollLock target={scrollTarget || childRef} />
+      <HideOtherAria
+        active={!disableHideOtherAria && isActive}
+        parent={container}
+        {...props}
+      >
+        {!disableScrollLock && willExist && (
+          <ScrollLock target={scrollTarget || childNodeRef} />
         )}
         {!disableEscapeKeyDown && isActive && open && (
           <HotKeys hotkeys={'escape'} action={handleEscapeKeyDown} />
         )}
         {!disableOutsideClick && isActive && open && (
           <ClickOutside
-            target={childRef}
+            target={childNodeRef}
             action={handleOutsideClick}
+            scope={rootNodeRef}
             {...clickOutsideProps}
           />
         )}
         {!hideBackdrop && (
           <Backdrop
             open={open}
-            disablePointerEvents={!open}
+            disablePointerEvents={true}
             aria-hidden={true}
             {...backdropProps}
           />
         )}
-        <FocusTrap
-          active={!disableEnforceFocus && isActive}
-          disableRestoreFocus={disableRestoreFocus}
-          fallbackFocus={disableFallbackFocus ? undefined : handleFallbackFocus}
-          {...contentProps}
-        >
+        <FocusTrap active={isActive} {...contentsProps} testid={other.testid}>
           {childComponent}
         </FocusTrap>
       </HideOtherAria>

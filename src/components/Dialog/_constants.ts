@@ -12,20 +12,28 @@ export const constants = {
     dialogInner: `${$.prefix}${name}-inner`,
   },
   styles: {
+    modal: {
+      contents: {
+        style: {
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        },
+        scrollBody: {
+          style: {
+            overflowX: 'hidden',
+            overflowY: 'auto',
+            alignItems: 'start',
+          },
+        },
+      }
+    },
     transition: {
       style: {
-        pointerEvents: 'none',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
       },
       scrollBody: {
         style: {
-          overflowX: 'hidden',
-          overflowY: 'auto',
-          alignItems: 'start',
+          margin: '48px'
         },
       },
     },
@@ -34,25 +42,22 @@ export const constants = {
       shape: 'default',
       style: {
         backgroundColor: 'white',
-        maxHeight: 'calc(100% - 96px)',
-        margin: '48px',
+        maxHeight: 'calc(100vh - 96px)',
         width: '256px',
         display: 'flex',
         flexDirection: 'column',
         overflowX: 'hidden',
         overflowY: 'auto',
-        pointerEvents: 'auto',
       },
       scrollBody: {
         style: {
           maxHeight: 'none',
-          // alignItems: 'hidden'
         },
       },
       fullScreen: {
         style: {
           width: '100%',
-          height: '100%',
+          height: '100vh',
           margin: '0',
           maxHeight: 'none',
         },

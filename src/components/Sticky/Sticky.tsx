@@ -1,194 +1,400 @@
 import * as React from 'react';
 import $ from './_constants';
-import { isNumber } from 'scripts';
-import { BaseElement, EventListener } from '..';
+import { addEventListener, raf, extractElement } from 'scripts';
+import { BaseElement } from '..';
 
-const $classNames = $.classNames
-const $style = $.style;
+const $classNames = $.classNames;
+const $styles = $.styles;
 
-const resetStyle = (node: HTMLElement) => {
-  node.style.position = null;
-  node.style.top = null;
-  node.style.bottom = null;
-  node.style.left = null;
-};
-
-const addSpaceToOuter = (outerNode: HTMLElement, innerNode: HTMLElement) => {
-  const computedStyle = window.getComputedStyle(innerNode);
-  outerNode.style.height = computedStyle.getPropertyValue('height');
-  outerNode.style.width = computedStyle.getPropertyValue('width');
-};
-
-const removeSpaceFromOuter = (outerNode: HTMLElement) => {
-  outerNode.style.height = '';
-  outerNode.style.width = '';
-};
-
-type Props = $Type.ReactUtils.CreateProps<{
-  innerProps?: $Type.ReactUtils.CreatePropComponentProps<typeof BaseElement>;
-  outerProps?: $Type.ReactUtils.CreatePropComponentProps<typeof BaseElement>;
-  absoluteWrapperProps?: $Type.ReactUtils.CreatePropComponentProps<
-    typeof BaseElement
-  >;
-  offsetTop?: number;
-  offsetBottom?: number;
-  enableAbsolute?: boolean;
-}>;
+type Props = $Type.ReactUtils.CreateProps<
+  {
+    active?: boolean;
+    offset?: number;
+    bottomOffset?: number;
+    context?: $Type.ReactUtils.IncludeNode<Element>;
+    scrollContext?: $Type.ReactUtils.IncludeNode<EventTarget>;
+    pushing?: boolean;
+    onBottom?: (e: Event) => void;
+    onStick?: (e: Event) => void;
+    onTop?: (e: Event) => void;
+    onUnstick?: (e: Event) => void;
+    contentsProps?: $Type.ReactUtils.CreatePropComponentProps<
+      typeof BaseElement
+    >;
+    triggerNodeProps?: $Type.ReactUtils.CreatePropComponentProps<
+      typeof BaseElement
+    >;
+  },
+  typeof BaseElement
+>;
 
 const Sticky: React.FC<Props> = ({
   children,
-  innerProps = {},
-  outerProps = {},
-  absoluteWrapperProps = {},
-  offsetTop = 0,
-  offsetBottom,
-  enableAbsolute = false,
+  active = true,
+  offset = 0,
+  bottomOffset = 0,
+  context = document.body,
+  scrollContext = window,
+  pushing = false,
+  onBottom,
+  onStick,
+  onTop,
+  onUnstick,
+  contentsProps = {},
+  triggerNodeProps = {},
+  ...other
 }) => {
-  const [isTopState, setIsTop] = React.useState(false);
-  const [isBottomState, setIsBottom] = React.useState(false);
-
-  const outerRef = React.useRef<null | HTMLElement>(null);
-  const innerRef = React.useRef<null | HTMLElement>(null);
-
-  const [canStickingTop, canStickingBottom] = React.useMemo(() => {
-    return [
-      typeof offsetTop !== 'undefined' && isNumber(offsetTop),
-      typeof offsetBottom !== 'undefined' && isNumber(offsetBottom),
-    ];
-  }, [offsetTop, offsetBottom]);
-
-  const managerRef = React.useRef<{
-    isTop: null | boolean;
-    prevIsTop: null | boolean;
-    isBottom: null | boolean;
-    prevIsBottom: null | boolean;
+  const [state, setState] = React.useState<{
+    sticky: boolean;
+    absolute?: boolean;
+    top?: number | null;
+    bottom?: number | null;
   }>({
-    isTop: null,
-    prevIsTop: null,
-    isBottom: null,
-    prevIsBottom: null,
+    sticky: false,
   });
 
-  const stickingListener = React.useCallback(() => {
-    if (!outerRef.current) return;
-    const rect = outerRef.current.getBoundingClientRect();
-    const manager = managerRef.current;
-    if (canStickingTop) {
-      manager.prevIsTop = manager.isTop;
-      manager.isTop = rect.top < offsetTop;
-      if (manager.isTop !== manager.prevIsTop) {
-        setIsTop(manager.isTop);
-      }
-    }
-    if (canStickingBottom) {
-      manager.prevIsBottom = manager.isBottom;
-      manager.isBottom =
-        rect.bottom + (offsetBottom as number) > window.innerHeight;
-      if (manager.isBottom !== manager.prevIsBottom) {
-        setIsBottom(manager.isBottom);
-      }
-    }
-  }, [offsetTop, offsetBottom]);
+  const stateRef = React.useRef<
+    | 'none'
+    | 'stickToContextBottom'
+    | 'stickToContextTop'
+    | 'stickToScreenBottom'
+    | 'stickToScreenTop'
+  >('none');
+
+  const pushingRef = React.useRef<boolean>(false);
+
+  const stickyNodeRef = React.useRef<null | HTMLElement>(null);
+  const triggerNodeRef = React.useRef<null | HTMLElement>(null);
+
+  const cancelRafRef = React.useRef<null | number>(null);
+  const prevActiveRef = React.useRef<null | boolean>(null);
+  const prevScrollContextRef = React.useRef<null | $Type.ReactUtils.IncludeNode<
+    EventTarget
+  >>(null);
+
+  const rectsRef = React.useRef<{
+    context?: ClientRect;
+    trigger?: ClientRect;
+    sticky?: ClientRect;
+  }>({});
+
+  const removeResizeEventListenerRef = React.useRef<null | (() => void)>(null);
+  const removeScrollEventListenerRef = React.useRef<null | (() => void)>(null);
+
+  const tickingRef = React.useRef<boolean>(false);
 
   React.useLayoutEffect(() => {
-    if (!outerRef.current) return;
-    const manager = managerRef.current;
-    manager.isTop = null;
-    manager.prevIsTop = null;
-    manager.isBottom = null;
-    manager.prevIsBottom = null;
-    const rect = outerRef.current.getBoundingClientRect();
-    if (canStickingTop) {
-      if (rect.top < offsetTop) {
-        manager.isTop = true;
-        manager.prevIsTop = true;
-        setIsTop(true);
+    if (active === prevActiveRef.current) {
+      if (scrollContext !== prevScrollContextRef.current) {
+        removeListeners();
+        addListeners(scrollContext);
       }
-    }
-    if (canStickingBottom) {
-      if (rect.bottom + (offsetBottom as number) > window.innerHeight) {
-        manager.isBottom = true;
-        manager.prevIsBottom = true;
-        setIsBottom(true);
-      }
-    }
-  }, [offsetTop, offsetBottom]);
-
-  React.useLayoutEffect(() => {
-    if (!innerRef.current || !outerRef.current) return;
-    if (isTopState) {
-      innerRef.current.style.position = 'fixed';
-      innerRef.current.style.top = `${offsetTop}px`;
-      innerRef.current.style.left = '0px';
-      addSpaceToOuter(outerRef.current, innerRef.current);
-    } else if (isBottomState) {
-      innerRef.current.style.position = 'fixed';
-      innerRef.current.style.bottom = `${offsetBottom}px`;
-      innerRef.current.style.left = '0px';
-      addSpaceToOuter(outerRef.current, innerRef.current);
     } else {
-      resetStyle(innerRef.current);
-      removeSpaceFromOuter(outerRef.current);
+      if (active) {
+        handleUpdate();
+        addListeners(scrollContext);
+      } else {
+        removeListeners();
+        setState({ sticky: false });
+      }
     }
-  }, [isTopState, isBottomState]);
+    prevActiveRef.current = active;
+    prevScrollContextRef.current = scrollContext;
 
-  const styles = React.useMemo(() => {
+    return () => {
+      if (active) {
+        removeListeners();
+        cancelRafRef.current !== null && raf.cancel(cancelRafRef.current);
+      }
+    };
+  }, [active, scrollContext]);
+
+  const addListeners = React.useCallback(scrollContext => {
+    const scrollContextNode = extractElement(scrollContext);
+
+    if (scrollContextNode) {
+      removeResizeEventListenerRef.current = addEventListener(
+        scrollContextNode,
+        'resize',
+        handleUpdate,
+        {},
+        true
+      );
+      removeScrollEventListenerRef.current = addEventListener(
+        scrollContextNode,
+        'scroll',
+        handleUpdate
+      );
+    }
+  }, []);
+
+  const removeListeners = React.useCallback(() => {
+    removeResizeEventListenerRef.current &&
+      removeResizeEventListenerRef.current();
+    removeScrollEventListenerRef.current &&
+      removeScrollEventListenerRef.current();
+  }, []);
+
+  // ----------------------------------------
+  // Handlers
+  // ----------------------------------------
+  const fixedContextBottom = React.useRef<boolean>(false);
+  const fixedContextTop = React.useRef<boolean>(false);
+
+  const prevTriggerWidthRef = React.useRef<null | number>(null);
+
+  const stickyRef = React.useRef<null | boolean>(state.sticky);
+  stickyRef.current = state.sticky;
+
+  const update = React.useCallback(
+    e => {
+      tickingRef.current = false;
+
+      assignRects();
+      const triggerWidth = rectsRef.current.trigger!.width;
+      if (stickyRef.current) {
+        if (triggerWidth !== prevTriggerWidthRef.current) {
+          stickyNodeRef.current!.style.width = `${triggerWidth}px`;
+        }
+      } else {
+        stickyNodeRef.current!.style.width = '';
+      }
+
+      prevTriggerWidthRef.current = triggerWidth;
+
+      const oversized = isOversized();
+
+      if (oversized) {
+        if (fixedContextBottom.current) {
+          if (
+            bottomTouchScreenBottomWhenContextBottom() &&
+            topTouchScreenTopWhenContextBottom()
+          ) {
+            return;
+          }
+          fixedContextBottom.current = false;
+          if (!topTouchScreenTopWhenContextBottom()) {
+            pushingRef.current = false;
+            return stickToScreenTop(e);
+          }
+        }
+
+        if (fixedContextTop.current) {
+          if (
+            topTouchScreenTopWhenContextTop() &&
+            bottomTouchScreenBottomWhenContextTop()
+          ) {
+            return;
+          }
+          fixedContextTop.current = false;
+          if (!bottomTouchScreenBottomWhenContextTop()) {
+            pushingRef.current = true;
+            return stickToScreenBottom(e);
+          }
+        }
+      }
+
+      if (pushingRef.current) {
+        if (topReachContextTopWhenFixed()) {
+          if (oversized) fixedContextTop.current = true;
+          return stickToContextTop(e);
+        }
+        if (bottomTouchScreenBottomWhenContextBottom()) {
+          return stickToScreenBottom(e);
+        }
+        return stickToContextBottom(e);
+      }
+
+      if (topTouchScreenTopWhenContextTop()) {
+        if (bottomReachContextBottomWhenFixed()) {
+          if (oversized) fixedContextBottom.current = true;
+          return stickToContextBottom(e);
+        }
+        return stickToScreenTop(e);
+      }
+
+      return stickToContextTop(e);
+    },
+    [offset, bottomOffset]
+  );
+
+  const handleUpdate = React.useCallback((event?: Event) => {
+    if (!tickingRef.current) {
+      tickingRef.current = true;
+      cancelRafRef.current = raf(() => update(event));
+    }
+  }, []);
+
+  // ----------------------------------------
+  // Helpers
+  // ----------------------------------------
+
+  const assignRects = React.useCallback(() => {
+    const contextNode = extractElement(context) || document.body;
+    rectsRef.current.context = contextNode.getBoundingClientRect();
+    rectsRef.current.trigger = triggerNodeRef.current!.getBoundingClientRect();
+    rectsRef.current.sticky = stickyNodeRef.current!.getBoundingClientRect();
+  }, [context]);
+
+  const style = React.useMemo(() => {
+    const { sticky, absolute, top, bottom } = state;
+
+    const stickyStyle = sticky
+      ? {
+          width: rectsRef.current.trigger!.width,
+          ...(absolute ? $styles.absolute.style : $styles.fixed.style),
+          ...(bottom === null && { top, bottom: 'auto' }),
+          ...(top === null && { bottom: absolute ? 0 : bottom, top: 'auto' }),
+          ...$styles.absolute.sticky,
+        }
+      : {};
+
     return {
-      inner: {
-        zIndex: $style.zIndex,
-      },
-      outer: {
-        position: enableAbsolute ? 'absolute' : undefined,
-      },
-      absoluteWrapper: {
-        position: 'relative',
-      },
-    } as const;
-  }, [enableAbsolute]);
+      position: 'static',
+      transition: 'none',
+      zIndex: 800,
+      ...stickyStyle,
+    };
+  }, [state.sticky, state.absolute, state.top, state.bottom]);
 
-  const innerComponent = (
-    <BaseElement
-      elementName="div"
-      _refer_={outerRef}
-      _style_={styles.outer}
-      _className_={$classNames.stickyOuter}
-      {...outerProps}
-    >
-      <BaseElement
-        elementName="div"
-        _refer_={innerRef}
-        _style_={styles.inner}
-        _className_={$classNames.stickyInner}
-        {...innerProps}
-      >
-        {typeof children === 'function'
-          ? children(isTopState, isBottomState)
-          : children}
-      </BaseElement>
-    </BaseElement>
+  const triggerStyle = React.useMemo(() => {
+    return state.sticky
+      ? {
+          height: rectsRef.current.sticky!.height,
+        }
+      : {};
+  }, [state.sticky]);
+
+  // ----------------------------------------
+  // Helpers
+  // ----------------------------------------
+
+  const bottomTouchScreenBottomWhenContextBottom = React.useCallback(() => {
+    return rectsRef.current.context!.bottom + bottomOffset > window.innerHeight;
+  }, [bottomOffset]);
+
+  const topTouchScreenTopWhenContextBottom = React.useCallback(() => {
+    return (
+      rectsRef.current.context!.bottom <
+      rectsRef.current.sticky!.height + offset
+    );
+  }, [offset]);
+
+  const topTouchScreenTopWhenContextTop = React.useCallback(() => {
+    return rectsRef.current.trigger!.top < offset;
+  }, [offset]);
+
+  const bottomTouchScreenBottomWhenContextTop = React.useCallback(() => {
+    return rectsRef.current.sticky!.bottom + bottomOffset > window.innerHeight;
+  }, [bottomOffset]);
+
+  // Return true when the component reached the bottom of the context
+  const bottomReachContextBottomWhenFixed = React.useCallback(() => {
+    return (
+      rectsRef.current.sticky!.height + offset >=
+      rectsRef.current.context!.bottom
+    );
+  }, [offset]);
+
+  // Return true when the component reached the starting point
+  const topReachContextTopWhenFixed = React.useCallback(() => {
+    return rectsRef.current.sticky!.top <= rectsRef.current.trigger!.top;
+  }, []);
+
+  // Return true if the height of the component is higher than the window
+  const isOversized = React.useCallback(() => {
+    return (
+      rectsRef.current.sticky!.height + offset + bottomOffset >
+      window.innerHeight
+    );
+  }, []);
+
+  const stickToContextBottom = React.useCallback(
+    e => {
+      if (stateRef.current !== 'stickToContextBottom') {
+        stateRef.current = 'stickToContextBottom';
+        onBottom && onBottom(e);
+        pushingRef.current = pushing;
+        setState({
+          sticky: true,
+          absolute: true,
+          top: null,
+          bottom: bottomOffset,
+        });
+        onStick && onStick(e);
+      }
+    },
+    [onBottom, pushing, bottomOffset]
+  );
+
+  const stickToContextTop = React.useCallback(
+    e => {
+      if (stateRef.current !== 'stickToContextTop') {
+        stateRef.current = 'stickToContextTop';
+        onTop && onTop(e);
+        pushingRef.current = false;
+        setState({
+          sticky: false,
+          absolute: false,
+          top: null,
+          bottom: null,
+        });
+        onUnstick && onUnstick(e);
+      }
+    },
+    [onTop]
+  );
+
+  const stickToScreenBottom = React.useCallback(
+    e => {
+      if (stateRef.current !== 'stickToScreenBottom') {
+        stateRef.current = 'stickToScreenBottom';
+        setState({
+          sticky: true,
+          absolute: false,
+          top: null,
+          bottom: bottomOffset,
+        });
+        onStick && onStick(e);
+      }
+    },
+    [bottomOffset]
+  );
+
+  const stickToScreenTop = React.useCallback(
+    e => {
+      if (stateRef.current !== 'stickToScreenTop') {
+        stateRef.current = 'stickToScreenTop';
+        setState({
+          sticky: true,
+          absolute: false,
+          top: offset,
+          bottom: null,
+        });
+        onStick && onStick(e);
+      }
+    },
+    [offset]
   );
 
   return (
-    <>
-      <EventListener
-        target={window}
-        type="scroll"
-        listener={stickingListener}
-        optimized={true}
+    <BaseElement elementName="div" _className_={$classNames.sticky} {...other}>
+      <BaseElement
+        elementName="div"
+        _style_={triggerStyle}
+        {...triggerNodeProps}
+        _refer_={triggerNodeRef}
       />
-      {enableAbsolute ? (
-        <BaseElement
-          elementName="div"
-          _style_={styles.absoluteWrapper}
-          _className_={$classNames.stickyAbsoluteWrapper}
-          {...absoluteWrapperProps}
-        >
-          {innerComponent}
-        </BaseElement>
-      ) : (
-        innerComponent
-      )}
-    </>
+      <BaseElement
+        elementName="div"
+        _style_={style}
+        _className_={$classNames.stickyContents}
+        {...contentsProps}
+        _refer_={stickyNodeRef}
+      >
+        {children}
+      </BaseElement>
+    </BaseElement>
   );
 };
 

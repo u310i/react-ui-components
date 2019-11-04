@@ -15,7 +15,10 @@ const $styles = $.styles;
 type Props = $Type.ReactUtils.CreateProps<
   $Type.Transition.CommonProps,
   typeof BaseElement,
-  $Type.Components.CSSTransitionProps
+  Omit<
+    $Type.Components.CSSTransitionProps,
+    $Type.Transition.CSSTransitionIgnoreProps
+  >
 >;
 
 const Zoom: React.FC<Props> = ({
@@ -23,7 +26,8 @@ const Zoom: React.FC<Props> = ({
   children,
   duration = $styles.duration,
   easing = $styles.easing,
-  hideVisibility,
+  hideVisibility = true,
+  disableEnter,
   appear = true,
   onEnter,
   onEntering,
@@ -31,22 +35,34 @@ const Zoom: React.FC<Props> = ({
   onExited,
   ...other
 }) => {
-  const _ref_ = React.useRef<null | HTMLElement>(null);
+  const ref = React.useRef<null | HTMLElement>(null);
 
   const [durations, easings] = React.useMemo(() => {
     return [genDurations(duration), genEasings(easing)];
   }, [duration, easing]);
 
   React.useLayoutEffect(() => {
-    const node = _ref_.current;
+    const node = ref.current;
     if (!node) return;
     if (!appear && inProp) {
       setTransform(node, $styles.enteredScale);
     } else {
-      setTransform(node, $styles.exitedScale);
+      if (!(appear && inProp)) {
+        setTransform(node, $styles.exitedScale);
+      }
       if (hideVisibility) node.style.visibility = 'hidden';
     }
   }, []);
+
+  const handleEnter = React.useCallback(
+    (node: HTMLElement, appearing: boolean) => {
+      if (!disableEnter) {
+        setTransform(node, $styles.exitedScale);
+        if (onEnter) onEnter(node, appearing);
+      }
+    },
+    []
+  );
 
   const handleEntering = React.useCallback(
     (node: HTMLElement, appearing: boolean) => {
@@ -64,7 +80,7 @@ const Zoom: React.FC<Props> = ({
         ])
       );
       setTransform(node, $styles.enteredScale);
-      if (hideVisibility) node.style.visibility = null;
+      if (hideVisibility) node.style.visibility = '';
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering, durations, easings]
@@ -103,6 +119,7 @@ const Zoom: React.FC<Props> = ({
       in={inProp}
       timeout={durations}
       appear={appear}
+      onEnter={handleEnter}
       onEntering={handleEntering}
       onExiting={handleExiting}
       onExited={handleExited}
@@ -117,7 +134,7 @@ const Zoom: React.FC<Props> = ({
             elementName="div"
             _style_={$styles.style}
             _className_={$classNames.zoom}
-            _refer_={_ref_}
+            _refer_={ref}
             {...childProps}
           >
             {children}

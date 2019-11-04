@@ -37,11 +37,13 @@ const HotKeys: React.FC<Props> = ({
     type === 'keydown' || type === 'keyup' || type === 'keypress'
       ? type
       : undefined;
+
   const mousetrapRef = React.useRef<null | MousetrapStatic | MousetrapInstance>(
     null
   );
-  const prevActive = React.useRef<null | boolean>(null);
+  const prevActiveRef = React.useRef<null | boolean>(null);
   const didBindRef = React.useRef<null | boolean>(null);
+
   React.useEffect(() => {
     if (mousetrapRef.current === null) {
       const node = extractElement(target);
@@ -49,16 +51,16 @@ const HotKeys: React.FC<Props> = ({
     }
     const mousetrap = mousetrapRef.current;
     if (!mousetrap) return;
-    if (!prevActive.current && active) {
+    if (!prevActiveRef.current && active) {
       bindAfterUnbind(mousetrap, { hotkeys, action, whichEvent });
       didBindRef.current = true;
-    } else if (prevActive.current && !active) {
+    } else if (prevActiveRef.current && !active) {
       if (didBindRef.current) {
         didBindRef.current && mousetrap.unbind(hotkeys, whichEvent);
         didBindRef.current = null;
       }
     }
-    prevActive.current = active;
+    prevActiveRef.current = active;
     return () => {
       if (didBindRef.current) {
         mousetrap.unbind(hotkeys, whichEvent);

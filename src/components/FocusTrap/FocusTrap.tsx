@@ -1,121 +1,153 @@
 import React from 'react';
-import { focusTrap as CreateFocusTrap } from './_focusTrap';
+import { injectElementToRef, extractElement, lazyEvent } from 'scripts';
 import { BaseElement } from '..';
-
-// https://github.com/davidtheclark/focus-trap-react
-
-// We need to hijack the returnFocusOnDeactivate option,
-// because React can move focus into the element before we arrived at
-// this lifecycle hook (e.g. with autoFocus inputs). So the component
-// captures the previouslyFocusedElement in componentWillMount,
-// then (optionally) returns focus to it in componentWillUnmount.
 
 type Props = $Type.ReactUtils.CreateProps<
   {
     active?: boolean;
-    paused?: boolean;
-    onActivate?: () => void;
-    onDeactivate?: () => void;
-    initialFocus?: $Type.ReactUtils.IncludeNode;
-    fallbackFocus?: $Type.ReactUtils.IncludeNode;
+    disableAutoFocus?: boolean;
+    disableEnforceFocus?: boolean;
     disableRestoreFocus?: boolean;
-    disableEscapeKeyDown?: boolean;
-    disableOutsideClick?: boolean;
-    disablePointerEvents?: boolean;
+    initialFocus?: HTMLElement;
   },
   typeof BaseElement
 >;
 
+let focusTrapCounter: number = 0;
+let firstRestoreNode: null | HTMLElement = null;
+
 const FocusTrap: React.FC<Props> = ({
   children,
-  active = true,
-  paused = false,
-  onActivate,
-  onDeactivate,
-  initialFocus,
-  fallbackFocus,
+  active,
+  disableAutoFocus = false,
+  disableEnforceFocus = false,
   disableRestoreFocus = false,
-  disableEscapeKeyDown = true,
-  disableOutsideClick = true,
-  disablePointerEvents = false,
+  initialFocus,
   ...other
 }) => {
-  const _ref_ = React.useRef(null);
-  const focusTrapOptions = {
-    onActivate,
-    onDeactivate,
-    initialFocus,
-    fallbackFocus,
-    returnFocusOnDeactivate: false,
-    disableEscapeKeyDown,
-    disableOutsideClick,
-  };
+  const ignoreNextEnforceFocus = React.useRef<undefined | boolean>();
+  const startGuradNodeRef = React.useRef<null | HTMLDivElement>(null);
+  const endGuradNodeRef = React.useRef<null | HTMLDivElement>(null);
+  const restoreNodeRef = React.useRef<null | HTMLElement>(null);
 
-  const focusTrapRef = React.useRef<$Type.Components.FocusTrap.Instance | null>(
-    null
+  const rootNodeRef = React.useRef<HTMLElement | null>(null);
+
+  const handleRootNodeRef = React.useCallback(
+    element => {
+      rootNodeRef.current = element;
+      injectElementToRef(other.refer, element);
+    },
+    [other.refer]
   );
-  const previouslyFocusedElementRef = React.useRef<HTMLElement | null>(null);
-  const prevActiveRef = React.useRef<boolean | null>(null);
-  const prevPausedRef = React.useRef<boolean | null>(null);
-
-  const deactivate = React.useCallback((disableRestoreFocus: boolean) => {
-    focusTrapRef.current && focusTrapRef.current.deactivate();
-    if (
-      !disableRestoreFocus &&
-      previouslyFocusedElementRef.current &&
-      previouslyFocusedElementRef.current.focus
-    ) {
-      previouslyFocusedElementRef.current.focus();
-      previouslyFocusedElementRef.current = null;
-    }
-  }, []);
 
   React.useEffect(() => {
-    if (previouslyFocusedElementRef.current === null) {
-      previouslyFocusedElementRef.current = document.activeElement as HTMLElement;
-    }
-    if (focusTrapRef.current === null) {
-      focusTrapRef.current = CreateFocusTrap(_ref_.current, focusTrapOptions);
-      if (active) focusTrapRef.current.activate();
-      if (paused) focusTrapRef.current.pause();
-    } else {
-      if (prevActiveRef.current && !active) {
-        deactivate(disableRestoreFocus);
-      } else if (!prevActiveRef.current && active) {
-        focusTrapRef.current.activate();
-      }
-
-      if (prevPausedRef.current && !paused) {
-        focusTrapRef.current.unpause();
-      } else if (!prevPausedRef.current && paused) {
-        focusTrapRef.current.pause();
-      }
+    if (!active) {
+      return;
     }
 
-    prevActiveRef.current = active;
-    prevPausedRef.current = paused;
+    ++focusTrapCounter;
+
+    restoreNodeRef.current = document.activeElement as HTMLElement;
+
+    // We might render an empty child.
+    if (
+      !disableAutoFocus &&
+      rootNodeRef.current &&
+      !rootNodeRef.current.contains(document.activeElement)
+    ) {
+      if (!rootNodeRef.current.hasAttribute('tabIndex')) {
+        rootNodeRef.current.setAttribute('tabIndex', '-1');
+      }
+
+      const initialFocusNode = extractElement(initialFocus);
+      if (initialFocusNode && rootNodeRef.current.contains(initialFocusNode)) {
+        initialFocusNode.focus();
+      } else {
+        rootNodeRef.current.focus();
+      }
+    }
+
+    const contain = () => {
+      if (disableEnforceFocus || ignoreNextEnforceFocus.current) {
+        ignoreNextEnforceFocus.current = false;
+        return;
+      }
+
+      if (
+        rootNodeRef.current &&
+        !rootNodeRef.current.contains(document.activeElement)
+      ) {
+        rootNodeRef.current.focus();
+      }
+    };
+
+    const loopFocus = (event: KeyboardEvent) => {
+      // 9 = Tab
+      if (disableEnforceFocus || event.keyCode !== 9) {
+        return;
+      }
+
+      // Make sure the next tab starts from the right place.
+      if (document.activeElement === rootNodeRef.current) {
+        // We need to ignore the next contain as
+        // it will try to move the focus back to the rootNodeRef element.
+        ignoreNextEnforceFocus.current = true;
+        if (event.shiftKey) {
+          endGuradNodeRef.current!.focus();
+        } else {
+          startGuradNodeRef.current!.focus();
+        }
+      }
+    };
+
+    document.addEventListener('focus', contain, true);
+    document.addEventListener('keydown', loopFocus, true);
+
+    // With Edge, Safari and Firefox, no focus related events are fired when the focused area stops being a focused area
+    // e.g. https://bugzilla.mozilla.org/show_bug.cgi?id=559561.
+    //
+    // The whatwg spec defines how the browser should behave but does not explicitly mention any events:
+    // https://html.spec.whatwg.org/multipage/interaction.html#focus-fixup-rule.
+
+    const handle = lazyEvent(contain);
 
     return () => {
-      deactivate(disableRestoreFocus);
-    };
-  }, [active, paused]);
+      handle();
+      document.removeEventListener('focus', contain, true);
+      document.removeEventListener('keydown', loopFocus, true);
 
-  const _style_ = React.useMemo(() => {
-    return {
-      pointerEvents: disablePointerEvents ? 'none' : 'auto',
-    } as const;
-  }, [disablePointerEvents]);
+      // restoreLastFocus()
+      if (!disableRestoreFocus) {
+        if (!restoreNodeRef.current) return;
+        // In IE 11 it is possible for document.activeElement to be null resulting
+        // in restoreNodeRef.current being null.
+        // Not all elements in IE 11 have a focus method.
+        // Once IE 11 support is dropped the focus() call can be unconditional.
+        if (focusTrapCounter > 1) {
+          if (firstRestoreNode === null) {
+            firstRestoreNode = restoreNodeRef.current;
+          }
+        } else {
+          const restoreNode = firstRestoreNode || restoreNodeRef.current;
+          if (restoreNode && restoreNode.focus) {
+            restoreNode.focus();
+          }
+          firstRestoreNode = null;
+        }
+        --focusTrapCounter;
+        restoreNodeRef.current = null;
+      }
+    };
+  }, [disableAutoFocus, disableEnforceFocus, disableRestoreFocus, active]);
 
   return (
-    <BaseElement
-      elementName="div"
-      _style_={_style_}
-      _className_="uc-focusTrap"
-      _refer_={_ref_}
-      {...other}
-    >
-      {children}
-    </BaseElement>
+    <React.Fragment>
+      <div tabIndex={0} ref={startGuradNodeRef} className="startFocusGurad" />
+      <BaseElement {...other} refer={handleRootNodeRef}>
+        {children}
+      </BaseElement>
+      <div tabIndex={0} ref={endGuradNodeRef} className="endFocusGurad" />
+    </React.Fragment>
   );
 };
 

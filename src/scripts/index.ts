@@ -7,6 +7,7 @@ import {
   createComponentConstants,
   getComponentConstants,
 } from './constants';
+import mergeObject from './mergeObject'
 import {
   raf,
   deepMerge,
@@ -20,6 +21,7 @@ import {
   testPassiveEventSupport,
   genUniqueId,
   createOptimizedEvent,
+  lazyEvent,
   toCamelCase,
   fromCamelCase,
   roundNumber,
@@ -96,6 +98,8 @@ export {
   createPageConstants,
   createComponentConstants,
   getComponentConstants,
+  // mergeObject
+  mergeObject,
   // library
   raf,
   deepMerge,
@@ -108,6 +112,7 @@ export {
   testPassiveEventSupport,
   genUniqueId,
   createOptimizedEvent,
+  lazyEvent,
   toCamelCase,
   fromCamelCase,
   roundNumber,

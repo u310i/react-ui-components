@@ -1,11 +1,10 @@
 import React from 'react';
 import $ from './_constants';
-import { injectElementToRef } from 'scripts';
 import { Modal, Slide, Paper } from '..';
 
 const $classNames = $.classNames;
 const $styles = $.styles;
-const $modalContentStyle = $styles.modal.content;
+const $modalContentStyle = $styles.modal.contents;
 const $transitionStyle = $styles.transition;
 const $innerStyle = $styles.inner;
 
@@ -41,9 +40,7 @@ type Props = $Type.ReactUtils.CreateProps<
     open?: boolean;
     anchor?: Anchor;
     TransitionComponent?: React.FC<
-      {
-        direction?: $Type.Components.SlideDirection;
-      } & Omit<$Type.Transition.PropTransitionComponentCommonProps, 'direction'>
+      $Type.Transition.PropTransitionComponentCommonProps
     >;
     transitionProps?: Omit<
       $Type.Transition.PropTransitionComponentCommonProps,
@@ -65,8 +62,6 @@ const Drawer: React.FC<Props> = ({
   innerProps: propInnerProps = {},
   ...other
 }) => {
-  const innerRef = React.useRef<null | HTMLElement>(null);
-
   const direction = getSlideDirections(anchor);
 
   const props = {
@@ -74,31 +69,22 @@ const Drawer: React.FC<Props> = ({
     ...React.useMemo(() => {
       return {
         classNames: [...(other.classNames || []), $classNames.drawer],
-        contentProps: {
-          ...other.contentProps,
+        contentsProps: {
+          ...other.contentsProps,
           style: {
             ...$modalContentStyle.style,
             ...$modalContentStyle[anchor].style,
-            ...(other.contentProps || {}).style,
+            ...(other.contentsProps || {}).style,
           },
           classNames: [
-            ...((other.contentProps || {}).classNames || []),
+            ...((other.contentsProps || {}).classNames || []),
             $classNames.drawerContainer,
           ],
         },
       };
-    }, [other.classNames, other.style, other.contentProps]),
+    }, [other.classNames, other.style, other.contentsProps]),
   };
 
-  const handleTransitionEntering = React.useCallback((node, appearing) => {
-    innerRef.current!.style.boxShadow = null;
-    if (propTransitionProps.onEntering)
-      propTransitionProps.onEntering(node, appearing);
-  }, []);
-  const handleTransitionExited = React.useCallback(node => {
-    innerRef.current!.style.boxShadow = 'none';
-    if (propTransitionProps.onExited) propTransitionProps.onExited(node);
-  }, []);
   const transitionProps = {
     ...propTransitionProps,
     ...React.useMemo(() => {
@@ -111,16 +97,10 @@ const Drawer: React.FC<Props> = ({
           ...(propTransitionProps.classNames || []),
           $classNames.drawerTransition,
         ],
-        onExited: handleTransitionExited,
-        onEntering: handleTransitionEntering,
       };
     }, [propTransitionProps.style, propTransitionProps.classNames]),
   };
 
-  const handleInnerRef = React.useCallback(element => {
-    innerRef.current = element;
-    injectElementToRef(propInnerProps.refer, element);
-  }, []);
   const innerProps = {
     ...propInnerProps,
     ...React.useMemo(() => {
@@ -136,21 +116,20 @@ const Drawer: React.FC<Props> = ({
           ...(propInnerProps.classNames || []),
           $classNames.drawerInner,
         ],
-        refer: handleInnerRef,
       };
     }, [propInnerProps.style, propInnerProps.classNames]),
   };
 
   return (
-    <Modal open={open} closeAfterTransition fallbackFocus={innerRef} {...props}>
+    <Modal open={open} {...props}>
       <TransitionComponent
         in={open}
         appear={true}
+        hideVisibility={false}
         direction={direction}
         {...transitionProps}
       >
         <InnerComponent
-          refer={innerRef}
           elevation={$styles.inner.elevation}
           shape="corner"
           {...innerProps}

@@ -1,30 +1,31 @@
-import { overrideConstant, mergeConstant } from './constantUtils'
+import { mergeObject } from '.'
 
-type Constants = $Type.DeepWiden<$Type.DeepPartial<$Type.Constants.All>>;
+type WidenConstants = $Type.DeepWiden<$Type.DeepPartial<$Type.Constants.All>>;
 
-let globalConstants: Constants = {};
+let globalConstants: WidenConstants = {};
 
-export const createAppConstants = (constants: Constants): void => {
+export const createAppConstants = (constants: WidenConstants): void => {
   globalConstants = constants;
 };
 
 
-let pageConstants: Constants = {};
-export const createPageConstants = (constants: Constants): void => {
-  pageConstants = mergeConstant(constants, globalConstants);
+let pageConstants: WidenConstants = {};
+export const createPageConstants = (constants: WidenConstants): void => {
+  pageConstants = mergeObject(constants, globalConstants, { tree: 'both', overrides: ['style'] }) || {};
 };
 
-const componentConstants: $Type.DeepPartial<$Type.DeepMutable<$Type.Constants.All>> = {}
+type OriginConstants = $Type.DeepPartial<$Type.DeepMutable<$Type.Constants.All>>
+const componentConstants: OriginConstants = {}
 
 export const createComponentConstants = <K extends keyof $Type.Constants.All>(
   type: K,
   constants: $Type.Constants.All[K]
 ): void => {
-  componentConstants[type] = (pageConstants[type] ? (overrideConstant(constants, pageConstants[type]) || {}) : constants) as any
+  componentConstants[type] = (pageConstants[type] ? (mergeObject(pageConstants[type], constants, { tree: 'source', overrides: ['style'] }) || {}) : constants) as OriginConstants[K]
 };
 
-export const getComponentConstants = <K extends keyof $Type.Constants.All, T = $Type.Constants.All[K]>(
+export const getComponentConstants = <K extends keyof $Type.Constants.All>(
   type: K
-): any => {
+): $Type.Constants.All[K] => {
   return (componentConstants[type] as any || {});
 };

@@ -101,7 +101,7 @@ const App: React.FC<{}> = ({}) => {
         style={{ margin: '0.5em' }}
         type="fill"
         toFill
-        color="rgb(255, 69, 0)"
+        color="rgb(3, 123, 252)"
         onClick={handler_drawer}
       >
         Button
@@ -120,7 +120,7 @@ const App: React.FC<{}> = ({}) => {
         color="rgb(255, 69, 0)"
         onClick={handler_drawer}
       />
-      <SwipeableDrawer
+      {/* <SwipeableDrawer
         open={state_drawer}
         onOpen={onOpen_drawer}
         onClose={onClose_drawer}
@@ -158,10 +158,41 @@ const App: React.FC<{}> = ({}) => {
           bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbb
           bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bottom
         </div>
-      </SwipeableDrawer>
+      </SwipeableDrawer> */}
 
-      <ButtonCoordinator
-        contents={[{ icon: 'sys-envelope' }, 'Dialog1']}
+      <BaseElement
+        elementName="div"
+        style={{
+          height: '3000px',
+          backgroundColor: '#e6e6fa',
+          position: 'relative',
+        }}
+        id="context"
+      >
+        <Sticky
+          pushing={false}
+          offset={100}
+          bottomOffset={100}
+          context="#context"
+        >
+          <div
+            style={{
+              width: '100%',
+              height: '100px',
+              backgroundColor: 'green',
+            }}
+          >
+            test
+          </div>
+        </Sticky>
+      </BaseElement>
+
+      <BaseElement
+        elementName="div"
+        style={{ height: '1000px', backgroundColor: '#ff00fa' }}
+      />
+      {/* <ButtonCoordinator
+        contents={[{ icon: 'sys-envelope' }, 'Drawer']}
         style={{ margin: '0.5em' }}
         type="fill"
         toFill
@@ -171,11 +202,13 @@ const App: React.FC<{}> = ({}) => {
         open={state1}
         onEscapeKeyDown={onClose1}
         onOutsideClick={onClose1}
+        anchor="right"
         // enableScrollBody={false}
         // TransitionComponent={Fade}
         // fullScreen={false}
         className={'AAA'}
-        keepMount={false}
+        keepMount={true}
+        transitionProps={{ duration: 300 }}
         id={'test'}
       >
         <a href="#">Another focusable thing</a>
@@ -184,7 +217,10 @@ const App: React.FC<{}> = ({}) => {
           top bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba
           bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb
           bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
-          aaaaaaaaaaaaaaaaaaaaaaaaa bottom
+          aaaaaaaaaaaaaaaaaaaaaaaaa bottom top bbbbbbbbbbbbbbbbbbbb
+          bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba
+          bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
+          bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bottom
         </div>
         <ButtonCoordinator
           contents={[{ icon: 'sys-envelope' }, 'Dialog2']}
@@ -195,7 +231,7 @@ const App: React.FC<{}> = ({}) => {
         />
       </Drawer>
       <ButtonCoordinator
-        contents={[{ icon: 'sys-envelope' }, 'Dialog2']}
+        contents={[{ icon: 'sys-envelope' }, 'Dialog1']}
         style={{ margin: '0.5em' }}
         type="fill"
         toFill
@@ -206,17 +242,21 @@ const App: React.FC<{}> = ({}) => {
         open={state2}
         onEscapeKeyDown={onClose2}
         onOutsideClick={onClose2}
-        enableScrollBody={false}
+        scrollBody={false}
+        fullScreen={false}
         TransitionComponent={Slide}
         keepMount={true}
-        fullScreen={false}
+        transitionProps={{ duration: 300, direction: 'left' }}
         classNames={['BBB']}
       >
         <a href="#">Another focusable thing</a>
         <input type="text" />
         <div>
           top aabbbbbb aaabbba aaabbba aaabbbaa aabbb aabbb aabbba abbbbbbbbbb
-          aaaaaaaaaaaaaaaaaaaaaaaaa bottom
+          aaaaaaaaaaaaaaaaaaaaaaaaa bottom top aabbbbbb aaabbba aaabbba aaabbbaa
+          aabbb aabbb aabbba abbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bottom top
+          aabbbbbb aaabbba aaabbba aaabbbaa aabbb aabbb aabbba abbbbbbbbbb
+          aaaaaaaaaaaaaaaaaaaaaaaaa bottom top aabbbbbb aaabbba aaabbba aaabbbaa
         </div>
         <ButtonCoordinator
           contents={[{ icon: 'sys-envelope' }, 'Dialog1']}
@@ -255,12 +295,12 @@ const App: React.FC<{}> = ({}) => {
           }
         }
       >
-        <Collapse
+        <Slide
           in={state_t}
           appear={true}
-          // direction="left"
-          duration={1000}
-          testId={'slide'}
+          direction="down"
+          duration={500}
+          testid={'slide'}
         >
           <Paper
             elevation={24}
@@ -284,13 +324,9 @@ const App: React.FC<{}> = ({}) => {
             aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
             aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
           </Paper>
-        </Collapse>
-      </BaseElement>
+        </Slide>
+      </BaseElement> */}
 
-      <BaseElement
-        elementName="div"
-        style={{ height: '100px', backgroundColor: '#e6e6fa' }}
-      />
       {/* <List width="400px" space={1} levelStyle={[ { paddingLeft: '0.5em' }, { paddingLeft: '2.5em' } ]}>
 				<List.Group title="root-1" style={{ backgroundColor: '#ee82ee' }}>
 					<List.Group title="group-1" style={{ backgroundColor: '#00fa9a' }}>
