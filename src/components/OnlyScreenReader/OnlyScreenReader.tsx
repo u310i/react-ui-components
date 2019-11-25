@@ -1,16 +1,29 @@
-import React from 'react';
-import $ from './_constants';
-import { BaseElement } from '..';
+import * as React from "react";
+import $ from "./_constants";
+import { BaseElement } from "..";
 
-type Props = $Type.ReactUtils.CreateProps<{}, typeof BaseElement>;
+type ComponentProps = $Type.Components.BaseElement._GeneralProps;
+
+type Props = ComponentProps;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace OnlyScreenReader {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
 
 const OnlyScreenReader: React.FC<Props> = props => {
   return (
     <BaseElement
       elementName="a"
-      _className_={$.classNames.onlyScreenReader}
-      _style_={$.styles.style}
       {...props}
+      _className_={$.classNames.name}
+      _style_={$.styles.style}
     />
   );
 };

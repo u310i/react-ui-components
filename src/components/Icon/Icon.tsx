@@ -1,15 +1,13 @@
-import * as React from 'react';
-import $ from './_constants';
+import * as React from "react";
+import $ from "./_constants";
 import {
   roundNumber,
   testCssNumberRegExp,
   getFontSize,
-  keyframes,
-} from 'scripts';
-import iconMap from 'icons';
-import { SVG } from '..';
-
-const $styles = $.styles;
+  keyframes
+} from "scripts";
+import iconMap from "icons";
+import { SVG } from "..";
 
 const getRatio = (viewBox: $Type.Icon.ViewBox): number | null => {
   if (!viewBox) return null;
@@ -32,33 +30,46 @@ const getIcon = (name: string | null): IconData | null => {
   if (!ratio) return null;
   return {
     ...icon,
-    ratio: ratio,
+    ratio: ratio
   };
 };
 
 type Icon = string | string[] | $Type.Icon.BaseIconDefinition;
 
-type Props = $Type.ReactUtils.CreateProps<
-  {
-    icon: Icon;
-    suffix?: string;
-    ariaHidden?: boolean;
-    symbol?: boolean;
-    use?: boolean;
-    currentColor?: string;
-    size?: $Type.Utils.FontSize;
-    fixedWidth?: string | boolean;
-    pull?: 'left' | 'right';
-    border?: boolean;
-    rotation?: number;
-    flip?: 'horizontal' | 'vertical' | 'both';
-    spin?: string | boolean;
-    pulse?: string | boolean;
-    marginLeft?: string | boolean;
-    marginRight?: string | boolean;
-  },
-  $Type.Components.BaseElementSVGProps
+type ComponentProps = {
+  icon: Icon;
+  suffix?: string;
+  ariaHidden?: boolean;
+  symbol?: boolean;
+  use?: boolean;
+  currentColor?: string;
+  size?: $Type.Utils.FontSize;
+  fixedWidth?: string | boolean;
+  pull?: "left" | "right";
+  border?: boolean;
+  rotation?: number;
+  flip?: "horizontal" | "vertical" | "both";
+  spin?: string | boolean;
+  pulse?: string | boolean;
+  marginLeft?: string | boolean;
+  marginRight?: string | boolean;
+};
+
+type Props = $Type.MergeObject<
+  ComponentProps,
+  $Type.Components.BaseElement._SVGProps
 >;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace Icon {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
 
 const Icon: React.FC<Props> = ({
   icon,
@@ -85,37 +96,37 @@ const Icon: React.FC<Props> = ({
   const [iconData, props] = React.useMemo(() => {
     let iconData: IconData | null;
     let name: string;
-    if (typeof icon === 'string' || Array.isArray(icon)) {
-      if (typeof icon === 'string') {
+    if (typeof icon === "string" || Array.isArray(icon)) {
+      if (typeof icon === "string") {
         name = icon;
       } else {
-        name = icon.join('-');
+        name = icon.join("-");
       }
 
       iconData = getIcon(name);
-    } else if (typeof icon.name === 'string' && Array.isArray(icon.name)) {
-      if (typeof icon.name === 'string') {
+    } else if (typeof icon.name === "string" && Array.isArray(icon.name)) {
+      if (typeof icon.name === "string") {
         name = icon.name;
       } else {
-        name = icon.name.join('-');
+        name = icon.name.join("-");
       }
 
       if (icon.viewBox && (icon.path || icon.tag)) {
         const ratio = getRatio(icon.viewBox);
         iconData = ratio
           ? {
-              type: 'inline',
+              type: "inline",
               viewBox: icon.viewBox,
               path: icon.path,
               tag: icon.tag,
-              ratio: ratio,
+              ratio: ratio
             }
           : null;
       } else {
         iconData = getIcon(name);
       }
     } else {
-      name = '';
+      name = "";
       iconData = null;
     }
 
@@ -123,7 +134,7 @@ const Icon: React.FC<Props> = ({
 
     const existPath = !!iconData.path;
 
-    const baseName = `${$styles.prefix}-svg-i-${iconData.type}`;
+    const baseName = `${$.styles.prefix}-svg-i-${iconData.type}`;
 
     let fill: string | undefined,
       className: string,
@@ -135,9 +146,9 @@ const Icon: React.FC<Props> = ({
       path: $Type.Icon.Path | undefined,
       tag: string | undefined;
 
-    if (currentColor || existPath) fill = $styles.currentColor;
+    if (currentColor || existPath) fill = $.styles.currentColor;
 
-    if (suffix && typeof suffix === 'string') name = `${name}-${suffix}`;
+    if (suffix && typeof suffix === "string") name = `${name}-${suffix}`;
 
     if (use) {
       className = `${baseName}-use-${name}`;
@@ -156,21 +167,21 @@ const Icon: React.FC<Props> = ({
       }
     }
 
-    const props: $Type.Components.SVGProps = {
+    const props: $Type.Components.SVG._Props = {
       ...other,
       fill: other.fill || fill,
       classNames: [...(other.classNames || []), className],
       ids: [...(other.ids || []), ...(id ? [id] : [])],
       arias: {
-        'aria-hidden': ariaHidden,
-        ...other.arias,
+        "aria-hidden": ariaHidden,
+        ...other.arias
       },
       use,
       symbol,
       xlinkHref,
       viewBox,
       path,
-      tag,
+      tag
     };
 
     return [iconData as IconData, props];
@@ -183,20 +194,20 @@ const Icon: React.FC<Props> = ({
 
     if (marginLeft)
       style.marginLeft =
-        typeof marginLeft === 'string' ? marginLeft : $styles.marginLeft;
+        typeof marginLeft === "string" ? marginLeft : $.styles.marginLeft;
     if (marginRight)
       style.marginRight =
-        typeof marginRight === 'string' ? marginRight : $styles.marginRight;
+        typeof marginRight === "string" ? marginRight : $.styles.marginRight;
 
     if (size) style.fontSize = getFontSize(size);
 
-    const height = border ? $styles.heightOnBorder : $styles.height;
-    const widthRatioOnFixed = $styles.widthRatioOnFixed;
-    const precision = $styles.precision;
+    const height = border ? $.styles.heightOnBorder : $.styles.height;
+    const widthRatioOnFixed = $.styles.widthRatioOnFixed;
+    const precision = $.styles.precision;
 
     if (fixedWidth && !border) {
       style.width =
-        typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
+        typeof fixedWidth === "string" && testCssNumberRegExp.test(fixedWidth)
           ? fixedWidth
           : `${roundNumber(height * widthRatioOnFixed, precision)}em`;
     } else {
@@ -207,11 +218,11 @@ const Icon: React.FC<Props> = ({
       style = {
         ...style,
         height: `${height}em`,
-        ...$styles.border,
+        ...$.styles.border
       };
       if (fixedWidth) {
         style.width =
-          typeof fixedWidth === 'string' && testCssNumberRegExp.test(fixedWidth)
+          typeof fixedWidth === "string" && testCssNumberRegExp.test(fixedWidth)
             ? fixedWidth
             : `${roundNumber(height * widthRatioOnFixed, precision)}em`;
       } else {
@@ -219,15 +230,15 @@ const Icon: React.FC<Props> = ({
       }
     }
 
-    if (pull === 'left') {
+    if (pull === "left") {
       style = {
         ...style,
-        ...$styles.pullLeft,
+        ...$.styles.pullLeft
       };
-    } else if (pull === 'right') {
+    } else if (pull === "right") {
       style = {
         ...style,
-        ...$styles.pullRight,
+        ...$.styles.pullRight
       };
     }
 
@@ -240,30 +251,30 @@ const Icon: React.FC<Props> = ({
       }
       if (flip) {
         let scale;
-        flip === 'horizontal' && (scale = $styles.flipHorizontal);
-        flip === 'vertical' && (scale = $styles.flipVertical);
-        flip === 'both' && (scale = $styles.flipBoth);
+        flip === "horizontal" && (scale = $.styles.flipHorizontal);
+        flip === "vertical" && (scale = $.styles.flipVertical);
+        flip === "both" && (scale = $.styles.flipBoth);
         transformList.push(scale);
       }
 
-      style['transform'] = transformList.join(' ');
+      style["transform"] = transformList.join(" ");
     }
 
     if (spin || pulse) {
       const rotateAnimation = keyframes({
-        from: $styles.roll.from,
-        to: $styles.roll.to,
+        from: $.styles.roll.from,
+        to: $.styles.roll.to
       });
       spin
         ? (style.animation = `${rotateAnimation} ${
-            typeof spin === 'string' ? spin : $styles.roll.spin
+            typeof spin === "string" ? spin : $.styles.roll.spin
           }`)
         : (style.animation = `${rotateAnimation} ${
-            typeof pulse === 'string' ? pulse : $styles.roll.pulse
+            typeof pulse === "string" ? pulse : $.styles.roll.pulse
           }`);
     }
 
-    return { ...$styles.style, ...style, ...propStyle };
+    return { ...$.styles.style, ...style, ...propStyle };
   }, [
     icon,
     currentColor,
@@ -277,7 +288,7 @@ const Icon: React.FC<Props> = ({
     pulse,
     marginLeft,
     marginRight,
-    propStyle,
+    propStyle
   ]);
 
   return <SVG {...props} style={style} />;

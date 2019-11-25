@@ -1,31 +1,37 @@
-import React from 'react';
-import $ from './_constants';
+import React from "react";
+import $ from "./_constants";
 import {
   genTransitionProperty,
   genDurations,
   genEasings,
   setTransition,
-  setTransform,
-} from 'scripts';
-import { CSSTransition, BaseElement } from '..';
+  setTransform
+} from "scripts";
+import { CSSTransition, BaseElement } from "..";
 
-const $classNames = $.classNames;
-const $styles = $.styles;
+type ComponentProps = $Type.Transition.CommonProps;
 
-type Props = $Type.ReactUtils.CreateProps<
-  $Type.Transition.CommonProps,
-  typeof BaseElement,
-  Omit<
-    $Type.Components.CSSTransitionProps,
-    $Type.Transition.CSSTransitionIgnoreProps
-  >
+type Props = $Type.MergeObject<
+  ComponentProps,
+  $Type.Components.BaseElement._GeneralProps
 >;
 
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace Zoom {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
+
 const Zoom: React.FC<Props> = ({
-  in: inProp,
   children,
-  duration = $styles.duration,
-  easing = $styles.easing,
+  in: inProp,
+  duration = $.styles.duration,
+  easing = $.styles.easing,
   hideVisibility = true,
   disableEnter,
   appear = true,
@@ -45,19 +51,19 @@ const Zoom: React.FC<Props> = ({
     const node = ref.current;
     if (!node) return;
     if (!appear && inProp) {
-      setTransform(node, $styles.enteredScale);
+      setTransform(node, $.styles.enteredScale);
     } else {
       if (!(appear && inProp)) {
-        setTransform(node, $styles.exitedScale);
+        setTransform(node, $.styles.exitedScale);
       }
-      if (hideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = "hidden";
     }
   }, []);
 
   const handleEnter = React.useCallback(
     (node: HTMLElement, appearing: boolean) => {
       if (!disableEnter) {
-        setTransform(node, $styles.exitedScale);
+        setTransform(node, $.styles.exitedScale);
         if (onEnter) onEnter(node, appearing);
       }
     },
@@ -73,14 +79,14 @@ const Zoom: React.FC<Props> = ({
         node,
         genTransitionProperty([
           {
-            property: 'transform',
+            property: "transform",
             duration,
-            easing,
-          },
+            easing
+          }
         ])
       );
-      setTransform(node, $styles.enteredScale);
-      if (hideVisibility) node.style.visibility = '';
+      setTransform(node, $.styles.enteredScale);
+      if (hideVisibility) node.style.visibility = "";
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering, durations, easings]
@@ -92,13 +98,13 @@ const Zoom: React.FC<Props> = ({
         node,
         genTransitionProperty([
           {
-            property: 'transform',
+            property: "transform",
             duration: durations.exit,
-            easing: easings.exit,
-          },
+            easing: easings.exit
+          }
         ])
       );
-      setTransform(node, $styles.exitedScale);
+      setTransform(node, $.styles.exitedScale);
       if (onExiting) onExiting(node);
     },
     [onExiting, durations, easings]
@@ -107,7 +113,7 @@ const Zoom: React.FC<Props> = ({
   const handleExited = React.useCallback(
     (node: HTMLElement) => {
       setTransition(node, null);
-      if (hideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = "hidden";
       if (onExited) onExited(node);
     },
     [onExited]
@@ -115,27 +121,27 @@ const Zoom: React.FC<Props> = ({
 
   return (
     <CSSTransition
+      {...other}
       disableClassing={true}
       in={inProp}
-      timeout={durations}
       appear={appear}
+      timeout={durations}
       onEnter={handleEnter}
       onEntering={handleEntering}
       onExiting={handleExiting}
       onExited={handleExited}
-      {...other}
     >
       {(
-        state: $Type.Components.CSSTransitionChildStatus,
-        childProps: $Type.Components.BaseElementProps
+        _state: $Type.Components.CSSTransition._ChildStatus,
+        childProps: $Type.Components.BaseElement._Props
       ) => {
         return (
           <BaseElement
             elementName="div"
-            _style_={$styles.style}
-            _className_={$classNames.zoom}
-            _refer_={ref}
             {...childProps}
+            _style_={$.styles.style}
+            _className_={$.classNames.name}
+            _refer_={ref}
           >
             {children}
           </BaseElement>

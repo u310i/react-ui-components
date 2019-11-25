@@ -1,25 +1,37 @@
-import React from 'react';
-import { extractElement, clickedScrollbar } from 'scripts';
-import { EventListener } from '..';
+import * as React from "react";
+import { extractElement, clickedScrollbar } from "scripts";
+import { EventListener } from "..";
 
-type Props = $Type.ReactUtils.CreateProps<{
+type ComponentProps = {
   target: $Type.ReactUtils.IncludeNode;
   action: (evt: MouseEvent) => void;
   options?: AddEventListenerOptions;
   scope?: $Type.ReactUtils.IncludeNode;
   includeScrollbar?: boolean;
   ignoreTarget?: boolean;
-}>;
+};
 
-const ClickOutside: $Type.ReactUtils.FunctionComponentWithoutChildren<
-  Props
-> = ({
+type Props = ComponentProps;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace ClickOutside {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
+
+const ClickOutside: React.FC<Props> = ({
+  children,
   target,
   action,
   options,
   scope = document.body,
   includeScrollbar,
-  ignoreTarget,
+  ignoreTarget
 }) => {
   if (!action) return null;
   const targetNodeRef = React.useRef<null | Node>(null);
@@ -45,10 +57,12 @@ const ClickOutside: $Type.ReactUtils.FunctionComponentWithoutChildren<
   return (
     <EventListener
       target={scope}
-      type={'click'}
+      type={"click"}
       listener={listener}
       options={options}
-    />
+    >
+      {children}
+    </EventListener>
   );
 };
 

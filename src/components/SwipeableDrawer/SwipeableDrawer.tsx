@@ -1,7 +1,6 @@
-import React from 'react';
-import $ from './_constants';
+import * as React from "react";
+import $ from "./_constants";
 import {
-  getComponentConstants,
   injectElementToRef,
   setTransition,
   setTransform,
@@ -9,15 +8,12 @@ import {
   genDurations,
   genEasings,
   useForceUpdate,
-  addEventListener,
-} from 'scripts';
-import { EventListener } from '..';
-import { isHorizontal } from '../Drawer/Drawer';
-import SwipeArea from './SwipeArea';
-import { Drawer } from '..';
-
-const $classNames = $.classNames;
-const $styles = $.styles;
+  addEventListener
+} from "scripts";
+import { EventListener } from "..";
+import { isHorizontal } from "../Drawer/Drawer";
+import SwipeArea from "./SwipeArea";
+import { Drawer } from "..";
 
 // This value is closed to what browsers are using internally to
 // trigger a native scroll.
@@ -37,19 +33,19 @@ type SwipeInstance = {
 let nodeThatClaimedTheSwipe: null | SwipeInstance = null;
 
 const calculateCurrentX = (
-  anchor: $Type.Components.DrawerAnchor,
+  anchor: $Type.Components.Drawer._Anchor,
   touches: TouchList
 ): number => {
-  return anchor === 'right'
+  return anchor === "right"
     ? document.body.offsetWidth - touches[0].pageX
     : touches[0].pageX;
 };
 
 const calculateCurrentY = (
-  anchor: $Type.Components.DrawerAnchor,
+  anchor: $Type.Components.Drawer._Anchor,
   touches: TouchList
 ): number => {
-  return anchor === 'bottom'
+  return anchor === "bottom"
     ? window.innerHeight - touches[0].clientY
     : touches[0].clientY;
 };
@@ -82,7 +78,7 @@ const getTranslate = (
 
 const touchMoveListenerOption = { passive: false };
 const disableSwipeToOpenDefault =
-  typeof navigator !== 'undefined' &&
+  typeof navigator !== "undefined" &&
   /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 const preventDefault = (e: Event) => {
@@ -91,32 +87,44 @@ const preventDefault = (e: Event) => {
   }
 };
 
-type Props = $Type.ReactUtils.CreateProps<
-  {
-    onOpen: () => void;
-    onClose: () => void;
-    hysteresis?: number;
-    minFlingVelocity?: number;
-    disableBackdropTransition?: boolean;
-    disableDiscovery?: boolean;
-    disableSwipeToOpen?: boolean;
-    hideBackdrop?: boolean;
-    swipeAreaProps?: Omit<
-      $Type.ReactUtils.CreatePropComponentProps<typeof SwipeArea>,
-      'anchor' | 'width'
-    >;
-    swipeAreaWidth?: number;
-  },
-  Omit<
-    $Type.ReactUtils.CreatePropComponentProps<typeof Drawer>,
-    'TransitionComponent' | 'keepMount'
-  >
->;
+type ComponentProps = {
+  onOpen: () => void;
+  onClose: () => void;
+  hysteresis?: number;
+  minFlingVelocity?: number;
+  disableBackdropTransition?: boolean;
+  disableDiscovery?: boolean;
+  disableSwipeToOpen?: boolean;
+  hideBackdrop?: boolean;
+  swipeAreaProps?: $Type.Components.SwipeArea._Props;
+  swipeAreaWidth?: number;
+};
+
+type DrawerSomeProps = {
+  open?: boolean;
+  anchor?: $Type.Components.Drawer._Anchor;
+  transitionProps?: $Type.Transition.AllProps;
+};
+
+// "Type instantiation is excessively deep and possibly infinite.ts(2589)"
+// type Props = $Type.MergeObject<ComponentProps, $Type.Components.Drawer._Props>;
+type Props = ComponentProps & DrawerSomeProps & $Type.AnyObject;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace SwipeableDrawer {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
 
 const SwipeableDrawer: React.FC<Props> = ({
   children,
   open = false,
-  anchor = 'left',
+  anchor = "left",
   onOpen,
   onClose,
   hysteresis = 0.55,
@@ -137,7 +145,7 @@ const SwipeableDrawer: React.FC<Props> = ({
   const drawerNodeRef = React.useRef<null | HTMLElement>(null);
 
   const swipeInstanceRef = React.useRef<SwipeInstance>({
-    isSwiping: null,
+    isSwiping: null
   });
 
   const touchDetected = React.useRef<boolean>(false);
@@ -154,8 +162,8 @@ const SwipeableDrawer: React.FC<Props> = ({
 
   const [durations, easings] = React.useMemo(() => {
     return [
-      genDurations(propTransitionProps.duration || $styles.duration),
-      genEasings(propTransitionProps.easing || $styles.easing),
+      genDurations(propTransitionProps.duration || $.styles.duration),
+      genEasings(propTransitionProps.easing || $.styles.easing)
     ];
   }, [propTransitionProps.duration, propTransitionProps.easing]);
 
@@ -178,14 +186,14 @@ const SwipeableDrawer: React.FC<Props> = ({
     (
       translate: number,
       options: {
-        mode?: 'enter' | 'exit' | null;
+        mode?: "enter" | "exit" | null;
         changeTransition?: boolean;
       } = {}
     ): void => {
       if (!transitionNodeRef.current) return;
       const { mode = null, changeTransition = true } = options;
       const translateMultiplier =
-        ['right', 'bottom'].indexOf(anchor) !== -1 ? 1 : -1;
+        ["right", "bottom"].indexOf(anchor) !== -1 ? 1 : -1;
       const horizontalSwipe = isHorizontal(anchor);
 
       const transform = horizontalSwipe
@@ -193,15 +201,15 @@ const SwipeableDrawer: React.FC<Props> = ({
         : `translateY(${translateMultiplier * translate}px)`;
       setTransform(transitionNodeRef.current, transform);
 
-      let transition = '';
+      let transition = "";
 
       if (mode) {
         transition = genTransitionProperty([
           {
-            property: 'all',
+            property: "all",
             duration: durations[mode],
-            easing: easings[mode],
-          },
+            easing: easings[mode]
+          }
         ]);
       }
 
@@ -266,16 +274,16 @@ const SwipeableDrawer: React.FC<Props> = ({
       swipeInstanceRef.current.startY = currentY;
       // setMaybeSwiping(true);
       if (!openedRef.current) {
-        if (drawerNodeRef.current) drawerNodeRef.current.style.visibility = '';
+        if (drawerNodeRef.current) drawerNodeRef.current.style.visibility = "";
         if (backdropNodeRef.current)
-          backdropNodeRef.current.style.visibility = '';
+          backdropNodeRef.current.style.visibility = "";
 
         // The ref may be null when a parent component updates while swiping.
         setPosition(
           getMaxTranslate(horizontalSwipe, transitionNodeRef.current) +
             (disableDiscovery ? 20 : -swipeAreaWidth),
           {
-            mode: 'enter',
+            mode: "enter"
           }
         );
       }
@@ -303,7 +311,7 @@ const SwipeableDrawer: React.FC<Props> = ({
         if (!openedRef.current) {
           removePreventDefaultRef.current = addEventListener(
             document,
-            'touchmove',
+            "touchmove",
             preventDefault,
             { passive: false }
           );
@@ -398,8 +406,8 @@ const SwipeableDrawer: React.FC<Props> = ({
         } else {
           swipeInstanceRef.current.isSwiping = definitelySwiping;
 
-          transitionNodeRef.current.style.willChange = 'transform';
-          backdropNodeRef.current!.style.willChange = 'opacity';
+          transitionNodeRef.current.style.willChange = "transform";
+          backdropNodeRef.current!.style.willChange = "opacity";
 
           // Shift the starting point.
           swipeInstanceRef.current.startX = currentX;
@@ -481,20 +489,20 @@ const SwipeableDrawer: React.FC<Props> = ({
     ...React.useMemo(() => {
       return {
         refer: handleDrawerNodeRef,
-        classNames: [$classNames.swipeableDrawer, ...(other.classNames || [])],
+        classNames: [$.classNames.name, ...(other.classNames || [])],
         backdropProps: {
           ...other.backdropProps,
           refer: handleBackdropNodeRef,
-          disableEnter: true,
-        },
+          disableEnter: true
+        }
       };
-    }, [other.classNames, other.backdropProps]),
+    }, [other.classNames, other.backdropProps])
   };
 
   const handleTransitionEnd = React.useCallback(() => {
     if (transitionNodeRef.current)
-      transitionNodeRef.current.style.willChange = '';
-    if (backdropNodeRef.current) backdropNodeRef.current.style.willChange = '';
+      transitionNodeRef.current.style.willChange = "";
+    if (backdropNodeRef.current) backdropNodeRef.current.style.willChange = "";
     if (removePreventDefaultRef.current) {
       removePreventDefaultRef.current();
       removePreventDefaultRef.current = null;
@@ -514,8 +522,8 @@ const SwipeableDrawer: React.FC<Props> = ({
       return {
         refer: handleTransitionNodeRef,
         classNames: [
-          $.classNames.swipeableDrawerTransition,
-          ...(propTransitionProps.classNames || []),
+          $.classNames.nameTransition,
+          ...(propTransitionProps.classNames || [])
         ],
         onEntered: (node: HTMLElement, appearing: boolean) => {
           handleTransitionEnd();
@@ -526,13 +534,13 @@ const SwipeableDrawer: React.FC<Props> = ({
           handleTransitionEnd();
           propTransitionProps.onExited && propTransitionProps.onExited(node);
         },
-        disableEnter: true,
+        disableEnter: true
       };
     }, [
       propTransitionProps.classNames,
       propTransitionProps.onEntered,
-      propTransitionProps.onExited,
-    ]),
+      propTransitionProps.onExited
+    ])
   };
 
   const handleSwipeAreaNodeRef = React.useCallback(
@@ -562,10 +570,10 @@ const SwipeableDrawer: React.FC<Props> = ({
         listener={handleBodyTouchEnd}
       />
       <Drawer
-        open={forceSwitchRef.current === null ? open : forceSwitchRef.current}
-        transitionProps={transitionProps}
-        anchor={anchor}
         {...props}
+        open={forceSwitchRef.current === null ? open : forceSwitchRef.current}
+        anchor={anchor}
+        transitionProps={transitionProps}
         keepMount={true}
         TransitionComponent={undefined}
       >

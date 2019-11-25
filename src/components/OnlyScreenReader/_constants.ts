@@ -6,7 +6,7 @@ const name = 'onlyScreenReader';
 export const constants = {
   name: name,
   classNames: {
-    onlyScreenReader: `${$.prefix}${name}`,
+    name: `${$.prefix}${name}`,
   },
   styles: {
     style: {

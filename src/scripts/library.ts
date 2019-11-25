@@ -19,7 +19,7 @@ const deepMerge: DeepMerge = (target, source, options) => {
 };
 
 const deepMergeOverrideArray: DeepMerge = (target, source) => {
-  return deepMerge(target, source, { arrayMerge: (x, y, options) => y });
+  return deepMerge(target, source, { arrayMerge: (_x, y, _options) => y });
 };
 
 const keyframes = emotionKeyframes;

@@ -1,11 +1,10 @@
-import * as React from 'react';
-import './_constants';
+import * as React from "react";
+import "./_constants";
 // import {} from 'scripts';
 
 import {
   BaseElement,
   Button,
-  ButtonCoordinator,
   // List,
   Icon,
   Fade,
@@ -19,8 +18,8 @@ import {
   Backdrop,
   Dialog,
   Drawer,
-  SwipeableDrawer,
-} from 'components';
+  SwipeableDrawer
+} from "components";
 // import { FocusOn } from 'react-focus-on';
 
 let index = 0;
@@ -59,33 +58,33 @@ const App: React.FC<{}> = ({}) => {
   }, []);
   const appBarProps = {
     style: {
-      backgroundColor: '#2f4f4f',
+      backgroundColor: "#2f4f4f"
     },
-    height: '5rem',
-    mode: 'absoluteToFixed',
-    actionMode: 'scrollDown',
+    height: "5rem",
+    mode: "absoluteToFixed",
+    actionMode: "scrollDown",
     action: {
-      timingFunction: 'ease-out',
+      timingFunction: "ease-out",
       duration: 200,
       scrollDown: {
-        preset: 'hide',
+        preset: "hide",
         beforeStyle: {},
-        afterStyle: {},
+        afterStyle: {}
       },
       scrolling: {
         beforeStyle: {
-          opacity: 1,
+          opacity: 1
         },
         afterStyle: {
           // height: '3rem',
           opacity: 0.3,
-          backgroundColor: '#ff0000',
-        },
-      },
-    },
+          backgroundColor: "#ff0000"
+        }
+      }
+    }
   };
   index += 1;
-  console.log('-----------------------------' + index);
+  console.log("-----------------------------" + index);
 
   // React.useEffect(() => {
   // 	const fn = (event) => console.log(event.target);
@@ -96,30 +95,19 @@ const App: React.FC<{}> = ({}) => {
   // });
 
   return (
-    <BaseElement elementName="div" style={{ backgroundColor: '#fff' }}>
-      <Button
-        style={{ margin: '0.5em' }}
-        type="fill"
-        toFill
-        color="rgb(3, 123, 252)"
-        onClick={handler_drawer}
-      >
+    <BaseElement elementName="div" style={{ backgroundColor: "#fff" }}>
+      <Button style={{ margin: "0.5em" }} onClick={handler_drawer}>
         Button
       </Button>
       {/* {state ? <Backdrop open={state} /> : null} */}
       <BaseElement
         elementName="div"
-        style={{ height: '1000px', backgroundColor: '#e6e6fa' }}
+        style={{ height: "1000px", backgroundColor: "#e6e6fa" }}
       />
 
-      <ButtonCoordinator
-        contents={[{ icon: 'sys-envelope' }, 'Drawer']}
-        style={{ margin: '0.5em' }}
-        type="fill"
-        toFill
-        color="rgb(255, 69, 0)"
-        onClick={handler_drawer}
-      />
+      <Button style={{ margin: "0.5em" }} onClick={handler_drawer}>
+        Button
+      </Button>
       {/* <SwipeableDrawer
         open={state_drawer}
         onOpen={onOpen_drawer}
@@ -163,9 +151,9 @@ const App: React.FC<{}> = ({}) => {
       <BaseElement
         elementName="div"
         style={{
-          height: '3000px',
-          backgroundColor: '#e6e6fa',
-          position: 'relative',
+          height: "3000px",
+          backgroundColor: "#e6e6fa",
+          position: "relative"
         }}
         id="context"
       >
@@ -177,9 +165,9 @@ const App: React.FC<{}> = ({}) => {
         >
           <div
             style={{
-              width: '100%',
-              height: '100px',
-              backgroundColor: 'green',
+              width: "100%",
+              height: "100px",
+              backgroundColor: "green"
             }}
           >
             test
@@ -189,7 +177,7 @@ const App: React.FC<{}> = ({}) => {
 
       <BaseElement
         elementName="div"
-        style={{ height: '1000px', backgroundColor: '#ff00fa' }}
+        style={{ height: "1000px", backgroundColor: "#ff00fa" }}
       />
       {/* <ButtonCoordinator
         contents={[{ icon: 'sys-envelope' }, 'Drawer']}

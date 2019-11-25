@@ -2,8 +2,8 @@ import * as React from 'react';
 import $ from './_constants';
 import { BaseElement } from '..';
 
-const $styles = $.styles;
-const $classNames = $.classNames
+const $.styles = $.styles;
+const $.classNames = $.classNames
 const $selectors = $.selectors;
 
 const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
@@ -47,7 +47,7 @@ const addLeftSpace = (children, space = 1, levelStyle = [], level) => {
 
 const List = ({
   children,
-  width = $styles.list.width,
+  width = $.styles.list.width,
   space,
   levelStyle,
   ...other
@@ -60,7 +60,7 @@ const List = ({
   }, [width, children, space, levelStyle]);
 
   return (
-    <BaseElement _style_={_style_} _className_={$classNames.list} {...other}>
+    <BaseElement _style_={_style_} _className_={$.classNames.list} {...other}>
       {children}
     </BaseElement>
   );
@@ -77,7 +77,7 @@ const ListGroup = ({
   const titleComponent = React.useMemo(() => {
     if (title) {
       if (typeof title === 'string') {
-        const titleStyle = $styles.group.title;
+        const titleStyle = $.styles.group.title;
         return (
           <BaseElement style={{ ...titleStyle, ...propTitleStyle }}>
             <BaseElement>{title}</BaseElement>
@@ -90,7 +90,7 @@ const ListGroup = ({
   }, [title]);
 
   return (
-    <BaseElement elementName="li" _className_={$classNames.listGroup} {...other}>
+    <BaseElement elementName="li" _className_={$.classNames.listGroup} {...other}>
       {titleComponent}
       <BaseElement elementName="ul">{children}</BaseElement>
     </BaseElement>
@@ -101,7 +101,7 @@ const ListGroup = ({
 
 const ListItem = ({ children, ...other }) => {
   return (
-    <BaseElement elementName="li" _style_={$styles.item.main} {...other}>
+    <BaseElement elementName="li" _style_={$.styles.item.main} {...other}>
       <BaseElement elementName="div">{children}</BaseElement>
     </BaseElement>
   );

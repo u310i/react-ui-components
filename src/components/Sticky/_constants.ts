@@ -6,24 +6,26 @@ const name = 'sticky';
 export const constants = {
   name: name,
   classNames: {
-    sticky: `${$.prefix}${name}`,
-    stickyContents: `${$.prefix}${name}-contents`,
-    stickyAbsoluteWrapper: `${$.prefix}${name}-absolute-wrapper`,
-    stickyOuter: `${$.prefix}${name}-outer`,
-    stickyInner: `${$.prefix}${name}-inner`,
-    stickyDummy: `${$.prefix}${name}-dummy`,
+    name: `${$.prefix}${name}`,
+    nameContents: `${$.prefix}${name}-contents`,
+    nameAbsoluteWrapper: `${$.prefix}${name}-absolute-wrapper`,
+    nameOuter: `${$.prefix}${name}-outer`,
+    nameInner: `${$.prefix}${name}-inner`,
+    nameDummy: `${$.prefix}${name}-dummy`,
   },
   styles: {
     default: {
       style: {
         position: 'static',
         transition: 'none',
-        zIndex: 800,
+        zIndex: $.zIndex.sticky,
       }
     },
     sticky: {
-      left: 'auto',
-      right: 'auto',
+      style: {
+        left: 'auto',
+        right: 'auto',
+      }
     },
     absolute: {
       style: {

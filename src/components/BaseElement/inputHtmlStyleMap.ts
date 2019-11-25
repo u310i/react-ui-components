@@ -1,5 +1,4 @@
 import style from './style';
-import * as CSS from 'csstype';
 
 export default {
   hidden: null,

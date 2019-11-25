@@ -6,8 +6,8 @@ import Slide from './Slide';
 import Zoom from './Zoom';
 import Sticky from './Sticky';
 // import AppBar from './AppBar';
-import Button, { ButtonGroup, ButtonCoordinator } from './Button';
-import Button2 from './Button2';
+// import Button, { ButtonGroup, ButtonCoordinator } from './Button';
+import Button from './Button';
 import Drawer from './Drawer';
 import SwipeableDrawer from './SwipeableDrawer';
 // import Flex from './Flex';
@@ -45,8 +45,8 @@ export {
 	Zoom,
 	Sticky,
 	// AppBar,
-	Button, ButtonGroup, ButtonCoordinator,
-	Button2,
+	// Button, ButtonGroup, ButtonCoordinator,
+	Button,
 	Drawer,
 	SwipeableDrawer,
 	// Flex,

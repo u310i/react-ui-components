@@ -1,18 +1,32 @@
-import * as React from 'react';
-import { extractElement, scrollLock } from 'scripts';
+import * as React from "react";
+import { extractElement, scrollLock } from "scripts";
 
 // https://github.com/willmcpo/body-scroll-lock
 
-type Props = $Type.ReactUtils.CreateProps<{
+type ComponentProps = {
   target?: $Type.ReactUtils.IncludeNode<Element>;
   active?: boolean;
   fillGap?: boolean;
-}>;
+};
 
-const ScrollLock: $Type.ReactUtils.FunctionComponentWithoutChildren<Props> = ({
+type Props = ComponentProps;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace ScrollLock {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
+
+const ScrollLock: React.FC<Props> = ({
+  children,
   target,
   active = true,
-  fillGap = true,
+  fillGap = true
 }) => {
   if (!target) return null;
   const prevActiveRef = React.useRef<boolean>(false);
@@ -33,7 +47,7 @@ const ScrollLock: $Type.ReactUtils.FunctionComponentWithoutChildren<Props> = ({
     };
   }, [active, fillGap]);
 
-  return null;
+  return <>{children}</>;
 };
 
 export default ScrollLock;

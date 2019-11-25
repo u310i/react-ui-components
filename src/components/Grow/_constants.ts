@@ -6,7 +6,7 @@ const name = 'grow';
 export const constants = {
   name: name,
   classNames: {
-    grow: `${$.prefix}${name}`,
+    name: `${$.prefix}${name}`,
   },
   styles: {
     style: {

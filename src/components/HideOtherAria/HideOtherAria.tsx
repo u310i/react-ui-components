@@ -1,14 +1,27 @@
-import React from 'react';
-import { extractElement } from 'scripts';
-import { BaseElement } from '..';
+import * as React from "react";
+import { extractElement } from "scripts";
+import { BaseElement } from "..";
 
-type Props = $Type.ReactUtils.CreateProps<
-  {
-    parent?: $Type.ReactUtils.IncludeNode<Element>;
-    active?: boolean;
-  },
-  typeof BaseElement
+type ComponentProps = {
+  parent?: $Type.ReactUtils.IncludeNode<Element>;
+  active?: boolean;
+};
+
+type Props = $Type.MergeObject<
+  ComponentProps,
+  $Type.Components.BaseElement._GeneralProps
 >;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace HideOtherAria {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
 
 const HideOtherAria: React.FC<Props> = ({
   children,
@@ -28,12 +41,12 @@ const HideOtherAria: React.FC<Props> = ({
         if (childNode.contains(nodeRef.current)) {
           activate(childNode);
         } else {
-          const attr = childNode.getAttribute('aria-hidden');
-          const alreadyHidden = attr !== null && attr !== 'false';
+          const attr = childNode.getAttribute("aria-hidden");
+          const alreadyHidden = attr !== null && attr !== "false";
 
           if (!alreadyHidden) {
             hiddenNodesRef.current.push(childNode);
-            childNode.setAttribute('aria-hidden', 'true');
+            childNode.setAttribute("aria-hidden", "true");
           }
         }
       });
@@ -43,7 +56,7 @@ const HideOtherAria: React.FC<Props> = ({
 
   const deactivate = React.useCallback(() => {
     hiddenNodesRef.current.forEach(node => {
-      node.removeAttribute('aria-hidden');
+      node.removeAttribute("aria-hidden");
     });
     hiddenNodesRef.current = [];
   }, []);
@@ -65,9 +78,9 @@ const HideOtherAria: React.FC<Props> = ({
   return (
     <BaseElement
       elementName="div"
-      _refer_={nodeRef}
-      _className_={'uc-hideOtherAria'}
       {...other}
+      _refer_={nodeRef}
+      _className_={"uc-hideOtherAria"}
     >
       {children}
     </BaseElement>

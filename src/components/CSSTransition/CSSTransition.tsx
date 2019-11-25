@@ -1,38 +1,38 @@
-import React from 'react';
-import { Transition } from 'react-transition-group';
+import React from "react";
+import { Transition } from "react-transition-group";
 import {
   TransitionProps as _TransitionProps,
   TransitionStatus as _TransitionStatus,
   TransitionChildren as _TransitionChildren,
   EnterHandler,
-  ExitHandler,
-} from 'react-transition-group/Transition';
-import { reflow, useForceUpdate } from 'scripts';
+  ExitHandler
+} from "react-transition-group/Transition";
+import { reflow } from "scripts";
 
-const APPEAR = 'appear';
-const ENTER = 'enter';
-const EXIT = 'exit';
-const SUFFIX_ACTIVE = '-active';
-const SUFFIX_DONE = '-done';
+const APPEAR = "appear";
+const ENTER = "enter";
+const EXIT = "exit";
+const SUFFIX_ACTIVE = "-active";
+const SUFFIX_DONE = "-done";
 
-type TransitionType = 'appear' | 'enter' | 'exit';
+type TransitionType = "appear" | "enter" | "exit";
 
 const ALL_CLASS_NAMES = {
   appear: {
     start: APPEAR,
     active: APPEAR + SUFFIX_ACTIVE,
-    done: APPEAR + SUFFIX_DONE,
+    done: APPEAR + SUFFIX_DONE
   },
   enter: {
     start: ENTER,
     active: ENTER + SUFFIX_ACTIVE,
-    done: ENTER + SUFFIX_DONE,
+    done: ENTER + SUFFIX_DONE
   },
   exit: {
     start: EXIT,
     active: EXIT + SUFFIX_ACTIVE,
-    done: EXIT + SUFFIX_DONE,
-  },
+    done: EXIT + SUFFIX_DONE
+  }
 };
 
 type ClassNames = {
@@ -54,47 +54,46 @@ const removeClasses = (node: Element, type: TransitionType): void => {
   );
 };
 
-type TransitionActionKeys = 'appear' | 'enter' | 'exit';
+type TransitionActionKeys = "appear" | "enter" | "exit";
 
 type TransitionHandlerKeys =
-  | 'onEnter'
-  | 'onEntering'
-  | 'onEntered'
-  | 'onExit'
-  | 'onExiting'
-  | 'onExited';
+  | "onEnter"
+  | "onEntering"
+  | "onEntered"
+  | "onExit"
+  | "onExiting"
+  | "onExited";
 
 type TransitionPropsKeys =
-  | 'timeout'
-  | 'mountOnEnter'
-  | 'unmountOnExit'
-  | 'addEndListener'
+  | "mountOnEnter"
+  | "unmountOnExit"
+  | "addEndListener"
   | TransitionHandlerKeys
   | TransitionActionKeys;
 
-type Props = $Type.ReactUtils.CreateProps<
-  { in: boolean } & {
-    disableClassing?: boolean;
-    lazyAppear?: boolean;
-  } & Pick<_TransitionProps, TransitionPropsKeys>
->;
+type ComponentProps = { in?: boolean } & {
+  disableClassing?: boolean;
+  lazyAppear?: boolean;
+} & Pick<_TransitionProps, TransitionPropsKeys | "children"> &
+  Partial<Pick<_TransitionProps, "timeout">>;
 
-type CharacteristicProps = Pick<_TransitionProps, 'children'>;
+type Props = ComponentProps;
 
 declare global {
   namespace $Type {
     namespace Components {
-      type CSSTransitionProps = Props;
-      type CSSTransitionChildStatus = _TransitionStatus;
+      namespace CSSTransition {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+        type _ChildStatus = _TransitionStatus;
+      }
     }
   }
 }
 
-const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
-  Props & CharacteristicProps & { testid?: string }
-> = ({
+const CSSTransition: $Type.ReactUtils.FCWithoutChildren<Props> = ({
   children,
-  in: inProp,
+  in: inProp = false,
   timeout = 300,
   appear = false,
   disableClassing = false,
@@ -105,7 +104,6 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
   onExit,
   onExiting,
   onExited,
-  testid,
   ...other
 }) => {
   // Order and timing of execution
@@ -185,6 +183,7 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
 
   return (
     <Transition
+      {...other}
       in={inProp}
       timeout={timeout}
       appear={appear}
@@ -194,11 +193,10 @@ const ReactCSSTransition: $Type.ReactUtils.FunctionComponentWithoutChildren<
       onExit={handleOnExit}
       onExiting={handleOnExiting}
       onExited={handleOnExited}
-      {...other}
     >
       {children}
     </Transition>
   );
 };
 
-export default ReactCSSTransition;
+export default CSSTransition;

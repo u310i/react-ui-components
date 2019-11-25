@@ -66,6 +66,7 @@ const cubicBeziers = {
 const zIndex = {
   button: 100,
   slide: 200,
+  sticky: 800,
   backdrop: 1000,
   appBar: 1100,
   drawer: 1200,

@@ -6,8 +6,8 @@ const name = 'collapse';
 export const constants = {
   name: name,
   classNames: {
-    collapse: `${$.prefix}${name}`,
-    collapseInner: `${$.prefix}${name}-inner`,
+    name: `${$.prefix}${name}`,
+    nameInner: `${$.prefix}${name}-inner`,
   },
   styles: {
     duration: $.transition.duration,

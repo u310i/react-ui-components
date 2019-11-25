@@ -1,61 +1,59 @@
-import React from 'react';
-import $ from './_constants';
-import { Modal, Slide, Paper } from '..';
+import * as React from "react";
+import $ from "./_constants";
+import { Modal, Slide, Paper } from "..";
 
-const $classNames = $.classNames;
-const $styles = $.styles;
-const $modalContentStyle = $styles.modal.contents;
-const $transitionStyle = $styles.transition;
-const $innerStyle = $styles.inner;
+const $modalContentStyle = $.styles.modal.contents;
+const $transitionStyle = $.styles.transition;
+const $innerStyle = $.styles.inner;
 
-type Anchor = 'left' | 'right' | 'top' | 'bottom';
-
-declare global {
-  namespace $Type {
-    namespace Components {
-      type DrawerAnchor = Anchor;
-    }
-  }
-}
+type Anchor = "left" | "right" | "top" | "bottom";
 
 export const isHorizontal = (anchor: Anchor): boolean => {
-  return ['left', 'right'].indexOf(anchor) !== -1;
+  return ["left", "right"].indexOf(anchor) !== -1;
 };
 
 const slideDirections = {
-  left: 'right',
-  right: 'left',
-  top: 'down',
-  bottom: 'up',
+  left: "right",
+  right: "left",
+  top: "down",
+  bottom: "up"
 } as const;
 
 export const getSlideDirections = (
   anchor: Anchor
-): $Type.Components.SlideDirection => {
+): $Type.Components.Slide._Direction => {
   return slideDirections[anchor];
 };
 
-type Props = $Type.ReactUtils.CreateProps<
-  {
-    open?: boolean;
-    anchor?: Anchor;
-    TransitionComponent?: React.FC<
-      $Type.Transition.PropTransitionComponentCommonProps
-    >;
-    transitionProps?: Omit<
-      $Type.Transition.PropTransitionComponentCommonProps,
-      'direction' | 'in'
-    >;
-    InnerComponent?: typeof Paper;
-    innerProps?: $Type.ReactUtils.CreatePropComponentProps<typeof Paper>;
-  },
-  typeof Modal
->;
+type ComponentProps = {
+  open?: boolean;
+  anchor?: Anchor;
+  // "Type instantiation is excessively deep and possibly infinite.ts(2589)"
+  // TransitionComponent?: React.FC<$Type.Transition.AllProps>;
+  TransitionComponent?: React.FC<{ [key: string]: any }>;
+  transitionProps?: $Type.Transition.AllProps;
+  InnerComponent?: React.FC<$Type.Components.Paper._Props & $Type.AnyObject>;
+  innerProps?: $Type.Components.Paper._Props & $Type.AnyObject;
+};
+
+type Props = $Type.MergeObject<ComponentProps, $Type.Components.Modal._Props>;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace Drawer {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+        type _Anchor = Anchor;
+      }
+    }
+  }
+}
 
 const Drawer: React.FC<Props> = ({
   children,
   open = false,
-  anchor = 'left',
+  anchor = "left",
   TransitionComponent = Slide,
   transitionProps: propTransitionProps = {},
   InnerComponent = Paper,
@@ -68,21 +66,21 @@ const Drawer: React.FC<Props> = ({
     ...other,
     ...React.useMemo(() => {
       return {
-        classNames: [...(other.classNames || []), $classNames.drawer],
+        classNames: [...(other.classNames || []), $.classNames.name],
         contentsProps: {
           ...other.contentsProps,
           style: {
             ...$modalContentStyle.style,
-            ...$modalContentStyle[anchor].style,
-            ...(other.contentsProps || {}).style,
+            ...$modalContentStyle.anchor[anchor].style,
+            ...(other.contentsProps || {}).style
           },
           classNames: [
             ...((other.contentsProps || {}).classNames || []),
-            $classNames.drawerContainer,
-          ],
-        },
+            $.classNames.nameContainer
+          ]
+        }
       };
-    }, [other.classNames, other.style, other.contentsProps]),
+    }, [other.classNames, other.style, other.contentsProps])
   };
 
   const transitionProps = {
@@ -91,14 +89,14 @@ const Drawer: React.FC<Props> = ({
       return {
         style: {
           ...$transitionStyle.style,
-          ...propTransitionProps.style,
+          ...propTransitionProps.style
         },
         classNames: [
           ...(propTransitionProps.classNames || []),
-          $classNames.drawerTransition,
-        ],
+          $.classNames.nameTransition
+        ]
       };
-    }, [propTransitionProps.style, propTransitionProps.classNames]),
+    }, [propTransitionProps.style, propTransitionProps.classNames])
   };
 
   const innerProps = {
@@ -110,27 +108,27 @@ const Drawer: React.FC<Props> = ({
           ...(isHorizontal(anchor)
             ? $innerStyle.horizontal.style
             : $innerStyle.vertical.style),
-          ...propInnerProps.style,
+          ...propInnerProps.style
         },
         classNames: [
           ...(propInnerProps.classNames || []),
-          $classNames.drawerInner,
-        ],
+          $.classNames.nameInner
+        ]
       };
-    }, [propInnerProps.style, propInnerProps.classNames]),
+    }, [propInnerProps.style, propInnerProps.classNames])
   };
 
   return (
-    <Modal open={open} {...props}>
+    <Modal {...props} open={open}>
       <TransitionComponent
+        hideVisibility={false}
+        {...transitionProps}
         in={open}
         appear={true}
-        hideVisibility={false}
         direction={direction}
-        {...transitionProps}
       >
         <InnerComponent
-          elevation={$styles.inner.elevation}
+          elevation={$.styles.inner.elevation}
           shape="corner"
           {...innerProps}
         >

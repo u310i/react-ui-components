@@ -1,18 +1,15 @@
-import React from 'react';
-import $ from './_constants';
+import React from "react";
+import $ from "./_constants";
 import {
   genTransitionProperty,
   genDurations,
   genEasings,
   setTransition,
-  setTransform,
-} from 'scripts';
-import { CSSTransition, BaseElement } from '..';
+  setTransform
+} from "scripts";
+import { CSSTransition, BaseElement } from "..";
 
-const $classNames = $.classNames;
-const $styles = $.styles;
-
-type Direction = 'left' | 'right' | 'up' | 'down';
+type Direction = "left" | "right" | "up" | "down";
 
 const getExitedTranslateValue = (
   node: HTMLElement,
@@ -23,33 +20,33 @@ const getExitedTranslateValue = (
 
   const computedStyle = window.getComputedStyle(node);
   const transform =
-    computedStyle.getPropertyValue('-webkit-transform') ||
-    computedStyle.getPropertyValue('transform');
+    computedStyle.getPropertyValue("-webkit-transform") ||
+    computedStyle.getPropertyValue("transform");
   let offsetX = 0;
   let offsetY = 0;
-  if (transform && transform !== 'none' && typeof transform === 'string') {
+  if (transform && transform !== "none" && typeof transform === "string") {
     const transformValues = transform
-      .split('(')[1]
-      .split(')')[0]
-      .split(',');
+      .split("(")[1]
+      .split(")")[0]
+      .split(",");
     offsetX = parseInt(transformValues[4], 10);
     offsetY = parseInt(transformValues[5], 10);
   }
   switch (direction) {
-    case 'left':
+    case "left":
       return `translateX(${window.innerWidth}px) translateX(${(Math.ceil(
         rect.left
       ) -
         offsetX -
         gutter) *
         -1}px)`;
-    case 'right':
+    case "right":
       return `translateX(${(Math.ceil(rect.left) +
         rect.width +
         gutter -
         offsetX) *
         -1}px)`;
-    case 'up':
+    case "up":
       return `translateY(${window.innerHeight}px) translateY(${(Math.ceil(
         rect.top
       ) -
@@ -70,20 +67,22 @@ type CharacteristicProps = {
   gutter?: number;
 };
 
-type Props = $Type.ReactUtils.CreateProps<
-  $Type.Transition.CommonProps & CharacteristicProps,
-  typeof BaseElement,
-  Omit<
-    $Type.Components.CSSTransitionProps,
-    $Type.Transition.CSSTransitionIgnoreProps
-  >
+type ComponentProps = $Type.Transition.CommonProps & CharacteristicProps;
+
+type Props = $Type.MergeObject<
+  ComponentProps,
+  $Type.Components.BaseElement._GeneralProps
 >;
 
 declare global {
   namespace $Type {
     namespace Components {
-      type SlideCharacteristicProps = CharacteristicProps;
-      type SlideDirection = Direction;
+      namespace Slide {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+        type _CharacteristicProps = CharacteristicProps;
+        type _Direction = Direction;
+      }
     }
   }
 }
@@ -91,12 +90,12 @@ declare global {
 const Slide: React.FC<Props> = ({
   in: inProp,
   children,
-  duration = $styles.duration,
-  easing = $styles.easing,
+  duration = $.styles.duration,
+  easing = $.styles.easing,
   hideVisibility = true,
   disableEnter,
-  direction = $styles.direction,
-  gutter = $styles.gutter,
+  direction = $.styles.direction,
+  gutter = $.styles.gutter,
   appear = true,
   onEnter,
   onEntering,
@@ -114,13 +113,13 @@ const Slide: React.FC<Props> = ({
     const node = nodeRef.current;
     if (!node) return;
     if (!appear && inProp) {
-      setTransform(node, $styles.enteredTranslate);
+      setTransform(node, $.styles.enteredTranslate);
     } else {
       if (!(appear && inProp)) {
         const translate = getExitedTranslateValue(node, direction, gutter);
         setTransform(node, translate);
       }
-      if (hideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = "hidden";
     }
   }, []);
 
@@ -144,15 +143,15 @@ const Slide: React.FC<Props> = ({
         node,
         genTransitionProperty([
           {
-            property: 'transform',
+            property: "transform",
             duration,
-            easing,
-          },
+            easing
+          }
         ])
       );
-      setTransform(node, $styles.enteredTranslate);
+      setTransform(node, $.styles.enteredTranslate);
 
-      if (hideVisibility) node.style.visibility = '';
+      if (hideVisibility) node.style.visibility = "";
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering, durations, easings]
@@ -164,10 +163,10 @@ const Slide: React.FC<Props> = ({
         node,
         genTransitionProperty([
           {
-            property: 'transform',
+            property: "transform",
             duration: durations.exit,
-            easing: easings.exit,
-          },
+            easing: easings.exit
+          }
         ])
       );
       const translate = getExitedTranslateValue(node, direction, gutter);
@@ -180,7 +179,7 @@ const Slide: React.FC<Props> = ({
   const handleExited = React.useCallback(
     (node: HTMLElement) => {
       setTransition(node, null);
-      if (hideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = "hidden";
       if (onExited) onExited(node);
     },
     [onExited]
@@ -189,6 +188,7 @@ const Slide: React.FC<Props> = ({
   return (
     <CSSTransition
       disableClassing={true}
+      {...other}
       appear={appear}
       in={inProp}
       timeout={durations}
@@ -196,21 +196,18 @@ const Slide: React.FC<Props> = ({
       onEntering={handleEntering}
       onExiting={handleExiting}
       onExited={handleExited}
-      {...other}
-      mountOnEnter={false}
-      unmountOnExit={false}
     >
       {(
-        state: $Type.Components.CSSTransitionChildStatus,
-        childProps: $Type.Components.BaseElementProps
+        _state: $Type.Components.CSSTransition._ChildStatus,
+        childProps: $Type.Components.BaseElement._Props
       ) => {
         return (
           <BaseElement
             elementName="div"
-            _refer_={nodeRef}
-            _style_={$styles.style}
-            _className_={$classNames.slide}
             {...childProps}
+            _refer_={nodeRef}
+            _style_={$.styles.style}
+            _className_={$.classNames.name}
           >
             {children}
           </BaseElement>

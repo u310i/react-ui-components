@@ -6,7 +6,7 @@ const name = 'fade';
 export const constants = {
   name: name,
   classNames: {
-    fade: `${$.prefix}${name}`,
+    name: `${$.prefix}${name}`,
   },
   styles: {
     style: {

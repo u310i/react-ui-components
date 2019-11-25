@@ -6,10 +6,10 @@ const name = 'dialog';
 export const constants = {
   name: name,
   classNames: {
-    dialog: `${$.prefix}${name}`,
-    dialogContainer: `${$.prefix}${name}-container`,
-    dialogTransition: `${$.prefix}${name}-transition`,
-    dialogInner: `${$.prefix}${name}-inner`,
+    name: `${$.prefix}${name}`,
+    nameContainer: `${$.prefix}${name}-container`,
+    nameTransition: `${$.prefix}${name}-transition`,
+    nameInner: `${$.prefix}${name}-inner`,
   },
   styles: {
     modal: {

@@ -1,30 +1,34 @@
-import * as React from 'react';
-import { extractElement, addEventListener } from 'scripts';
+import * as React from "react";
+import { extractElement, addEventListener } from "scripts";
 
-type Props = $Type.ReactUtils.CreateProps<{
+type ComponentProps = {
   target?: $Type.ReactUtils.IncludeNode<EventTarget>;
   type: string;
   listener: (evt: any) => void;
   options?: AddEventListenerOptions;
   optimized?: boolean;
-}>;
+};
+
+type Props = ComponentProps;
 
 declare global {
   namespace $Type {
     namespace Components {
-      type EventListenerProps = Props;
+      namespace EventListener {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
     }
   }
 }
 
-const EventListener: $Type.ReactUtils.FunctionComponentWithoutChildren<
-  Props
-> = ({
+const EventListener: React.FC<Props> = ({
+  children,
   target: propTarget = document,
   type,
   listener,
   options = {},
-  optimized = false,
+  optimized = false
 }) => {
   if (!type || !listener) return null;
   const removeEventListenerRef = React.useRef<null | (() => void)>(null);
@@ -64,10 +68,10 @@ const EventListener: $Type.ReactUtils.FunctionComponentWithoutChildren<
     options.capture,
     options.once,
     options.passive,
-    optimized,
+    optimized
   ]);
 
-  return null;
+  return <>{children}</>;
 };
 
 export default EventListener;

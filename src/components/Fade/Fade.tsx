@@ -1,38 +1,44 @@
-import React from 'react';
-import $ from './_constants';
+import React from "react";
+import $ from "./_constants";
 import {
   genTransitionProperty,
   genDurations,
   genEasings,
-  setTransition,
-} from 'scripts';
-import { CSSTransition, BaseElement } from '..';
-
-const $classNames = $.classNames;
-const $styles = $.styles;
+  setTransition
+} from "scripts";
+import { CSSTransition, BaseElement } from "..";
 
 const setExitedOpacity = (node: HTMLElement) => {
-  node.style.opacity = $styles.exitedOpacity;
+  node.style.opacity = $.styles.exitedOpacity;
 };
 
 const setEnteredOpacity = (node: HTMLElement) => {
-  node.style.opacity = $styles.enteredOpacity;
+  node.style.opacity = $.styles.enteredOpacity;
 };
 
-type Props = $Type.ReactUtils.CreateProps<
-  $Type.Transition.CommonProps,
-  typeof BaseElement,
-  Omit<
-    $Type.Components.CSSTransitionProps,
-    $Type.Transition.CSSTransitionIgnoreProps
-  >
+type ComponentProps = $Type.Transition.CommonProps;
+
+type Props = $Type.MergeObject<
+  ComponentProps,
+  $Type.Components.BaseElement._GeneralProps
 >;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace Fade {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
 
 const Fade: React.FC<Props> = ({
   in: inProp,
   children,
-  duration = $styles.duration,
-  easing = $styles.easing,
+  duration = $.styles.duration,
+  easing = $.styles.easing,
   hideVisibility = true,
   disableEnter,
   appear = true,
@@ -57,7 +63,7 @@ const Fade: React.FC<Props> = ({
       if (!(appear && inProp)) {
         setExitedOpacity(node);
       }
-      if (hideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = "hidden";
     }
   }, []);
 
@@ -80,14 +86,14 @@ const Fade: React.FC<Props> = ({
         node,
         genTransitionProperty([
           {
-            property: 'opacity',
+            property: "opacity",
             duration,
-            easing,
-          },
+            easing
+          }
         ])
       );
       setEnteredOpacity(node);
-      if (hideVisibility) node.style.visibility = '';
+      if (hideVisibility) node.style.visibility = "";
       if (onEntering) onEntering(node, appearing);
     },
     [onEntering, durations, easings]
@@ -99,10 +105,10 @@ const Fade: React.FC<Props> = ({
         node,
         genTransitionProperty([
           {
-            property: 'opacity',
+            property: "opacity",
             duration: durations.exit,
-            easing: easings.exit,
-          },
+            easing: easings.exit
+          }
         ])
       );
       setExitedOpacity(node);
@@ -114,7 +120,7 @@ const Fade: React.FC<Props> = ({
   const handleExited = React.useCallback(
     (node: HTMLElement) => {
       setTransition(node, null);
-      if (hideVisibility) node.style.visibility = 'hidden';
+      if (hideVisibility) node.style.visibility = "hidden";
       if (onExited) onExited(node);
     },
     [onExited]
@@ -123,6 +129,7 @@ const Fade: React.FC<Props> = ({
   return (
     <CSSTransition
       disableClassing={true}
+      {...other}
       appear={appear}
       in={inProp}
       timeout={durations}
@@ -130,19 +137,18 @@ const Fade: React.FC<Props> = ({
       onEntering={handleEntering}
       onExiting={handleExiting}
       onExited={handleExited}
-      {...other}
     >
       {(
-        state: $Type.Components.CSSTransitionChildStatus,
-        childProps: $Type.Components.BaseElementProps
+        _state: $Type.Components.CSSTransition._ChildStatus,
+        childProps: $Type.Components.BaseElement._Props
       ): React.ReactElement => {
         return (
           <BaseElement
             elementName="div"
-            _style_={$styles.style}
-            _className_={$classNames.fade}
-            _refer_={nodeRef}
             {...childProps}
+            _style_={$.styles.style}
+            _className_={$.classNames.name}
+            _refer_={nodeRef}
           >
             {children}
           </BaseElement>

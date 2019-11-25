@@ -21,7 +21,9 @@ export const createComponentConstants = <K extends keyof $Type.Constants.All>(
   type: K,
   constants: $Type.Constants.All[K]
 ): void => {
-  componentConstants[type] = (pageConstants[type] ? (mergeObject(pageConstants[type], constants, { tree: 'source', overrides: ['style'] }) || {}) : constants) as OriginConstants[K]
+  componentConstants[type] = ((pageConstants && pageConstants[type])
+    ? (mergeObject(pageConstants[type], constants, { tree: 'source', overrides: ['style'] }) || {})
+    : constants) as OriginConstants[K]
 };
 
 export const getComponentConstants = <K extends keyof $Type.Constants.All>(

@@ -6,29 +6,39 @@ import { Component, ComponentSpec } from 'react';
 declare global {
   export namespace $Type {
     namespace ReactUtils {
+
       type ExtractProps<
         P extends React.JSXElementConstructor<any>
         > = P extends React.JSXElementConstructor<infer P> ? P : {};
 
+      type AvailableProps = React.JSXElementConstructor<any> | object
 
-      type CreateProps<
-        P1 extends object = {},
-        P2 extends React.JSXElementConstructor<any> | object = {},
-        P3 extends object = {}
-        > =
-        Readonly<P1> &
-        (P2 extends React.JSXElementConstructor<any>
-          ? Omit<ExtractProps<P2>, 'children' | Components.BaseElementIgnoreProps | keyof P1 | keyof P3>
-          : P2 extends object
-          ? Omit<P2, 'children' | Components.BaseElementIgnoreProps | keyof P1 | keyof P3>
-          : {}) &
-        Omit<P3, 'children' | Components.BaseElementIgnoreProps | keyof P1>
-        ;
+      // type ExtractProps<P extends AvailableProps> = Omit<
+      //   P extends React.JSXElementConstructor<any>
+      //   ? ExtractPropsFromComponent<P>
+      //   : P extends object
+      //   ? P
+      //   : {}
+      //   , 'children'>
+
+
+      // type CreateProps<
+      //   P1 extends object = {},
+      //   P2 extends AvailableProps = {},
+      //   P3 extends object = {}
+      //   > =
+      //   Readonly<P1> &
+      //   (P2 extends React.JSXElementConstructor<any>
+      //     ? Omit<ExtractPropsFromComponent<P2>, keyof P1 | keyof P3>
+      //     : P2 extends object
+      //     ? Omit<P2, keyof P1 | keyof P3>
+      //     : {}) &
+      //   Partial<Omit<P3, keyof P1>>;
 
       // type SpecificPartial<T, K extends keyof T> = Partial<Pick<T, K>> &
       //   Omit<T, K>;
 
-      type FunctionComponentWithoutChildren<P = {}> = {
+      type FCWithoutChildren<P = {}> = {
         (props: P, context?: any): React.ReactElement | null;
         propTypes?: React.WeakValidationMap<P>;
         contextTypes?: React.ValidationMap<any>;
@@ -36,12 +46,9 @@ declare global {
         displayName?: string;
       };
 
-      type CreatePropComponentProps<
-        C extends React.JSXElementConstructor<any>
-        > = Omit<ExtractProps<C>, 'children' | Components.BaseElementIgnoreProps>;
-
-
-
+      // type CreatePropComponentProps<
+      //   C extends React.JSXElementConstructor<any>
+      //   > = Omit<ExtractPropsFromComponent<C>, 'children' | Components.$BaseElement.DirectOnlyPropsKey>;
 
       type MaybeNode<T = Node> = T | null;
 
@@ -70,12 +77,16 @@ declare global {
       type Shape = 'corner' | 'default' | 'round' | 'circle';
     }
     namespace Transition {
-      type CommonProps = {
+      type CommonProps = MergeObject<{
+        in?: boolean;
         duration?: Duration;
         easing?: Easing;
         hideVisibility?: boolean;
         disableEnter?: boolean;
-      } & Components.SlideCharacteristicProps
+      }, Components.CSSTransition._Props>
+
+      type AllProps = MergeObject<CommonProps & Components.Slide._CharacteristicProps
+        & Components.Collapse._CharacteristicProps, Components.BaseElement._GeneralProps>
 
       type Duration =
         | {
@@ -92,14 +103,16 @@ declare global {
         }
         | string;
 
-      type CSSTransitionIgnoreProps = 'timeout' | 'mountOnEnter' | 'unmountOnExit'
-
       type PropTransitionComponentCommonProps<
-        P1 = Omit<Components.CSSTransitionProps, CSSTransitionIgnoreProps>,
+        P1 = Components.CSSTransition._Props,
         P2 = CommonProps,
-        P3 = Components.BaseElementProps
-        > = P1 & P2 & Omit<P3, keyof P1 | keyof P2>;
+        P3 = Components.BaseElement._Props
+        > = Omit<P1, 'timeout'> & Omit<P2, keyof P1> & Omit<P3, keyof P1 | keyof P2>;
     }
+
+    type AnyObject = { [key: string]: any }
+
+    type MergeObject<P1 extends object, P2 extends object> = P1 & Omit<P2, keyof P1>
 
     type PartiallyPartial<T, K extends keyof T> = Partial<Pick<T, K>> &
       Omit<T, K>;

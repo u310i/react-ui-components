@@ -6,10 +6,10 @@ const name = 'drawer';
 export const constants = {
   name: name,
   classNames: {
-    drawer: `${$.prefix}${name}`,
-    drawerContainer: `${$.prefix}${name}-container`,
-    drawerTransition: `${$.prefix}${name}-transition`,
-    drawerInner: `${$.prefix}${name}-inner`,
+    name: `${$.prefix}${name}`,
+    nameContainer: `${$.prefix}${name}-container`,
+    nameTransition: `${$.prefix}${name}-transition`,
+    nameInner: `${$.prefix}${name}-inner`,
   },
   styles: {
     modal: {
@@ -17,26 +17,28 @@ export const constants = {
         style: {
           display: 'flex',
         },
-        left: {
-          style: {
-            justifyContent: 'flex-start',
+        anchor: {
+          left: {
+            style: {
+              justifyContent: 'flex-start',
+            },
           },
-        },
-        right: {
-          style: {
-            justifyContent: 'flex-end',
+          right: {
+            style: {
+              justifyContent: 'flex-end',
+            },
           },
-        },
-        top: {
-          style: {
-            alignItems: 'flex-start',
+          top: {
+            style: {
+              alignItems: 'flex-start',
+            },
           },
-        },
-        bottom: {
-          style: {
-            alignItems: 'flex-end',
+          bottom: {
+            style: {
+              alignItems: 'flex-end',
+            },
           },
-        },
+        }
       },
     },
     transition: {

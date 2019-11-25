@@ -1,30 +1,35 @@
-import React from 'react';
-import $ from './_constants';
-import { Modal, Fade, Paper } from '..';
+import * as React from "react";
+import $ from "./_constants";
+import { Modal, Fade, Paper } from "..";
 
-const $classNames = $.classNames;
-const $styles = $.styles;
-const $modalContentStyle = $styles.modal.contents;
-const $transitionStyle = $styles.transition;
-const $innerStyle = $styles.inner;
+const $modalContentStyle = $.styles.modal.contents;
+const $transitionStyle = $.styles.transition;
+const $innerStyle = $.styles.inner;
 
-type Props = $Type.ReactUtils.CreateProps<
-  {
-    open?: boolean;
-    scrollBody?: boolean;
-    fullScreen?: boolean;
-    TransitionComponent?: React.FC<
-      $Type.Transition.PropTransitionComponentCommonProps
-    >;
-    transitionProps?: Omit<
-      $Type.Transition.PropTransitionComponentCommonProps,
-      'in'
-    >;
-    InnerComponent?: typeof Paper;
-    innerProps?: $Type.ReactUtils.CreatePropComponentProps<typeof Paper>;
-  },
-  typeof Modal
->;
+type ComponentProps = {
+  open?: boolean;
+  scrollBody?: boolean;
+  fullScreen?: boolean;
+  // "Type instantiation is excessively deep and possibly infinite.ts(2589)"
+  // TransitionComponent?: React.FC<$Type.Transition.AllProps>;
+  TransitionComponent?: React.FC<$Type.AnyObject>;
+  transitionProps?: $Type.Transition.AllProps;
+  InnerComponent?: React.FC<$Type.Components.Paper._Props & $Type.AnyObject>;
+  innerProps?: $Type.Components.Paper._Props & $Type.AnyObject;
+};
+
+type Props = $Type.MergeObject<ComponentProps, $Type.Components.Modal._Props>;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace Dialog {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
 
 const Dialog: React.FC<Props> = ({
   children,
@@ -41,21 +46,21 @@ const Dialog: React.FC<Props> = ({
     ...other,
     ...React.useMemo(() => {
       return {
-        classNames: [...(other.classNames || []), $classNames.dialog],
+        classNames: [...(other.classNames || []), $.classNames.name],
         contentsProps: {
           ...other.contentsProps,
           style: {
             ...$modalContentStyle.style,
             ...(scrollBody && $modalContentStyle.scrollBody.style),
-            ...(other.contentsProps || {}).style,
+            ...(other.contentsProps || {}).style
           },
           classNames: [
             ...((other.contentsProps || {}).classNames || []),
-            $classNames.dialogContainer,
-          ],
-        },
+            $.classNames.nameContainer
+          ]
+        }
       };
-    }, [other.classNames, other.contentsProps]),
+    }, [other.classNames, other.contentsProps])
   };
 
   const transitionProps = {
@@ -65,14 +70,14 @@ const Dialog: React.FC<Props> = ({
         style: {
           ...$transitionStyle.style,
           ...(scrollBody && $transitionStyle.scrollBody.style),
-          ...propTransitionProps.style,
+          ...propTransitionProps.style
         },
         classNames: [
           ...(propTransitionProps.classNames || []),
-          $classNames.dialogTransition,
-        ],
+          $.classNames.nameTransition
+        ]
       };
-    }, [propTransitionProps.style, scrollBody, propTransitionProps.classNames]),
+    }, [propTransitionProps.style, scrollBody, propTransitionProps.classNames])
   };
 
   const innerProps = {
@@ -83,31 +88,27 @@ const Dialog: React.FC<Props> = ({
           ...$innerStyle.style,
           ...(scrollBody && $innerStyle.scrollBody.style),
           ...(fullScreen && $innerStyle.fullScreen.style),
-          ...propInnerProps.style,
+          ...propInnerProps.style
         },
         classNames: [
           ...(propInnerProps.classNames || []),
-          $classNames.dialogInner,
-        ],
+          $.classNames.nameInner
+        ]
       };
     }, [
       propInnerProps.style,
       scrollBody,
       fullScreen,
-      propInnerProps.classNames,
-    ]),
+      propInnerProps.classNames
+    ])
   };
 
-  // React.useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, [open]);
-
   return (
-    <Modal role="dialog" open={open} {...props}>
+    <Modal role="dialog" {...props} open={open}>
       <TransitionComponent
-        in={open}
         hideVisibility={false}
         {...transitionProps}
+        in={open}
       >
         <InnerComponent
           elevation={$innerStyle.elevation}

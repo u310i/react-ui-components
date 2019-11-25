@@ -1,5 +1,5 @@
-import { addEventListener, testPassiveEventSupport } from './addEventListener';
-import { raf, isNumber } from '.';
+import { addEventListener, testPassiveEventSupport } from "./addEventListener";
+import { raf, isNumber } from ".";
 
 export { addEventListener, testPassiveEventSupport };
 
@@ -7,18 +7,18 @@ export const reflow = (node: Element) => node.scrollTop;
 
 export const getFontSize = (data?: $Type.Utils.FontSize) => {
   if (!data) {
-    return '1em'
+    return "1em";
   } else if (isNumber(data)) {
     return `${Math.round(data * 100) / 100}em`;
   } else {
-    if (typeof data !== 'string') return '1em';
+    if (typeof data !== "string") return "1em";
     switch (data) {
-      case 'xs':
-        return '0.75em';
-      case 'sm':
-        return '0.875em';
-      case 'lg':
-        return '1.33em';
+      case "xs":
+        return "0.75em";
+      case "sm":
+        return "0.875em";
+      case "lg":
+        return "1.33em";
       default:
         return data;
     }
@@ -38,19 +38,19 @@ export const genDurations = (
     return {
       enter: 0,
       exit: 0,
-      appear: 0,
+      appear: 0
     };
-  if ('number' === typeof duration) {
+  if ("number" === typeof duration) {
     return {
       enter: duration,
       exit: duration,
-      appear: duration,
+      appear: duration
     };
   } else {
     return {
       enter: duration.enter,
       exit: duration.exit || duration.enter,
-      appear: duration.appear || duration.enter,
+      appear: duration.appear || duration.enter
     };
   }
 };
@@ -63,27 +63,27 @@ type GetEasings = {
 export const genEasings = (easing: $Type.Transition.Easing): GetEasings => {
   if (!easing)
     return {
-      enter: 'linear',
-      exit: 'linear',
-      appear: 'linear',
+      enter: "linear",
+      exit: "linear",
+      appear: "linear"
     };
-  if ('string' === typeof easing) {
+  if ("string" === typeof easing) {
     return {
       enter: easing,
       exit: easing,
-      appear: easing,
+      appear: easing
     };
   } else {
     return {
       enter: easing.enter,
       exit: easing.exit || easing.enter,
-      appear: easing.appear || easing.enter,
+      appear: easing.appear || easing.enter
     };
   }
 };
 
 export const setTransition = (node: HTMLElement, value?: string | null) => {
-  const property = !value ? '' : value;
+  const property = !value ? "" : value;
   node.style.webkitTransition = property;
   node.style.transition = property;
 };
@@ -107,14 +107,14 @@ export const genTransitionProperty = (
   for (let props of propsList) {
     transitionProp.push(
       [
-        props.property || 'all',
-        (props.duration || props.duration === 0) ? `${props.duration}ms` : '0ms',
-        props.easing || 'linear',
-        (props.delay || props.delay === 0) ? `${props.delay}ms` : '0ms',
-      ].join(' ')
+        props.property || "all",
+        props.duration || props.duration === 0 ? `${props.duration}ms` : "0ms",
+        props.easing || "linear",
+        props.delay || props.delay === 0 ? `${props.delay}ms` : "0ms"
+      ].join(" ")
     );
   }
-  return transitionProp.join(', ');
+  return transitionProp.join(", ");
 };
 
 export const genUniqueId = () => {
@@ -142,16 +142,16 @@ export const createOptimizedEvent = (
   };
 };
 
-export const lazyEvent = (callback: any): () => void => {
-  let nextHandle: number
+export const lazyEvent = (callback: any): (() => void) => {
+  let nextHandle: number;
   const handle = raf(() => {
-    nextHandle = raf(callback)
-  })
+    nextHandle = raf(callback);
+  });
   return () => {
     raf.cancel(handle);
-    raf.cancel(nextHandle)
-  }
-}
+    raf.cancel(nextHandle);
+  };
+};
 
 // export const extractOverlapObjectProperty = (first, second, extractIsFirst) => {
 // 	const result = {};
@@ -164,15 +164,15 @@ export const lazyEvent = (callback: any): () => void => {
 // 	return result;
 // };
 
-export const toCamelCase = (str: string, replace = '-') => {
+export const toCamelCase = (str: string, replace = "-") => {
   str = str.charAt(0).toLowerCase() + str.slice(1);
-  const reg = new RegExp(`[${replace}](.)`, 'g');
-  return str.replace(reg, (match, toUpperStr) => {
+  const reg = new RegExp(`[${replace}](.)`, "g");
+  return str.replace(reg, (_match, toUpperStr) => {
     return toUpperStr.toUpperCase();
   });
 };
 
-export const fromCamelCase = (camel: string, insert = '-') => {
+export const fromCamelCase = (camel: string, insert = "-") => {
   return camel.replace(/[A-Z]/g, s => {
     return insert + s.charAt(0).toLowerCase();
   });
@@ -183,10 +183,10 @@ export const roundNumber = (number: number, precision = 0) => {
     if (reverseShift) {
       precision = -precision;
     }
-    const numArray = ('' + number).split('e');
+    const numArray = ("" + number).split("e");
     return +(
       numArray[0] +
-      'e' +
+      "e" +
       (numArray[1] ? +numArray[1] + precision : precision)
     );
   };
@@ -212,10 +212,10 @@ export const clickedScrollbar = (event: MouseEvent) => {
 
 export const getTransitionEndName = (() => {
   const transitions = {
-    transition: 'transitionend',
-    WebkitTransition: 'webkitTransitionEnd',
-    MozTransition: 'transitionend',
-    OTransition: 'oTransitionEnd otransitionend',
+    transition: "transitionend",
+    WebkitTransition: "webkitTransitionEnd",
+    MozTransition: "transitionend",
+    OTransition: "oTransitionEnd otransitionend"
   } as const;
 
   type Transitions = typeof transitions;
@@ -226,7 +226,7 @@ export const getTransitionEndName = (() => {
   };
   let transitionEndName: Transitions[Keys];
   for (let t of Object.keys(transitions) as Keys[]) {
-    if (typeof testElementStyle[t] !== 'undefined') {
+    if (typeof testElementStyle[t] !== "undefined") {
       transitionEndName = transitions[t];
       break;
     }
@@ -241,11 +241,11 @@ export const extractElement = <T = Element>(
     return null;
   }
   const node =
-    typeof value === 'string'
+    typeof value === "string"
       ? document.querySelector(value)
-      : typeof value === 'function'
-        ? (value as () => $Type.ReactUtils.MaybeNode<T>)() as any
-        : 'current' in value
+      : typeof value === "function"
+        ? ((value as () => $Type.ReactUtils.MaybeNode<T>)() as any)
+        : "current" in value
           ? value.current
           : value;
 
@@ -257,6 +257,6 @@ export const injectElementToRef = <T = Element>(
   element: $Type.ReactUtils.MaybeNode<T>
 ) => {
   if (ref) {
-    typeof ref === 'function' ? ref(element) : (ref.current = element);
+    typeof ref === "function" ? ref(element) : (ref.current = element);
   }
 };

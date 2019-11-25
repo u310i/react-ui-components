@@ -6,9 +6,9 @@ const name = 'swipeableDrawer';
 export const constants = {
   name: name,
   classNames: {
-    swipeableDrawer: `${$.prefix}${name}`,
-    swipeableDrawerTransition: `${$.prefix}${name}-transition`,
-    swipeableDrawerArea: `${$.prefix}${name}-area`,
+    name: `${$.prefix}${name}`,
+    nameTransition: `${$.prefix}${name}-transition`,
+    nameArea: `${$.prefix}${name}-area`,
   },
   selectors: {},
   styles: {
@@ -21,30 +21,32 @@ export const constants = {
         bottom: 0,
         zIndex: $.zIndex.drawer - 1,
       },
-      left: {
-        style: {
-          right: 'auto',
+      anchor: {
+        left: {
+          style: {
+            right: 'auto',
+          },
         },
-      },
-      right: {
-        style: {
-          left: 'auto',
-          right: 0,
+        right: {
+          style: {
+            left: 'auto',
+            right: 0,
+          },
         },
-      },
-      top: {
-        style: {
-          bottom: 'auto',
-          right: 0,
+        top: {
+          style: {
+            bottom: 'auto',
+            right: 0,
+          },
         },
-      },
-      bottom: {
-        style: {
-          top: 'auto',
-          bottom: 0,
-          right: 0,
+        bottom: {
+          style: {
+            top: 'auto',
+            bottom: 0,
+            right: 0,
+          },
         },
-      },
+      }
     },
     // duration: $.transition.duration,
     duration: {

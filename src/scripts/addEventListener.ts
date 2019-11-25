@@ -42,7 +42,7 @@ const createListenerOptions = passiveSupported
   };
 
 
-type addEventListenerArgs = $Type.Components.EventListenerProps
+type addEventListenerArgs = $Type.Components.EventListener._Props
 
 export const addEventListener = (
   target: $Type.ReactUtils.MaybeNode<EventTarget>,

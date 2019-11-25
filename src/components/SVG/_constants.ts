@@ -6,12 +6,12 @@ const name = 'svg';
 export const constants = {
   name: name,
   classNames: {
-    svg: `${$.prefix}${name}`,
-    svgSymbol: `${$.prefix}${name}-symbol`,
-    svgUse: `${$.prefix}${name}-use`,
-    svgInner: `${$.prefix}${name}-inner`,
-    svgTransformGroupOuter: `${$.prefix}${name}-transform-group-outer`,
-    svgTransformGroupInner: `${$.prefix}${name}-transform-group-inner`,
+    name: `${$.prefix}${name}`,
+    nameSymbol: `${$.prefix}${name}-symbol`,
+    nameUse: `${$.prefix}${name}-use`,
+    nameInner: `${$.prefix}${name}-inner`,
+    nameTransformGroupOuter: `${$.prefix}${name}-transform-group-outer`,
+    nameTransformGroupInner: `${$.prefix}${name}-transform-group-inner`,
   },
   styles: {
     style: {

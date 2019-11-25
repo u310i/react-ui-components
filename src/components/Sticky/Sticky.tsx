@@ -1,32 +1,38 @@
-import * as React from 'react';
-import $ from './_constants';
-import { addEventListener, raf, extractElement } from 'scripts';
-import { BaseElement } from '..';
+import * as React from "react";
+import $ from "./_constants";
+import { addEventListener, raf, extractElement } from "scripts";
+import { BaseElement } from "..";
 
-const $classNames = $.classNames;
-const $styles = $.styles;
+type ComponentProps = {
+  active?: boolean;
+  offset?: number;
+  bottomOffset?: number;
+  context?: $Type.ReactUtils.IncludeNode<Element>;
+  scrollContext?: $Type.ReactUtils.IncludeNode<EventTarget>;
+  pushing?: boolean;
+  onBottom?: (e: Event) => void;
+  onStick?: (e: Event) => void;
+  onTop?: (e: Event) => void;
+  onUnstick?: (e: Event) => void;
+  contentsProps?: $Type.Components.BaseElement._GeneralProps;
+  triggerNodeProps?: $Type.Components.BaseElement._GeneralProps;
+};
 
-type Props = $Type.ReactUtils.CreateProps<
-  {
-    active?: boolean;
-    offset?: number;
-    bottomOffset?: number;
-    context?: $Type.ReactUtils.IncludeNode<Element>;
-    scrollContext?: $Type.ReactUtils.IncludeNode<EventTarget>;
-    pushing?: boolean;
-    onBottom?: (e: Event) => void;
-    onStick?: (e: Event) => void;
-    onTop?: (e: Event) => void;
-    onUnstick?: (e: Event) => void;
-    contentsProps?: $Type.ReactUtils.CreatePropComponentProps<
-      typeof BaseElement
-    >;
-    triggerNodeProps?: $Type.ReactUtils.CreatePropComponentProps<
-      typeof BaseElement
-    >;
-  },
-  typeof BaseElement
+type Props = $Type.MergeObject<
+  ComponentProps,
+  $Type.Components.BaseElement._GeneralProps
 >;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace Sticky {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
 
 const Sticky: React.FC<Props> = ({
   children,
@@ -50,16 +56,16 @@ const Sticky: React.FC<Props> = ({
     top?: number | null;
     bottom?: number | null;
   }>({
-    sticky: false,
+    sticky: false
   });
 
   const stateRef = React.useRef<
-    | 'none'
-    | 'stickToContextBottom'
-    | 'stickToContextTop'
-    | 'stickToScreenBottom'
-    | 'stickToScreenTop'
-  >('none');
+    | "none"
+    | "stickToContextBottom"
+    | "stickToContextTop"
+    | "stickToScreenBottom"
+    | "stickToScreenTop"
+  >("none");
 
   const pushingRef = React.useRef<boolean>(false);
 
@@ -115,14 +121,14 @@ const Sticky: React.FC<Props> = ({
     if (scrollContextNode) {
       removeResizeEventListenerRef.current = addEventListener(
         scrollContextNode,
-        'resize',
+        "resize",
         handleUpdate,
         {},
         true
       );
       removeScrollEventListenerRef.current = addEventListener(
         scrollContextNode,
-        'scroll',
+        "scroll",
         handleUpdate
       );
     }
@@ -157,7 +163,7 @@ const Sticky: React.FC<Props> = ({
           stickyNodeRef.current!.style.width = `${triggerWidth}px`;
         }
       } else {
-        stickyNodeRef.current!.style.width = '';
+        stickyNodeRef.current!.style.width = "";
       }
 
       prevTriggerWidthRef.current = triggerWidth;
@@ -239,28 +245,34 @@ const Sticky: React.FC<Props> = ({
   const style = React.useMemo(() => {
     const { sticky, absolute, top, bottom } = state;
 
-    const stickyStyle = sticky
+    const stickyStyle: {
+      width?: number;
+      position?: "absolute" | "fixed";
+      bottom?: "auto" | number;
+      top?: "auto" | number;
+      left?: "auto";
+      right?: "auto";
+    } = sticky
       ? {
           width: rectsRef.current.trigger!.width,
-          ...(absolute ? $styles.absolute.style : $styles.fixed.style),
-          ...(bottom === null && { top, bottom: 'auto' }),
-          ...(top === null && { bottom: absolute ? 0 : bottom, top: 'auto' }),
-          ...$styles.absolute.sticky,
+          ...(absolute ? $.styles.absolute.style : $.styles.fixed.style),
+          ...(bottom === null && top !== null && { top, bottom: "auto" }),
+          ...(top === null &&
+            bottom !== null && { bottom: absolute ? 0 : bottom, top: "auto" }),
+          ...$.styles.sticky.style
         }
       : {};
 
     return {
-      position: 'static',
-      transition: 'none',
-      zIndex: 800,
-      ...stickyStyle,
+      ...$.styles.default.style,
+      ...stickyStyle
     };
   }, [state.sticky, state.absolute, state.top, state.bottom]);
 
   const triggerStyle = React.useMemo(() => {
     return state.sticky
       ? {
-          height: rectsRef.current.sticky!.height,
+          height: rectsRef.current.sticky!.height
         }
       : {};
   }, [state.sticky]);
@@ -311,15 +323,15 @@ const Sticky: React.FC<Props> = ({
 
   const stickToContextBottom = React.useCallback(
     e => {
-      if (stateRef.current !== 'stickToContextBottom') {
-        stateRef.current = 'stickToContextBottom';
+      if (stateRef.current !== "stickToContextBottom") {
+        stateRef.current = "stickToContextBottom";
         onBottom && onBottom(e);
         pushingRef.current = pushing;
         setState({
           sticky: true,
           absolute: true,
           top: null,
-          bottom: bottomOffset,
+          bottom: bottomOffset
         });
         onStick && onStick(e);
       }
@@ -329,15 +341,15 @@ const Sticky: React.FC<Props> = ({
 
   const stickToContextTop = React.useCallback(
     e => {
-      if (stateRef.current !== 'stickToContextTop') {
-        stateRef.current = 'stickToContextTop';
+      if (stateRef.current !== "stickToContextTop") {
+        stateRef.current = "stickToContextTop";
         onTop && onTop(e);
         pushingRef.current = false;
         setState({
           sticky: false,
           absolute: false,
           top: null,
-          bottom: null,
+          bottom: null
         });
         onUnstick && onUnstick(e);
       }
@@ -347,13 +359,13 @@ const Sticky: React.FC<Props> = ({
 
   const stickToScreenBottom = React.useCallback(
     e => {
-      if (stateRef.current !== 'stickToScreenBottom') {
-        stateRef.current = 'stickToScreenBottom';
+      if (stateRef.current !== "stickToScreenBottom") {
+        stateRef.current = "stickToScreenBottom";
         setState({
           sticky: true,
           absolute: false,
           top: null,
-          bottom: bottomOffset,
+          bottom: bottomOffset
         });
         onStick && onStick(e);
       }
@@ -363,13 +375,13 @@ const Sticky: React.FC<Props> = ({
 
   const stickToScreenTop = React.useCallback(
     e => {
-      if (stateRef.current !== 'stickToScreenTop') {
-        stateRef.current = 'stickToScreenTop';
+      if (stateRef.current !== "stickToScreenTop") {
+        stateRef.current = "stickToScreenTop";
         setState({
           sticky: true,
           absolute: false,
           top: offset,
-          bottom: null,
+          bottom: null
         });
         onStick && onStick(e);
       }
@@ -378,18 +390,18 @@ const Sticky: React.FC<Props> = ({
   );
 
   return (
-    <BaseElement elementName="div" _className_={$classNames.sticky} {...other}>
+    <BaseElement elementName="div" _className_={$.classNames.name} {...other}>
       <BaseElement
         elementName="div"
-        _style_={triggerStyle}
         {...triggerNodeProps}
+        _style_={triggerStyle}
         _refer_={triggerNodeRef}
       />
       <BaseElement
         elementName="div"
-        _style_={style}
-        _className_={$classNames.stickyContents}
         {...contentsProps}
+        _style_={style}
+        _className_={$.classNames.nameContents}
         _refer_={stickyNodeRef}
       >
         {children}

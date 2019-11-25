@@ -1,179 +1,82 @@
-import React from 'react';
-import $ from './_constants';
-import { getFontSize, keyframes, useLateUpdate } from 'scripts';
-import { BaseElement } from '..';
-import scripts from './_scripts';
+import * as React from "react";
+import $ from "./_constants";
+import {} from "scripts";
+import { BaseElement } from "..";
 
-const $styles = $.styles;
+type ComponentProps = {
+  /**
+   * test disabled description
+   * test test test
+   * @default false
+   */
+  disabled?: boolean;
+  ariaDisabled?: boolean;
+  disabledStyle?: React.CSSProperties;
+  ariaDisabledStyle?: React.CSSProperties;
+  test?: (value: number) => void;
+};
 
-type Type =
-  | 'normal-outline'
-  | 'dark'
-  | 'dark-outline'
-  | 'outline'
-  | 'fill'
-  | 'normal';
-
-type Between = boolean | string;
+type Props = $Type.MergeObject<
+  ComponentProps,
+  $Type.Components.BaseElement._GeneralProps
+>;
 
 declare global {
   namespace $Type {
     namespace Components {
-      type ButtonType = Type;
-      type ButtonBetween = Between;
+      namespace Button {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
     }
   }
 }
 
-type Props = $Type.ReactUtils.CreateProps<
-  {
-    color?: string;
-    type?: Type;
-    toFill?: boolean;
-    loading?: boolean;
-    disable?: boolean;
-    effectColor?: string;
-    between?: Between;
-    shape?: $Type.Constants.Shape;
-    size?: $Type.Utils.FontSize;
-    fullWidth?: boolean;
-    fullHeight?: boolean;
-    borderStyle?: string;
-    borderWidth?: string;
-    clickEffect?: boolean;
-    onClick?: () => void;
-  },
-  typeof BaseElement
->;
-
-const Button: React.FC<Props> = ({
+export const Button: React.FC<Props> = ({
   children,
-  color: keyColor,
-  type = 'normal',
-  toFill = false,
-  loading = false,
-  disable = false,
-  effectColor,
-  between = false,
-  shape = 'default',
-  size,
-  fullWidth = false,
-  fullHeight = false,
-  borderStyle,
-  borderWidth = $styles.borderWidth,
-  clickEffect = true,
-  onClick,
+  disabled = false,
+  ariaDisabled,
+  disabledStyle: propDisabledStyle = $.styles.disabled.style,
+  ariaDisabledStyle: propAriaDisabledStyle = $.styles.disabled.style,
   ...other
 }) => {
-  const [lateUpdateStatus, lateUpdate] = useLateUpdate(
-    $styles.clickEffectDuration
-  );
-
-  const hasClickEffect = clickEffect && !disable && !loading;
-
-  const handleClick = React.useCallback(() => {
-    onClick && onClick();
-    hasClickEffect && lateUpdate();
-  }, [onClick, hasClickEffect]);
-
-  const mainStyle = $styles.main;
-
-  const clickEffectStyle = React.useMemo(() => {
-    const waveKeyframes = keyframes(scripts.genWaveKeyframes(borderWidth));
-    const fadeKeyframes = keyframes({
-      to: {
-        ...$styles.fadeKeyframes,
-      },
-    });
-    const style = scripts.genClickEffectStyle(
-      borderWidth,
-      effectColor,
-      waveKeyframes,
-      fadeKeyframes
-    );
-    return style;
-  }, [borderWidth, effectColor]);
-
-  const loadingMaskStyle = React.useMemo(() => {
-    return loading ? scripts.genLoadingMask(borderWidth) : {};
-  }, [loading, borderWidth]);
-
-  const shapeStyle = React.useMemo(() => {
-    const style = {
-      ...scripts.genShape(shape),
-      ...(loading ? $styles.loading : {}),
-      ...(fullWidth ? $styles.fullWidth : {}),
-      ...(fullHeight ? $styles.fullHeight : {}),
-      fontSize: size ? getFontSize(size) : $styles.fontSize,
-      borderStyle: borderStyle || $styles.borderStyle,
-      borderWidth: borderWidth || $styles.borderWidth,
-    };
-    return style;
-  }, [shape, size, borderStyle, borderWidth, fullWidth, fullHeight, loading]);
-
-  const colorStyle = React.useMemo(() => {
-    return scripts.genColor(type, toFill, disable, keyColor);
-  }, [keyColor, type, toFill, disable]);
-
   const style = React.useMemo(() => {
-    return {
-      ...mainStyle,
-      ...shapeStyle,
-      ...colorStyle,
-    };
-  }, [shapeStyle, colorStyle]);
-
-  let contents = React.useMemo(() => {
-    return scripts.defineContents(children, between, loading);
-  }, [children, between, loading]);
-
-  // const clickEffectComponent = React.useMemo(() => {
-  //   return (
-  //     lateUpdateStatus &&
-  //     hasClickEffect && (
-  //       <BaseElement
-  //         elementName="div"
-  //         key={lateUpdateStatus}
-  //         aria-hidden={true}
-  //         style={clickEffectStyle}
-  //       />
-  //     )
-  //   );
-  // }, [lateUpdateStatus, hasClickEffect]);
-
-  // const loadingMaskComponent = React.useMemo(() => {
-  //   return (
-  //     loading && (
-  //       <BaseElement
-  //         elementName="div"
-  //         aria-hidden={true}
-  //         style={loadingMaskStyle}
-  //       />
-  //     )
-  //   );
-  // }, [loading]);
-
-  const arias = React.useMemo(() => {
-    const props = {} as React.AriaAttributes;
-    if (disable) props['aria-disabled'] = true;
-    if (loading) props['aria-busy'] = true;
-    return props;
-  }, [disable, loading]);
-
+    const disabledStyle = disabled ? propDisabledStyle : {};
+    const ariaDisabledStyle = ariaDisabled ? propAriaDisabledStyle : {};
+    return { ...$.styles.style, ...ariaDisabledStyle, ...disabledStyle };
+  }, [disabled]);
   return (
     <BaseElement
       elementName="button"
-      _style_={style}
-      onClick={handleClick}
-      disabled={disable || loading}
-      _arias_={arias}
+      disabled={disabled}
+      aria-disabled={ariaDisabled}
       {...other}
+      _style_={style}
+      _className_={$.classNames.name}
     >
-      {contents}
-      {/* {loadingMaskComponent}
-      {clickEffectComponent} */}
+      {children}
     </BaseElement>
   );
 };
+
+// Button.displayName = "Button";
+
+// interface Props {
+//   disabled?: boolean;
+//   ariaDisabled?: boolean;
+//   disabledStyle?: object;
+//   ariaDisabledStyle?: object;
+// }
+// export class Button extends React.Component<Props> {
+//   render() {
+//     const {
+//       ariaDisabled,
+//       disabledStyle,
+//       ariaDisabledStyle,
+//       ...other
+//     } = this.props;
+//     return <button {...other} />;
+//   }
+// }
 
 export default Button;

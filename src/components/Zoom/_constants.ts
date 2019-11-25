@@ -6,7 +6,7 @@ const name = 'zoom';
 export const constants = {
   name: name,
   classNames: {
-    zoom: `${$.prefix}${name}`,
+    name: `${$.prefix}${name}`,
   },
   styles: {
     style: {

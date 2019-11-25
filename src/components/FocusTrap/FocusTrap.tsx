@@ -1,17 +1,30 @@
-import React from 'react';
-import { injectElementToRef, extractElement, lazyEvent } from 'scripts';
-import { BaseElement } from '..';
+import * as React from "react";
+import { injectElementToRef, extractElement, lazyEvent } from "scripts";
+import { BaseElement } from "..";
 
-type Props = $Type.ReactUtils.CreateProps<
-  {
-    active?: boolean;
-    disableAutoFocus?: boolean;
-    disableEnforceFocus?: boolean;
-    disableRestoreFocus?: boolean;
-    initialFocus?: HTMLElement;
-  },
-  typeof BaseElement
+type ComponentProps = {
+  active?: boolean;
+  disableAutoFocus?: boolean;
+  disableEnforceFocus?: boolean;
+  disableRestoreFocus?: boolean;
+  initialFocus?: HTMLElement;
+};
+
+type Props = $Type.MergeObject<
+  ComponentProps,
+  $Type.Components.BaseElement._GeneralProps
 >;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace FocusTrap {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
 
 let focusTrapCounter: number = 0;
 let firstRestoreNode: null | HTMLElement = null;
@@ -55,8 +68,8 @@ const FocusTrap: React.FC<Props> = ({
       rootNodeRef.current &&
       !rootNodeRef.current.contains(document.activeElement)
     ) {
-      if (!rootNodeRef.current.hasAttribute('tabIndex')) {
-        rootNodeRef.current.setAttribute('tabIndex', '-1');
+      if (!rootNodeRef.current.hasAttribute("tabIndex")) {
+        rootNodeRef.current.setAttribute("tabIndex", "-1");
       }
 
       const initialFocusNode = extractElement(initialFocus);
@@ -100,8 +113,8 @@ const FocusTrap: React.FC<Props> = ({
       }
     };
 
-    document.addEventListener('focus', contain, true);
-    document.addEventListener('keydown', loopFocus, true);
+    document.addEventListener("focus", contain, true);
+    document.addEventListener("keydown", loopFocus, true);
 
     // With Edge, Safari and Firefox, no focus related events are fired when the focused area stops being a focused area
     // e.g. https://bugzilla.mozilla.org/show_bug.cgi?id=559561.
@@ -113,8 +126,8 @@ const FocusTrap: React.FC<Props> = ({
 
     return () => {
       handle();
-      document.removeEventListener('focus', contain, true);
-      document.removeEventListener('keydown', loopFocus, true);
+      document.removeEventListener("focus", contain, true);
+      document.removeEventListener("keydown", loopFocus, true);
 
       // restoreLastFocus()
       if (!disableRestoreFocus) {

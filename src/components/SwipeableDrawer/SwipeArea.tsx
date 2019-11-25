@@ -1,40 +1,54 @@
-import React from 'react';
-import { getComponentConstants } from 'scripts';
-import { isHorizontal } from '../Drawer/Drawer';
-import { BaseElement } from '..';
+import * as React from "react";
+import { getComponentConstants } from "scripts";
+import { isHorizontal } from "../Drawer/Drawer";
+import { BaseElement } from "..";
 
-const $ = getComponentConstants('swipeableDrawer');
+const $ = getComponentConstants("swipeableDrawer");
+const $swipeAreaStyle = $.styles.swipeArea;
 
-const $swipeAreaStyles = $.styles.swipeArea;
-const $classNames = $.classNames
+type ComponentProps = {
+  anchor?: $Type.Components.Drawer._Anchor;
+  width?: number;
+};
 
-type Props = $Type.ReactUtils.CreateProps<
-  {
-    anchor?: $Type.Components.DrawerAnchor;
-    width?: number;
-  },
-  typeof BaseElement
+type Props = $Type.MergeObject<
+  ComponentProps,
+  $Type.Components.BaseElement._GeneralProps
 >;
 
-const SwipeArea: $Type.ReactUtils.FunctionComponentWithoutChildren<Props> = ({
-  anchor = 'left',
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace SwipeArea {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
+
+const SwipeArea: React.FC<Props> = ({
+  children,
+  anchor = "left",
   width = 40,
   ...other
 }) => {
   const _style_ = React.useMemo(() => {
     return {
-      ...$swipeAreaStyles.style,
-      ...$swipeAreaStyles[anchor].style,
-      [isHorizontal(anchor) ? 'width' : 'height']: width,
+      ...$swipeAreaStyle.style,
+      ...$swipeAreaStyle.anchor[anchor].style,
+      [isHorizontal(anchor) ? "width" : "height"]: width
     };
   }, [anchor, width]);
   return (
     <BaseElement
       elementName="div"
-      _style_={_style_}
-      _className_={$classNames.swipeableDrawerArea}
       {...other}
-    />
+      _style_={_style_}
+      _className_={$.classNames.name}
+    >
+      {children}
+    </BaseElement>
   );
 };
 

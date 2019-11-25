@@ -1,11 +1,11 @@
-import * as React from 'react';
-import $ from './_constants';
+import * as React from "react";
+import $ from "./_constants";
 import {
   injectElementToRef,
   useForceUpdate,
   isReactComponentChildren,
-  isTransitionComponent,
-} from 'scripts';
+  isTransitionComponent
+} from "scripts";
 import {
   Portal,
   HideOtherAria,
@@ -13,45 +13,53 @@ import {
   FocusTrap,
   HotKeys,
   ClickOutside,
-  ScrollLock,
-} from '..';
-
-const $classNames = $.classNames;
-const $styles = $.styles;
+  ScrollLock
+} from "..";
 
 type ModalQueueValue = {
   isActive: boolean;
   update: () => void;
 };
 
-type Props = $Type.ReactUtils.CreateProps<
-  {
-    container?: Element;
-    open?: boolean;
-    onChanged?: (willExist: boolean, node: HTMLElement | null) => void;
-    onEscapeKeyDown?: (evt: KeyboardEvent) => void;
-    onOutsideClick?: (evt: MouseEvent) => void;
-    keepMount?: boolean;
-    ignoreTransition?: boolean;
-    disableEscapeKeyDown?: boolean;
-    disableOutsideClick?: boolean;
-    disableHideOtherAria?: boolean;
-    hideBackdrop?: boolean;
-    disableResetScroll?: boolean;
-    disableScrollLock?: boolean;
-    scrollTarget?: $Type.ReactUtils.IncludeNode<Element>;
-    clickOutsideProps?: $Type.ReactUtils.CreatePropComponentProps<
-      typeof ClickOutside
-    >;
-    contentsProps?: $Type.ReactUtils.CreatePropComponentProps<typeof FocusTrap>;
-    backdropProps?: $Type.ReactUtils.CreatePropComponentProps<typeof Backdrop>;
-  },
-  typeof HideOtherAria
+type ComponentProps = {
+  container?: Element;
+  open?: boolean;
+  onChanged?: (willExist: boolean, node: HTMLElement | null) => void;
+  onEscapeKeyDown?: (evt: KeyboardEvent) => void;
+  onOutsideClick?: (evt: MouseEvent) => void;
+  keepMount?: boolean;
+  ignoreTransition?: boolean;
+  disableEscapeKeyDown?: boolean;
+  disableOutsideClick?: boolean;
+  disableHideOtherAria?: boolean;
+  hideBackdrop?: boolean;
+  disableResetScroll?: boolean;
+  disableScrollLock?: boolean;
+  scrollTarget?: $Type.ReactUtils.IncludeNode<Element>;
+  clickOutsideProps?: $Type.Components.ClickOutside._Props;
+  contentsProps?: $Type.Components.FocusTrap._Props;
+  backdropProps?: $Type.Components.Backdrop._Props;
+};
+
+type Props = $Type.MergeObject<
+  ComponentProps,
+  $Type.Components.HideOtherAria._Props
 >;
+
+declare global {
+  namespace $Type {
+    namespace Components {
+      namespace Modal {
+        type _Props = Props;
+        type _ComponentProps = ComponentProps;
+      }
+    }
+  }
+}
 
 const modalQueue: ModalQueueValue[] = [];
 
-let zIndexCounter: number = $styles.modalZindex;
+let zIndexCounter: number = $.styles.modalZindex;
 
 const Modal: React.FC<Props> = ({
   children,
@@ -107,7 +115,7 @@ const Modal: React.FC<Props> = ({
 
   const modalManagerRef = React.useRef<ModalQueueValue>({
     isActive: false,
-    update: forceUpdate,
+    update: forceUpdate
   });
 
   if (open && !activatedRef.current) {
@@ -149,7 +157,7 @@ const Modal: React.FC<Props> = ({
         lastModal.update();
       }
     } else {
-      zIndexCounter = $styles.modalZindex;
+      zIndexCounter = $.styles.modalZindex;
       modalQueue.length = 0;
     }
   }
@@ -176,7 +184,7 @@ const Modal: React.FC<Props> = ({
   React.useEffect(() => {
     const isExist = willExist;
     if (rootNodeRef.current) {
-      rootNodeRef.current.style.visibility = isExist ? '' : 'hidden';
+      rootNodeRef.current.style.visibility = isExist ? "" : "hidden";
     }
     if (!disableResetScroll) {
       if (childNodeRef.current!.children[0])
@@ -266,17 +274,17 @@ const Modal: React.FC<Props> = ({
     ...React.useMemo(() => {
       return {
         style: {
-          ...$styles.container.style,
-          ...other.style,
+          ...$.styles.container.style,
+          ...other.style
         },
-        classNames: [...(other.classNames || []), $classNames.modal],
+        classNames: [...(other.classNames || []), $.classNames.name],
         arias: {
-          'aria-modal': true,
-          ...other.arias,
+          "aria-modal": true,
+          ...other.arias
         },
-        refer: handleRootNodeRef,
+        refer: handleRootNodeRef
       };
-    }, [other.style, other.classNames, other.arias]),
+    }, [other.style, other.classNames, other.arias])
   };
 
   const contentsProps = {
@@ -284,15 +292,15 @@ const Modal: React.FC<Props> = ({
     ...React.useMemo(() => {
       return {
         style: {
-          ...$styles.contents.style,
-          ...propContentProps.style,
+          ...$.styles.contents.style,
+          ...propContentProps.style
         },
         classNames: [
           ...(propContentProps.classNames || []),
-          $classNames.modalContent,
-        ],
+          $.classNames.nameContent
+        ]
       };
-    }, [propContentProps.style, propContentProps.classNames]),
+    }, [propContentProps.style, propContentProps.classNames])
   };
 
   const backdropProps = {
@@ -300,15 +308,15 @@ const Modal: React.FC<Props> = ({
     ...React.useMemo(() => {
       return {
         style: {
-          zIndex: $styles.backdropZindex,
-          ...propBackdropProps.style,
+          zIndex: $.styles.backdropZindex,
+          ...propBackdropProps.style
         },
         classNames: [
           ...(propBackdropProps.classNames || []),
-          $classNames.modalBackdrop,
-        ],
+          $.classNames.nameBackdrop
+        ]
       };
-    }, [propBackdropProps.style, propBackdropProps.classNames]),
+    }, [propBackdropProps.style, propBackdropProps.classNames])
   };
 
   const isMount = keepMount ? true : willExist;
@@ -316,33 +324,33 @@ const Modal: React.FC<Props> = ({
   return isMount ? (
     <Portal container={container}>
       <HideOtherAria
+        {...props}
         active={!disableHideOtherAria && isActive}
         parent={container}
-        {...props}
       >
         {!disableScrollLock && willExist && (
           <ScrollLock target={scrollTarget || childNodeRef} />
         )}
         {!disableEscapeKeyDown && isActive && open && (
-          <HotKeys hotkeys={'escape'} action={handleEscapeKeyDown} />
+          <HotKeys hotkeys={"escape"} action={handleEscapeKeyDown} />
         )}
         {!disableOutsideClick && isActive && open && (
           <ClickOutside
+            {...clickOutsideProps}
             target={childNodeRef}
             action={handleOutsideClick}
             scope={rootNodeRef}
-            {...clickOutsideProps}
           />
         )}
         {!hideBackdrop && (
           <Backdrop
-            open={open}
             disablePointerEvents={true}
             aria-hidden={true}
             {...backdropProps}
+            open={open}
           />
         )}
-        <FocusTrap active={isActive} {...contentsProps} testid={other.testid}>
+        <FocusTrap {...contentsProps} active={isActive}>
           {childComponent}
         </FocusTrap>
       </HideOtherAria>
