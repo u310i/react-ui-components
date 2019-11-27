@@ -1,22 +1,32 @@
-import $ from '../_constants';
-import { createComponentConstants, getComponentConstants } from 'scripts';
+import $ from "../_constants";
+import { createComponentConstants, getComponentConstants } from "scripts";
 
-const name = 'paper';
+const name = "paper";
 
 export const constants = {
   name: name,
   classNames: {
-    name: `${$.prefix}${name}`,
+    name: `${$.prefix}${name}`
   },
   styles: {
     style: {
-      padding: '16px 24px',
-    },
+      padding: "16px 24px"
+    }
   },
   shadow: $.shadow,
   shape: $.shape,
-  color: $.colors.white,
+  color: $.colors.white
 } as const;
+
+declare global {
+  namespace $Type {
+    namespace Constants {
+      namespace Components {
+        type Paper = typeof constants;
+      }
+    }
+  }
+}
 
 createComponentConstants(name, constants);
 

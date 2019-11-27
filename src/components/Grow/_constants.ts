@@ -1,31 +1,41 @@
-import $ from '../_constants';
-import { createComponentConstants, getComponentConstants } from 'scripts';
+import $ from "../_constants";
+import { createComponentConstants, getComponentConstants } from "scripts";
 
-const name = 'grow';
+const name = "grow";
 
 export const constants = {
   name: name,
   classNames: {
-    name: `${$.prefix}${name}`,
+    name: `${$.prefix}${name}`
   },
   styles: {
     style: {
       // alternative to "width: fit-content"
-      display: 'table',
-      position: 'relative',
+      display: "table",
+      position: "relative"
     },
     duration: $.transition.duration,
     easing: $.transition.easing,
-    enteredOpacity: '1',
-    exitedOpacity: '0',
-    enteredScale: 'scale(1, 1) translateZ(0px)',
+    enteredOpacity: "1",
+    exitedOpacity: "0",
+    enteredScale: "scale(1, 1) translateZ(0px)",
     scaleDurationRatio: 0.666,
     outScalingDelayRatioFromDuration: 0.333,
     scaleXRatio: 0.75,
     scaleYRatio: 0.6,
-    exitedVisibility: 'hidden',
-  },
+    exitedVisibility: "hidden"
+  }
 } as const;
+
+declare global {
+  namespace $Type {
+    namespace Constants {
+      namespace Components {
+        type Grow = typeof constants;
+      }
+    }
+  }
+}
 
 createComponentConstants(name, constants);
 

@@ -1,8 +1,8 @@
 import { configure, addDecorator, addParameters } from "@storybook/react";
-import { withInfo } from "@storybook/addon-info";
 import { withKnobs } from "@storybook/addon-knobs";
 import { configureActions } from "@storybook/addon-actions";
 import { withConsole } from "@storybook/addon-console";
+// import { DocsPage, DocsContainer } from "@storybook/addon-docs/blocks";
 
 // automatically import all files ending in *.stories.tsx
 // import "../src/scripts/polyfill/index.ts";
@@ -14,19 +14,49 @@ configureActions({
   clearOnStoryChange: true
 });
 
-addDecorator(
-  withInfo({
-    source: false
-  })
-);
+// addDecorator(
+//   withInfo({
+//     source: false,
+//     styles: {
+//       button: {
+//         base: {
+//           fontFamily: "sans-serif",
+//           fontSize: "14px",
+//           fontWeight: "500",
+//           display: "block",
+//           position: "fixed",
+//           border: "none",
+//           background: "#14558f",
+//           color: "#fff",
+//           opacity: 0.7,
+//           padding: "5px 15px",
+//           cursor: "pointer"
+//         },
+//         topRight: {
+//           bottom: 17,
+//           right: 17,
+//           top: "unset",
+//           borderRadius: "5px"
+//         }
+//       }
+//     }
+//   })
+// );
+addDecorator(withKnobs);
+addDecorator((storyFn, context) => withConsole()(storyFn)(context));
 
 addParameters({
   options: {
     name: "MyComponents"
   }
 });
-addDecorator(withKnobs);
-addDecorator((storyFn, context) => withConsole()(storyFn)(context));
+
+// addParameters({
+//   docs: {
+//     container: DocsContainer,
+//     page: DocsPage
+//   }
+// });
 
 addParameters({
   backgrounds: [
@@ -35,4 +65,4 @@ addParameters({
   ]
 });
 
-configure(require.context("../src", true, /\.stories\.tsx?$/), module);
+configure(require.context("../src", true, /\.stories\.tsx?|mdx$/), module);

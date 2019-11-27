@@ -1,12 +1,12 @@
-import $ from '../_constants';
-import { createComponentConstants, getComponentConstants } from 'scripts';
+import $ from "../_constants";
+import { createComponentConstants, getComponentConstants } from "scripts";
 
-const name = 'onlyScreenReader';
+const name = "onlyScreenReader";
 
 export const constants = {
   name: name,
   classNames: {
-    name: `${$.prefix}${name}`,
+    name: `${$.prefix}${name}`
   },
   styles: {
     style: {
@@ -20,10 +20,20 @@ export const constants = {
       padding: 0,
       position: "absolute",
       width: "1px",
-      whiteSpace: "nowrap",
-    },
-  },
+      whiteSpace: "nowrap"
+    }
+  }
 } as const;
+
+declare global {
+  namespace $Type {
+    namespace Constants {
+      namespace Components {
+        type OnlyScreenReader = typeof constants;
+      }
+    }
+  }
+}
 
 createComponentConstants(name, constants);
 

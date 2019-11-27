@@ -5,15 +5,19 @@ import { BaseElement } from "..";
 
 type ComponentProps = {
   /**
-   * test disabled description
-   * test test test
+   * prop description
    * @default false
    */
   disabled?: boolean;
   ariaDisabled?: boolean;
+  /**
+   * prop description
+   */
   disabledStyle?: React.CSSProperties;
+  /**
+   * @default string
+   */
   ariaDisabledStyle?: React.CSSProperties;
-  test?: (value: number) => void;
 };
 
 type Props = $Type.MergeObject<
@@ -32,6 +36,9 @@ declare global {
   }
 }
 
+/**
+ * General component description.
+ */
 export const Button: React.FC<Props> = ({
   children,
   disabled = false,

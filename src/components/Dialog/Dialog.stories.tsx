@@ -5,15 +5,12 @@ import { linkTo } from "@storybook/addon-links";
 import Dialog from "./Dialog";
 import Button from "../Button/Button";
 import Slide from "../Slide/Slide";
-import notes from "./notes.md";
 
 export default {
   title: "Dialog",
+  component: Dialog,
   parameters: {
-    notes: "",
-    info: {
-      inline: true
-    }
+    componentSubtitle: "Sub Title"
   }
 };
 

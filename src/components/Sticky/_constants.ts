@@ -1,7 +1,7 @@
-import $ from '../_constants';
-import { createComponentConstants, getComponentConstants } from 'scripts';
+import $ from "../_constants";
+import { createComponentConstants, getComponentConstants } from "scripts";
 
-const name = 'sticky';
+const name = "sticky";
 
 export const constants = {
   name: name,
@@ -11,35 +11,45 @@ export const constants = {
     nameAbsoluteWrapper: `${$.prefix}${name}-absolute-wrapper`,
     nameOuter: `${$.prefix}${name}-outer`,
     nameInner: `${$.prefix}${name}-inner`,
-    nameDummy: `${$.prefix}${name}-dummy`,
+    nameDummy: `${$.prefix}${name}-dummy`
   },
   styles: {
     default: {
       style: {
-        position: 'static',
-        transition: 'none',
-        zIndex: $.zIndex.sticky,
+        position: "static",
+        transition: "none",
+        zIndex: $.zIndex.sticky
       }
     },
     sticky: {
       style: {
-        left: 'auto',
-        right: 'auto',
+        left: "auto",
+        right: "auto"
       }
     },
     absolute: {
       style: {
-        position: 'absolute',
+        position: "absolute"
       }
     },
     fixed: {
       style: {
-        position: 'fixed',
+        position: "fixed"
       }
     },
-    zIndex: $.zIndex.slide,
-  },
+    zIndex: $.zIndex.slide
+  }
 } as const;
+
+declare global {
+  namespace $Type {
+    namespace Constants {
+      namespace Components {
+        type Sticky = typeof constants;
+      }
+    }
+  }
+}
 
 createComponentConstants(name, constants);
 

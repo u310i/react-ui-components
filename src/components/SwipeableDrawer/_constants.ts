@@ -1,61 +1,71 @@
-import $ from '../_constants';
-import { createComponentConstants, getComponentConstants } from 'scripts';
+import $ from "../_constants";
+import { createComponentConstants, getComponentConstants } from "scripts";
 
-const name = 'swipeableDrawer';
+const name = "swipeableDrawer";
 
 export const constants = {
   name: name,
   classNames: {
     name: `${$.prefix}${name}`,
     nameTransition: `${$.prefix}${name}-transition`,
-    nameArea: `${$.prefix}${name}-area`,
+    nameArea: `${$.prefix}${name}-area`
   },
   selectors: {},
   styles: {
     style: {},
     swipeArea: {
       style: {
-        position: 'fixed',
+        position: "fixed",
         top: 0,
         left: 0,
         bottom: 0,
-        zIndex: $.zIndex.drawer - 1,
+        zIndex: $.zIndex.drawer - 1
       },
       anchor: {
         left: {
           style: {
-            right: 'auto',
-          },
+            right: "auto"
+          }
         },
         right: {
           style: {
-            left: 'auto',
-            right: 0,
-          },
+            left: "auto",
+            right: 0
+          }
         },
         top: {
           style: {
-            bottom: 'auto',
-            right: 0,
-          },
+            bottom: "auto",
+            right: 0
+          }
         },
         bottom: {
           style: {
-            top: 'auto',
+            top: "auto",
             bottom: 0,
-            right: 0,
-          },
-        },
+            right: 0
+          }
+        }
       }
     },
     // duration: $.transition.duration,
     duration: {
       enter: 195,
-      exit: 225,
+      exit: 225
     },
-    easing: $.cubicBeziers.easeInOut,
-  },
+    easing: $.cubicBeziers.easeInOut
+  }
 } as const;
+
+declare global {
+  namespace $Type {
+    namespace Constants {
+      namespace Components {
+        type SwipeableDrawer = typeof constants;
+      }
+    }
+  }
+}
 
 createComponentConstants(name, constants);
 

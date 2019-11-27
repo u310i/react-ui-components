@@ -1,7 +1,7 @@
-import $ from '../_constants';
-import { createComponentConstants, getComponentConstants } from 'scripts';
+import $ from "../_constants";
+import { createComponentConstants, getComponentConstants } from "scripts";
 
-const name = 'drawer';
+const name = "drawer";
 
 export const constants = {
   name: name,
@@ -9,68 +9,78 @@ export const constants = {
     name: `${$.prefix}${name}`,
     nameContainer: `${$.prefix}${name}-container`,
     nameTransition: `${$.prefix}${name}-transition`,
-    nameInner: `${$.prefix}${name}-inner`,
+    nameInner: `${$.prefix}${name}-inner`
   },
   styles: {
     modal: {
       contents: {
         style: {
-          display: 'flex',
+          display: "flex"
         },
         anchor: {
           left: {
             style: {
-              justifyContent: 'flex-start',
-            },
+              justifyContent: "flex-start"
+            }
           },
           right: {
             style: {
-              justifyContent: 'flex-end',
-            },
+              justifyContent: "flex-end"
+            }
           },
           top: {
             style: {
-              alignItems: 'flex-start',
-            },
+              alignItems: "flex-start"
+            }
           },
           bottom: {
             style: {
-              alignItems: 'flex-end',
-            },
-          },
+              alignItems: "flex-end"
+            }
+          }
         }
-      },
+      }
     },
     transition: {
       style: {
         // display: 'flex',
-      },
+      }
     },
     inner: {
       elevation: 16,
-      shape: 'default',
+      shape: "default",
       style: {
-        backgroundColor: 'white',
-        display: 'flex',
-        flexDirection: 'column',
-        overflowX: 'hidden',
-        overflowY: 'auto',
+        backgroundColor: "white",
+        display: "flex",
+        flexDirection: "column",
+        overflowX: "hidden",
+        overflowY: "auto"
       },
       horizontal: {
         style: {
-          width: '256px',
-          height: '100vh',
-        },
+          width: "256px",
+          height: "100vh"
+        }
       },
       vertical: {
         style: {
-          width: '100vw',
-          height: '256px',
-        },
-      },
-    },
-  },
+          width: "100vw",
+          height: "256px"
+        }
+      }
+    }
+  }
 } as const;
+
+declare global {
+  namespace $Type {
+    namespace Constants {
+      namespace Components {
+        type Drawer = typeof constants;
+      }
+    }
+  }
+}
 
 createComponentConstants(name, constants);
 

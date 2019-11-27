@@ -5,7 +5,7 @@ import { BaseElement } from "..";
 
 type ComponentProps = {
   elevation?: number;
-  shape?: $Type.Constants.Shape;
+  shape?: $Type.Constants.Origin.Shape;
 };
 
 type Props = $Type.MergeObject<

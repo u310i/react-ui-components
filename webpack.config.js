@@ -1,5 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const _env = {};
 if (process.env.NODE_ENV !== "production") {
@@ -24,7 +25,8 @@ module.exports = {
     filename: "[name].bundle.js"
   },
   plugins: [
-    new webpack.EnvironmentPlugin({ NODE_ENV: "development", DEV_ENV: "" })
+    new webpack.EnvironmentPlugin({ NODE_ENV: "development", DEV_ENV: "" }),
+    new ForkTsCheckerWebpackPlugin()
   ],
   devServer: {
     contentBase: path.resolve(__dirname, "public"),

@@ -1,54 +1,64 @@
-import $ from '../_constants';
-import { createComponentConstants, getComponentConstants } from 'scripts';
+import $ from "../_constants";
+import { createComponentConstants, getComponentConstants } from "scripts";
 
-const name = 'icon';
+const name = "icon";
 
 export const constants = {
   name: name,
   styles: {
     prefix: $.prefix,
     style: {
-      display: 'inline-block',
-      overflow: 'visible',
-      height: '1em',
-      fontSize: 'inherit',
-      verticalAlign: '-.125em',
+      display: "inline-block",
+      overflow: "visible",
+      height: "1em",
+      fontSize: "inherit",
+      verticalAlign: "-.125em"
     },
-    marginLeft: '0.5em',
-    marginRight: '0.5em',
-    currentColor: 'currentColor',
+    marginLeft: "0.5em",
+    marginRight: "0.5em",
+    currentColor: "currentColor",
     height: 1,
     heightOnBorder: 1.5,
     widthRatioOnFixed: 1.25,
     precision: 3,
     border: {
-      border: 'main 0.08em #eee',
-      borderRadius: '0.1em',
-      padding: '0.2em 0.25em 0.15em',
+      border: "main 0.08em #eee",
+      borderRadius: "0.1em",
+      padding: "0.2em 0.25em 0.15em"
     },
     pullLeft: {
-      marginRight: '0.3em',
-      float: 'left',
+      marginRight: "0.3em",
+      float: "left"
     },
     pullRight: {
-      marginLeft: '0.3em',
-      float: 'right',
+      marginLeft: "0.3em",
+      float: "right"
     },
-    flipHorizontal: 'scale(-1, 1)',
-    flipVertical: 'scale(1, -1)',
-    flipBoth: 'scale(-1, -1)',
+    flipHorizontal: "scale(-1, 1)",
+    flipVertical: "scale(1, -1)",
+    flipBoth: "scale(-1, -1)",
     roll: {
       from: {
-        transform: 'rotate(0deg)',
+        transform: "rotate(0deg)"
       },
       to: {
-        transform: 'rotate(360deg)',
+        transform: "rotate(360deg)"
       },
-      spin: '1s infinite linear',
-      pulse: '1s infinite steps(8)',
-    },
-  },
+      spin: "1s infinite linear",
+      pulse: "1s infinite steps(8)"
+    }
+  }
 } as const;
+
+declare global {
+  namespace $Type {
+    namespace Constants {
+      namespace Components {
+        type Icon = typeof constants;
+      }
+    }
+  }
+}
 
 createComponentConstants(name, constants);
 

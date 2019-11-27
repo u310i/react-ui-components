@@ -91,7 +91,7 @@ declare global {
   }
 }
 
-const CSSTransition: $Type.ReactUtils.FCWithoutChildren<Props> = ({
+const CSSTransition: React.FC<Props> = ({
   children,
   in: inProp = false,
   timeout = 300,

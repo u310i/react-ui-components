@@ -31,7 +31,7 @@ declare global {
   }
 }
 
-const Dialog: React.FC<Props> = ({
+export const Dialog: React.FC<Props> = ({
   children,
   open = false,
   scrollBody,
