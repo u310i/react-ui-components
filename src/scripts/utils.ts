@@ -244,10 +244,10 @@ export const extractElement = <T = Element>(
     typeof value === "string"
       ? document.querySelector(value)
       : typeof value === "function"
-        ? ((value as () => $Type.ReactUtils.MaybeNode<T>)() as any)
-        : "current" in value
-          ? value.current
-          : value;
+      ? ((value as () => $Type.ReactUtils.MaybeNode<T>)() as any)
+      : "current" in value
+      ? value.current
+      : value;
 
   return node;
 };
@@ -259,4 +259,28 @@ export const injectElementToRef = <T = Element>(
   if (ref) {
     typeof ref === "function" ? ref(element) : (ref.current = element);
   }
+};
+
+export const deeplyChildren = (
+  parent: any,
+  action: (child: any) => void,
+  limit?: number,
+  count?: number
+): void => {
+  if (parent.children.length === 0) return;
+
+  let childCounter: number;
+  if (typeof limit !== "undefined") {
+    if (typeof count !== "undefined") {
+      if (count > limit) return;
+      childCounter = count + 1;
+    } else {
+      childCounter = 1;
+    }
+  }
+
+  Array.from(parent.children as ArrayLike<any>, child => {
+    action(child);
+    deeplyChildren(child, action, limit, childCounter);
+  });
 };

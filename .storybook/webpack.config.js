@@ -1,7 +1,44 @@
 const path = require("path");
 // const createCompiler = require("@storybook/addon-docs/mdx-compiler-plugin");
 
-module.exports = ({ config }) => {
+const reactDocgenTypescriptLoaderOptions = {
+  tsconfigPath: path.resolve(__dirname, "../tsconfig.json"),
+  propFilter(prop, component) {
+    if (prop.parent) {
+      return !prop.parent.fileName.includes("node_modules");
+    }
+
+    // if (component.name === "Dialog") {
+    //   console.log("#####################################################");
+    //   console.log(component);
+    //   console.log(prop);
+    //   // prop.type.name = "test";
+    //   // const ex = [
+    //   //   { name: 'Button' },
+    //   //   { defaultValue: null,
+    //   //     description: '',
+    //   //     name: 'classNames',
+    //   //     parent: undefined,
+    //   //     required: false,
+    //   //     type: { name: 'string[] | undefined' } }
+    //   // ]
+    // }
+    return ![
+      "type",
+      "className",
+      "id",
+      "style",
+      "elementName",
+      "classNames",
+      "ids",
+      "arias",
+      "refer",
+      "testid"
+    ].includes(prop.name);
+  }
+};
+
+module.exports = async ({ config }) => {
   config.module.rules.push({
     test: /\.tsx?$/,
     use: [
@@ -14,44 +51,7 @@ module.exports = ({ config }) => {
       },
       {
         loader: require.resolve("react-docgen-typescript-loader"),
-        options: {
-          tsconfigPath: path.resolve(__dirname, "../tsconfig.json"),
-          propFilter(prop, component) {
-            if (prop.parent) {
-              return !prop.parent.fileName.includes("node_modules");
-            }
-
-            if (component.name === "Dialog") {
-              console.log(
-                "#####################################################"
-              );
-              console.log(component);
-              console.log(prop);
-              // prop.type.name = "test";
-              // const ex = [
-              //   { name: 'Button' },
-              //   { defaultValue: null,
-              //     description: '',
-              //     name: 'classNames',
-              //     parent: undefined,
-              //     required: false,
-              //     type: { name: 'string[] | undefined' } }
-              // ]
-            }
-            return ![
-              "type",
-              "className",
-              "id",
-              "style",
-              "elementName",
-              "classNames",
-              "ids",
-              "arias",
-              "refer",
-              "testid"
-            ].includes(prop.name);
-          }
-        }
+        options: reactDocgenTypescriptLoaderOptions
       }
     ],
     include: [path.resolve(__dirname, "../src")],

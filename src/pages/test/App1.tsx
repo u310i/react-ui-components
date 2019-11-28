@@ -106,7 +106,7 @@ const App: React.FC<{}> = ({}) => {
       />
 
       <Button style={{ margin: "0.5em" }} onClick={handler_drawer}>
-        Button
+        SwipeableDrawer
       </Button>
       {/* <SwipeableDrawer
         open={state_drawer}
@@ -148,6 +148,134 @@ const App: React.FC<{}> = ({}) => {
         </div>
       </SwipeableDrawer> */}
 
+      <Button style={{ margin: "0.5em" }} onClick={handler2}>
+        dialog
+      </Button>
+      {/* <Dialog
+        open={state2}
+        onEscapeKeyDown={onClose2}
+        onOutsideClick={onClose2}
+        scrollBody={true}
+        fullScreen={false}
+        TransitionComponent={Slide}
+        keepMount={true}
+        transitionProps={{ duration: 300, direction: "left" }}
+        classNames={["BBB"]}
+      >
+        <a href="#">Another focusable thing</a>
+        <input type="text" />
+        <div>
+          top aabbbbbb aaabbba aaabbba aaabbbaa aabbb aabbb aabbba abbbbbbbbbb
+          aaaaaaaaaaaaaaaaaaaaaaaaa bottom top aabbbbbb aaabbba aaabbba aaabbbaa
+          aabbb aabbb aabbba abbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bottom top
+          aabbbbbb aaabbba aaabbba aaabbbaa aabbb aabbb aabbba abbbbbbbbbb
+          aaaaaaaaaaaaaaaaaaaaaaaaa bottom top aabbbbbb aaabbba aaabbba aaabbbaa
+          top aabbbbbb aaabbba aaabbba aaabbbaa aabbb aabbb aabbba abbbbbbbbbb
+          aaaaaaaaaaaaaaaaaaaaaaaaa bottom top aabbbbbb aaabbba aaabbba aaabbbaa
+          aabbb aabbb aabbba abbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bottom top
+          aabbbbbb aaabbba aaabbba aaabbbaa aabbb aabbb aabbba abbbbbbbbbb
+          aaaaaaaaaaaaaaaaaaaaaaaaa bottom top aabbbbbb aaabbba aaabbba aaabbbaa
+        </div>
+
+        <Button onClick={handler1}>close</Button>
+      </Dialog> */}
+      <Modal
+        role="dialog"
+        open={state2}
+        onEscapeKeyDown={handler2}
+        onOutsideClick={handler2}
+      >
+        <BaseElement elementName="div" style={{ backgroundColor: "white" }}>
+          top test test test test test test test test test test test test test
+          test test test test test test test test test test test test test test
+          test test test test test test test test test test test test test test
+          test test test test test test test test test test test test test test
+          test test test test test test test test test test test test bottom
+          <Button onClick={handler2}>handler1</Button>
+        </BaseElement>
+      </Modal>
+
+      <Button onClick={handler1}>drawer</Button>
+      <Drawer
+        open={state1}
+        onEscapeKeyDown={onClose1}
+        onOutsideClick={onClose1}
+        anchor="right"
+        // enableScrollBody={false}
+        // TransitionComponent={Fade}
+        // fullScreen={false}
+        className={"AAA"}
+        keepMount={true}
+        transitionProps={{ duration: 300 }}
+        id={"test"}
+      >
+        <a href="#">Another focusable thing</a>
+        <input type="text" />
+        <div>
+          top bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba
+          bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb
+          bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
+          aaaaaaaaaaaaaaaaaaaaaaaaa bottom top bbbbbbbbbbbbbbbbbbbb
+          bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba
+          bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
+          bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bottom
+        </div>
+        <Button onClick={handler2}>close</Button>
+      </Drawer>
+
+      <BaseElement
+        elementName="div"
+        style={{ backgroundColor: "#b0c4de", height: "100px" }}
+      />
+      <Button onClick={handler_t}>Slide</Button>
+      <BaseElement
+        elementName="div"
+        style={
+          {
+            // position: 'fixed',
+            // left: '0',
+            // top: '0',
+            // bottom: '0',
+            // right: '0',
+            // pointerEvents: 'none',
+            // display: 'flex',
+            // justifyContent: 'center',
+            // alignItems: 'center'
+          }
+        }
+      >
+        <Slide
+          in={state_t}
+          appear={true}
+          direction="down"
+          duration={500}
+          testid={"slide"}
+        >
+          <Paper
+            elevation={24}
+            shape="round"
+            style={{
+              backgroundColor: "#ff6347",
+              width: "256px",
+              height: "256px",
+              overflow: "hidden"
+              // marginLeft: '100px'
+            }}
+            id="el2"
+          >
+            aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+            aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+            aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
+            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
+          </Paper>
+        </Slide>
+      </BaseElement>
+
       <BaseElement
         elementName="div"
         style={{
@@ -179,141 +307,6 @@ const App: React.FC<{}> = ({}) => {
         elementName="div"
         style={{ height: "1000px", backgroundColor: "#ff00fa" }}
       />
-      {/* <ButtonCoordinator
-        contents={[{ icon: 'sys-envelope' }, 'Drawer']}
-        style={{ margin: '0.5em' }}
-        type="fill"
-        toFill
-        onClick={handler1}
-      />
-      <Drawer
-        open={state1}
-        onEscapeKeyDown={onClose1}
-        onOutsideClick={onClose1}
-        anchor="right"
-        // enableScrollBody={false}
-        // TransitionComponent={Fade}
-        // fullScreen={false}
-        className={'AAA'}
-        keepMount={true}
-        transitionProps={{ duration: 300 }}
-        id={'test'}
-      >
-        <a href="#">Another focusable thing</a>
-        <input type="text" />
-        <div>
-          top bbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbba
-          bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb
-          bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb
-          aaaaaaaaaaaaaaaaaaaaaaaaa bottom top bbbbbbbbbbbbbbbbbbbb
-          bbbbbbbbbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbbbbbbbbba
-          bbbbbbbbbbbbbbbbbbbbbbbbaa bbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbb
-          bbbbbbbbbbbbbbbbba bbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bottom
-        </div>
-        <ButtonCoordinator
-          contents={[{ icon: 'sys-envelope' }, 'Dialog2']}
-          style={{ margin: '0.5em' }}
-          type="fill"
-          toFill
-          onClick={handler2}
-        />
-      </Drawer>
-      <ButtonCoordinator
-        contents={[{ icon: 'sys-envelope' }, 'Dialog1']}
-        style={{ margin: '0.5em' }}
-        type="fill"
-        toFill
-        color="rgb(255, 20, 147)"
-        onClick={handler2}
-      />
-      <Dialog
-        open={state2}
-        onEscapeKeyDown={onClose2}
-        onOutsideClick={onClose2}
-        scrollBody={false}
-        fullScreen={false}
-        TransitionComponent={Slide}
-        keepMount={true}
-        transitionProps={{ duration: 300, direction: 'left' }}
-        classNames={['BBB']}
-      >
-        <a href="#">Another focusable thing</a>
-        <input type="text" />
-        <div>
-          top aabbbbbb aaabbba aaabbba aaabbbaa aabbb aabbb aabbba abbbbbbbbbb
-          aaaaaaaaaaaaaaaaaaaaaaaaa bottom top aabbbbbb aaabbba aaabbba aaabbbaa
-          aabbb aabbb aabbba abbbbbbbbbb aaaaaaaaaaaaaaaaaaaaaaaaa bottom top
-          aabbbbbb aaabbba aaabbba aaabbbaa aabbb aabbb aabbba abbbbbbbbbb
-          aaaaaaaaaaaaaaaaaaaaaaaaa bottom top aabbbbbb aaabbba aaabbba aaabbbaa
-        </div>
-        <ButtonCoordinator
-          contents={[{ icon: 'sys-envelope' }, 'Dialog1']}
-          style={{ margin: '0.5em' }}
-          type="fill"
-          toFill
-          onClick={handler1}
-        />
-      </Dialog>
-
-      <BaseElement
-        elementName="div"
-        style={{ backgroundColor: '#b0c4de', height: '100px' }}
-      />
-      <ButtonCoordinator
-        contents={[{ icon: 'sys-envelope' }, 'Transition']}
-        style={{ margin: '0.5em' }}
-        type="fill"
-        toFill
-        color="rgb(255, 20, 147)"
-        onClick={handler_t}
-      />
-      <BaseElement
-        elementName="div"
-        style={
-          {
-            // position: 'fixed',
-            // left: '0',
-            // top: '0',
-            // bottom: '0',
-            // right: '0',
-            // pointerEvents: 'none',
-            // display: 'flex',
-            // justifyContent: 'center',
-            // alignItems: 'center'
-          }
-        }
-      >
-        <Slide
-          in={state_t}
-          appear={true}
-          direction="down"
-          duration={500}
-          testid={'slide'}
-        >
-          <Paper
-            elevation={24}
-            shape="round"
-            style={{
-              backgroundColor: '#ff6347',
-              width: '256px',
-              height: '256px',
-              overflow: 'hidden',
-              // marginLeft: '100px'
-            }}
-            id="el2"
-          >
-            aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-            aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-            aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaa
-            aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa
-          </Paper>
-        </Slide>
-      </BaseElement> */}
 
       {/* <List width="400px" space={1} levelStyle={[ { paddingLeft: '0.5em' }, { paddingLeft: '2.5em' } ]}>
 				<List.Group title="root-1" style={{ backgroundColor: '#ee82ee' }}>

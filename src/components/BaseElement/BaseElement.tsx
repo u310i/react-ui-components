@@ -24,6 +24,7 @@ type DirectOnlyProps = {
   _id_?: string;
   _arias_?: React.AriaAttributes;
   _refer_?: $Type.ReactUtils.Ref<Element>;
+  ref?: $Type.ReactUtils.Ref<Element>;
 };
 
 type Props<
@@ -63,6 +64,7 @@ const BaseElement: React.FC<Props> = ({
   arias: propArias,
   _refer_,
   refer: propRefer,
+  ref,
   ...other
 }) => {
   const style = React.useMemo(() => {
@@ -109,8 +111,9 @@ const BaseElement: React.FC<Props> = ({
     (element: Element) => {
       injectElementToRef(propRefer, element);
       injectElementToRef(_refer_, element);
+      injectElementToRef(ref, element);
     },
-    [propRefer, _refer_]
+    [propRefer, _refer_, ref]
   );
 
   return React.createElement(

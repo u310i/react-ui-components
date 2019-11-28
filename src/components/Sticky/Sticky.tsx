@@ -1,6 +1,11 @@
 import * as React from "react";
 import $ from "./_constants";
-import { addEventListener, raf, extractElement } from "scripts";
+import {
+  addEventListener,
+  raf,
+  extractElement,
+  injectElementToRef
+} from "scripts";
 import { BaseElement } from "..";
 
 type ComponentProps = {
@@ -238,6 +243,7 @@ const Sticky: React.FC<Props> = ({
   const assignRects = React.useCallback(() => {
     const contextNode = extractElement(context) || document.body;
     rectsRef.current.context = contextNode.getBoundingClientRect();
+    console.log(triggerNodeRef.current);
     rectsRef.current.trigger = triggerNodeRef.current!.getBoundingClientRect();
     rectsRef.current.sticky = stickyNodeRef.current!.getBoundingClientRect();
   }, [context]);

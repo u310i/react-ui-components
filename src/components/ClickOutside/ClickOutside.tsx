@@ -34,6 +34,7 @@ const ClickOutside: React.FC<Props> = ({
   ignoreTarget
 }) => {
   if (!action) return null;
+
   const targetNodeRef = React.useRef<null | Node>(null);
 
   React.useEffect(() => {

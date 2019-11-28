@@ -8,6 +8,7 @@ export const constants = {
   classNames: {
     name: `${$.prefix}${name}`,
     nameContent: `${$.prefix}${name}-contents`,
+    nameContentInner: `${$.prefix}${name}-contents-inner`,
     nameBackdrop: `${$.prefix}${name}-backdrop`
   },
   styles: {
@@ -28,7 +29,8 @@ export const constants = {
       }
     },
     modalZindex: $.zIndex.modal,
-    backdropZindex: 0
+    backdropZindex: 0,
+    resetScrollDepth: 2
   }
 } as const;
 

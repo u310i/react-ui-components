@@ -6,16 +6,20 @@ import { BaseElement } from "..";
 type ComponentProps = {
   /**
    * prop description
-   * @default false
    */
   disabled?: boolean;
-  ariaDisabled?: boolean;
   /**
    * prop description
    */
+  ariaDisabled?: boolean;
+  /**
+   * prop description
+   * @default $.styles.disabled.style
+   */
   disabledStyle?: React.CSSProperties;
   /**
-   * @default string
+   * prop description
+   * @default $.styles.disabled.style
    */
   ariaDisabledStyle?: React.CSSProperties;
 };
@@ -39,9 +43,9 @@ declare global {
 /**
  * General component description.
  */
-export const Button: React.FC<Props> = ({
+const Button: React.FC<Props> = ({
   children,
-  disabled = false,
+  disabled,
   ariaDisabled,
   disabledStyle: propDisabledStyle = $.styles.disabled.style,
   ariaDisabledStyle: propAriaDisabledStyle = $.styles.disabled.style,

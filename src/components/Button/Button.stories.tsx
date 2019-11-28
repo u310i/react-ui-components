@@ -23,11 +23,11 @@ export default {
   }
 };
 
-declare global {
-  interface Window {
-    STORYBOOK_REACT_CLASSES: any;
-  }
-}
+// declare global {
+//   interface Window {
+//     STORYBOOK_REACT_CLASSES: any;
+//   }
+// }
 
 // console.log(
 //   "=================================================================="
@@ -40,10 +40,10 @@ declare global {
 // console.log(
 //   JSON.stringify((window as any).STORYBOOK_REACT_CLASSES, null, "  ")
 // );
-console.log(JSON.stringify(window.STORYBOOK_REACT_CLASSES, null, "  "));
-console.log("Button");
+// console.log(JSON.stringify(window.STORYBOOK_REACT_CLASSES, null, "  "));
+// console.log("Button");
 
-export const withText = () => (
+export const Basic = () => (
   <div>
     <Button
       onClick={action("button-click")}

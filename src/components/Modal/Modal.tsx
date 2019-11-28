@@ -4,17 +4,17 @@ import {
   injectElementToRef,
   useForceUpdate,
   isReactComponentChildren,
-  isTransitionComponent
+  isTransitionComponent,
+  deeplyChildren
 } from "scripts";
-import {
-  Portal,
-  HideOtherAria,
-  Backdrop,
-  FocusTrap,
-  HotKeys,
-  ClickOutside,
-  ScrollLock
-} from "..";
+import Portal from "../Portal/Portal";
+import BaseElement from "../BaseElement/BaseElement";
+import HideOtherAria from "../HideOtherAria/HideOtherAria";
+import Backdrop from "../Backdrop/Backdrop";
+import FocusTrap from "../FocusTrap/FocusTrap";
+import HotKeys from "../HotKeys/HotKeys";
+import ClickOutside from "../ClickOutside/ClickOutside";
+import ScrollLock from "../ScrollLock/ScrollLock";
 
 type ModalQueueValue = {
   isActive: boolean;
@@ -24,20 +24,21 @@ type ModalQueueValue = {
 type ComponentProps = {
   container?: Element;
   open?: boolean;
-  onChanged?: (willExist: boolean, node: HTMLElement | null) => void;
+  onChanged?: (betweenOpenAndExited: boolean, node: HTMLElement | null) => void;
   onEscapeKeyDown?: (evt: KeyboardEvent) => void;
   onOutsideClick?: (evt: MouseEvent) => void;
   keepMount?: boolean;
-  ignoreTransition?: boolean;
   disableEscapeKeyDown?: boolean;
   disableOutsideClick?: boolean;
   disableHideOtherAria?: boolean;
   hideBackdrop?: boolean;
   disableResetScroll?: boolean;
+  resetScrollDepth?: number;
   disableScrollLock?: boolean;
   scrollTarget?: $Type.ReactUtils.IncludeNode<Element>;
   clickOutsideProps?: $Type.Components.ClickOutside._Props;
   contentsProps?: $Type.Components.FocusTrap._Props;
+  innerProps?: $Type.Components.BaseElement._GeneralProps;
   backdropProps?: $Type.Components.Backdrop._Props;
 };
 
@@ -61,7 +62,7 @@ const modalQueue: ModalQueueValue[] = [];
 
 let zIndexCounter: number = $.styles.modalZindex;
 
-const Modal: React.FC<Props> = ({
+export const Modal: React.FC<Props> = ({
   children,
   container = document.body,
   open = false,
@@ -69,16 +70,17 @@ const Modal: React.FC<Props> = ({
   onEscapeKeyDown,
   onOutsideClick,
   keepMount = false,
-  ignoreTransition = false,
   disableEscapeKeyDown = false,
   disableOutsideClick = false,
   disableHideOtherAria = false,
   hideBackdrop = false,
   disableResetScroll = false,
+  resetScrollDepth = $.styles.resetScrollDepth,
   disableScrollLock = false,
   scrollTarget,
   clickOutsideProps,
   contentsProps: propContentProps = {},
+  innerProps = {},
   backdropProps: propBackdropProps = {},
   ...other
 }) => {
@@ -92,20 +94,18 @@ const Modal: React.FC<Props> = ({
 
   if (!componentChild) return null;
 
-  const transitionChild =
-    !ignoreTransition &&
-    componentChild &&
-    isTransitionComponent(componentChild!)
-      ? componentChild
-      : null;
+  const isTransitionChild =
+    componentChild && isTransitionComponent(componentChild);
 
   const rootNodeRef = React.useRef<null | HTMLElement>(null);
-  const childNodeRef = React.useRef<null | HTMLElement>(null);
+  const innerNodeRef = React.useRef<null | HTMLElement>(null);
 
   const prevOpenRef = React.useRef<null | boolean>(null);
-  // Use when 'transitionChild' exists.
-  const willExistOnTransitionRef = React.useRef<null | boolean>(null);
-  // Use when 'transitionChild' exists.
+  // Use when 'isTransitionChild' exists.
+  const betweenOpenAndExitedOnTransitionRef = React.useRef<null | boolean>(
+    null
+  );
+  // Use when 'isTransitionChild' exists.
   // It is true until 'open' changes to false and is unmounted.
   const untilClosingRef = React.useRef<null | boolean>(null);
 
@@ -164,35 +164,45 @@ const Modal: React.FC<Props> = ({
 
   if (open && !prevOpenRef.current) {
     prevOpenRef.current = true;
-    if (transitionChild) {
-      willExistOnTransitionRef.current = true;
+    if (isTransitionChild) {
+      betweenOpenAndExitedOnTransitionRef.current = true;
       untilClosingRef.current = false;
     }
   } else if (!open && prevOpenRef.current) {
     prevOpenRef.current = false;
-    if (transitionChild) {
+    if (isTransitionChild) {
       untilClosingRef.current = true;
     }
   }
 
   const isActive = !!modalManagerRef.current.isActive;
 
-  const willExist = !transitionChild
-    ? open
-    : !!willExistOnTransitionRef.current;
+  const betweenOpenAndExited = isTransitionChild
+    ? !!betweenOpenAndExitedOnTransitionRef.current
+    : open;
 
   React.useEffect(() => {
-    const isExist = willExist;
     if (rootNodeRef.current) {
-      rootNodeRef.current.style.visibility = isExist ? "" : "hidden";
+      rootNodeRef.current.style.visibility = betweenOpenAndExited
+        ? ""
+        : "hidden";
     }
-    if (!disableResetScroll) {
-      if (childNodeRef.current!.children[0])
-        childNodeRef.current!.children[0].scrollTop = 0;
-      childNodeRef.current!.parentElement!.scrollTop = 0;
+    if (!disableResetScroll && !betweenOpenAndExited) {
+      if (innerNodeRef.current) {
+        innerNodeRef.current.parentElement &&
+          (innerNodeRef.current.parentElement.scrollTop = 0);
+
+        deeplyChildren(
+          innerNodeRef.current,
+          (child: Element) => {
+            child && child.scrollTop && (child.scrollTop = 0);
+          },
+          resetScrollDepth
+        );
+      }
     }
-    onChanged && onChanged(isExist, rootNodeRef.current || null);
-  }, [willExist]);
+    onChanged && onChanged(betweenOpenAndExited, rootNodeRef.current || null);
+  }, [betweenOpenAndExited]);
 
   React.useEffect(() => {
     if (open) {
@@ -217,48 +227,30 @@ const Modal: React.FC<Props> = ({
     [onOutsideClick]
   );
 
-  // Use when 'transitionChild' exists.
+  // Use when 'isTransitionChild' true.
   // If you want to unmount after waiting for the transition,
   //  use 'forceUpdate' to unmount after the transition.
   const handleTransitionExited = React.useCallback(
     node => {
       untilClosingRef.current = false;
-      willExistOnTransitionRef.current = false;
-      transitionChild &&
-        transitionChild.props.onExited &&
-        transitionChild.props.onExited(node);
+      betweenOpenAndExitedOnTransitionRef.current = false;
+      isTransitionChild &&
+        componentChild.props &&
+        componentChild.props.onExited &&
+        componentChild.props.onExited(node);
       forceUpdate();
     },
-    [ignoreTransition, transitionChild]
+    [isTransitionChild]
   );
 
-  const handleChildNodeRef = React.useCallback(
-    element => {
-      childNodeRef.current = element;
-      injectElementToRef(((children as any).props || {}).refer, element);
-    },
-    [((children as any).props || {}).refer]
+  const childComponent = isTransitionChild ? (
+    <componentChild.type
+      {...componentChild.props}
+      onExited={handleTransitionExited}
+    />
+  ) : (
+    componentChild
   );
-
-  let childComponent: React.ReactNode;
-  if (transitionChild) {
-    childComponent = (
-      <transitionChild.type
-        {...transitionChild.props}
-        onExited={handleTransitionExited}
-        refer={handleChildNodeRef}
-      />
-    ) as React.ReactElement<
-      $Type.Transition.PropTransitionComponentCommonProps
-    >;
-  } else {
-    childComponent = (
-      <componentChild.type
-        {...componentChild.props}
-        refer={handleChildNodeRef}
-      />
-    ) as React.ReactElement<any>;
-  }
 
   // 'React.useCallback' is never updated.
   const handleRootNodeRef = React.useCallback(
@@ -319,7 +311,7 @@ const Modal: React.FC<Props> = ({
     }, [propBackdropProps.style, propBackdropProps.classNames])
   };
 
-  const isMount = keepMount ? true : willExist;
+  const isMount = keepMount ? true : betweenOpenAndExited;
 
   return isMount ? (
     <Portal container={container}>
@@ -328,8 +320,8 @@ const Modal: React.FC<Props> = ({
         active={!disableHideOtherAria && isActive}
         parent={container}
       >
-        {!disableScrollLock && willExist && (
-          <ScrollLock target={scrollTarget || childNodeRef} />
+        {!disableScrollLock && betweenOpenAndExited && (
+          <ScrollLock target={scrollTarget || innerNodeRef} />
         )}
         {!disableEscapeKeyDown && isActive && open && (
           <HotKeys hotkeys={"escape"} action={handleEscapeKeyDown} />
@@ -337,7 +329,7 @@ const Modal: React.FC<Props> = ({
         {!disableOutsideClick && isActive && open && (
           <ClickOutside
             {...clickOutsideProps}
-            target={childNodeRef}
+            target={innerNodeRef}
             action={handleOutsideClick}
             scope={rootNodeRef}
           />
@@ -351,7 +343,14 @@ const Modal: React.FC<Props> = ({
           />
         )}
         <FocusTrap {...contentsProps} active={isActive}>
-          {childComponent}
+          <BaseElement
+            elementName="div"
+            {...innerProps}
+            _className_={$.classNames.nameContentInner}
+            _refer_={innerNodeRef}
+          >
+            {childComponent}
+          </BaseElement>
         </FocusTrap>
       </HideOtherAria>
     </Portal>

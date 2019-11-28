@@ -5,17 +5,17 @@ import {
   createAppConstants,
   createPageConstants,
   createComponentConstants,
-  getComponentConstants,
-} from './constants';
-import mergeObject from './mergeObject'
+  getComponentConstants
+} from "./constants";
+import mergeObject from "./mergeObject";
 import {
   raf,
   deepMerge,
   deepMergeOverrideArray,
   keyframes,
   mousetrap,
-  scrollLock,
-} from './library';
+  scrollLock
+} from "./library";
 import {
   addEventListener,
   testPassiveEventSupport,
@@ -38,7 +38,8 @@ import {
   getTransitionEndName,
   extractElement,
   injectElementToRef,
-} from './utils';
+  deeplyChildren
+} from "./utils";
 import {
   toFullHexa,
   hexa2rgba,
@@ -48,8 +49,8 @@ import {
   toCssColor,
   LightenDarkenHex,
   adjustBrightness,
-  adjustBrightnessFromCssRgb,
-} from './color';
+  adjustBrightnessFromCssRgb
+} from "./color";
 import {
   isReactComponentChildren,
   isTransitionComponent,
@@ -66,25 +67,25 @@ import {
   // isEmptyString,
   // isBoolean,
   // isFunction,
-  isDate,
+  isDate
   // isReact,
   // isReactComponent,
   // isReactElement,
   // isUndefined,
   // getType
-} from './checkTypes';
+} from "./checkTypes";
 // import {} from './breakpoint';
-import { testCssNumberRegExp } from './regExp';
+import { testCssNumberRegExp } from "./regExp";
 // import {} from './windowEvents';
 import {
   useForceUpdate,
-  useLateUpdate,
+  useLateUpdate
   // useAddWindowEvent,
   // useAddCssInBody,
   // useGetDomProperty,
   // useGetDomProperties,
   // useGlobalState,
-} from './hooks';
+} from "./hooks";
 // import { useAddWindowEvent, useAddCssInBody } from './hooks/useEffects';
 // import {
 //   useGetDomProperty,
@@ -129,6 +130,7 @@ export {
   getTransitionEndName,
   extractElement,
   injectElementToRef,
+  deeplyChildren,
   // domHelpers
 
   // color
@@ -156,7 +158,7 @@ export {
   // windowEvents
   // hooks/useHooks
   useForceUpdate,
-  useLateUpdate,
+  useLateUpdate
   // useAddWindowEvent,
   // useAddCssInBody,
   // useGetDomProperty,
