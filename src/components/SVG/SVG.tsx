@@ -1,7 +1,7 @@
 import * as React from "react";
 import $ from "./_constants";
 import { roundNumber } from "scripts";
-import { BaseElement } from "..";
+import BaseElement from "../BaseElement/BaseElement";
 
 type ViewBox = $Type.Icon.ViewBox;
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { getComponentConstants } from "scripts";
 import { isHorizontal } from "../Drawer/Drawer";
-import { BaseElement } from "..";
+import BaseElement from "../BaseElement/BaseElement";
 
 const $ = getComponentConstants("swipeableDrawer");
 const $swipeAreaStyle = $.styles.swipeArea;

@@ -6,7 +6,8 @@ import {
   genEasings,
   setTransition
 } from "scripts";
-import { CSSTransition, BaseElement } from "..";
+import BaseElement from "../BaseElement/BaseElement";
+import CSSTransition from "../CSSTransition/CSSTransition";
 
 type CharacteristicProps = {
   collapsedHeight?: string;

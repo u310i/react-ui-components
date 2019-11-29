@@ -1,6 +1,8 @@
 import * as React from "react";
 import $ from "./_constants";
-import { Modal, Slide, Paper } from "..";
+import Modal from "../Modal/Modal";
+import Slide from "../Slide/Slide";
+import Paper from "../Paper/Paper";
 
 const $modalContentStyle = $.styles.modal.contents;
 const $transitionStyle = $.styles.transition;

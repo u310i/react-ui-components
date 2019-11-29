@@ -8,7 +8,8 @@ import {
   setTransition,
   setTransform
 } from "scripts";
-import { CSSTransition, BaseElement } from "..";
+import BaseElement from "../BaseElement/BaseElement";
+import CSSTransition from "../CSSTransition/CSSTransition";
 
 const enteredScale = $.styles.enteredScale;
 const exitedScale = `scale(${$.styles.scaleXRatio}, ${$.styles.scaleYRatio})`;

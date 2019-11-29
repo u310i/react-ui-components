@@ -1,7 +1,8 @@
 import * as React from "react";
 import $ from "./_constants";
 import { injectElementToRef } from "scripts";
-import { Fade, BaseElement } from "..";
+import Fade from "../Fade/Fade";
+import BaseElement from "../BaseElement/BaseElement";
 
 type ComponentProps = {
   open?: boolean;

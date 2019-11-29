@@ -1,7 +1,7 @@
 import * as React from "react";
 import $ from "./_constants";
 import {} from "scripts";
-import { BaseElement } from "..";
+import BaseElement from "../BaseElement/BaseElement";
 
 type ComponentProps = {
   elevation?: number;

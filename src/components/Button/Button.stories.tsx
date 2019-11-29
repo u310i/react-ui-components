@@ -2,7 +2,7 @@ import * as React from "react";
 import { text, boolean, object } from "@storybook/addon-knobs";
 import { action, decorate } from "@storybook/addon-actions";
 import { linkTo } from "@storybook/addon-links";
-import Button from "./Button";
+import Button from "../Button/Button";
 
 export default {
   title: "Button",

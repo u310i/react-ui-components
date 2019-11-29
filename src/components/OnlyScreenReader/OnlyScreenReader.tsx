@@ -1,6 +1,6 @@
 import * as React from "react";
 import $ from "./_constants";
-import { BaseElement } from "..";
+import BaseElement from "../BaseElement/BaseElement";
 
 type ComponentProps = $Type.Components.BaseElement._GeneralProps;
 

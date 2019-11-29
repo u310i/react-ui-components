@@ -7,7 +7,7 @@ import {
   keyframes
 } from "scripts";
 import iconMap from "icons";
-import { SVG } from "..";
+import SVG from "../SVG/SVG";
 
 const getRatio = (viewBox: $Type.Icon.ViewBox): number | null => {
   if (!viewBox) return null;

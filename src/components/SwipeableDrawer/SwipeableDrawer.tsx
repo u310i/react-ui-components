@@ -13,7 +13,7 @@ import {
 import { EventListener } from "..";
 import { isHorizontal } from "../Drawer/Drawer";
 import SwipeArea from "./SwipeArea";
-import { Drawer } from "..";
+import Drawer from "../Drawer/Drawer";
 
 // This value is closed to what browsers are using internally to
 // trigger a native scroll.

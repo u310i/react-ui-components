@@ -1,6 +1,6 @@
 import * as React from "react";
 import { extractElement } from "scripts";
-import { BaseElement } from "..";
+import BaseElement from "../BaseElement/BaseElement";
 
 type ComponentProps = {
   parent?: $Type.ReactUtils.IncludeNode<Element>;

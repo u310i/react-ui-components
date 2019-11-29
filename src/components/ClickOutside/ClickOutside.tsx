@@ -1,6 +1,6 @@
 import * as React from "react";
 import { extractElement, clickedScrollbar } from "scripts";
-import { EventListener } from "..";
+import EventListener from "../EventListener/EventListener";
 
 type ComponentProps = {
   target: $Type.ReactUtils.IncludeNode;

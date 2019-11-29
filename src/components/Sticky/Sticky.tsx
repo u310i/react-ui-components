@@ -6,7 +6,7 @@ import {
   extractElement,
   injectElementToRef
 } from "scripts";
-import { BaseElement } from "..";
+import BaseElement from "../BaseElement/BaseElement";
 
 type ComponentProps = {
   active?: boolean;

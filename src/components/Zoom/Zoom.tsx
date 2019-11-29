@@ -7,7 +7,8 @@ import {
   setTransition,
   setTransform
 } from "scripts";
-import { CSSTransition, BaseElement } from "..";
+import BaseElement from "../BaseElement/BaseElement";
+import CSSTransition from "../CSSTransition/CSSTransition";
 
 type ComponentProps = $Type.Transition.CommonProps;
 
