@@ -188,7 +188,7 @@ const Slide: React.FC<Props> = ({
 
   return (
     <CSSTransition
-      disableClassing={true}
+      disableClass={true}
       {...other}
       appear={appear}
       in={inProp}

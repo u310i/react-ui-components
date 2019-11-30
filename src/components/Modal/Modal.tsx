@@ -31,7 +31,7 @@ type ComponentProps = {
   disableEscapeKeyDown?: boolean;
   disableOutsideClick?: boolean;
   disableHideOtherAria?: boolean;
-  hideBackdrop?: boolean;
+  disableBackdrop?: boolean;
   disableResetScroll?: boolean;
   resetScrollDepth?: number;
   disableScrollLock?: boolean;
@@ -40,11 +40,12 @@ type ComponentProps = {
   contentsProps?: $Type.Components.FocusTrap._Props;
   innerProps?: $Type.Components.BaseElement._GeneralProps;
   backdropProps?: $Type.Components.Backdrop._Props;
+  hideOtherAriaProps?: $Type.Components.HideOtherAria._Props;
 };
 
 type Props = $Type.MergeObject<
   ComponentProps,
-  $Type.Components.HideOtherAria._Props
+  $Type.Components.BaseElement._GeneralProps
 >;
 
 declare global {
@@ -73,15 +74,16 @@ export const Modal: React.FC<Props> = ({
   disableEscapeKeyDown = false,
   disableOutsideClick = false,
   disableHideOtherAria = false,
-  hideBackdrop = false,
+  disableBackdrop = false,
   disableResetScroll = false,
   resetScrollDepth = $.styles.resetScrollDepth,
   disableScrollLock = false,
   scrollTarget,
   clickOutsideProps,
-  contentsProps: propContentProps = {},
+  contentsProps: propModalContentProps = {},
   innerProps = {},
   backdropProps: propBackdropProps = {},
+  hideOtherAriaProps = {},
   ...other
 }) => {
   if (!children) return null;
@@ -273,26 +275,25 @@ export const Modal: React.FC<Props> = ({
         arias: {
           "aria-modal": true,
           ...other.arias
-        },
-        refer: handleRootNodeRef
+        }
       };
     }, [other.style, other.classNames, other.arias])
   };
 
   const contentsProps = {
-    ...propContentProps,
+    ...propModalContentProps,
     ...React.useMemo(() => {
       return {
         style: {
           ...$.styles.contents.style,
-          ...propContentProps.style
+          ...propModalContentProps.style
         },
         classNames: [
-          ...(propContentProps.classNames || []),
+          ...(propModalContentProps.classNames || []),
           $.classNames.nameContent
         ]
       };
-    }, [propContentProps.style, propContentProps.classNames])
+    }, [propModalContentProps.style, propModalContentProps.classNames])
   };
 
   const backdropProps = {
@@ -316,10 +317,12 @@ export const Modal: React.FC<Props> = ({
   return isMount ? (
     <Portal container={container}>
       <HideOtherAria
-        {...props}
+        {...hideOtherAriaProps}
+        target={rootNodeRef}
         active={!disableHideOtherAria && isActive}
         parent={container}
-      >
+      />
+      <BaseElement elementName="div" {...props} refer={handleRootNodeRef}>
         {!disableScrollLock && betweenOpenAndExited && (
           <ScrollLock target={scrollTarget || innerNodeRef} />
         )}
@@ -328,13 +331,13 @@ export const Modal: React.FC<Props> = ({
         )}
         {!disableOutsideClick && isActive && open && (
           <ClickOutside
-            {...clickOutsideProps}
             target={innerNodeRef}
+            {...clickOutsideProps}
             action={handleOutsideClick}
             scope={rootNodeRef}
           />
         )}
-        {!hideBackdrop && (
+        {!disableBackdrop && (
           <Backdrop
             disablePointerEvents={true}
             aria-hidden={true}
@@ -352,7 +355,7 @@ export const Modal: React.FC<Props> = ({
             {childComponent}
           </BaseElement>
         </FocusTrap>
-      </HideOtherAria>
+      </BaseElement>
     </Portal>
   ) : null;
 };

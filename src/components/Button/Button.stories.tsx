@@ -43,7 +43,7 @@ export default {
 // console.log(JSON.stringify(window.STORYBOOK_REACT_CLASSES, null, "  "));
 // console.log("Button");
 
-export const Basic = () => (
+export const basic = () => (
   <div>
     <Button
       onClick={action("button-click")}

@@ -55,7 +55,8 @@ const Button: React.FC<Props> = ({
     const disabledStyle = disabled ? propDisabledStyle : {};
     const ariaDisabledStyle = ariaDisabled ? propAriaDisabledStyle : {};
     return { ...$.styles.style, ...ariaDisabledStyle, ...disabledStyle };
-  }, [disabled]);
+  }, [disabled, ariaDisabled, propDisabledStyle, propAriaDisabledStyle]);
+
   return (
     <BaseElement
       elementName="button"

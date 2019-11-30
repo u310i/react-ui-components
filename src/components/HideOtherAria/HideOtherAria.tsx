@@ -4,6 +4,7 @@ import BaseElement from "../BaseElement/BaseElement";
 
 type ComponentProps = {
   parent?: $Type.ReactUtils.IncludeNode<Element>;
+  target?: $Type.ReactUtils.IncludeNode<Element>;
   active?: boolean;
 };
 
@@ -25,20 +26,26 @@ declare global {
 
 const HideOtherAria: React.FC<Props> = ({
   children,
-  parent = document.body,
-  active = true,
-  ...other
+  parent: propParent = document.body,
+  target: propTarget,
+  active = true
 }) => {
-  const nodeRef = React.useRef<null | Element>(null);
   const hiddenNodesRef = React.useRef<Element[]>([]);
-  const prevActiveRef = React.useRef<null | boolean>(null);
+  const activatedRef = React.useRef<boolean>(false);
 
   const activate = React.useCallback(
     parent => {
-      if (nodeRef.current === parent || parent.children.length === 0) return;
+      const target = extractElement(propTarget);
+      if (
+        target === parent ||
+        !target ||
+        !parent ||
+        parent.children.length === 0
+      )
+        return;
 
       Array.from(parent.children, (childNode: Element) => {
-        if (childNode.contains(nodeRef.current)) {
+        if (childNode.contains(target)) {
           activate(childNode);
         } else {
           const attr = childNode.getAttribute("aria-hidden");
@@ -51,7 +58,7 @@ const HideOtherAria: React.FC<Props> = ({
         }
       });
     },
-    [active]
+    [parent, propTarget]
   );
 
   const deactivate = React.useCallback(() => {
@@ -62,29 +69,24 @@ const HideOtherAria: React.FC<Props> = ({
   }, []);
 
   React.useEffect(() => {
-    if (!prevActiveRef.current && active) {
-      const parentElement = extractElement(parent);
-      activate(parentElement);
-    } else if (prevActiveRef.current && !active) {
-      deactivate();
+    if (active) {
+      activatedRef.current && deactivate();
+      const parent = extractElement(propParent);
+      activate(parent);
+      activatedRef.current = true;
+    } else {
+      if (activatedRef.current) {
+        activatedRef.current && deactivate();
+        activatedRef.current = false;
+      }
     }
-    prevActiveRef.current = active;
     return () => {
       deactivate();
-      prevActiveRef.current = null;
+      activatedRef.current = false;
     };
-  }, [active, parent]);
+  }, [active, propParent, propTarget]);
 
-  return (
-    <BaseElement
-      elementName="div"
-      {...other}
-      _refer_={nodeRef}
-      _className_={"uc-hideOtherAria"}
-    >
-      {children}
-    </BaseElement>
-  );
+  return <>{children}</>;
 };
 
 export default HideOtherAria;

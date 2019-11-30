@@ -37,7 +37,7 @@ const getIcon = (name: string | null): IconData | null => {
 type Icon = string | string[] | $Type.Icon.BaseIconDefinition;
 
 type ComponentProps = {
-  icon: Icon;
+  icon?: Icon;
   suffix?: string;
   ariaHidden?: boolean;
   symbol?: boolean;

@@ -123,7 +123,7 @@ const Zoom: React.FC<Props> = ({
   return (
     <CSSTransition
       {...other}
-      disableClassing={true}
+      disableClass={true}
       in={inProp}
       appear={appear}
       timeout={durations}

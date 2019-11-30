@@ -88,14 +88,14 @@ const preventDefault = (e: Event) => {
 };
 
 type ComponentProps = {
-  onOpen: () => void;
-  onClose: () => void;
+  onOpen?: () => void;
+  onClose?: () => void;
   hysteresis?: number;
   minFlingVelocity?: number;
   disableBackdropTransition?: boolean;
   disableDiscovery?: boolean;
   disableSwipeToOpen?: boolean;
-  hideBackdrop?: boolean;
+  disableBackdrop?: boolean;
   swipeAreaProps?: $Type.Components.SwipeArea._Props;
   swipeAreaWidth?: number;
 };
@@ -132,7 +132,7 @@ const SwipeableDrawer: React.FC<Props> = ({
   disableBackdropTransition = false,
   disableDiscovery = false,
   disableSwipeToOpen = disableSwipeToOpenDefault,
-  hideBackdrop,
+  disableBackdrop,
   swipeAreaProps = {},
   swipeAreaWidth = 40,
   transitionProps: propTransitionProps = {},
@@ -219,7 +219,7 @@ const SwipeableDrawer: React.FC<Props> = ({
 
       if (
         !disableBackdropTransition &&
-        !hideBackdrop &&
+        !disableBackdrop &&
         backdropNodeRef.current
       ) {
         backdropNodeRef.current.style.opacity = (
@@ -233,7 +233,7 @@ const SwipeableDrawer: React.FC<Props> = ({
         }
       }
     },
-    [anchor, disableBackdropTransition, hideBackdrop, durations, easings]
+    [anchor, disableBackdropTransition, disableBackdrop, durations, easings]
   );
 
   const handleBodyTouchStart = React.useCallback(
@@ -470,12 +470,15 @@ const SwipeableDrawer: React.FC<Props> = ({
     [setPosition, handleBodyTouchEnd, anchor, disableDiscovery, swipeAreaWidth]
   );
 
+  const otherBackdropPropsRefer = other.backdropProps
+    ? other.backdropProps.refer
+    : null;
   const handleBackdropNodeRef = React.useCallback(
     element => {
       backdropNodeRef.current = element;
-      injectElementToRef((other.backdropProps || {}).refer, element);
+      injectElementToRef(otherBackdropPropsRefer, element);
     },
-    [(other.backdropProps || {}).refer]
+    [otherBackdropPropsRefer]
   );
   const handleDrawerNodeRef = React.useCallback(
     element => {
@@ -574,6 +577,7 @@ const SwipeableDrawer: React.FC<Props> = ({
         open={forceSwitchRef.current === null ? open : forceSwitchRef.current}
         anchor={anchor}
         transitionProps={transitionProps}
+        disableBackdrop={disableBackdrop}
         keepMount={true}
         TransitionComponent={undefined}
       >

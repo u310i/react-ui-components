@@ -1,5 +1,6 @@
 import * as React from "react";
 import $ from "./_constants";
+import { injectElementToRef } from "scripts";
 import Modal from "../Modal/Modal";
 import Fade from "../Fade/Fade";
 import Paper from "../Paper/Paper";
@@ -14,10 +15,13 @@ type ComponentProps = {
   fullScreen?: boolean;
   // "Type instantiation is excessively deep and possibly infinite.ts(2589)"
   // TransitionComponent?: React.FC<$Type.Transition.AllProps>;
-  TransitionComponent?: React.FC<$Type.AnyObject>;
+  TransitionComponent?: React.FC<any>;
   transitionProps?: $Type.Transition.AllProps;
   InnerComponent?: React.FC<$Type.Components.Paper._Props & $Type.AnyObject>;
   innerProps?: $Type.Components.Paper._Props & $Type.AnyObject;
+  positionX?: number | string;
+  positionY?: number | string;
+  modalInnerProps?: $Type.Components.BaseElement._GeneralProps;
 };
 
 type Props = $Type.MergeObject<ComponentProps, $Type.Components.Modal._Props>;
@@ -42,8 +46,26 @@ export const Dialog: React.FC<Props> = ({
   transitionProps: propTransitionProps = {},
   InnerComponent = Paper,
   innerProps: propInnerProps = {},
+  positionX,
+  positionY,
+  modalInnerProps = {},
   ...other
 }) => {
+  const modalInnerNodeRef = React.useRef<null | HTMLElement>(null);
+
+  const handleModalInnerNodeRef = React.useCallback(
+    element => {
+      modalInnerNodeRef.current = element;
+      injectElementToRef(modalInnerProps.refer, element);
+    },
+    [modalInnerProps.refer]
+  );
+  const handleModalClickOutsideTarget = React.useCallback(
+    () =>
+      modalInnerNodeRef.current && modalInnerNodeRef.current.firstElementChild,
+    []
+  );
+
   const props = {
     ...other,
     ...React.useMemo(() => {
@@ -60,9 +82,17 @@ export const Dialog: React.FC<Props> = ({
             ...((other.contentsProps || {}).classNames || []),
             $.classNames.nameContainer
           ]
+        },
+        innerProps: {
+          ...modalInnerProps,
+          refer: handleModalInnerNodeRef
+        },
+        clickOutsideProps: {
+          ...other.clickOutsideProps,
+          target: handleModalClickOutsideTarget
         }
       };
-    }, [other.classNames, other.contentsProps])
+    }, [other.classNames, other.contentsProps, modalInnerProps])
   };
 
   const transitionProps = {
@@ -72,6 +102,8 @@ export const Dialog: React.FC<Props> = ({
         style: {
           ...$transitionStyle.style,
           ...(scrollBody && $transitionStyle.scrollBody.style),
+          top: positionY,
+          left: positionX,
           ...propTransitionProps.style
         },
         classNames: [
@@ -79,7 +111,13 @@ export const Dialog: React.FC<Props> = ({
           $.classNames.nameTransition
         ]
       };
-    }, [propTransitionProps.style, scrollBody, propTransitionProps.classNames])
+    }, [
+      propTransitionProps.style,
+      scrollBody,
+      propTransitionProps.classNames,
+      positionX,
+      positionY
+    ])
   };
 
   const innerProps = {
@@ -106,7 +144,7 @@ export const Dialog: React.FC<Props> = ({
   };
 
   return (
-    <Modal role="dialog" {...props} open={open}>
+    <Modal role="dialog" disableBackdrop={fullScreen} {...props} open={open}>
       <TransitionComponent
         hideVisibility={false}
         {...transitionProps}

@@ -3,8 +3,8 @@ import { extractElement, clickedScrollbar } from "scripts";
 import EventListener from "../EventListener/EventListener";
 
 type ComponentProps = {
-  target: $Type.ReactUtils.IncludeNode;
-  action: (evt: MouseEvent) => void;
+  target?: $Type.ReactUtils.IncludeNode;
+  action?: (evt: MouseEvent) => void;
   options?: AddEventListenerOptions;
   scope?: $Type.ReactUtils.IncludeNode;
   includeScrollbar?: boolean;
@@ -30,10 +30,10 @@ const ClickOutside: React.FC<Props> = ({
   action,
   options,
   scope = document.body,
-  includeScrollbar,
+  // includeScrollbar,
   ignoreTarget
 }) => {
-  if (!action) return null;
+  if (!target || !action) return null;
 
   const targetNodeRef = React.useRef<null | Node>(null);
 
@@ -49,10 +49,10 @@ const ClickOutside: React.FC<Props> = ({
           if (targetNodeRef.current !== event.target) return;
         } else return;
       }
-      if (!includeScrollbar && clickedScrollbar(event)) return;
+      // if (!includeScrollbar && clickedScrollbar(event)) return;
       action(event);
     },
-    [action, includeScrollbar, target]
+    [action, target]
   );
 
   return (

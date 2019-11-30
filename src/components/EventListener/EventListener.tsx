@@ -3,8 +3,8 @@ import { extractElement, addEventListener } from "scripts";
 
 type ComponentProps = {
   target?: $Type.ReactUtils.IncludeNode<EventTarget>;
-  type: string;
-  listener: (evt: any) => void;
+  type?: string;
+  listener?: (evt: any) => void;
   options?: AddEventListenerOptions;
   optimized?: boolean;
 };

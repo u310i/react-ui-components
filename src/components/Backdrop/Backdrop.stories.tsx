@@ -13,7 +13,7 @@ export default {
   }
 };
 
-export const Basic = () => {
+export const basic = () => {
   const [state, setState] = React.useState(false);
   const handleSwitch = React.useCallback(() => {
     setState(prev => !prev);

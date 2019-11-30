@@ -72,8 +72,7 @@ type TransitionPropsKeys =
   | TransitionActionKeys;
 
 type ComponentProps = { in?: boolean } & {
-  disableClassing?: boolean;
-  lazyAppear?: boolean;
+  disableClass?: boolean;
 } & Pick<_TransitionProps, TransitionPropsKeys | "children"> &
   Partial<Pick<_TransitionProps, "timeout">>;
 
@@ -96,8 +95,7 @@ const CSSTransition: React.FC<Props> = ({
   in: inProp = false,
   timeout = 300,
   appear = false,
-  disableClassing = false,
-  lazyAppear = false,
+  disableClass = false,
   onEnter,
   onEntering,
   onEntered,
@@ -111,7 +109,7 @@ const CSSTransition: React.FC<Props> = ({
 
   const handleOnEnter = React.useCallback<EnterHandler>(
     (node, appearing) => {
-      if (!disableClassing) {
+      if (!disableClass) {
         removeClasses(node, EXIT);
         const classNameList = getClassNames(appearing ? APPEAR : ENTER);
         node.classList.add(classNameList.start);
@@ -124,30 +122,30 @@ const CSSTransition: React.FC<Props> = ({
   const handleOnEntering = React.useCallback<EnterHandler>(
     (node, appearing) => {
       reflow(node);
-      if (!disableClassing) {
+      if (!disableClass) {
         const classNameList = getClassNames(appearing ? APPEAR : ENTER);
         node.classList.add(classNameList.active);
       }
-      if (onEntering) onEntering(node, lazyAppear ? appearing : appearing);
+      if (onEntering) onEntering(node, appearing);
     },
     [onEntering]
   );
 
   const handleOnEntered = React.useCallback<EnterHandler>(
     (node, appearing) => {
-      if (!disableClassing) {
+      if (!disableClass) {
         removeClasses(node, appearing ? APPEAR : ENTER);
         const classNameList = getClassNames(ENTER);
         node.classList.add(classNameList.done);
       }
-      if (onEntered) onEntered(node, lazyAppear ? appearing : appearing);
+      if (onEntered) onEntered(node, appearing);
     },
     [onEntered]
   );
 
   const handleOnExit = React.useCallback<ExitHandler>(
     node => {
-      if (!disableClassing) {
+      if (!disableClass) {
         const classNameList = getClassNames(EXIT);
 
         removeClasses(node, APPEAR);
@@ -162,7 +160,7 @@ const CSSTransition: React.FC<Props> = ({
   const handleOnExiting = React.useCallback<ExitHandler>(
     node => {
       reflow(node);
-      if (!disableClassing) {
+      if (!disableClass) {
         const classNameList = getClassNames(EXIT);
 
         node.classList.add(classNameList.active);
@@ -173,7 +171,7 @@ const CSSTransition: React.FC<Props> = ({
   );
 
   const handleOnExited = React.useCallback<ExitHandler>(node => {
-    if (!disableClassing) {
+    if (!disableClass) {
       const classNameList = getClassNames(EXIT);
       removeClasses(node, EXIT);
       node.classList.add(classNameList.done);

@@ -205,8 +205,8 @@ export const ownerWindow = <T extends Element>(node: T, fallback = window) => {
 export const clickedScrollbar = (event: MouseEvent) => {
   if (!event.clientX || !event.clientY) return;
   return (
-    document.documentElement.clientWidth <= event.clientX ||
-    document.documentElement.clientHeight <= event.clientY
+    document.body.clientWidth <= event.clientX ||
+    document.body.clientHeight <= event.clientY
   );
 };
 

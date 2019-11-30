@@ -2,6 +2,7 @@ import * as React from "react";
 import { text, boolean, object } from "@storybook/addon-knobs";
 import { action, decorate } from "@storybook/addon-actions";
 import { linkTo } from "@storybook/addon-links";
+import { wrapedLong } from "../../_storybook/dummyText";
 import Modal from "./Modal";
 import Button from "../Button/Button";
 import BaseElement from "../BaseElement/BaseElement";
@@ -14,7 +15,7 @@ export default {
   }
 };
 
-export const Basic = () => {
+export const basic = () => {
   const [state, setState] = React.useState(false);
   const handleOpen = React.useCallback(() => {
     setState(true);
@@ -35,12 +36,8 @@ export const Basic = () => {
         onOutsideClick={handleClose}
       >
         <BaseElement elementName="div" style={{ backgroundColor: "white" }}>
-          top test test test test test test test test test test test test test
-          test test test test test test test test test test test test test test
-          test test test test test test test test test test test test test test
-          test test test test test test test test test test test test test test
-          test test test test test test test test test test test test bottom
-          <Button onClick={handleClose}>handler1</Button>
+          {wrapedLong}
+          <Button onClick={handleClose}>close</Button>
         </BaseElement>
       </Modal>
     </div>

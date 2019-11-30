@@ -1,5 +1,5 @@
 import * as React from "react";
-import { extractElement, mousetrap as Mousetrap } from "scripts";
+import { extractElement, mousetrap as Mousetrap, raf } from "scripts";
 
 // https://github.com/ccampbell/mousetrap
 
@@ -32,7 +32,7 @@ const bindAfterUnbind = (
     whichEvent?: Props["type"];
   }
 ) => {
-  setTimeout(() => {
+  raf(() => {
     mousetrap.bind(options.hotkeys, options.action, options.whichEvent);
   });
 };
@@ -46,41 +46,42 @@ const HotKeys: React.FC<Props> = ({
   active = true
 }) => {
   if (!hotkeys || !action) return null;
-  const whichEvent =
-    type === "keydown" || type === "keyup" || type === "keypress"
-      ? type
-      : undefined;
 
   const mousetrapRef = React.useRef<null | MousetrapStatic | MousetrapInstance>(
     null
   );
-  const prevActiveRef = React.useRef<null | boolean>(null);
-  const didBindRef = React.useRef<null | boolean>(null);
+  const bindedRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
-    if (mousetrapRef.current === null) {
-      const node = extractElement(target);
-      mousetrapRef.current = node ? Mousetrap(node) : Mousetrap;
-    }
+    const node = extractElement(target);
+    mousetrapRef.current = node ? Mousetrap(node) : Mousetrap;
+  }, [target]);
+
+  React.useEffect(() => {
+    const whichEvent =
+      type === "keydown" || type === "keyup" || type === "keypress"
+        ? type
+        : undefined;
+
     const mousetrap = mousetrapRef.current;
     if (!mousetrap) return;
-    if (!prevActiveRef.current && active) {
+    if (active) {
+      bindedRef.current && mousetrap.unbind(hotkeys, whichEvent);
       bindAfterUnbind(mousetrap, { hotkeys, action, whichEvent });
-      didBindRef.current = true;
-    } else if (prevActiveRef.current && !active) {
-      if (didBindRef.current) {
-        didBindRef.current && mousetrap.unbind(hotkeys, whichEvent);
-        didBindRef.current = null;
+      bindedRef.current = true;
+    } else {
+      if (bindedRef.current) {
+        mousetrap.unbind(hotkeys, whichEvent);
+        bindedRef.current = false;
       }
     }
-    prevActiveRef.current = active;
     return () => {
-      if (didBindRef.current) {
+      if (bindedRef.current) {
         mousetrap.unbind(hotkeys, whichEvent);
-        didBindRef.current = null;
+        bindedRef.current = false;
       }
     };
-  }, [active]);
+  }, [active, type, target, hotkeys]);
 
   return <>{children}</>;
 };
