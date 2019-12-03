@@ -1,13 +1,11 @@
 import * as React from "react";
 import { extractElement, mousetrap as Mousetrap, raf } from "scripts";
 
-// https://github.com/ccampbell/mousetrap
-
 type ComponentProps = {
   hotkeys?: string | string[];
   action?: (evt: KeyboardEvent) => void;
   type?: "keydown" | "keyup" | "keypress";
-  target?: Element;
+  target?: $Type.ReactUtils.IncludeNode;
   active?: boolean;
 };
 
@@ -37,12 +35,16 @@ const bindAfterUnbind = (
   });
 };
 
+/**
+ * mousetrap
+ * https://github.com/ccampbell/mousetrap
+ */
 const HotKeys: React.FC<Props> = ({
   children,
   hotkeys,
   action,
   type,
-  target,
+  target: propTarget,
   active = true
 }) => {
   if (!hotkeys || !action) return null;
@@ -53,9 +55,9 @@ const HotKeys: React.FC<Props> = ({
   const bindedRef = React.useRef<boolean>(false);
 
   React.useEffect(() => {
-    const node = extractElement(target);
-    mousetrapRef.current = node ? Mousetrap(node) : Mousetrap;
-  }, [target]);
+    const target = extractElement(propTarget);
+    mousetrapRef.current = target ? Mousetrap(target as Element) : Mousetrap;
+  }, [propTarget]);
 
   React.useEffect(() => {
     const whichEvent =
@@ -81,7 +83,7 @@ const HotKeys: React.FC<Props> = ({
         bindedRef.current = false;
       }
     };
-  }, [active, type, target, hotkeys]);
+  }, [active, type, propTarget, hotkeys]);
 
   return <>{children}</>;
 };

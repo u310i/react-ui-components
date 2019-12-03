@@ -6,6 +6,7 @@ const name = "icon";
 export const constants = {
   name: name,
   styles: {
+    defaultIcon: ["sys", "envelope"],
     prefix: $.prefix,
     style: {
       display: "inline-block",
@@ -14,15 +15,16 @@ export const constants = {
       fontSize: "inherit",
       verticalAlign: "-.125em"
     },
+    symbolDisplay: "none",
     marginLeft: "0.5em",
     marginRight: "0.5em",
     currentColor: "currentColor",
     height: 1,
-    heightOnBorder: 1.5,
-    widthRatioOnFixed: 1.25,
+    heightIfBorder: 1.5,
+    widthRatioIfFixed: 1.25,
     precision: 3,
     border: {
-      border: "main 0.08em #eee",
+      border: "solid 0.08em #eee",
       borderRadius: "0.1em",
       padding: "0.2em 0.25em 0.15em"
     },

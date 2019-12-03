@@ -1,21 +1,23 @@
-import faBrands from './fontAwesome/faFreeBrandsSvgIcons';
-import faSoild from './fontAwesome/faFreeSolidSvgIcons';
-import { IconDefinition as fontAwesomeIconDefinition } from '@fortawesome/fontawesome-common-types';
+import faBrands from "./fontAwesome/faFreeBrandsSvgIcons";
+import faSoild from "./fontAwesome/faFreeSolidSvgIcons";
+import { IconDefinition as fontAwesomeIconDefinition } from "@fortawesome/fontawesome-common-types";
+
+const prefix = "fa";
 
 export const convertFaIcons = (
   iconList: fontAwesomeIconDefinition[]
 ): $Type.Icon.BaseIconDefinition[] => {
-  const list = [];
-  for (let { icon, prefix, iconName } of iconList) {
-    list.push({
-      name: `${prefix}-${iconName}`,
+  const icons = [];
+  for (let { icon, prefix: faPrefix, iconName } of iconList) {
+    icons.push({
+      name: `${faPrefix}-${iconName}`,
       viewBox: [0, 0, icon[0], icon[1]] as $Type.Icon.ViewBox,
-      path: icon[4] as string,
+      path: icon[4] as string
     });
   }
-  return list;
+  return icons;
 };
 
-const list = convertFaIcons([...faBrands, ...faSoild]);
+const icons = convertFaIcons([...faBrands, ...faSoild]);
 
-export default { list: list, type: 'fa' };
+export default { icons, prefix };

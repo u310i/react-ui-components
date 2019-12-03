@@ -13,11 +13,11 @@ type ComponentProps = {
   viewBox?: ViewBox;
   innerProps?: SVGProps;
   symbol?: boolean;
-  symbolTagId?: string;
-  symbolTagProps?: SVGProps;
+  symbolId?: string;
+  symbolProps?: SVGProps;
   use?: boolean;
-  useTagHref?: string;
-  useTagProps?: SVGProps;
+  useHref?: string;
+  useProps?: SVGProps;
   transform?: string;
   title?: string;
   desc?: string;
@@ -43,11 +43,11 @@ const SVG: React.FC<Props> = ({
   viewBox = [0, 0, 512, 512],
   innerProps: propInnerProps,
   symbol,
-  symbolTagId,
-  symbolTagProps,
+  symbolId,
+  symbolProps,
   use,
-  useTagHref,
-  useTagProps,
+  useHref,
+  useProps,
   transform,
   title,
   desc,
@@ -154,13 +154,14 @@ const SVG: React.FC<Props> = ({
       <BaseElement
         {...props}
         elementName="svg"
+        _style_={$.styles.symbol.style}
         display={$.styles.symbolDisplay}
       >
         <BaseElement
-          {...symbolTagProps}
+          {...symbolProps}
           elementName="symbol"
           viewBox={viewBox.join(" ")}
-          id={symbolTagId}
+          _id_={symbolId}
           _className_={$.classNames.nameSymbol}
         >
           {titleTag}
@@ -175,10 +176,10 @@ const SVG: React.FC<Props> = ({
         {titleTag}
         {descTag}
         <BaseElement
-          {...useTagProps}
+          {...useProps}
           elementName="use"
-          xlinkHref={useTagHref}
-          href={useTagHref}
+          xlinkHref={useHref}
+          href={useHref}
           _className_={$.classNames.nameUse}
         />
       </BaseElement>

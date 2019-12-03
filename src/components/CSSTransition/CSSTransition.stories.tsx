@@ -3,8 +3,8 @@ import { text, boolean, object } from "@storybook/addon-knobs";
 import { action, decorate } from "@storybook/addon-actions";
 import { linkTo } from "@storybook/addon-links";
 import CSSTransition from "./CSSTransition";
-import Button from "../Button/Button";
 import BaseElement from "../BaseElement/BaseElement";
+import { childrenHorizontalSpacing } from "../../_storybook/style";
 
 export default {
   title: "CSSTransition",
@@ -18,13 +18,19 @@ export const basic = () => {
   const [state, setState] = React.useState(false);
   return (
     <div>
-      <Button onClick={() => setState(prev => !prev)}>toggle</Button>
+      <button onClick={() => setState(prev => !prev)}>toggle</button>
       <CSSTransition
         in={state}
         timeout={{ appear: 1000, enter: 2000, exit: 500 }}
-        onEnter={() => console.log("onEnter")}
-        onEntering={() => console.log("onEntering")}
-        onEntered={() => console.log("onEntered")}
+        onEnter={(_node, appear) =>
+          console.log(`onEnter${appear ? ": appear" : ""}`)
+        }
+        onEntering={(_node, appear) =>
+          console.log(`onEntering${appear ? ": appear" : ""}`)
+        }
+        onEntered={(_node, appear) =>
+          console.log(`onEntered${appear ? ": appear" : ""}`)
+        }
         onExit={() => console.log("onExit")}
         onExiting={() => console.log("onExiting")}
         onExited={() => console.log("onExited")}
@@ -63,18 +69,32 @@ export const basic = () => {
 };
 
 export const appear = () => {
-  const [state, setState] = React.useState(false);
+  const [mountState, setMount] = React.useState(false);
+  const [state, setState] = React.useState(true);
   return (
     <div>
-      <Button onClick={() => setState(prev => !prev)}>toggle</Button>
-      {state ? (
+      <BaseElement style={childrenHorizontalSpacing}>
+        <button onClick={() => setMount(prev => !prev)}>mount</button>
+        <button onClick={() => setState(prev => !prev)}>toggle</button>
+      </BaseElement>
+
+      {mountState ? (
         <CSSTransition
           in={state}
           appear={true}
           timeout={2000}
-          onEnter={() => console.log("onEnter")}
-          onEntering={() => console.log("onEntering")}
-          onEntered={() => console.log("onEntered")}
+          onEnter={(_node, appear) =>
+            console.log(`onEnter${appear ? ": appear" : ""}`)
+          }
+          onEntering={(_node, appear) =>
+            console.log(`onEntering${appear ? ": appear" : ""}`)
+          }
+          onEntered={(_node, appear) =>
+            console.log(`onEntered${appear ? ": appear" : ""}`)
+          }
+          onExit={() => console.log("onExit")}
+          onExiting={() => console.log("onExiting")}
+          onExited={() => console.log("onExited")}
         >
           {(
             state: $Type.Components.CSSTransition._ChildStatus,

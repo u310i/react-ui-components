@@ -9,6 +9,7 @@ type ComponentProps = {
   scope?: $Type.ReactUtils.IncludeNode;
   includeScrollbar?: boolean;
   ignoreTarget?: boolean;
+  active?: boolean;
 };
 
 type Props = ComponentProps;
@@ -26,36 +27,40 @@ declare global {
 
 const ClickOutside: React.FC<Props> = ({
   children,
-  target,
+  target: propTarget,
   action,
   options,
   scope = document.body,
   // includeScrollbar,
-  ignoreTarget
+  ignoreTarget,
+  active = true
 }) => {
-  if (!target || !action) return null;
+  if (!propTarget || !action) return null;
 
   const targetNodeRef = React.useRef<null | Node>(null);
 
   React.useEffect(() => {
-    targetNodeRef.current = extractElement<Node>(target);
-  }, [target]);
+    targetNodeRef.current = extractElement<Node>(propTarget);
+  }, [propTarget]);
 
   const listener = React.useCallback(
     (event: MouseEvent): void => {
-      if (!targetNodeRef.current) return;
-      if (targetNodeRef.current.contains(event.target as Node)) {
+      const target = targetNodeRef.current;
+      if (!target) return;
+      if (target.contains(event.target as Node)) {
         if (ignoreTarget) {
-          if (targetNodeRef.current !== event.target) return;
-        } else return;
+          if (target !== event.target) return;
+        } else {
+          return;
+        }
       }
       // if (!includeScrollbar && clickedScrollbar(event)) return;
       action(event);
     },
-    [action, target]
+    [action, propTarget, ignoreTarget]
   );
 
-  return (
+  return active ? (
     <EventListener
       target={scope}
       type={"click"}
@@ -64,7 +69,7 @@ const ClickOutside: React.FC<Props> = ({
     >
       {children}
     </EventListener>
-  );
+  ) : null;
 };
 
 export default ClickOutside;

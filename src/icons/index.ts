@@ -1,6 +1,6 @@
-import userIcons from './userIcons';
-import fontAwesomeIcons from './fontAwesomeIcons';
-import defaultIcons from './defaultIcons';
+import userIcons from "./userIcons";
+import fontAwesomeIcons from "./fontAwesomeIcons";
+import defaultIcons from "./defaultIcons";
 
 declare global {
   namespace $Type {
@@ -9,14 +9,13 @@ declare global {
       type Path = string | string[];
 
       type BaseIconDefinition = {
-        name: string | string[];
+        name: string;
         viewBox: ViewBox;
         path?: Path;
         tag?: string;
       };
 
       type IconDefinition = {
-        type: string;
         viewBox: ViewBox;
         path?: Path;
         tag?: string;
@@ -25,17 +24,19 @@ declare global {
   }
 }
 
-const iconMap: Map<string, $Type.Icon.IconDefinition> = new Map(null);
+const iconMap: {
+  [key: string]: Map<string, $Type.Icon.IconDefinition>;
+} = {};
 
-const iconPackageList = [defaultIcons, userIcons, fontAwesomeIcons];
+const libraryList = [defaultIcons, userIcons, fontAwesomeIcons];
 
-for (let icons of iconPackageList) {
-  for (let icon of icons.list) {
-    iconMap.set(`${icon.name}`, {
-      type: icons.type,
+for (let library of libraryList) {
+  iconMap[library.prefix] = new Map(null);
+  for (let icon of library.icons) {
+    iconMap[library.prefix].set(icon.name, {
       viewBox: icon.viewBox,
       path: icon.path || undefined,
-      tag: icon.tag || undefined,
+      tag: icon.tag || undefined
     });
   }
 }
